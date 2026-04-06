@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — AutomationHire</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <style>
+    .admin-wrap { max-width: 1100px; margin: 100px auto 60px; padding: 0 24px; }
+    .admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; flex-wrap:wrap; gap:16px; }
+    .admin-header h1 { font-family:var(--font-head); font-size:28px; font-weight:800; }
+    .admin-tabs { display:flex; gap:8px; margin-bottom:24px; }
+    .admin-tab { padding:8px 18px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:transparent; color:var(--white-60); font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; }
+    .admin-tab.active { background:rgba(0,230,118,0.1); border-color:rgba(0,230,118,0.3); color:var(--green); }
+    .admin-tab .badge { background:rgba(0,230,118,0.15); color:var(--green); border-radius:20px; padding:1px 7px; font-size:11px; margin-left:6px; }
+
+    .provider-row { background:#0d1117; border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:20px 24px; margin-bottom:12px; display:grid; grid-template-columns:1fr auto; gap:16px; align-items:center; }
+    .provider-row:hover { border-color:rgba(255,255,255,0.1); }
+    .provider-row.pending { border-left:3px solid #f59e0b; }
+    .provider-row.approved { border-left:3px solid var(--green); }
+    .provider-row.rejected { border-left:3px solid #ef4444; opacity:.6; }
+    .row-name { font-family:var(--font-head); font-size:16px; font-weight:700; margin-bottom:4px; }
+    .row-meta { font-size:13px; color:var(--white-60); display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px; }
+    .row-meta span { display:flex; align-items:center; gap:4px; }
+    .row-desc { font-size:13px; color:var(--white-60); line-height:1.5; max-width:600px; }
+    .row-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+    .row-actions { display:flex; gap:8px; flex-direction:column; min-width:130px; }
+    .btn-approve { background:linear-gradient(135deg,var(--green),#00b4d8); color:#060810; font-weight:700; font-size:13px; padding:8px 16px; border:none; border-radius:8px; cursor:pointer; transition:all .2s; }
+    .btn-approve:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,230,118,.3); }
+    .btn-reject  { background:transparent; color:#ef4444; font-weight:600; font-size:13px; padding:8px 16px; border:1px solid rgba(239,68,68,.3); border-radius:8px; cursor:pointer; transition:all .2s; }
+    .btn-reject:hover { background:rgba(239,68,68,.08); }
+    .btn-view { background:transparent; color:var(--white-60); font-size:12px; padding:6px 12px; border:1px solid rgba(255,255,255,.08); border-radius:8px; cursor:pointer; text-decoration:none; display:block; text-align:center; transition:all .2s; }
+    .btn-view:hover { border-color:rgba(255,255,255,.2); color:#fff; }
+    .status-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+    .status-pending  { background:rgba(245,158,11,.12); color:#f59e0b; border:1px solid rgba(245,158,11,.2); }
+    .status-approved { background:rgba(0,230,118,.1);   color:var(--green); border:1px solid rgba(0,230,118,.2); }
+    .status-rejected { background:rgba(239,68,68,.1);   color:#ef4444; border:1px solid rgba(239,68,68,.2); }
+    .empty-state { text-align:center; padding:60px 20px; color:var(--white-60); }
+    .empty-state .icon { font-size:48px; margin-bottom:16px; }
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:32px; }
+    .stat-card { background:#0d1117; border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:20px; }
+    .stat-num { font-family:var(--font-head); font-size:32px; font-weight:800; margin-bottom:4px; }
+    .stat-label { font-size:13px; color:var(--white-60); }
+    .login-gate { max-width:400px; margin:120px auto; padding:40px; background:#0d1117; border:1px solid rgba(255,255,255,.06); border-radius:20px; text-align:center; }
+    .login-gate h2 { font-family:var(--font-head); font-size:22px; font-weight:700; margin-bottom:8px; }
+    .login-gate p { font-size:14px; color:var(--white-60); margin-bottom:24px; }
+    .loading { text-align:center; padding:40px; color:var(--white-60); }
+    .spinner { display:inline-block; font-size:28px; animation:spin .8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <div class="nav-cta">
+      <span id="admin-user" style="font-size:13px;color:var(--white-60)"></span>
+      <button onclick="adminLogout()" class="btn btn-secondary btn-sm">Log Out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- LOGIN GATE -->
+<div id="login-gate" class="login-gate" style="display:none">
+  <div style="font-size:40px;margin-bottom:16px">🔐</div>
+  <h2>Admin Access</h2>
+  <p>Enter your Supabase service role key to continue</p>
+  <input id="admin-key-input" type="password" placeholder="Service role key (eyJ...)" class="form-input" style="width:100%;margin-bottom:12px" />
+  <button onclick="adminLogin()" class="btn btn-primary" style="width:100%">Access Admin Panel</button>
+  <p style="margin-top:16px;font-size:12px;color:var(--white-60)">Find this in Supabase → Settings → API</p>
+</div>
+
+<!-- MAIN PANEL -->
+<div id="admin-panel" class="admin-wrap" style="display:none">
+
+  <div class="admin-header">
+    <div>
+      <div style="font-size:13px;color:var(--green);font-weight:600;margin-bottom:4px">⚡ Admin Panel</div>
+      <h1>Provider Listings</h1>
+    </div>
+    <button onclick="loadAll()" class="btn btn-secondary btn-sm">↻ Refresh</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num grad-green" id="stat-pending">—</div>
+      <div class="stat-label">Pending Review</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-approved">—</div>
+      <div class="stat-label">Approved & Live</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-total">—</div>
+      <div class="stat-label">Total Listings</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-today">—</div>
+      <div class="stat-label">New Today</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="switchTab('pending', this)">
+      Pending <span class="badge" id="tab-pending-count">0</span>
+    </button>
+    <button class="admin-tab" onclick="switchTab('approved', this)">Approved</button>
+    <button class="admin-tab" onclick="switchTab('all', this)">All</button>
+  </div>
+
+  <!-- List -->
+  <div id="providers-list">
+    <div class="loading"><span class="spinner">⟳</span></div>
+  </div>
+
+</div>
+
+<script src="assets/js/main.js"></script>
+<script>
+/* ============================================================
+   AutomationHire Admin Panel
+   Uses Supabase service role key (stored in sessionStorage only)
+   ============================================================ */
+
+const SUPABASE_URL = 'https://lywcjlhfpucohuaxthem.supabase.co';
+let   supabaseKey  = '';
+let   currentTab   = 'pending';
+let   allProviders = [];
+
+/* ── Auth ── */
+function adminLogin() {
+  const key = document.getElementById('admin-key-input').value.trim();
+  if (!key.startsWith('eyJ')) {
+    alert('That does not look like a valid key. Find it in Supabase → Settings → API → service_role key.');
+    return;
+  }
+  sessionStorage.setItem('ah_admin_key', key);
+  supabaseKey = key;
+  showPanel();
+}
+
+function adminLogout() {
+  sessionStorage.removeItem('ah_admin_key');
+  location.reload();
+}
+
+function showPanel() {
+  document.getElementById('login-gate').style.display  = 'none';
+  document.getElementById('admin-panel').style.display = 'block';
+  loadAll();
+}
+
+/* ── Supabase fetch ── */
+async function sbFetch(path, opts = {}) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
+    ...opts,
+    headers: {
+      'apikey':        supabaseKey,
+      'Authorization': `Bearer ${supabaseKey}`,
+      'Content-Type':  'application/json',
+      'Prefer':        opts.prefer || 'return=representation',
+      ...(opts.headers || {}),
+    },
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err);
+  }
+  return opts.method === 'PATCH' ? res : res.json();
+}
+
+/* ── Load providers ── */
+async function loadAll() {
+  document.getElementById('providers-list').innerHTML =
+    '<div class="loading"><span class="spinner">⟳</span><br><br>Loading listings…</div>';
+
+  try {
+    allProviders = await sbFetch(
+      '/providers?select=*&order=created_at.desc',
+      { headers: { 'Prefer': 'return=representation' } }
+    );
+    updateStats();
+    renderTab(currentTab);
+  } catch (e) {
+    document.getElementById('providers-list').innerHTML =
+      `<div class="empty-state"><div class="icon">⚠️</div><p>Error loading data:<br><code style="color:#ef4444;font-size:12px">${e.message}</code></p></div>`;
+  }
+}
+
+function updateStats() {
+  const pending  = allProviders.filter(p => !p.is_approved).length;
+  const approved = allProviders.filter(p =>  p.is_approved && p.is_active).length;
+  const today    = allProviders.filter(p => {
+    const d = new Date(p.created_at);
+    const n = new Date();
+    return d.toDateString() === n.toDateString();
+  }).length;
+
+  document.getElementById('stat-pending').textContent  = pending;
+  document.getElementById('stat-approved').textContent = approved;
+  document.getElementById('stat-total').textContent    = allProviders.length;
+  document.getElementById('stat-today').textContent    = today;
+  document.getElementById('tab-pending-count').textContent = pending;
+}
+
+function switchTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderTab(tab);
+}
+
+function renderTab(tab) {
+  let list = allProviders;
+  if (tab === 'pending')  list = allProviders.filter(p => !p.is_approved);
+  if (tab === 'approved') list = allProviders.filter(p =>  p.is_approved);
+
+  const el = document.getElementById('providers-list');
+
+  if (list.length === 0) {
+    el.innerHTML = `<div class="empty-state">
+      <div class="icon">${tab === 'pending' ? '✅' : '📭'}</div>
+      <p>${tab === 'pending' ? 'No pending listings — all caught up!' : 'No listings found.'}</p>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(p => buildRow(p)).join('');
+}
+
+function buildRow(p) {
+  const statusClass = p.is_approved ? 'approved' : 'rejected'.replace('rejected', p.is_active === false && p.is_approved === false ? 'pending' : 'rejected');
+  const pending  = !p.is_approved;
+  const approved =  p.is_approved && p.is_active;
+
+  const statusLabel = pending  ? '<span class="status-badge status-pending">⏳ Pending</span>'
+                    : approved ? '<span class="status-badge status-approved">✅ Live</span>'
+                    :            '<span class="status-badge status-rejected">✗ Rejected</span>';
+
+  const date = new Date(p.created_at).toLocaleDateString('en-GB', {
+    day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'
+  });
+
+  const tags = [...(p.categories||[]).slice(0,3), ...(p.tools||[]).slice(0,2)]
+    .slice(0,5).map(t => `<span class="tag tag-green" style="font-size:11px;padding:3px 8px">${t}</span>`).join('');
+
+  return `
+    <div class="provider-row ${pending ? 'pending' : approved ? 'approved' : 'rejected'}" id="row-${p.id}">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <div class="row-name">${escHtml(p.business_name)}</div>
+          ${statusLabel}
+        </div>
+        <div class="row-meta">
+          <span>📧 ${escHtml(p.email || '—')}</span>
+          <span>🏢 ${capitalize(p.provider_type || '—')}</span>
+          <span>📍 ${escHtml([p.location_city, p.location_country].filter(Boolean).join(', ') || 'Remote')}</span>
+          <span>🕐 ${date}</span>
+          ${p.hourly_rate_min ? `<span>💷 From £${p.hourly_rate_min}/hr</span>` : ''}
+        </div>
+        <div class="row-desc">${escHtml((p.description||'').substring(0,180))}${(p.description||'').length > 180 ? '…' : ''}</div>
+        <div class="row-tags">${tags}</div>
+      </div>
+      <div class="row-actions">
+        ${pending ? `
+          <button class="btn-approve" onclick="approve('${p.id}')">✓ Approve</button>
+          <button class="btn-reject"  onclick="reject('${p.id}')">✗ Reject</button>
+        ` : approved ? `
+          <button class="btn-reject" onclick="reject('${p.id}')">Unpublish</button>
+        ` : `
+          <button class="btn-approve" onclick="approve('${p.id}')">Re-approve</button>
+        `}
+        ${p.slug ? `<a href="provider-profile.html?slug=${p.slug}" target="_blank" class="btn-view">View Profile ↗</a>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+/* ── Actions ── */
+async function approve(id) {
+  const btn = document.querySelector(`#row-${id} .btn-approve`);
+  if (btn) { btn.textContent = '⟳ Saving…'; btn.disabled = true; }
+
+  try {
+    await sbFetch(`/providers?id=eq.${id}`, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({ is_approved: true, is_active: true }),
+    });
+    showToastMsg('✅ Approved and live!', false);
+    await loadAll();
+  } catch (e) {
+    showToastMsg('Failed: ' + e.message, true);
+    if (btn) { btn.textContent = '✓ Approve'; btn.disabled = false; }
+  }
+}
+
+async function reject(id) {
+  if (!confirm('Remove this listing from the directory?')) return;
+  try {
+    await sbFetch(`/providers?id=eq.${id}`, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({ is_approved: false, is_active: false }),
+    });
+    showToastMsg('Listing unpublished.', false);
+    await loadAll();
+  } catch (e) {
+    showToastMsg('Failed: ' + e.message, true);
+  }
+}
+
+/* ── Utils ── */
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function capitalize(s) { return s ? s.charAt(0).toUpperCase()+s.slice(1) : ''; }
+
+function showToastMsg(msg, isError) {
+  let el = document.getElementById('admin-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'admin-toast';
+    Object.assign(el.style, {
+      position:'fixed', top:'24px', right:'24px', zIndex:'9999',
+      background: isError ? '#1a0a0a' : '#0d1117',
+      border: `1px solid ${isError ? 'rgba(239,68,68,0.4)' : 'rgba(0,230,118,0.4)'}`,
+      borderRadius:'12px', padding:'14px 20px', color:'#fff',
+      fontFamily:'Inter,sans-serif', fontSize:'14px', fontWeight:'600',
+      boxShadow:'0 8px 32px rgba(0,0,0,0.5)', transition:'all .3s',
+    });
+    document.body.appendChild(el);
+  }
+  el.style.background = isError ? '#1a0a0a' : '#0d1117';
+  el.style.borderColor = isError ? 'rgba(239,68,68,0.4)' : 'rgba(0,230,118,0.4)';
+  el.textContent = msg;
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.opacity = '0'; }, 3000);
+}
+
+/* ── Boot ── */
+window.addEventListener('DOMContentLoaded', () => {
+  supabaseKey = sessionStorage.getItem('ah_admin_key') || '';
+  if (supabaseKey) {
+    showPanel();
+  } else {
+    document.getElementById('login-gate').style.display = 'block';
+  }
+});
+</script>
+
+</body>
+</html>
