@@ -1,7 +1,11 @@
 {
   "version": 2,
+  "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
+  "outputDirectory": ".",
+  "buildCommand": "echo skip",
+  "installCommand": "npm install --omit=dev",
   "headers": [
     {
       "source": "/api/(.*)",
