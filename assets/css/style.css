@@ -320,10 +320,15 @@ body {
 .tag {
   padding: 4px 10px; border-radius: 100px;
   font-size: 11px; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 4px;
+  transition: all 0.2s;
 }
 .tag-green { background: rgba(0,230,118,0.12); color: var(--green); border: 1px solid rgba(0,230,118,0.2); }
-.tag-blue { background: rgba(41,121,255,0.12); color: var(--blue); border: 1px solid rgba(41,121,255,0.2); }
-.tag-white { background: var(--white-10); color: var(--white-60); border: 1px solid var(--border); }
+.tag-green:hover { background: rgba(0,230,118,0.2); border-color: rgba(0,230,118,0.4); }
+.tag-blue  { background: rgba(41,121,255,0.12); color: var(--blue);  border: 1px solid rgba(41,121,255,0.2); }
+.tag-blue:hover  { background: rgba(41,121,255,0.2); border-color: rgba(41,121,255,0.4); }
+.tag-white { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.18); }
+.tag-white:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.35); color: #fff; }
 .provider-rating { display: flex; align-items: center; gap: 8px; font-size: 14px; }
 .stars { color: #fbbf24; letter-spacing: 1px; }
 .provider-meta {
