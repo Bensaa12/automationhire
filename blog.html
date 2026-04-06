@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Automation Blog — Tips, Guides & Expert Insights | AutomationHire</title>
+  <meta name="description" content="Expert guides on AI automation, Make.com, Zapier, n8n, and workflow automation. Learn how to automate your business and hire the right experts." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <style>
+    .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .blog-card { background: var(--black-3); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all 0.3s ease; cursor: pointer; text-decoration: none; color: inherit; display: block; }
+    .blog-card:hover { border-color: rgba(0,230,118,0.25); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+    .blog-thumb { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 56px; position: relative; overflow: hidden; }
+    .blog-thumb::before { content: ''; position: absolute; inset: 0; }
+    .blog-thumb-1 { background: linear-gradient(135deg, rgba(0,230,118,0.15), rgba(41,121,255,0.15)); }
+    .blog-thumb-2 { background: linear-gradient(135deg, rgba(41,121,255,0.15), rgba(124,58,237,0.15)); }
+    .blog-thumb-3 { background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(239,68,68,0.15)); }
+    .blog-body { padding: 22px; }
+    .blog-category { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--green); margin-bottom: 8px; }
+    .blog-title { font-family: var(--font-head); font-weight: 700; font-size: 17px; line-height: 1.4; margin-bottom: 10px; }
+    .blog-excerpt { font-size: 13px; color: var(--white-60); line-height: 1.7; margin-bottom: 16px; }
+    .blog-meta { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--white-30); }
+    .blog-author { display: flex; align-items: center; gap: 8px; }
+    .blog-author-av { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg,var(--green),var(--blue)); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--black); }
+    .blog-card.featured-post { grid-column: span 2; }
+    .blog-card.featured-post .blog-thumb { height: 240px; }
+    .blog-card.featured-post .blog-title { font-size: 22px; }
+    @media(max-width:900px) { .blog-grid{grid-template-columns:1fr} .blog-card.featured-post{grid-column:auto} }
+    @media(max-width:600px) { .blog-grid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
+      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:0">
+      <div class="section-label">Automation Intelligence</div>
+      <h1 class="page-hero-title">AI Automation Blog</h1>
+      <p class="page-hero-sub">Expert guides, industry trends, tool comparisons, and hiring advice.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Topic Filter -->
+<div style="background:var(--black-2);border-bottom:1px solid var(--border);padding:16px 0;position:relative;z-index:1">
+  <div class="container">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm">All Topics</button>
+      <button class="btn btn-ghost btn-sm">Hiring Guides</button>
+      <button class="btn btn-ghost btn-sm">Make.com</button>
+      <button class="btn btn-ghost btn-sm">Zapier</button>
+      <button class="btn btn-ghost btn-sm">n8n</button>
+      <button class="btn btn-ghost btn-sm">AI Agents</button>
+      <button class="btn btn-ghost btn-sm">CRM Automation</button>
+      <button class="btn btn-ghost btn-sm">Case Studies</button>
+      <button class="btn btn-ghost btn-sm">Pricing & ROI</button>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="blog-grid">
+
+      <!-- Featured -->
+      <a href="#" class="blog-card featured-post reveal">
+        <div class="blog-thumb blog-thumb-1">🤖</div>
+        <div class="blog-body">
+          <div class="blog-category">AI Agents</div>
+          <h2 class="blog-title">How to Hire an AI Automation Expert in 2025: The Complete UK Guide</h2>
+          <p class="blog-excerpt">Everything you need to know before hiring an automation specialist — from scoping your project and choosing the right tool stack, to evaluating proposals and protecting your IP. With real salary and rate benchmarks.</p>
+          <div class="blog-meta">
+            <div class="blog-author"><div class="blog-author-av">AH</div> AutomationHire Team</div>
+            <span>April 2, 2025 · 12 min read</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Sidebar post -->
+      <a href="#" class="blog-card reveal reveal-delay-1">
+        <div class="blog-thumb blog-thumb-2">⚙️</div>
+        <div class="blog-body">
+          <div class="blog-category">Make.com</div>
+          <h2 class="blog-title">Make.com vs Zapier vs n8n: Which Should You Use in 2025?</h2>
+          <p class="blog-excerpt">An honest side-by-side comparison covering pricing, complexity, best use cases, and when to choose each platform.</p>
+          <div class="blog-meta">
+            <div class="blog-author"><div class="blog-author-av">JK</div> James K.</div>
+            <span>March 28 · 8 min</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="blog-card reveal">
+        <div class="blog-thumb blog-thumb-3">💰</div>
+        <div class="blog-body">
+          <div class="blog-category">Pricing & ROI</div>
+          <h2 class="blog-title">How Much Does AI Automation Cost in the UK? 2025 Rate Guide</h2>
+          <p class="blog-excerpt">Real data on freelancer and agency rates for Make.com, Zapier, n8n, and AI agents. Hourly vs project pricing breakdown.</p>
+          <div class="blog-meta">
+            <div class="blog-author"><div class="blog-author-av">SR</div> Sarah R.</div>
+            <span>March 24 · 6 min</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="blog-card reveal reveal-delay-1">
+        <div class="blog-thumb blog-thumb-1">🎯</div>
+        <div class="blog-body">
+          <div class="blog-category">Lead Generation</div>
+          <h2 class="blog-title">Top 10 Best Make.com Experts in the UK (2025 Ranked)</h2>
+          <p class="blog-excerpt">We reviewed 100+ Make.com specialists on our platform. Here are the top 10, ranked by reviews, case studies and delivery speed.</p>
+          <div class="blog-meta">
+            <div class="blog-author"><div class="blog-author-av">AH</div> AutomationHire</div>
+            <span>March 20 · 10 min</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="blog-card reveal reveal-delay-2">
+        <div class="blog-thumb blog-thumb-2">🛒</div>
+        <div class="blog-body">
+          <div class="blog-category">E-commerce</div>
+          <h2 class="blog-title">E-commerce Automation: 10 Workflows Every Shopify Store Should Have</h2>
+          <p class="blog-excerpt">From order management to customer win-back flows. Real automation ideas that save hours every week for e-commerce teams.</p>
+          <div class="blog-meta">
+            <div class="blog-author"><div class="blog-author-av">LM</div> Laura M.</div>
+            <span>March 15 · 7 min</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="blog-card reveal reveal-delay-3">
+        <div class="blog-thumb blog-thumb-3">🏢</div>
+        <div class="blog-body">
+          <div class="blog-category">Case Study</div>
+          <h2 class="blog-title">How a London SaaS Company Saved £80K/Year With Make.com Automation</h2>
+          <p class="blog-excerpt">A real-world deep dive: the exact workflows, tools, and ROI breakdown for a 30-person SaaS company that automated their ops.</p>
+          <div class="blog-meta">
+            <div class="blog-author"><div class="blog-author-av">AH</div> AutomationHire</div>
+            <span>March 10 · 9 min</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="blog-card reveal">
+        <div class="blog-thumb blog-thumb-1">🔗</div>
+        <div class="blog-body">
+          <div class="blog-category">n8n</div>
+          <h2 class="blog-title">n8n vs Zapier: Why More Developers Are Switching in 2025</h2>
+          <p class="blog-excerpt">n8n is self-hostable, more flexible, and often cheaper at scale. Here's what you need to know before switching.</p>
+          <div class="blog-meta">
+            <div class="blog-author"><div class="blog-author-av">DK</div> Dev K.</div>
+            <span>March 5 · 7 min</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="blog-card reveal reveal-delay-1">
+        <div class="blog-thumb blog-thumb-2">📊</div>
+        <div class="blog-body">
+          <div class="blog-category">CRM Automation</div>
+          <h2 class="blog-title">Best HubSpot Automation Agencies in the UK — 2025 Directory</h2>
+          <p class="blog-excerpt">We've hand-curated the top HubSpot automation specialists based on certifications, reviews, and case study results.</p>
+          <div class="blog-meta">
+            <div class="blog-author"><div class="blog-author-av">AH</div> AutomationHire</div>
+            <span>Feb 28 · 8 min</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="blog-card reveal reveal-delay-2">
+        <div class="blog-thumb blog-thumb-3">⚡</div>
+        <div class="blog-body">
+          <div class="blog-category">Hiring Guide</div>
+          <h2 class="blog-title">Freelancer vs Agency for Automation: Which Should You Hire?</h2>
+          <p class="blog-excerpt">The honest pros, cons, and cost comparison between hiring a solo automation freelancer versus a full automation agency for your project.</p>
+          <div class="blog-meta">
+            <div class="blog-author"><div class="blog-author-av">SR</div> Sarah R.</div>
+            <span>Feb 22 · 6 min</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Load More -->
+    <div class="text-center mt-32">
+      <button class="btn btn-secondary btn-lg">Load More Articles →</button>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="section-sm" style="background:var(--black-2);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-label">Weekly Digest</div>
+      <h3 class="section-title" style="font-size:28px">Don't Miss the Latest Automation Insights</h3>
+      <p class="section-sub" style="margin-bottom:28px">Expert guides, new tool releases, and UK provider spotlights. Every Thursday.</p>
+      <form class="newsletter-form" data-newsletter="blog">
+        <input type="email" placeholder="Enter your email" required />
+        <button class="btn btn-primary" type="submit">Subscribe Free</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div><a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+</body>
+</html>

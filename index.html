@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutomationHire — Find Top AI Automation Agencies & Experts in the UK</title>
+  <meta name="description" content="The #1 directory for AI automation agencies, Make.com experts, Zapier consultants and workflow automation freelancers. Get matched with verified providers today." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="request-quote.html">Get Matched</a></li>
+      <li><a href="book.html">Book a Call</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
+      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge reveal">
+        <span></span> 500+ Verified Automation Experts
+      </div>
+      <h1 class="hero-title reveal reveal-delay-1">
+        <span class="line">Hire the Best</span>
+        <span class="line grad-green" data-typewriter='["AI Automation Experts","Make.com Specialists","Zapier Consultants","n8n Developers","Workflow Builders"]'>AI Automation Experts</span>
+        <span class="line">in the UK &amp; Beyond</span>
+      </h1>
+      <p class="hero-sub reveal reveal-delay-2">
+        The trusted directory connecting businesses with verified AI automation agencies,
+        no-code specialists, and workflow engineers. Save 40+ hours per week — starting today.
+      </p>
+      <div class="hero-actions reveal reveal-delay-3">
+        <a href="providers.html" class="btn btn-primary btn-lg">Browse 500+ Experts →</a>
+        <a href="request-quote.html" class="btn btn-ghost btn-lg">Get Free Matched</a>
+      </div>
+      <div class="hero-stats reveal reveal-delay-4">
+        <div class="hero-stat-item">
+          <div class="hero-stat-num"><span data-count="500" data-suffix="+">500+</span></div>
+          <div class="hero-stat-label">Verified Providers</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-num"><span data-count="12" data-suffix="">12</span></div>
+          <div class="hero-stat-label">Specialisations</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-num"><span data-count="2400" data-suffix="+">2400+</span></div>
+          <div class="hero-stat-label">Projects Completed</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-num"><span data-count="98" data-suffix="%">98%</span></div>
+          <div class="hero-stat-label">Client Satisfaction</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Visual -->
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="hero-card hero-card-back2"></div>
+        <div class="hero-card hero-card-back1"></div>
+        <div class="hero-card hero-card-main animate-border">
+          <div class="provider-avatar">🤖</div>
+          <div class="provider-name">FlowCraft Agency</div>
+          <div class="provider-title">AI Automation · London, UK</div>
+          <div class="provider-tags">
+            <span class="tag tag-green">Make.com</span>
+            <span class="tag tag-blue">n8n</span>
+            <span class="tag tag-white">AI Agents</span>
+            <span class="tag tag-white">CRM</span>
+          </div>
+          <div class="provider-rating">
+            <span class="stars">★★★★★</span>
+            <strong>5.0</strong>
+            <span style="color:var(--white-60)">(47 reviews)</span>
+          </div>
+          <div class="provider-meta">
+            <span class="verified-badge">✓ Verified</span>
+            <span>From <strong style="color:var(--green)">£75/hr</strong></span>
+          </div>
+        </div>
+        <div class="floating-badge floating-badge-1">
+          <div class="floating-badge-num">✓</div>
+          <div style="font-size:12px;color:var(--white-60)">Quote Received</div>
+        </div>
+        <div class="floating-badge floating-badge-2">
+          <div class="floating-badge-num">40h</div>
+          <div style="font-size:12px;color:var(--white-60)">Saved / Week</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEARCH ===== -->
+<section class="search-section">
+  <div class="container">
+    <div class="search-box">
+      <div class="search-row">
+        <div class="search-field">
+          <label>What do you need?</label>
+          <input type="text" placeholder="e.g. Zapier expert, AI chatbot..." />
+        </div>
+        <div class="search-field">
+          <label>Category</label>
+          <select>
+            <option value="">All Categories</option>
+            <option>AI Agents & Assistants</option>
+            <option>Workflow Automation</option>
+            <option>CRM Automation</option>
+            <option>Email Automation</option>
+            <option>Chatbot Development</option>
+            <option>Make.com Experts</option>
+            <option>Zapier Experts</option>
+            <option>n8n Developers</option>
+            <option>Lead Generation</option>
+            <option>E-commerce Automation</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>Location</label>
+          <select>
+            <option value="">Anywhere</option>
+            <option>London, UK</option>
+            <option>Manchester, UK</option>
+            <option>Birmingham, UK</option>
+            <option>Edinburgh, UK</option>
+            <option>Remote Only</option>
+            <option>Europe</option>
+            <option>USA</option>
+          </select>
+        </div>
+        <a href="providers.html" class="btn btn-primary btn-lg">Search</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRUST BAR ===== -->
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-item">
+      <span class="trust-item-icon">✓</span> Verified Providers
+    </div>
+    <div class="trust-item">
+      <span class="trust-item-icon">⭐</span> 4.8/5 Average Rating
+    </div>
+    <div class="trust-item">
+      <span class="trust-item-icon">🔒</span> Safe Payments
+    </div>
+    <div class="trust-item">
+      <span class="trust-item-icon">🇬🇧</span> UK-Focused Directory
+    </div>
+    <div class="trust-item">
+      <span class="trust-item-icon">💬</span> Free Quote Matching
+    </div>
+    <div class="trust-item">
+      <span class="trust-item-icon">⚡</span> Average 4hr Response
+    </div>
+  </div>
+</div>
+
+<!-- ===== CATEGORIES ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Browse by Specialisation</div>
+      <h2 class="section-title">Find the Right Automation Expert</h2>
+      <p class="section-sub">From no-code workflow builders to enterprise AI agents — every automation need covered.</p>
+    </div>
+    <div class="categories-grid">
+
+      <a href="providers.html?cat=ai-agents" class="cat-card reveal">
+        <span class="cat-icon">🤖</span>
+        <div class="cat-name">AI Agents & Assistants</div>
+        <div class="cat-count">84 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="providers.html?cat=workflow" class="cat-card reveal reveal-delay-1">
+        <span class="cat-icon">🔄</span>
+        <div class="cat-name">Workflow Automation</div>
+        <div class="cat-count">112 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="providers.html?cat=crm" class="cat-card reveal reveal-delay-2">
+        <span class="cat-icon">📊</span>
+        <div class="cat-name">CRM Automation</div>
+        <div class="cat-count">67 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="providers.html?cat=email" class="cat-card reveal reveal-delay-3">
+        <span class="cat-icon">📧</span>
+        <div class="cat-name">Email Automation</div>
+        <div class="cat-count">93 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="providers.html?cat=chatbot" class="cat-card reveal">
+        <span class="cat-icon">💬</span>
+        <div class="cat-name">Chatbot Development</div>
+        <div class="cat-count">55 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="providers.html?cat=lead-gen" class="cat-card reveal reveal-delay-1">
+        <span class="cat-icon">🎯</span>
+        <div class="cat-name">Lead Generation</div>
+        <div class="cat-count">78 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="providers.html?cat=make" class="cat-card reveal reveal-delay-2">
+        <span class="cat-icon">⚙️</span>
+        <div class="cat-name">Make.com Experts</div>
+        <div class="cat-count">121 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="providers.html?cat=zapier" class="cat-card reveal reveal-delay-3">
+        <span class="cat-icon">⚡</span>
+        <div class="cat-name">Zapier Experts</div>
+        <div class="cat-count">98 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="providers.html?cat=n8n" class="cat-card reveal">
+        <span class="cat-icon">🔗</span>
+        <div class="cat-name">n8n Developers</div>
+        <div class="cat-count">44 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="providers.html?cat=ecommerce" class="cat-card reveal reveal-delay-1">
+        <span class="cat-icon">🛒</span>
+        <div class="cat-name">E-commerce Automation</div>
+        <div class="cat-count">61 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="providers.html?cat=bpa" class="cat-card reveal reveal-delay-2">
+        <span class="cat-icon">🏢</span>
+        <div class="cat-name">Business Process Automation</div>
+        <div class="cat-count">88 providers</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="categories.html" class="cat-card reveal reveal-delay-3" style="background:linear-gradient(135deg,var(--black-3),rgba(41,121,255,0.06));border-color:rgba(41,121,255,0.2);">
+        <span class="cat-icon">🗂️</span>
+        <div class="cat-name">View All Categories</div>
+        <div class="cat-count">12 specialisations</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-num" data-count="500" data-suffix="+">500+</div>
+        <div class="stat-label">Listed Providers</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-num" data-count="2400" data-suffix="+">2,400+</div>
+        <div class="stat-label">Projects Completed</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-num" data-count="98" data-suffix="%">98%</div>
+        <div class="stat-label">Client Satisfaction</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-num" data-count="12" data-suffix="">12</div>
+        <div class="stat-label">Automation Specialisms</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURED PROVIDERS ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Top Rated This Month</div>
+      <h2 class="section-title">Featured Automation Experts</h2>
+      <p class="section-sub">Hand-picked, verified providers with outstanding client results.</p>
+    </div>
+    <div class="providers-grid">
+
+      <div class="provider-card featured reveal">
+        <span class="featured-label">⭐ Featured</span>
+        <div class="card-header">
+          <div class="card-avatar">🚀</div>
+          <div class="card-info">
+            <div class="card-name">FlowCraft Agency</div>
+            <div class="card-type">Agency · London, UK</div>
+          </div>
+        </div>
+        <div class="card-rating">
+          <span class="stars">★★★★★</span>
+          <strong>5.0</strong>
+          <span class="text-muted">(47 reviews)</span>
+          <span class="verified-badge" style="margin-left:auto">✓ Verified</span>
+        </div>
+        <p class="card-desc">End-to-end AI workflow automation specialists. We build custom Make.com and n8n pipelines that save businesses 40+ hours per week.</p>
+        <div class="card-tags">
+          <span class="tag tag-green">Make.com</span>
+          <span class="tag tag-blue">n8n</span>
+          <span class="tag tag-white">AI Agents</span>
+          <span class="tag tag-white">CRM</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-price">From <span>£75</span>/hr</div>
+          <div class="card-location">📍 London</div>
+        </div>
+      </div>
+
+      <div class="provider-card reveal reveal-delay-1">
+        <div class="card-header">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#2979ff,#00b4d8)">⚡</div>
+          <div class="card-info">
+            <div class="card-name">ZapMaster Pro</div>
+            <div class="card-type">Freelancer · Manchester, UK</div>
+          </div>
+        </div>
+        <div class="card-rating">
+          <span class="stars">★★★★★</span>
+          <strong>4.9</strong>
+          <span class="text-muted">(31 reviews)</span>
+          <span class="verified-badge" style="margin-left:auto">✓ Verified</span>
+        </div>
+        <p class="card-desc">Certified Zapier Expert with 200+ automations built. Specialises in HubSpot, Salesforce and e-commerce stack integrations.</p>
+        <div class="card-tags">
+          <span class="tag tag-green">Zapier</span>
+          <span class="tag tag-blue">HubSpot</span>
+          <span class="tag tag-white">E-commerce</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-price">From <span>£55</span>/hr</div>
+          <div class="card-location">📍 Manchester</div>
+        </div>
+      </div>
+
+      <div class="provider-card reveal reveal-delay-2">
+        <div class="card-header">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#7c3aed,#2979ff)">🧠</div>
+          <div class="card-info">
+            <div class="card-name">NeuralFlow Ltd</div>
+            <div class="card-type">Agency · Remote</div>
+          </div>
+        </div>
+        <div class="card-rating">
+          <span class="stars">★★★★★</span>
+          <strong>4.8</strong>
+          <span class="text-muted">(62 reviews)</span>
+          <span class="verified-badge" style="margin-left:auto">✓ Verified</span>
+        </div>
+        <p class="card-desc">AI-first automation studio building GPT-4 powered agents, custom chatbots and intelligent document processing pipelines.</p>
+        <div class="card-tags">
+          <span class="tag tag-green">OpenAI</span>
+          <span class="tag tag-blue">LangChain</span>
+          <span class="tag tag-white">Python</span>
+          <span class="tag tag-white">AI Agents</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-price">From <span>£95</span>/hr</div>
+          <div class="card-location">📍 Remote</div>
+        </div>
+      </div>
+
+      <div class="provider-card reveal">
+        <div class="card-header">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#00e676,#00b4d8)">📊</div>
+          <div class="card-info">
+            <div class="card-name">CRMFlow Solutions</div>
+            <div class="card-type">Agency · Birmingham, UK</div>
+          </div>
+        </div>
+        <div class="card-rating">
+          <span class="stars">★★★★☆</span>
+          <strong>4.7</strong>
+          <span class="text-muted">(28 reviews)</span>
+        </div>
+        <p class="card-desc">CRM automation specialists for HubSpot, Salesforce, and GoHighLevel. Full pipeline setup, lead routing, and follow-up sequences.</p>
+        <div class="card-tags">
+          <span class="tag tag-green">HubSpot</span>
+          <span class="tag tag-blue">Salesforce</span>
+          <span class="tag tag-white">GHL</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-price">From <span>£60</span>/hr</div>
+          <div class="card-location">📍 Birmingham</div>
+        </div>
+      </div>
+
+      <div class="provider-card reveal reveal-delay-1">
+        <div class="card-header">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">🛒</div>
+          <div class="card-info">
+            <div class="card-name">ShopBot Automations</div>
+            <div class="card-type">Freelancer · Edinburgh, UK</div>
+          </div>
+        </div>
+        <div class="card-rating">
+          <span class="stars">★★★★★</span>
+          <strong>4.9</strong>
+          <span class="text-muted">(19 reviews)</span>
+          <span class="verified-badge" style="margin-left:auto">✓ Verified</span>
+        </div>
+        <p class="card-desc">E-commerce automation expert. Shopify, WooCommerce order management, inventory sync, returns automation, and customer comms.</p>
+        <div class="card-tags">
+          <span class="tag tag-green">Shopify</span>
+          <span class="tag tag-blue">Make.com</span>
+          <span class="tag tag-white">Klaviyo</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-price">From <span>£50</span>/hr</div>
+          <div class="card-location">📍 Edinburgh</div>
+        </div>
+      </div>
+
+      <div class="provider-card reveal reveal-delay-2">
+        <div class="card-header">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#10b981,#2979ff)">🎯</div>
+          <div class="card-info">
+            <div class="card-name">LeadEngine Agency</div>
+            <div class="card-type">Agency · Bristol, UK</div>
+          </div>
+        </div>
+        <div class="card-rating">
+          <span class="stars">★★★★☆</span>
+          <strong>4.6</strong>
+          <span class="text-muted">(35 reviews)</span>
+        </div>
+        <p class="card-desc">B2B lead generation automation. AI-powered outreach sequences, LinkedIn automation, and multi-channel prospecting funnels.</p>
+        <div class="card-tags">
+          <span class="tag tag-green">Lead Gen</span>
+          <span class="tag tag-blue">LinkedIn</span>
+          <span class="tag tag-white">Instantly</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-price">From <span>£65</span>/hr</div>
+          <div class="card-location">📍 Bristol</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="text-center mt-32 reveal">
+      <a href="providers.html" class="btn btn-secondary btn-lg">View All 500+ Providers →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="section" style="background:var(--black-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Simple Process</div>
+      <h2 class="section-title">How AutomationHire Works</h2>
+      <p class="section-sub">From search to signed contract in under 24 hours.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-card reveal">
+        <div class="how-number">1</div>
+        <h3 class="how-title">Describe Your Project</h3>
+        <p class="how-desc">Tell us what you need automated, your budget, tools you use, and your timeline. Takes 2 minutes.</p>
+      </div>
+      <div class="how-card reveal reveal-delay-1">
+        <div class="how-number">2</div>
+        <h3 class="how-title">Get Matched Instantly</h3>
+        <p class="how-desc">We match you with 3-5 verified automation experts who fit your exact requirements and budget.</p>
+      </div>
+      <div class="how-card reveal reveal-delay-2">
+        <div class="how-number">3</div>
+        <h3 class="how-title">Compare & Hire</h3>
+        <p class="how-desc">Review proposals, compare case studies, check ratings, and hire with confidence. Zero commission fees.</p>
+      </div>
+    </div>
+    <div class="text-center mt-32 reveal">
+      <a href="request-quote.html" class="btn btn-primary btn-lg">Get Matched Free →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Client Stories</div>
+      <h2 class="section-title">What Businesses Say</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">Found a Make.com specialist within 2 hours of posting. They automated our entire client onboarding process and we saved 25 hours a week. Absolutely incredible ROI.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">SJ</div>
+          <div>
+            <div class="testi-name">Sarah Johnson</div>
+            <div class="testi-role">Operations Director, TechScale Ltd</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">The filtering system is brilliant. I searched for a Zapier expert with HubSpot experience under £80/hr and had three great quotes within the same day.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MC</div>
+          <div>
+            <div class="testi-name">Mark Collins</div>
+            <div class="testi-role">CEO, Bloom Marketing Agency</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">We needed a complex AI agent built for our customer support. AutomationHire matched us with NeuralFlow and they delivered in 3 weeks. Game changing.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">RP</div>
+          <div>
+            <div class="testi-name">Rachel Patel</div>
+            <div class="testi-role">Head of CX, ShopDirect</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA BANNER ===== -->
+<section class="section-sm">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <div class="cta-banner-title">
+        Ready to Automate Your Business?<br/>
+        <span class="grad-green">Find Your Expert Today.</span>
+      </div>
+      <p class="cta-banner-sub">Join 2,400+ UK businesses that have hired automation experts through AutomationHire.</p>
+      <div class="cta-banner-actions">
+        <a href="providers.html" class="btn btn-primary btn-lg">Browse Experts →</a>
+        <a href="submit-listing.html" class="btn btn-ghost btn-lg">List Your Business</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEWSLETTER ===== -->
+<section class="section-sm" style="background:var(--black-2);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-label">Weekly Digest</div>
+      <h3 class="section-title" style="font-size:28px">Get the Latest Automation Trends</h3>
+      <p class="section-sub" style="margin-bottom:28px">New providers, AI automation case studies, and tool tips. Every Thursday.</p>
+      <form class="newsletter-form" data-newsletter="homepage">
+        <input type="email" placeholder="Enter your email address" required />
+        <button class="btn btn-primary" type="submit">Subscribe Free</button>
+      </form>
+      <p style="font-size:12px;color:var(--white-30);margin-top:12px">No spam. Unsubscribe anytime. 3,200+ subscribers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          <div class="footer-logo-icon">⚡</div>
+          <span class="footer-logo-text">Automation<span>Hire</span></span>
+        </a>
+        <p class="footer-desc">The UK's leading directory for AI automation agencies and workflow automation specialists. Find, compare and hire verified experts.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-link">𝕏</a>
+          <a href="#" class="social-link">in</a>
+          <a href="#" class="social-link">▶</a>
+          <a href="#" class="social-link">f</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Directory</div>
+        <ul class="footer-links">
+          <li><a href="providers.html">Browse All Experts</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="providers.html?filter=featured">Featured Providers</a></li>
+          <li><a href="providers.html?filter=new">New Listings</a></li>
+          <li><a href="request-quote.html">Get Matched</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">For Providers</div>
+        <ul class="footer-links">
+          <li><a href="submit-listing.html">Submit Your Listing</a></li>
+          <li><a href="pricing.html">Pricing Plans</a></li>
+          <li><a href="dashboard.html">Provider Dashboard</a></li>
+          <li><a href="#">Advertise</a></li>
+          <li><a href="#">Partnership</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div>
+        <a href="#">Privacy</a> &nbsp;·&nbsp;
+        <a href="#">Terms</a> &nbsp;·&nbsp;
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+</body>
+</html>

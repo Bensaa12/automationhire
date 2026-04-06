@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Discovery Call — AutomationHire</title>
+  <meta name="description" content="Book a free 30-minute discovery call to explore how AI automation can streamline your business processes and create real value." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <style>
+    /* ── Booking page specific styles ── */
+    .booking-hero {
+      padding: 120px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+    .booking-hero .hero-bg-glow {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse at center, rgba(0,230,118,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .booking-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,230,118,0.08);
+      border: 1px solid rgba(0,230,118,0.2);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green);
+      margin-bottom: 20px;
+      letter-spacing: 0.3px;
+    }
+    .booking-hero-badge span {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    .booking-hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .booking-hero p {
+      font-size: 17px;
+      color: var(--white-60);
+      max-width: 560px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+    .booking-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .booking-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--white-60);
+    }
+    .booking-meta-item .meta-icon {
+      font-size: 16px;
+    }
+    .booking-meta-item strong {
+      color: #fff;
+    }
+
+    /* ── Cal.com embed container ── */
+    .booking-embed-wrapper {
+      max-width: 1100px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+    .booking-embed-card {
+      background: #0d1117;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(0,230,118,0.04),
+        0 24px 64px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      position: relative;
+    }
+    .booking-embed-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      border-radius: 20px 20px 0 0;
+    }
+    #cal-booking-embed {
+      width: 100%;
+      min-height: 680px;
+      border: none;
+    }
+
+    /* ── Trust strip below calendar ── */
+    .booking-trust {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      padding: 32px 24px 0;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      margin-top: 0;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--white-60);
+    }
+    .trust-item .trust-icon {
+      font-size: 15px;
+    }
+
+    /* ── What to expect section ── */
+    .booking-expect {
+      max-width: 900px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+    .booking-expect h2 {
+      font-family: var(--font-head);
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .expect-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .expect-card {
+      background: #0d1117;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .expect-card:hover {
+      border-color: rgba(0,230,118,0.2);
+      transform: translateY(-2px);
+    }
+    .expect-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .expect-card h3 {
+      font-family: var(--font-head);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .expect-card p {
+      font-size: 14px;
+      color: var(--white-60);
+      line-height: 1.6;
+    }
+
+    /* ── Cal.com powered by strip ── */
+    .cal-powered {
+      text-align: center;
+      padding: 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .cal-powered a {
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+    }
+    .cal-powered a:hover {
+      color: var(--green);
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="request-quote.html">Get Matched</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
+      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== BOOKING HERO ===== -->
+<section class="booking-hero">
+  <div class="hero-bg-glow"></div>
+  <div class="container">
+    <div class="booking-hero-badge reveal">
+      <span></span> Free Discovery Call
+    </div>
+    <h1 class="reveal reveal-delay-1">
+      Book Your Free<br />
+      <span class="grad-green">Discovery Call</span>
+    </h1>
+    <p class="reveal reveal-delay-2">
+      A quick 30-minute call to understand your goals, challenges, and ideas.
+      We'll explore how automation, AI, and smart workflows can streamline
+      your processes and create real value for your business.
+    </p>
+    <div class="booking-meta reveal reveal-delay-3">
+      <div class="booking-meta-item">
+        <span class="meta-icon">⏱</span>
+        <span><strong>30 minutes</strong></span>
+      </div>
+      <div class="booking-meta-item">
+        <span class="meta-icon">🎥</span>
+        <span><strong>Google Meet</strong></span>
+      </div>
+      <div class="booking-meta-item">
+        <span class="meta-icon">🌍</span>
+        <span><strong>Europe / London</strong></span>
+      </div>
+      <div class="booking-meta-item">
+        <span class="meta-icon">💷</span>
+        <span><strong>Free — No obligation</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CAL.COM EMBED ===== -->
+<div class="booking-embed-wrapper">
+  <div class="booking-embed-card reveal">
+    <!-- Cal.com inline embed -->
+    <div id="cal-booking-embed"></div>
+    <div class="cal-powered">
+      Scheduling powered by <a href="https://cal.com" target="_blank" rel="noopener">Cal.com</a>
+    </div>
+  </div>
+
+  <!-- Trust strip -->
+  <div class="booking-trust reveal">
+    <div class="trust-item">
+      <span class="trust-icon">🔒</span>
+      <span>Your details are never shared</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">✅</span>
+      <span>No sales pressure</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">📅</span>
+      <span>Reschedule anytime</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon">⚡</span>
+      <span>Instant confirmation by email</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== WHAT TO EXPECT ===== -->
+<div class="booking-expect">
+  <h2 class="reveal">What happens on the call?</h2>
+  <div class="expect-grid">
+    <div class="expect-card reveal">
+      <div class="expect-icon">🎯</div>
+      <h3>Understand Your Goals</h3>
+      <p>We start by listening — what are you trying to achieve? Where are the bottlenecks costing you time and money?</p>
+    </div>
+    <div class="expect-card reveal reveal-delay-1">
+      <div class="expect-icon">🤖</div>
+      <h3>Explore Automation Fits</h3>
+      <p>We'll map your workflows and identify where AI, no-code tools, or custom automation can make the biggest impact.</p>
+    </div>
+    <div class="expect-card reveal reveal-delay-2">
+      <div class="expect-icon">📋</div>
+      <h3>Get a Clear Plan</h3>
+      <p>You'll leave with a practical summary of recommended tools, approach, and realistic timelines — no jargon.</p>
+    </div>
+    <div class="expect-card reveal reveal-delay-3">
+      <div class="expect-icon">🚀</div>
+      <h3>Next Steps (If You Want)</h3>
+      <p>If it feels like a good fit, we'll talk about how to move forward. Zero pressure if it's not the right time.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          <div class="footer-logo-icon">⚡</div>
+          <span class="footer-logo-text">Automation<span>Hire</span></span>
+        </a>
+        <p class="footer-desc">The UK's leading directory for AI automation agencies and workflow automation specialists. Find, compare and hire verified experts.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-link">𝕏</a>
+          <a href="#" class="social-link">in</a>
+          <a href="#" class="social-link">▶</a>
+          <a href="#" class="social-link">f</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Directory</div>
+        <ul class="footer-links">
+          <li><a href="providers.html">Browse All Experts</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="providers.html?filter=featured">Featured Providers</a></li>
+          <li><a href="providers.html?filter=new">New Listings</a></li>
+          <li><a href="request-quote.html">Get Matched</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">For Providers</div>
+        <ul class="footer-links">
+          <li><a href="submit-listing.html">Submit Your Listing</a></li>
+          <li><a href="pricing.html">Pricing Plans</a></li>
+          <li><a href="dashboard.html">Provider Dashboard</a></li>
+          <li><a href="#">Advertise</a></li>
+          <li><a href="#">Partnership</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="book.html">Book a Call</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div>
+        <a href="privacy.html">Privacy</a> &nbsp;·&nbsp;
+        <a href="terms.html">Terms</a> &nbsp;·&nbsp;
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+
+<!-- ===== CAL.COM EMBED SCRIPT ===== -->
+<script type="text/javascript">
+(function (C, A, L) {
+  let p = function (a, ar) { a.q.push(ar); };
+  let d = C.document;
+  C.Cal = C.Cal || function () {
+    let cal = C.Cal;
+    let ar = arguments;
+    if (!cal.loaded) {
+      cal.ns = {};
+      cal.q = cal.q || [];
+      d.head.appendChild(d.createElement("script")).src = A;
+      cal.loaded = true;
+    }
+    if (ar[0] === L) {
+      const api = function () { p(api, arguments); };
+      const namespace = ar[1];
+      api.q = api.q || [];
+      if (typeof namespace === "string") {
+        cal.ns[namespace] = cal.ns[namespace] || api;
+        p(cal.ns[namespace], ar);
+        p(cal, ["initNamespace", namespace]);
+      } else p(cal, ar);
+      return;
+    }
+    p(cal, ar);
+  };
+})(window, "https://app.cal.com/embed/embed.js", "init");
+
+Cal("init", { origin: "https://cal.com" });
+
+Cal("inline", {
+  elementOrSelector: "#cal-booking-embed",
+  // ↓ Replace with your Cal.com username/event-slug
+  calLink: "YOUR-CAL-USERNAME/discovery-call",
+  layout: "month_view",
+});
+
+Cal("ui", {
+  theme: "dark",
+  cssVarsPerTheme: {
+    dark: {
+      "cal-brand":              "#00e676",
+      "cal-brand-emphasis":     "#00b4d8",
+      "cal-brand-text":         "#060810",
+      "cal-bg":                 "#060810",
+      "cal-bg-subtle":          "#0d1117",
+      "cal-bg-muted":           "#161b27",
+      "cal-bg-inverted":        "#ffffff",
+      "cal-border":             "rgba(255,255,255,0.08)",
+      "cal-border-subtle":      "rgba(255,255,255,0.05)",
+      "cal-border-booker":      "rgba(255,255,255,0.06)",
+      "cal-border-default":     "rgba(255,255,255,0.08)",
+      "cal-text":               "#ffffff",
+      "cal-text-emphasis":      "#ffffff",
+      "cal-text-subtle":        "#9ca3af",
+      "cal-text-muted":         "#6b7280",
+      "cal-text-inverted":      "#060810",
+    }
+  },
+  hideEventTypeDetails: false,
+  layout: "month_view",
+});
+</script>
+
+</body>
+</html>

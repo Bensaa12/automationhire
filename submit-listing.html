@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit Your Listing — List Your Automation Business | AutomationHire</title>
+  <meta name="description" content="List your AI automation agency or freelance services on AutomationHire. Free listing available. Get in front of thousands of businesses actively looking to hire." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:0">
+      <div class="section-label">Grow Your Business</div>
+      <h1 class="page-hero-title" style="font-size:clamp(28px,4vw,44px)">List Your Automation Business</h1>
+      <p class="page-hero-sub">Join 500+ providers. Get discovered by UK businesses actively looking to hire.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="submit-layout">
+
+      <!-- FORM -->
+      <div>
+        <form id="submit-listing-form">
+
+          <!-- Step 1 -->
+          <div class="form-card" style="margin-bottom:24px">
+            <div class="form-section-title">
+              <div class="step-badge">1</div>
+              Basic Information
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Business Name <span>*</span></label>
+                <input type="text" name="business_name" class="form-control" placeholder="e.g. FlowCraft Agency" required />
+              </div>
+              <div class="form-group">
+                <label>Provider Type <span>*</span></label>
+                <select name="provider_type" class="form-control" required>
+                  <option value="">Select type</option>
+                  <option value="agency">Agency</option>
+                  <option value="freelancer">Freelancer / Solo Consultant</option>
+                  <option value="consultant">Consultant</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Business Description <span>*</span></label>
+              <textarea name="description" class="form-control form-control-textarea" placeholder="Tell businesses what you do, your specialisms, and what makes you stand out..." required></textarea>
+              <div class="form-hint">Aim for 150-300 words. Be specific about your tools and results.</div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Website URL</label>
+                <input type="url" name="website_url" class="form-control" placeholder="https://yourwebsite.com" />
+              </div>
+              <div class="form-group">
+                <label>LinkedIn URL</label>
+                <input type="url" name="linkedin_url" class="form-control" placeholder="https://linkedin.com/company/..." />
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="form-card" style="margin-bottom:24px">
+            <div class="form-section-title">
+              <div class="step-badge">2</div>
+              Services & Specialisms
+            </div>
+            <div class="form-group">
+              <label>Automation Categories <span>*</span> <span style="color:var(--white-60);font-weight:400">(select all that apply)</span></label>
+              <div class="checkbox-group">
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="ai-agents" /> AI Agents</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="workflow-automation" /> Workflow Automation</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="crm-automation" /> CRM Automation</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="email-automation" /> Email Automation</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="chatbot-automation" /> Chatbot Development</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="lead-generation" /> Lead Generation</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="ecommerce-automation" /> E-commerce Automation</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="document-automation" /> Document Automation</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="business-process-automation" /> Business Process (BPA)</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="data-reporting" /> Data &amp; Reporting</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="categories" value="hr-automation" /> HR &amp; Recruitment</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Tools & Platforms Used <span>*</span></label>
+              <div class="checkbox-group">
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="Make.com" /> Make.com</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="Zapier" /> Zapier</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="n8n" /> n8n</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="OpenAI" /> OpenAI / GPT-4</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="LangChain" /> LangChain</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="HubSpot" /> HubSpot</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="Salesforce" /> Salesforce</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="GoHighLevel" /> GoHighLevel</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="Airtable" /> Airtable</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="ActiveCampaign" /> ActiveCampaign</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="Python" /> Python</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="JavaScript" /> JavaScript / Node</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="Shopify" /> Shopify</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="tools" value="Notion" /> Notion</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Industries Served</label>
+              <div class="checkbox-group">
+                <label class="checkbox-chip"><input type="checkbox" data-group="industries" value="ecommerce" /> E-commerce</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="industries" value="saas" /> SaaS / Tech</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="industries" value="real-estate" /> Real Estate</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="industries" value="healthcare" /> Healthcare</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="industries" value="finance" /> Finance</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="industries" value="marketing" /> Marketing</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="industries" value="legal" /> Legal</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="industries" value="education" /> Education</label>
+                <label class="checkbox-chip"><input type="checkbox" data-group="industries" value="recruitment" /> Recruitment</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="form-card" style="margin-bottom:24px">
+            <div class="form-section-title">
+              <div class="step-badge">3</div>
+              Pricing & Location
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Hourly Rate (£)</label>
+                <select name="hourly_rate" class="form-control">
+                  <option value="">Select range</option>
+                  <option>Under £25/hr</option>
+                  <option>£25 – £50/hr</option>
+                  <option>£50 – £75/hr</option>
+                  <option>£75 – £100/hr</option>
+                  <option>£100 – £150/hr</option>
+                  <option>£150+/hr</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Minimum Project Budget</label>
+                <select class="form-control">
+                  <option value="">Select range</option>
+                  <option>Under £500</option>
+                  <option>£500 – £1,000</option>
+                  <option>£1,000 – £5,000</option>
+                  <option>£5,000 – £15,000</option>
+                  <option>£15,000+</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>City / Location <span>*</span></label>
+                <input type="text" name="location_city" class="form-control" placeholder="e.g. London, Manchester" required />
+              </div>
+              <div class="form-group">
+                <label>Country</label>
+                <select class="form-control">
+                  <option>United Kingdom</option>
+                  <option>United States</option>
+                  <option>Canada</option>
+                  <option>Australia</option>
+                  <option>Germany</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Remote Work</label>
+              <select class="form-control">
+                <option>Yes — work with clients worldwide</option>
+                <option>Yes — UK clients only</option>
+                <option>On-site only</option>
+                <option>Hybrid (remote + on-site)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Team Size</label>
+                <select class="form-control">
+                  <option>Solo (just me)</option>
+                  <option>2-5 people</option>
+                  <option>6-15 people</option>
+                  <option>16-50 people</option>
+                  <option>50+ people</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Years of Experience</label>
+                <select class="form-control">
+                  <option>Under 1 year</option>
+                  <option>1-2 years</option>
+                  <option>3-5 years</option>
+                  <option>5-10 years</option>
+                  <option>10+ years</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="form-card" style="margin-bottom:24px">
+            <div class="form-section-title">
+              <div class="step-badge">4</div>
+              Contact & Account
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Your Name <span>*</span></label>
+                <input type="text" name="contact_name" class="form-control" placeholder="Full name" required />
+              </div>
+              <div class="form-group">
+                <label>Email Address <span>*</span></label>
+                <input type="email" name="email" class="form-control" placeholder="work@email.com" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Phone (optional)</label>
+              <input type="tel" class="form-control" placeholder="+44 ..." />
+            </div>
+            <div class="form-group">
+              <label>Create Password <span>*</span></label>
+              <input type="password" name="password" class="form-control" placeholder="Min. 8 characters" required />
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-top:8px">
+              <input type="checkbox" id="terms" style="accent-color:var(--green);margin-top:2px" required />
+              <label for="terms" style="font-size:13px;color:var(--white-60);cursor:pointer">I agree to the <a href="#" style="color:var(--green)">Terms of Service</a> and <a href="#" style="color:var(--green)">Privacy Policy</a></label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg w-full" style="justify-content:center;font-size:16px">
+            ⚡ Submit My Listing →
+          </button>
+          <p style="font-size:13px;color:var(--white-60);text-align:center;margin-top:12px">Free listing · Live within 24 hours · No credit card required</p>
+        </form>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="submit-sidebar-info">
+        <h3 style="font-family:var(--font-head);font-weight:700;font-size:18px;margin-bottom:20px">Why List on AutomationHire?</h3>
+        <div class="plan-comparison">
+          <div class="plan-comparison-item">
+            <div class="plan-icon">🎯</div>
+            <div>
+              <div class="plan-item-title">Targeted Buyers</div>
+              <div class="plan-item-desc">Every visitor is actively searching to hire an automation expert. High buying intent.</div>
+            </div>
+          </div>
+          <div class="plan-comparison-item">
+            <div class="plan-icon">✓</div>
+            <div>
+              <div class="plan-item-title">Verified Badge</div>
+              <div class="plan-item-desc">Stand out with our trust-building Verified badge, included in paid plans.</div>
+            </div>
+          </div>
+          <div class="plan-comparison-item">
+            <div class="plan-icon">📊</div>
+            <div>
+              <div class="plan-item-title">Analytics Dashboard</div>
+              <div class="plan-item-desc">See who's viewing your profile, where leads come from, and track conversions.</div>
+            </div>
+          </div>
+          <div class="plan-comparison-item">
+            <div class="plan-icon">⚡</div>
+            <div>
+              <div class="plan-item-title">Inbound Leads</div>
+              <div class="plan-item-desc">Receive project briefs and quote requests directly in your dashboard inbox.</div>
+            </div>
+          </div>
+          <div class="plan-comparison-item">
+            <div class="plan-icon">🔗</div>
+            <div>
+              <div class="plan-item-title">No Commission</div>
+              <div class="plan-item-desc">We never take a cut from your client deals. Flat monthly fee only.</div>
+            </div>
+          </div>
+          <div class="plan-comparison-item">
+            <div class="plan-icon">📈</div>
+            <div>
+              <div class="plan-item-title">SEO Backlink</div>
+              <div class="plan-item-desc">Your profile page gets indexed and linked, boosting your web presence.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:rgba(0,230,118,0.07);border:1px solid rgba(0,230,118,0.2);border-radius:var(--radius-md);padding:16px;margin-top:24px">
+          <div style="font-size:24px;margin-bottom:8px">💬</div>
+          <p style="font-size:13px;color:var(--white-60);font-style:italic;line-height:1.7">"Listed on a Tuesday morning, had my first lead request by Thursday afternoon. The ROI on the Growth plan was clear within week one."</p>
+          <div style="font-size:13px;font-weight:600;margin-top:10px">— James T., ZapMaster Pro</div>
+        </div>
+
+        <a href="pricing.html" class="btn btn-secondary w-full mt-16" style="justify-content:center">View All Plans →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div><a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+</body>
+</html>

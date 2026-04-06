@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse AI Automation Experts & Agencies | AutomationHire</title>
+  <meta name="description" content="Find and compare 500+ verified AI automation agencies, Make.com experts, Zapier consultants and workflow automation freelancers in the UK." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="request-quote.html">Get Matched</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
+      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a><span>/</span>
+      <span style="color:var(--white-90)">Browse Experts</span>
+    </div>
+    <h1 class="page-hero-title">AI Automation Experts & Agencies</h1>
+    <p class="page-hero-sub">500+ verified providers. Filter by tool, location, budget and more.</p>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+    <div class="directory-layout">
+
+      <!-- FILTER SIDEBAR -->
+      <aside class="filter-sidebar">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <h3 style="font-family:var(--font-head);font-weight:700;font-size:16px">Filters</h3>
+          <button class="btn btn-sm" style="padding:4px 10px;font-size:12px;background:transparent;color:var(--green);border:1px solid rgba(0,230,118,0.2);border-radius:6px;cursor:pointer">Clear All</button>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Provider Type</span>
+          <div class="filter-options">
+            <label class="filter-option"><input type="checkbox" /> Agency</label>
+            <label class="filter-option"><input type="checkbox" /> Freelancer</label>
+            <label class="filter-option"><input type="checkbox" /> Consultant</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Automation Type</span>
+          <div class="filter-options">
+            <label class="filter-option"><input type="checkbox" /> AI Agents</label>
+            <label class="filter-option"><input type="checkbox" /> Workflow Automation</label>
+            <label class="filter-option"><input type="checkbox" /> CRM Automation</label>
+            <label class="filter-option"><input type="checkbox" /> Email Automation</label>
+            <label class="filter-option"><input type="checkbox" /> Chatbot Development</label>
+            <label class="filter-option"><input type="checkbox" /> Lead Generation</label>
+            <label class="filter-option"><input type="checkbox" /> E-commerce</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Tools Used</span>
+          <div class="filter-options">
+            <label class="filter-option"><input type="checkbox" /> Make.com</label>
+            <label class="filter-option"><input type="checkbox" /> Zapier</label>
+            <label class="filter-option"><input type="checkbox" /> n8n</label>
+            <label class="filter-option"><input type="checkbox" /> OpenAI / GPT</label>
+            <label class="filter-option"><input type="checkbox" /> HubSpot</label>
+            <label class="filter-option"><input type="checkbox" /> Salesforce</label>
+            <label class="filter-option"><input type="checkbox" /> GoHighLevel</label>
+            <label class="filter-option"><input type="checkbox" /> Airtable</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Hourly Rate</span>
+          <input type="range" class="filter-range" min="0" max="300" value="200" id="rate-slider" />
+          <div class="filter-range-labels">
+            <span>£0</span>
+            <span id="rate-val" style="color:var(--green);font-weight:600">Up to £200/hr</span>
+            <span>£300+</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Location</span>
+          <div class="filter-options">
+            <label class="filter-option"><input type="checkbox" /> London</label>
+            <label class="filter-option"><input type="checkbox" /> Manchester</label>
+            <label class="filter-option"><input type="checkbox" /> Birmingham</label>
+            <label class="filter-option"><input type="checkbox" /> Remote Only</label>
+            <label class="filter-option"><input type="checkbox" /> UK-wide</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Industry</span>
+          <div class="filter-options">
+            <label class="filter-option"><input type="checkbox" /> E-commerce</label>
+            <label class="filter-option"><input type="checkbox" /> SaaS / Tech</label>
+            <label class="filter-option"><input type="checkbox" /> Real Estate</label>
+            <label class="filter-option"><input type="checkbox" /> Healthcare</label>
+            <label class="filter-option"><input type="checkbox" /> Finance</label>
+            <label class="filter-option"><input type="checkbox" /> Marketing</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Rating</span>
+          <div class="filter-options">
+            <label class="filter-option"><input type="checkbox" /> ★★★★★ 5 stars</label>
+            <label class="filter-option"><input type="checkbox" /> ★★★★☆ 4+ stars</label>
+            <label class="filter-option"><input type="checkbox" /> ★★★☆☆ 3+ stars</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Badges</span>
+          <div class="filter-options">
+            <label class="filter-option"><input type="checkbox" /> ✓ Verified Only</label>
+            <label class="filter-option"><input type="checkbox" /> ⭐ Featured</label>
+            <label class="filter-option"><input type="checkbox" /> 🆕 New Listings</label>
+          </div>
+        </div>
+
+        <a href="request-quote.html" class="btn btn-primary w-full mt-16" style="justify-content:center">
+          ⚡ Get Matched Free
+        </a>
+      </aside>
+
+      <!-- RESULTS -->
+      <div class="results-area">
+        <div class="results-header">
+          <div class="results-count"><strong id="result-count-num">500</strong> providers found</div>
+          <div class="results-sort">
+            Sort by:
+            <select id="sort-select" data-filter="sort">
+              <option value="featured">Most Relevant</option>
+              <option value="rating">Highest Rated</option>
+              <option value="reviews">Most Reviews</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+              <option value="newest">Newest</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Active filter chips -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+          <div class="tag tag-green" style="padding:6px 12px;cursor:pointer">Make.com ×</div>
+          <div class="tag tag-blue" style="padding:6px 12px;cursor:pointer">London ×</div>
+          <div class="tag tag-white" style="padding:6px 12px;cursor:pointer">Verified ×</div>
+        </div>
+
+        <div class="providers-grid" id="providers-api-grid">
+          <!-- Cards injected by api.js → initDirectoryPage() -->
+          <!-- Static fallback cards shown while API loads: -->
+          <div class="provider-card featured">
+            <span class="featured-label">⭐ Featured</span>
+            <div class="card-header">
+              <div class="card-avatar">🚀</div>
+              <div class="card-info">
+                <div class="card-name">FlowCraft Agency</div>
+                <div class="card-type">Agency · London, UK</div>
+              </div>
+            </div>
+            <div class="card-rating">
+              <span class="stars">★★★★★</span>
+              <strong>5.0</strong>
+              <span class="text-muted">(47)</span>
+              <span class="verified-badge" style="margin-left:auto">✓ Verified</span>
+            </div>
+            <p class="card-desc">End-to-end AI workflow automation. Make.com and n8n pipelines that save businesses 40+ hours per week.</p>
+            <div class="card-tags">
+              <span class="tag tag-green">Make.com</span>
+              <span class="tag tag-blue">n8n</span>
+              <span class="tag tag-white">AI Agents</span>
+            </div>
+            <div class="card-footer">
+              <div class="card-price">From <span>£75</span>/hr</div>
+              <div><a href="provider-profile.html" class="btn btn-primary btn-sm">View Profile</a></div>
+            </div>
+          </div>
+
+          <div class="provider-card">
+            <div class="card-header">
+              <div class="card-avatar" style="background:linear-gradient(135deg,#2979ff,#00b4d8)">⚡</div>
+              <div class="card-info">
+                <div class="card-name">ZapMaster Pro</div>
+                <div class="card-type">Freelancer · Manchester</div>
+              </div>
+            </div>
+            <div class="card-rating">
+              <span class="stars">★★★★★</span>
+              <strong>4.9</strong>
+              <span class="text-muted">(31)</span>
+              <span class="verified-badge" style="margin-left:auto">✓ Verified</span>
+            </div>
+            <p class="card-desc">Certified Zapier Expert. 200+ automations built. HubSpot, Salesforce, e-commerce integrations.</p>
+            <div class="card-tags">
+              <span class="tag tag-green">Zapier</span>
+              <span class="tag tag-blue">HubSpot</span>
+            </div>
+            <div class="card-footer">
+              <div class="card-price">From <span>£55</span>/hr</div>
+              <div><a href="provider-profile.html" class="btn btn-primary btn-sm">View Profile</a></div>
+            </div>
+          </div>
+
+          <div class="provider-card">
+            <div class="card-header">
+              <div class="card-avatar" style="background:linear-gradient(135deg,#7c3aed,#2979ff)">🧠</div>
+              <div class="card-info">
+                <div class="card-name">NeuralFlow Ltd</div>
+                <div class="card-type">Agency · Remote</div>
+              </div>
+            </div>
+            <div class="card-rating">
+              <span class="stars">★★★★★</span>
+              <strong>4.8</strong>
+              <span class="text-muted">(62)</span>
+              <span class="verified-badge" style="margin-left:auto">✓ Verified</span>
+            </div>
+            <p class="card-desc">AI-first automation studio. GPT-4 agents, chatbots, intelligent document processing pipelines.</p>
+            <div class="card-tags">
+              <span class="tag tag-green">OpenAI</span>
+              <span class="tag tag-blue">LangChain</span>
+              <span class="tag tag-white">Python</span>
+            </div>
+            <div class="card-footer">
+              <div class="card-price">From <span>£95</span>/hr</div>
+              <div><a href="provider-profile.html" class="btn btn-primary btn-sm">View Profile</a></div>
+            </div>
+          </div>
+
+          <div class="provider-card">
+            <div class="card-header">
+              <div class="card-avatar" style="background:linear-gradient(135deg,#00e676,#00b4d8)">📊</div>
+              <div class="card-info">
+                <div class="card-name">CRMFlow Solutions</div>
+                <div class="card-type">Agency · Birmingham</div>
+              </div>
+            </div>
+            <div class="card-rating">
+              <span class="stars">★★★★☆</span>
+              <strong>4.7</strong>
+              <span class="text-muted">(28)</span>
+            </div>
+            <p class="card-desc">CRM automation specialists. HubSpot, Salesforce, GoHighLevel pipeline setup and lead routing.</p>
+            <div class="card-tags">
+              <span class="tag tag-green">HubSpot</span>
+              <span class="tag tag-blue">Salesforce</span>
+            </div>
+            <div class="card-footer">
+              <div class="card-price">From <span>£60</span>/hr</div>
+              <div><a href="provider-profile.html" class="btn btn-primary btn-sm">View Profile</a></div>
+            </div>
+          </div>
+
+          <div class="provider-card">
+            <div class="card-header">
+              <div class="card-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">🛒</div>
+              <div class="card-info">
+                <div class="card-name">ShopBot Automations</div>
+                <div class="card-type">Freelancer · Edinburgh</div>
+              </div>
+            </div>
+            <div class="card-rating">
+              <span class="stars">★★★★★</span>
+              <strong>4.9</strong>
+              <span class="text-muted">(19)</span>
+              <span class="verified-badge" style="margin-left:auto">✓ Verified</span>
+            </div>
+            <p class="card-desc">E-commerce automation. Shopify, WooCommerce order management, inventory sync, returns automation.</p>
+            <div class="card-tags">
+              <span class="tag tag-green">Shopify</span>
+              <span class="tag tag-blue">Make.com</span>
+            </div>
+            <div class="card-footer">
+              <div class="card-price">From <span>£50</span>/hr</div>
+              <div><a href="provider-profile.html" class="btn btn-primary btn-sm">View Profile</a></div>
+            </div>
+          </div>
+
+          <div class="provider-card">
+            <div class="card-header">
+              <div class="card-avatar" style="background:linear-gradient(135deg,#10b981,#2979ff)">🎯</div>
+              <div class="card-info">
+                <div class="card-name">LeadEngine Agency</div>
+                <div class="card-type">Agency · Bristol</div>
+              </div>
+            </div>
+            <div class="card-rating">
+              <span class="stars">★★★★☆</span>
+              <strong>4.6</strong>
+              <span class="text-muted">(35)</span>
+            </div>
+            <p class="card-desc">B2B lead generation automation. AI outreach, LinkedIn automation, multi-channel funnels.</p>
+            <div class="card-tags">
+              <span class="tag tag-green">Lead Gen</span>
+              <span class="tag tag-blue">LinkedIn</span>
+            </div>
+            <div class="card-footer">
+              <div class="card-price">From <span>£65</span>/hr</div>
+              <div><a href="provider-profile.html" class="btn btn-primary btn-sm">View Profile</a></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Load More -->
+        <div style="text-align:center;margin-top:40px">
+          <button id="load-more-btn" class="btn btn-secondary btn-lg" style="display:none">
+            Load More Providers →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div><a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+<script>
+  const slider = document.getElementById('rate-slider');
+  const rateVal = document.getElementById('rate-val');
+  if (slider) slider.addEventListener('input', () => { rateVal.textContent = 'Up to £' + slider.value + '/hr'; });
+</script>
+</body>
+</html>

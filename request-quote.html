@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Matched With Automation Experts — Free Quote | AutomationHire</title>
+  <meta name="description" content="Tell us what you need automated. We'll match you with 3-5 verified experts in 4 hours. Free, no obligation." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<section class="section" style="padding-top:120px;min-height:100vh;display:flex;align-items:center">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center">
+
+      <!-- Left: Info -->
+      <div>
+        <div class="hero-badge reveal" style="margin-bottom:24px">
+          <span></span> Free Matching Service
+        </div>
+        <h1 class="section-title reveal" style="font-size:clamp(30px,4vw,48px);text-align:left;margin-bottom:20px">
+          Get Matched With the <span class="grad-green">Right Expert</span> in 4 Hours
+        </h1>
+        <p style="font-size:16px;color:var(--white-60);line-height:1.8;margin-bottom:32px" class="reveal reveal-delay-1">
+          Tell us what you need. We'll match you with 3-5 verified automation experts who fit your project, budget, and timeline. 100% free, zero obligation.
+        </p>
+
+        <div style="display:flex;flex-direction:column;gap:20px" class="reveal reveal-delay-2">
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--green),var(--blue));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">1</div>
+            <div>
+              <div style="font-weight:600;font-size:15px;margin-bottom:4px">Describe Your Project</div>
+              <div style="font-size:14px;color:var(--white-60)">Tell us what you need automated, your tools, budget, and timeline. Takes 2 minutes.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--green),var(--blue));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">2</div>
+            <div>
+              <div style="font-weight:600;font-size:15px;margin-bottom:4px">We Match You</div>
+              <div style="font-size:14px;color:var(--white-60)">Our system finds the 3-5 best-fit providers from our verified network within 4 hours.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--green),var(--blue));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">3</div>
+            <div>
+              <div style="font-weight:600;font-size:15px;margin-bottom:4px">Choose & Hire</div>
+              <div style="font-size:14px;color:var(--white-60)">Review proposals, compare providers, and hire the best fit. No commission, no pressure.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social proof -->
+        <div style="margin-top:40px;padding:20px;background:var(--black-3);border:1px solid var(--border);border-radius:var(--radius-md)" class="reveal reveal-delay-3">
+          <div style="display:flex;gap:4px;margin-bottom:8px">
+            <span style="font-size:20px">★★★★★</span>
+            <strong style="margin-left:6px;color:var(--green)">4.9/5</strong>
+            <span style="color:var(--white-60);font-size:14px;margin-left:4px">from 847 matched projects</span>
+          </div>
+          <p style="font-size:14px;color:var(--white-60);font-style:italic">"Got 4 proposals in 3 hours. Hired the best one and we launched our automation in 2 weeks. Amazing service."</p>
+          <div style="font-size:13px;font-weight:600;margin-top:8px">— Claire M., E-commerce Director</div>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="reveal reveal-delay-1">
+        <div class="form-card" style="border-color:rgba(0,230,118,0.2)">
+          <div style="text-align:center;margin-bottom:24px">
+            <div style="font-size:32px;margin-bottom:8px">⚡</div>
+            <h2 style="font-family:var(--font-head);font-size:22px;font-weight:700;margin-bottom:6px">Request Free Expert Matching</h2>
+            <p style="font-size:14px;color:var(--white-60)">Takes 2 minutes · No spam · No obligation</p>
+          </div>
+
+          <form id="get-matched-form">
+            <div class="form-group">
+              <label>What do you need automated? <span style="color:var(--green)">*</span></label>
+              <select name="automation_type" class="form-control" required>
+                <option value="">Select automation type</option>
+                <option>AI Agents / Assistants</option>
+                <option>Workflow / Business Process</option>
+                <option>CRM Automation</option>
+                <option>Email / Marketing Automation</option>
+                <option>Chatbot Development</option>
+                <option>Lead Generation Automation</option>
+                <option>E-commerce Automation</option>
+                <option>Document Automation</option>
+                <option>API Integration</option>
+                <option>Other / Multiple</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Describe your project <span style="color:var(--green)">*</span></label>
+              <textarea name="description" class="form-control" style="min-height:110px" placeholder="e.g. We need to automate our lead capture from website → CRM → email sequence. Currently using HubSpot and want to add AI scoring..." required></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Your budget</label>
+                <select class="form-control">
+                  <option value="">Not sure yet</option>
+                  <option>Under £500</option>
+                  <option>£500 – £2,000</option>
+                  <option>£2,000 – £5,000</option>
+                  <option>£5,000 – £15,000</option>
+                  <option>£15,000+</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Timeline</label>
+                <select class="form-control">
+                  <option>ASAP</option>
+                  <option>Within 2 weeks</option>
+                  <option>Within a month</option>
+                  <option>Flexible</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Tools you already use</label>
+              <input type="text" name="tools_mentioned" class="form-control" placeholder="e.g. HubSpot, Slack, Shopify, Notion..." />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Your name <span style="color:var(--green)">*</span></label>
+                <input type="text" name="client_name" class="form-control" placeholder="Full name" required />
+              </div>
+              <div class="form-group">
+                <label>Email <span style="color:var(--green)">*</span></label>
+                <input type="email" name="client_email" class="form-control" placeholder="work@company.com" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Company name</label>
+              <input type="text" name="client_company" class="form-control" placeholder="Your company (optional)" />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-full" style="justify-content:center;font-size:16px;margin-top:8px">
+              ⚡ Get My Free Matches →
+            </button>
+
+            <p style="font-size:12px;color:var(--white-30);text-align:center;margin-top:12px">
+              No spam. Your details are only shared with matched providers. <a href="#" style="color:var(--white-60)">Privacy Policy</a>
+            </p>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div><a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+</body>
+</html>

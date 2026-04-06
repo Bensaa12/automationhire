@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing Plans — List Your Automation Business | AutomationHire</title>
+  <meta name="description" content="Free and paid plans for automation agencies and freelancers. Get featured, receive leads, and grow your automation business on AutomationHire." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
+      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:0">
+      <div class="section-label">Transparent Pricing</div>
+      <h1 class="page-hero-title" style="font-size:clamp(32px,5vw,52px)">Grow Your Automation Business</h1>
+      <p class="page-hero-sub" style="font-size:17px;max-width:520px;margin:12px auto 0">List free. Upgrade when you're ready. No hidden fees, no commissions on client deals.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <!-- Toggle -->
+    <div class="pricing-toggle">
+      <span>Monthly</span>
+      <div class="toggle-switch" id="billing-toggle">
+        <div class="toggle-knob"></div>
+      </div>
+      <span>Annual <span class="toggle-save">Save 30%</span></span>
+    </div>
+
+    <!-- Plans -->
+    <div class="pricing-grid reveal">
+      <!-- Free -->
+      <div class="pricing-card">
+        <div class="pricing-plan">Free</div>
+        <div class="pricing-price"><sup>£</sup><span data-price-monthly="0" data-price-yearly="0">0</span></div>
+        <div class="pricing-period">forever · no credit card</div>
+        <hr class="pricing-divider" />
+        <ul class="pricing-features">
+          <li>Basic listing profile</li>
+          <li>1 service category</li>
+          <li>Company description</li>
+          <li>Contact button</li>
+          <li>Appear in search results</li>
+          <li class="disabled">Featured placement</li>
+          <li class="disabled">Inbound leads</li>
+          <li class="disabled">Analytics dashboard</li>
+          <li class="disabled">Verified badge</li>
+          <li class="disabled">Portfolio case studies</li>
+          <li class="disabled">Priority support</li>
+        </ul>
+        <a href="submit-listing.html" class="btn btn-secondary w-full" style="justify-content:center">Get Started Free</a>
+      </div>
+
+      <!-- Growth — Popular -->
+      <div class="pricing-card popular reveal reveal-delay-1">
+        <div class="pricing-popular-badge">Most Popular</div>
+        <div class="pricing-plan">Growth</div>
+        <div class="pricing-price"><sup>£</sup><span data-price-monthly="79" data-price-yearly="55">79</span></div>
+        <div class="pricing-period" id="growth-period">per month, billed monthly</div>
+        <hr class="pricing-divider" />
+        <ul class="pricing-features">
+          <li>Full profile with rich media</li>
+          <li>Up to 5 service categories</li>
+          <li>Portfolio (3 case studies)</li>
+          <li>20 inbound leads per month</li>
+          <li>Category page featured slot</li>
+          <li>Analytics dashboard</li>
+          <li>✓ Verified badge included</li>
+          <li>Review management</li>
+          <li>Email support</li>
+          <li class="disabled">Homepage featured</li>
+          <li class="disabled">Unlimited leads</li>
+        </ul>
+        <button data-upgrade-plan="growth" class="btn btn-primary w-full" style="justify-content:center">Start Growth Plan</button>
+        <p style="font-size:12px;color:var(--white-60);text-align:center;margin-top:10px">14-day free trial · cancel anytime</p>
+      </div>
+
+      <!-- Pro -->
+      <div class="pricing-card reveal reveal-delay-2">
+        <div class="pricing-plan">Pro</div>
+        <div class="pricing-price"><sup>£</sup><span data-price-monthly="149" data-price-yearly="104">149</span></div>
+        <div class="pricing-period">per month, billed monthly</div>
+        <hr class="pricing-divider" />
+        <ul class="pricing-features">
+          <li>Everything in Growth</li>
+          <li>Unlimited service categories</li>
+          <li>Unlimited case studies</li>
+          <li>Unlimited inbound leads</li>
+          <li>Homepage featured placement</li>
+          <li>Custom profile banner</li>
+          <li>Video intro embed</li>
+          <li>Priority search ranking</li>
+          <li>Priority support (4hr response)</li>
+          <li>Monthly analytics report</li>
+          <li>Badge: "Top Rated" eligibility</li>
+        </ul>
+        <button data-upgrade-plan="pro" class="btn btn-blue w-full" style="justify-content:center">Start Pro Plan</button>
+        <p style="font-size:12px;color:var(--white-60);text-align:center;margin-top:10px">14-day free trial · cancel anytime</p>
+      </div>
+    </div>
+
+    <!-- Agency Plan -->
+    <div class="cta-banner reveal mt-32" style="padding:40px 48px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;position:relative;z-index:1">
+        <div>
+          <div class="tag tag-green" style="margin-bottom:12px;padding:6px 14px;font-size:13px">Agency Plan</div>
+          <h3 style="font-family:var(--font-head);font-size:24px;font-weight:700;margin-bottom:8px">Multiple Profiles? We've Got You.</h3>
+          <p style="font-size:15px;color:var(--white-60);max-width:500px">For agencies with multiple brands or team members. Manage up to 10 listings from one dashboard. <strong style="color:var(--white)">From £299/month.</strong></p>
+        </div>
+        <a href="#" class="btn btn-primary btn-lg">Talk to Sales →</a>
+      </div>
+    </div>
+
+    <!-- Feature Comparison -->
+    <div class="reveal mt-32">
+      <h3 class="section-title text-center" style="font-size:28px;margin-bottom:32px">Full Feature Comparison</h3>
+      <div style="background:var(--black-3);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden">
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <thead>
+            <tr style="background:var(--black-4)">
+              <th style="padding:16px 24px;text-align:left;color:var(--white-60);font-weight:600">Feature</th>
+              <th style="padding:16px;text-align:center;font-family:var(--font-head);color:var(--white-60)">Free</th>
+              <th style="padding:16px;text-align:center;font-family:var(--font-head);color:var(--green)">Growth</th>
+              <th style="padding:16px;text-align:center;font-family:var(--font-head);color:var(--blue)">Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-top:1px solid var(--border)">
+              <td style="padding:14px 24px;color:var(--white-60)">Listed in Directory</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">✓</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">✓</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">✓</td>
+            </tr>
+            <tr style="border-top:1px solid var(--border);background:rgba(255,255,255,0.01)">
+              <td style="padding:14px 24px;color:var(--white-60)">Service Categories</td>
+              <td style="padding:14px;text-align:center;color:var(--white-60)">1</td>
+              <td style="padding:14px;text-align:center;color:var(--white)">5</td>
+              <td style="padding:14px;text-align:center;color:var(--white)">Unlimited</td>
+            </tr>
+            <tr style="border-top:1px solid var(--border)">
+              <td style="padding:14px 24px;color:var(--white-60)">Monthly Inbound Leads</td>
+              <td style="padding:14px;text-align:center;color:var(--white-30)">—</td>
+              <td style="padding:14px;text-align:center;color:var(--white)">20</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">Unlimited</td>
+            </tr>
+            <tr style="border-top:1px solid var(--border);background:rgba(255,255,255,0.01)">
+              <td style="padding:14px 24px;color:var(--white-60)">Verified Badge</td>
+              <td style="padding:14px;text-align:center;color:var(--white-30)">—</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">✓</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">✓</td>
+            </tr>
+            <tr style="border-top:1px solid var(--border)">
+              <td style="padding:14px 24px;color:var(--white-60)">Case Studies</td>
+              <td style="padding:14px;text-align:center;color:var(--white-30)">—</td>
+              <td style="padding:14px;text-align:center;color:var(--white)">3</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">Unlimited</td>
+            </tr>
+            <tr style="border-top:1px solid var(--border);background:rgba(255,255,255,0.01)">
+              <td style="padding:14px 24px;color:var(--white-60)">Analytics Dashboard</td>
+              <td style="padding:14px;text-align:center;color:var(--white-30)">—</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">✓</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">✓</td>
+            </tr>
+            <tr style="border-top:1px solid var(--border)">
+              <td style="padding:14px 24px;color:var(--white-60)">Homepage Featured Placement</td>
+              <td style="padding:14px;text-align:center;color:var(--white-30)">—</td>
+              <td style="padding:14px;text-align:center;color:var(--white-30)">—</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">✓</td>
+            </tr>
+            <tr style="border-top:1px solid var(--border);background:rgba(255,255,255,0.01)">
+              <td style="padding:14px 24px;color:var(--white-60)">Priority Support</td>
+              <td style="padding:14px;text-align:center;color:var(--white-30)">—</td>
+              <td style="padding:14px;text-align:center;color:var(--white-60)">Email</td>
+              <td style="padding:14px;text-align:center;color:var(--green)">4hr response</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="reveal mt-32">
+      <h3 class="section-title text-center" style="font-size:28px;margin-bottom:32px">Frequently Asked Questions</h3>
+      <div style="max-width:720px;margin:0 auto">
+
+        <div class="faq-item">
+          <div class="faq-question">Is the free plan really free forever? <span class="faq-chevron">▾</span></div>
+          <div class="faq-answer">Yes — the Free plan is genuinely free with no time limit and no credit card required. You get a basic listing that appears in our directory. You can upgrade anytime when you want more visibility and features.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Do you take commission on projects? <span class="faq-chevron">▾</span></div>
+          <div class="faq-answer">No. We never take commission on deals between you and your clients. Your subscription is a flat fee for directory visibility and lead access. What you earn is 100% yours.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">What counts as an "inbound lead"? <span class="faq-chevron">▾</span></div>
+          <div class="faq-answer">A lead is when a business submits a quote request directly to your profile, or when our matching system sends your profile to a buyer. You receive the lead's contact details and project brief directly.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">How does the Verified badge work? <span class="faq-chevron">▾</span></div>
+          <div class="faq-answer">The Verified badge is included in Growth and Pro plans. Our team manually reviews your profile, checks your portfolio, certifications, and company details. Most verifications complete within 48 hours of your first billing.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">Can I cancel anytime? <span class="faq-chevron">▾</span></div>
+          <div class="faq-answer">Yes, cancel anytime from your dashboard. You keep your paid features until the end of your billing period, then drop to the Free plan. No exit fees, no questions asked.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <div class="cta-banner-title">Start Free. <span class="grad-green">Scale When Ready.</span></div>
+      <p class="cta-banner-sub">Join 500+ automation experts already listed on AutomationHire.</p>
+      <div class="cta-banner-actions">
+        <a href="submit-listing.html" class="btn btn-primary btn-lg">List Your Business Free →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div><a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+</body>
+</html>
