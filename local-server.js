@@ -40,6 +40,7 @@ const routes = [
   { path: '/api/stripe/create-checkout',handler: './api/stripe/create-checkout'},
   { path: '/api/stripe/webhook',        handler: './api/stripe/webhook'        },
   { path: '/api/chat',                  handler: './api/chat'                  },
+  { path: '/api/n8n-webhook',           handler: './api/n8n-webhook'           },
 ];
 
 routes.forEach(({ path: routePath, handler }) => {
