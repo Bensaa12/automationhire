@@ -103,35 +103,42 @@ module.exports = async function handler(req, res) {
     const languageInstruction = `\n\n## LANGUAGE INSTRUCTION\nThe visitor has selected: ${langLabel} (${language}). Respond in this language unless they speak to you in a different language — always match the language they use.`;
     const systemPrompt = BASE_SYSTEM + languageInstruction + expertsContext;
 
-    // Call Gemini API — try gemini-1.5-flash (stable, works with all AI Studio keys)
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: systemPrompt }] },
-          contents: cleanMessages,
-          generationConfig: {
-            maxOutputTokens: 120,   // Short — this is voice
-            temperature: 0.75,
-            topP: 0.9,
-          },
-          safetySettings: [
-            { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-            { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-            { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-          ],
-        }),
-      }
-    );
+    // Try models in order — different AI Studio keys support different models
+    const MODELS = [
+      'gemini-1.5-flash-latest',
+      'gemini-1.5-flash',
+      'gemini-2.0-flash',
+      'gemini-pro',
+    ];
 
-    if (!geminiRes.ok) {
+    const requestBody = JSON.stringify({
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      contents: cleanMessages,
+      generationConfig: { maxOutputTokens: 120, temperature: 0.75, topP: 0.9 },
+      safetySettings: [
+        { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      ],
+    });
+
+    let geminiRes = null;
+    let usedModel = null;
+    for (const model of MODELS) {
+      geminiRes = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: requestBody }
+      );
+      console.log(`[receptionist] tried ${model} → ${geminiRes.status}`);
+      if (geminiRes.ok) { usedModel = model; break; }
+      if (geminiRes.status !== 404) break; // non-404 error, stop trying
+    }
+
+    if (!geminiRes || !geminiRes.ok) {
       const errBody = await geminiRes.text();
-      console.error('[receptionist] Gemini error:', geminiRes.status, errBody);
-      // Return a friendly spoken error so the UI doesn't silently fail
-      return ok(res, { reply: `I'm having a little technical difficulty right now. The error code is ${geminiRes.status}. Please try again in a moment.`, _debug: errBody.slice(0,200) });
+      console.error('[receptionist] All models failed. Last error:', geminiRes.status, errBody);
+      return ok(res, { reply: `I'm sorry, I'm having a connection issue right now. Please try the text box below or email us at hello@automationhire.co.uk`, _debug: errBody.slice(0, 200) });
     }
 
     const data = await geminiRes.json();
