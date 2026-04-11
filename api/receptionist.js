@@ -103,12 +103,11 @@ module.exports = async function handler(req, res) {
     const languageInstruction = `\n\n## LANGUAGE INSTRUCTION\nThe visitor has selected: ${langLabel} (${language}). Respond in this language unless they speak to you in a different language — always match the language they use.`;
     const systemPrompt = BASE_SYSTEM + languageInstruction + expertsContext;
 
-    // Try models in order — different AI Studio keys support different models
+    // Try models in order — using models confirmed available on this key
     const MODELS = [
-      'gemini-1.5-flash-latest',
-      'gemini-1.5-flash',
+      'gemini-2.5-flash',
       'gemini-2.0-flash',
-      'gemini-pro',
+      'gemini-flash-latest',
     ];
 
     const requestBody = JSON.stringify({
