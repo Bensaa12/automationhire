@@ -76,6 +76,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return err(res, 'Method not allowed', 405);
 
   const apiKey = process.env.GOOGLE_AI_API_KEY;
+  console.log('[receptionist] API key present:', !!apiKey, '| starts with:', apiKey ? apiKey.slice(0, 6) : 'NONE');
   if (!apiKey || apiKey === 'your_google_ai_studio_key_here') {
     return ok(res, { reply: "Hi, I'm Aria from AutomationHire. I'm running in demo mode right now. Please add your Google AI API key to enable full AI responses." });
   }
@@ -102,9 +103,9 @@ module.exports = async function handler(req, res) {
     const languageInstruction = `\n\n## LANGUAGE INSTRUCTION\nThe visitor has selected: ${langLabel} (${language}). Respond in this language unless they speak to you in a different language — always match the language they use.`;
     const systemPrompt = BASE_SYSTEM + languageInstruction + expertsContext;
 
-    // Call Gemini API
+    // Call Gemini API — try gemini-1.5-flash (stable, works with all AI Studio keys)
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -129,7 +130,8 @@ module.exports = async function handler(req, res) {
     if (!geminiRes.ok) {
       const errBody = await geminiRes.text();
       console.error('[receptionist] Gemini error:', geminiRes.status, errBody);
-      return err(res, 'AI service unavailable', 502);
+      // Return a friendly spoken error so the UI doesn't silently fail
+      return ok(res, { reply: `I'm having a little technical difficulty right now. The error code is ${geminiRes.status}. Please try again in a moment.`, _debug: errBody.slice(0,200) });
     }
 
     const data = await geminiRes.json();
