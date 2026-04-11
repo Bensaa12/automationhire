@@ -41,6 +41,7 @@ const routes = [
   { path: '/api/stripe/webhook',        handler: './api/stripe/webhook'        },
   { path: '/api/chat',                  handler: './api/chat'                  },
   { path: '/api/receptionist',          handler: './api/receptionist'          },
+  { path: '/api/test-gemini',           handler: './api/test-gemini'           },
 ];
 
 routes.forEach(({ path: routePath, handler }) => {
