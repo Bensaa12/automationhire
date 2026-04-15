@@ -416,6 +416,14 @@ Cal("inline", {
   layout: "month_view",
 });
 
+// Redirect to thank-you page after successful booking
+Cal("on", {
+  action: "bookingSuccessful",
+  callback: function () {
+    window.location.href = "/thank-you";
+  },
+});
+
 Cal("ui", {
   theme: "dark",
   cssVarsPerTheme: {

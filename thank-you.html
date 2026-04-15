@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're Booked! — AutomationHire</title>
+  <meta name="description" content="Your discovery call is confirmed. Here's everything you need to know before we speak." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <style>
+
+    .ty-hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ty-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse at center,
+        rgba(0,230,118,0.07) 0%,
+        rgba(41,121,255,0.05) 40%,
+        transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Check animation ── */
+    .ty-check-wrap {
+      width: 90px; height: 90px;
+      background: linear-gradient(135deg, rgba(0,230,118,0.15), rgba(41,121,255,0.1));
+      border: 2px solid rgba(0,230,118,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 28px;
+      animation: tyPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+      position: relative;
+    }
+    .ty-check-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,230,118,0.15);
+      animation: tyRing 2s ease-out infinite;
+    }
+    @keyframes tyPop {
+      from { opacity:0; transform:scale(0.5); }
+      to   { opacity:1; transform:scale(1); }
+    }
+    @keyframes tyRing {
+      0%   { transform:scale(1);   opacity:0.5; }
+      100% { transform:scale(1.6); opacity:0; }
+    }
+
+    .ty-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(0,230,118,0.08);
+      border: 1px solid rgba(0,230,118,0.2);
+      border-radius: 50px;
+      padding: 5px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+    .ty-badge span {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .ty-hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(32px, 5vw, 54px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .ty-hero p.ty-sub {
+      font-size: 17px;
+      color: var(--white-60);
+      max-width: 520px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    /* ── Booking summary card ── */
+    .ty-summary {
+      background: #0d1117;
+      border: 1px solid rgba(0,230,118,0.15);
+      border-radius: 16px;
+      padding: 24px 28px;
+      max-width: 420px;
+      width: 100%;
+      margin: 0 auto 48px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+    .ty-summary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+    .ty-summary-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+    .ty-summary-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 14px;
+    }
+    .ty-summary-row:last-child { border-bottom: none; }
+    .ty-summary-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align:center; }
+    .ty-summary-label { color: var(--white-60); flex-shrink: 0; width: 90px; }
+    .ty-summary-value { color: #fff; font-weight: 600; }
+
+    /* ── CTA buttons ── */
+    .ty-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 60px;
+    }
+
+    /* ── Prepare section ── */
+    .ty-prepare {
+      max-width: 860px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+    .ty-prepare h2 {
+      font-family: var(--font-head);
+      font-size: 26px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .ty-prepare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .ty-prepare-card {
+      background: #0d1117;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 22px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .ty-prepare-card:hover {
+      border-color: rgba(0,230,118,0.2);
+      transform: translateY(-2px);
+    }
+    .ty-prepare-num {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: #060810;
+      margin-bottom: 14px;
+    }
+    .ty-prepare-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .ty-prepare-card p {
+      font-size: 13px;
+      color: var(--white-60);
+      line-height: 1.6;
+    }
+
+    /* ── While you wait ── */
+    .ty-while {
+      max-width: 860px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+    .ty-while h2 {
+      font-family: var(--font-head);
+      font-size: 26px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .ty-while-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .ty-while-card {
+      background: #0d1117;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 22px;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .ty-while-card:hover {
+      border-color: rgba(41,121,255,0.3);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+    .ty-while-icon { font-size: 28px; margin-bottom: 12px; }
+    .ty-while-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .ty-while-card p {
+      font-size: 13px;
+      color: var(--white-60);
+      line-height: 1.5;
+    }
+    .ty-while-arrow {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    /* ── Reassurance strip ── */
+    .ty-reassure {
+      background: rgba(0,230,118,0.04);
+      border-top: 1px solid rgba(0,230,118,0.08);
+      border-bottom: 1px solid rgba(0,230,118,0.08);
+      padding: 28px 24px;
+      margin-bottom: 80px;
+    }
+    .ty-reassure-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .ty-reassure-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--white-60);
+    }
+    .ty-reassure-item strong { color: #fff; }
+  </style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
+      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="ty-hero">
+  <div class="ty-glow"></div>
+
+  <div class="ty-check-wrap reveal">✓</div>
+
+  <div class="ty-badge reveal">
+    <span></span> Booking Confirmed
+  </div>
+
+  <h1 class="reveal reveal-delay-1">
+    You're all booked!<br />
+    <span class="grad-green">See you on the call.</span>
+  </h1>
+
+  <p class="ty-sub reveal reveal-delay-2">
+    A confirmation email is on its way to you. We're looking forward to learning
+    about your business and exploring how automation can help you grow.
+  </p>
+
+  <!-- Booking summary -->
+  <div class="ty-summary reveal reveal-delay-3">
+    <div class="ty-summary-title">Your Booking</div>
+    <div class="ty-summary-row">
+      <span class="ty-summary-icon">📅</span>
+      <span class="ty-summary-label">Event</span>
+      <span class="ty-summary-value">Discovery Call</span>
+    </div>
+    <div class="ty-summary-row">
+      <span class="ty-summary-icon">⏱</span>
+      <span class="ty-summary-label">Duration</span>
+      <span class="ty-summary-value">30 minutes</span>
+    </div>
+    <div class="ty-summary-row">
+      <span class="ty-summary-icon">🎥</span>
+      <span class="ty-summary-label">Location</span>
+      <span class="ty-summary-value">Cal Video (link in your email)</span>
+    </div>
+    <div class="ty-summary-row">
+      <span class="ty-summary-icon">✉️</span>
+      <span class="ty-summary-label">Reminder</span>
+      <span class="ty-summary-value">24 hrs & 1 hr before the call</span>
+    </div>
+    <div class="ty-summary-row">
+      <span class="ty-summary-icon">🔄</span>
+      <span class="ty-summary-label">Reschedule</span>
+      <span class="ty-summary-value">Check your confirmation email</span>
+    </div>
+  </div>
+
+  <div class="ty-actions reveal">
+    <a href="providers.html" class="btn btn-primary">Browse Experts While You Wait</a>
+    <a href="index.html" class="btn btn-secondary">Back to Home</a>
+  </div>
+</section>
+
+<!-- REASSURANCE STRIP -->
+<div class="ty-reassure">
+  <div class="ty-reassure-inner">
+    <div class="ty-reassure-item">
+      <span style="font-size:18px">🔒</span>
+      <span>Your details are <strong>never shared</strong></span>
+    </div>
+    <div class="ty-reassure-item">
+      <span style="font-size:18px">✅</span>
+      <span><strong>No sales pressure</strong> — just honest advice</span>
+    </div>
+    <div class="ty-reassure-item">
+      <span style="font-size:18px">🏆</span>
+      <span>100+ businesses <strong>already automated</strong></span>
+    </div>
+    <div class="ty-reassure-item">
+      <span style="font-size:18px">⚡</span>
+      <span>UK's leading <strong>automation directory</strong></span>
+    </div>
+  </div>
+</div>
+
+<!-- PREPARE FOR THE CALL -->
+<section class="ty-prepare">
+  <h2 class="reveal">How to get the most from your call</h2>
+  <div class="ty-prepare-grid">
+    <div class="ty-prepare-card reveal">
+      <div class="ty-prepare-num">1</div>
+      <h3>Think about your biggest time drain</h3>
+      <p>What does your team spend the most time on manually? Invoicing? Follow-ups? Customer support? Come with one or two examples.</p>
+    </div>
+    <div class="ty-prepare-card reveal reveal-delay-1">
+      <div class="ty-prepare-num">2</div>
+      <h3>List the tools you use</h3>
+      <p>Note down your current software stack — CRM, email, e-commerce platform, etc. This helps us suggest the right integrations.</p>
+    </div>
+    <div class="ty-prepare-card reveal reveal-delay-2">
+      <div class="ty-prepare-num">3</div>
+      <h3>Know your rough budget range</h3>
+      <p>You don't need a fixed number — just a sense of whether you're looking for a quick win or a bigger transformation project.</p>
+    </div>
+    <div class="ty-prepare-card reveal reveal-delay-3">
+      <div class="ty-prepare-num">4</div>
+      <h3>Have questions ready</h3>
+      <p>Write down anything you're curious about — AI tools, timelines, what's realistic for your industry. No question is too basic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHILE YOU WAIT -->
+<section class="ty-while">
+  <h2 class="reveal">While you wait, explore AutomationHire</h2>
+  <div class="ty-while-grid">
+    <a href="providers.html" class="ty-while-card reveal">
+      <div class="ty-while-icon">🔍</div>
+      <h3>Browse Experts</h3>
+      <p>See all vetted automation agencies and freelancers on the platform.</p>
+      <span class="ty-while-arrow">Browse directory →</span>
+    </a>
+    <a href="categories.html" class="ty-while-card reveal reveal-delay-1">
+      <div class="ty-while-icon">🗂️</div>
+      <h3>Explore by Category</h3>
+      <p>CRM, chatbots, e-commerce automation, lead generation and more.</p>
+      <span class="ty-while-arrow">View categories →</span>
+    </a>
+    <a href="request-quote.html" class="ty-while-card reveal reveal-delay-2">
+      <div class="ty-while-icon">💬</div>
+      <h3>Request a Quote</h3>
+      <p>Already know what you need? Send a brief to experts and get proposals.</p>
+      <span class="ty-while-arrow">Get quotes →</span>
+    </a>
+    <a href="blog.html" class="ty-while-card reveal reveal-delay-3">
+      <div class="ty-while-icon">📖</div>
+      <h3>Read the Blog</h3>
+      <p>Automation guides, tool reviews and real-world case studies.</p>
+      <span class="ty-while-arrow">Read articles →</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          <div class="footer-logo-icon">⚡</div>
+          <span class="footer-logo-text">Automation<span>Hire</span></span>
+        </a>
+        <p class="footer-desc">The UK's leading directory for AI automation agencies and workflow automation specialists.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-link">𝕏</a>
+          <a href="#" class="social-link">in</a>
+          <a href="#" class="social-link">▶</a>
+          <a href="#" class="social-link">f</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Directory</div>
+        <ul class="footer-links">
+          <li><a href="providers.html">Browse All Experts</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="request-quote.html">Get Matched</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">For Providers</div>
+        <ul class="footer-links">
+          <li><a href="submit-listing.html">Submit Your Listing</a></li>
+          <li><a href="pricing.html">Pricing Plans</a></li>
+          <li><a href="dashboard.html">Provider Dashboard</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="book.html">Book a Call</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div>
+        <a href="privacy.html">Privacy</a> &nbsp;·&nbsp;
+        <a href="terms.html">Terms</a> &nbsp;·&nbsp;
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/chat.js"></script>
+<script src="assets/js/receptionist.js"></script>
+
+</body>
+</html>
