@@ -1,5 +1,5 @@
 /* ============================================================
-   AutomationHire — Talk2Sell AI Chat
+   AutomationHire — Lily AI Chat
    Intelligent sales assistant powered by Claude
    ============================================================ */
 
@@ -8,14 +8,14 @@
 
   /* ── Config ── */
   const API_ENDPOINT    = '/api/chat';
-  const BRAND_NAME      = 'Talk2Sell';
+  const BRAND_NAME      = 'Lily';
   const BRAND_SUBTITLE  = 'AI Sales Consultant · AutomationHire';
   const OPEN_DELAY_MS   = 3000;   // auto-open after 3s on first visit
   const STORAGE_KEY     = 'ah_chat_history';
   const SESSION_KEY     = 'ah_chat_opened';
 
   /* ── Opening message ── */
-  const OPENING_MESSAGE = "Hi 👋 Welcome to AutomationHire! I'm Talk2Sell, your AI sales consultant.\n\nWhat part of your business are you looking to automate today—sales, customer support, follow-ups, operations, or something else?";
+  const OPENING_MESSAGE = "Hi 👋 Welcome to AutomationHire! I'm Lily, your AI sales consultant.\n\nWhat part of your business are you looking to automate today—sales, customer support, follow-ups, operations, or something else?";
 
   /* ── State ── */
   let messages    = [];   // [{role, content}]
@@ -344,7 +344,7 @@
     launcher.id = 'ah-chat-launcher';
     launcher.innerHTML = `
       <!-- Chat window -->
-      <div id="ah-chat-window" role="dialog" aria-label="Talk2Sell chat">
+      <div id="ah-chat-window" role="dialog" aria-label="Lily chat">
         <div id="ah-chat-header">
           <div id="ah-chat-avatar">⚡</div>
           <div id="ah-chat-header-info">
@@ -379,7 +379,7 @@
 
       <!-- Launcher bubble -->
       <div style="position:relative; pointer-events:all;">
-        <button id="ah-chat-bubble" aria-label="Chat with Talk2Sell">
+        <button id="ah-chat-bubble" aria-label="Chat with Lily">
           <span class="ah-chat-icon">💬</span>
           Talk to Sales
           <span id="ah-online-dot"></span>
@@ -500,7 +500,7 @@
       }
 
     } catch (e) {
-      console.error('[Talk2Sell]', e.message);
+      console.error('[Lily]', e.message);
       setTyping(false);
       addMessage('assistant', "I'm having a moment — please try again or email us at hello@automationhire.co.uk");
     }

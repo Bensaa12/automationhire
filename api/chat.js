@@ -1,12 +1,12 @@
 // ============================================================
-// AutomationHire — Talk2Sell AI Chat API
+// AutomationHire — Lily AI Chat API
 // POST /api/chat  { messages: [{role, content}] }
 // Returns        { reply: "..." }
 // ============================================================
 
 const { handleCors, ok, err, getSupabase } = require('./_lib');
 
-const BASE_SYSTEM_PROMPT = `You are Talk2Sell, the AI-powered sales and solutions consultant for AutomationHire.co.uk.
+const BASE_SYSTEM_PROMPT = `You are Lily, the AI-powered sales and solutions consultant for AutomationHire.co.uk.
 
 Your role is to engage website visitors exactly like a highly trained human sales expert—friendly, intelligent, consultative, persuasive, and deeply knowledgeable about business automation, AI solutions, workflow optimisation, customer support systems, lead generation, CRM integrations, chatbot deployments, and operational efficiency.
 
@@ -138,7 +138,7 @@ module.exports = async function handler(req, res) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey || apiKey.startsWith('sk-ant-placeholder')) {
     return ok(res, {
-      reply: "Hi! I'm Talk2Sell, your AutomationHire consultant. (AI stub mode — add ANTHROPIC_API_KEY to enable real responses.) What part of your business are you looking to automate?"
+      reply: "Hi! I'm Lily, your AutomationHire consultant. (AI stub mode — add ANTHROPIC_API_KEY to enable real responses.) What part of your business are you looking to automate?"
     });
   }
 
