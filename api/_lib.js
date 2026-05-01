@@ -298,4 +298,24 @@ const emails = {
   })
 };
 
-module.exports = { getSupabase, getResend, handleCors, ok, err, toSlug, emails };
+// --- Email sender addresses ---
+// Use getSender(type) to pick the right FROM address for each email type.
+//
+//  'system'       → noreply@   (auth, account, transactional)
+//  'expert'       → experts@   (recruitment, onboarding, drip to providers)
+//  'client'       → solutions@ (buyer enquiries, quote responses)
+//  'confirmation' → confirmation@ (booking confirmations, listing approvals)
+//  'default'      → noreply@   (fallback)
+//
+const SENDERS = {
+  system:       process.env.RESEND_FROM_EMAIL         || 'noreply@automationhire.co.uk',
+  expert:       process.env.RESEND_EXPERTS_EMAIL      || 'experts@automationhire.co.uk',
+  client:       process.env.RESEND_SOLUTIONS_EMAIL    || 'solutions@automationhire.co.uk',
+  confirmation: process.env.RESEND_CONFIRMATION_EMAIL || 'confirmation@automationhire.co.uk',
+};
+
+function getSender(type = 'system') {
+  return SENDERS[type] || SENDERS.system;
+}
+
+module.exports = { getSupabase, getResend, handleCors, ok, err, toSlug, emails, getSender };

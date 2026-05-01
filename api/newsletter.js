@@ -3,7 +3,7 @@
 // Newsletter signup — saves to Supabase, sends welcome email
 // ============================================================
 
-const { getSupabase, getResend, handleCors, ok, err, emails } = require('./_lib');
+const { getSupabase, getResend, handleCors, ok, err, emails, getSender } = require('./_lib');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -40,9 +40,9 @@ module.exports = async function handler(req, res) {
   }
 
   // ---- Welcome email ----
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@automationhire.co.uk';
+  
   resend.emails.send({
-    from: fromEmail,
+    from: `AutomationHire <${getSender('system')}>`,
     to:   cleanEmail,
     ...emails.newsletterWelcome({ email: cleanEmail }),
   }).catch(e => console.error('Newsletter welcome email error:', e));

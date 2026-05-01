@@ -4,7 +4,7 @@
 // lead to up to 5 matching providers simultaneously.
 // ============================================================
 
-const { getSupabase, getResend, handleCors, ok, err, emails } = require('./_lib');
+const { getSupabase, getResend, handleCors, ok, err, emails, getSender } = require('./_lib');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -108,14 +108,14 @@ module.exports = async function handler(req, res) {
       .catch(e => console.error('Lead batch insert error:', e));
   }
 
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@automationhire.co.uk';
+  
 
   // ---- Email each matched provider ----
   const providerEmails = matchedProviders
     .filter(p => p.contact_email)
     .map(p =>
       resend.emails.send({
-        from:     fromEmail,
+        from: `AutomationHire <${getSender('expert')}>`,
         to:       p.contact_email,
         reply_to: client_email.trim().toLowerCase(),
         ...emails.leadNotification({
@@ -135,7 +135,7 @@ module.exports = async function handler(req, res) {
 
   // ---- Confirmation to client ----
   const clientEmailPromise = resend.emails.send({
-    from:    fromEmail,
+    from: `AutomationHire <${getSender('solutions')}>`,
     to:      client_email.trim().toLowerCase(),
     ...emails.matchedExperts({
       clientName: client_name.trim(),

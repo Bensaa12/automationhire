@@ -18,3 +18,12 @@ Thumbs.db
 npm-debug.log*
 
 .vercel
+
+# Claude Code local settings
+.claude/
+
+# Internal docs & lead data — never push to public repo
+scripts/leads.json
+scripts/leads.log
+automationhire_seo_strategy_2026.html
+automations/

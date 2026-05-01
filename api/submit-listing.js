@@ -4,7 +4,7 @@
 // Sends welcome email via Resend
 // ============================================================
 
-const { getSupabase, getResend, handleCors, ok, err, toSlug, emails } = require('./_lib');
+const { getSupabase, getResend, handleCors, ok, err, toSlug, emails, getSender } = require('./_lib');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -133,19 +133,18 @@ module.exports = async function handler(req, res) {
   }
 
   // ---- Send emails (fire and forget) ----
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@automationhire.co.uk';
-
   Promise.all([
-    // Welcome email to provider
+    // Welcome/confirmation email to provider — from confirmation@
     resend.emails.send({
-      from:    fromEmail,
-      to:      email.trim().toLowerCase(),
+      from:     `AutomationHire <${getSender('confirmation')}>`,
+      reply_to: getSender('expert'),
+      to:       email.trim().toLowerCase(),
       ...emails.listingSubmitted({ name: contact_name || business_name }),
     }),
-    // Alert to admin
+    // Alert to admin — from system (noreply@)
     resend.emails.send({
-      from:    fromEmail,
-      to:      process.env.ADMIN_EMAIL || 'admin@automationhire.co.uk',
+      from:  `AutomationHire <${getSender('system')}>`,
+      to:    process.env.ADMIN_EMAIL || 'admin@automationhire.co.uk',
       ...emails.adminNewListing({ name: business_name, email, type: provider_type }),
     }),
   ]).catch(e => console.error('Email send error:', e));

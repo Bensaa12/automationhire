@@ -4,7 +4,7 @@
 // Saves lead to DB, emails provider + sends confirmation to client.
 // ============================================================
 
-const { getSupabase, getResend, handleCors, ok, err, emails } = require('./_lib');
+const { getSupabase, getResend, handleCors, ok, err, emails, getSender } = require('./_lib');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -122,12 +122,12 @@ module.exports = async function handler(req, res) {
       .catch(() => {}); // non-critical
   }
 
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@automationhire.co.uk';
+  
 
   // ---- Email provider ----
   if (providerEmail) {
     resend.emails.send({
-      from:     fromEmail,
+      from:     `AutomationHire <${getSender('expert')}>`,
       to:       providerEmail,
       reply_to: client_email.trim().toLowerCase(),
       ...emails.leadNotification({
@@ -147,7 +147,7 @@ module.exports = async function handler(req, res) {
 
   // ---- Confirmation email to client ----
   resend.emails.send({
-    from:    fromEmail,
+    from:    `AutomationHire <${getSender('solutions')}>`,
     to:      client_email.trim().toLowerCase(),
     ...emails.leadConfirmation({ clientName: client_name.trim(), providerName }),
   }).catch(e => console.error('Client email error:', e));

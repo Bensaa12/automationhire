@@ -1,12 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AutomationHire — Find Top AI Automation Agencies & Experts in the UK</title>
   <meta name="description" content="The #1 directory for AI automation agencies, Make.com experts, Zapier consultants and workflow automation freelancers. Get matched with verified providers today." />
+  <link rel="canonical" href="https://automationhire.co.uk/" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="AutomationHire — Find Top AI Automation Agencies & Experts in the UK" />
+  <meta property="og:description" content="The #1 directory for AI automation agencies, Make.com experts, Zapier consultants and workflow automation freelancers. Get matched with verified providers today." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://automationhire.co.uk/" />
+  <meta property="og:site_name" content="AutomationHire" />
+  <meta property="og:image" content="https://automationhire.co.uk/assets/og/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AutomationHire — Find Top AI Automation Agencies & Experts in the UK" />
+  <meta name="twitter:description" content="The #1 directory for AI automation agencies, Make.com experts, Zapier consultants and workflow automation freelancers. Get matched with verified providers today." />
+
+  <!-- Organization schema — AggregateRating mirrors the canonical /reviews page (execution plan §4). -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "AutomationHire",
+    "url": "https://automationhire.co.uk",
+    "logo": "https://automationhire.co.uk/assets/og/logo.png",
+    "description": "UK marketplace connecting businesses with verified automation specialists across Zapier, Make.com, n8n, and AI agent workflows.",
+    "areaServed": { "@type": "Country", "name": "United Kingdom" },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "bestRating": "5",
+      "worstRating": "1",
+      "reviewCount": "222"
+    },
+    "knowsAbout": [
+      "Workflow Automation",
+      "Zapier Integration",
+      "Make.com Development",
+      "n8n Self-Hosting",
+      "AI Agent Development",
+      "CRM Automation",
+      "E-commerce Automation"
+    ],
+    "sameAs": [
+      "https://www.linkedin.com/company/automationhire",
+      "https://x.com/automationhire",
+      "https://www.youtube.com/@automationhire"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "email": "hello@automationhire.co.uk",
+      "areaServed": "GB",
+      "availableLanguage": "English"
+    }
+  }
+  </script>
+
+  <!-- WebSite schema (enables sitelinks search box in Google SERPs) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "AutomationHire",
+    "url": "https://automationhire.co.uk",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://automationhire.co.uk/providers?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
 </head>
 <body>
 
@@ -22,6 +91,8 @@
     <ul class="nav-links">
       <li><a href="providers.html">Browse Experts</a></li>
       <li><a href="categories.html">Categories</a></li>
+      <li><a href="ads.html">Ad Production</a></li>
+      <li><a href="ready-to-deploy.html">Ready to Deploy</a></li>
       <li><a href="pricing.html">Pricing</a></li>
       <li><a href="blog.html">Blog</a></li>
       <li><a href="request-quote.html">Get Matched</a></li>
@@ -272,10 +343,19 @@
         <span class="cat-arrow">→</span>
       </a>
 
-      <a href="categories.html" class="cat-card reveal reveal-delay-3" style="background:linear-gradient(135deg,var(--black-3),rgba(41,121,255,0.06));border-color:rgba(41,121,255,0.2);">
-        <span class="cat-icon">🗂️</span>
-        <div class="cat-name">View All Categories</div>
-        <div class="cat-count">12 specialisations</div>
+      <a href="ads.html" class="cat-card reveal reveal-delay-2" style="background:linear-gradient(135deg,var(--black-3),rgba(255,100,50,0.08));border-color:rgba(255,100,50,0.25);">
+        <span class="cat-icon">📢</span>
+        <div class="cat-name">Ad Production — New</div>
+        <div class="cat-count">120+ ad specialists</div>
+        <div style="font-size:12px;color:var(--white-30);margin-top:6px">Meta · Google · TikTok · AI Video</div>
+        <span class="cat-arrow">→</span>
+      </a>
+
+      <a href="ready-to-deploy.html" class="cat-card reveal reveal-delay-3" style="background:linear-gradient(135deg,var(--black-3),rgba(0,230,118,0.08));border-color:rgba(0,230,118,0.25);">
+        <span class="cat-icon">⚡</span>
+        <div class="cat-name">Ready to Deploy — Store</div>
+        <div class="cat-count">12 plug-and-play automations</div>
+        <div style="font-size:12px;color:var(--white-30);margin-top:6px">Buy blueprint · Get it installed</div>
         <span class="cat-arrow">→</span>
       </a>
 
@@ -554,6 +634,41 @@
         </div>
       </div>
     </div>
+    <div class="text-center mt-32 reveal">
+      <a href="reviews" class="btn btn-ghost">Read all 222+ verified reviews · 4.8/5 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURED GUIDES ===== -->
+<section class="section-sm">
+  <div class="container">
+    <div class="reveal" style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:20px">
+      <div style="background:linear-gradient(135deg,rgba(0,230,118,0.08),rgba(41,121,255,0.08));border:1px solid rgba(0,230,118,0.22);border-radius:18px;padding:30px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:inline-block;align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--green);background:rgba(0,230,118,0.10);border:1px solid rgba(0,230,118,0.25);border-radius:50px;padding:5px 12px">UK Hiring Guide · 2026</div>
+        <h3 style="font-family:var(--font-head);font-size:22px;font-weight:800;color:#fff;line-height:1.25;margin:0">How to Hire an AI Automation Expert in the UK</h3>
+        <p style="color:var(--white-60);font-size:15px;line-height:1.6;margin:0;flex:1">UK rates, where to find verified experts, how to brief them, and the red flags that mean walk away. Built from data on 500+ UK specialists and 2,400+ businesses.</p>
+        <a href="hire-ai-automation-expert-uk" class="btn btn-primary" style="align-self:flex-start">Read the Guide →</a>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(41,121,255,0.10),rgba(0,230,118,0.06));border:1px solid rgba(41,121,255,0.25);border-radius:18px;padding:30px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:inline-block;align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#7cb2ff;background:rgba(41,121,255,0.10);border:1px solid rgba(41,121,255,0.30);border-radius:50px;padding:5px 12px">UK Pricing Guide · 2026</div>
+        <h3 style="font-family:var(--font-head);font-size:22px;font-weight:800;color:#fff;line-height:1.25;margin:0">How Much Does Workflow Automation Cost in the UK?</h3>
+        <p style="color:var(--white-60);font-size:15px;line-height:1.6;margin:0;flex:1">Real UK rates, project tiers from £500 to £12k+, retainer pricing, hidden costs, and a worked ROI example. Everything you need to budget your first or next automation project.</p>
+        <a href="how-much-does-workflow-automation-cost-uk" class="btn btn-primary" style="align-self:flex-start">Read the Pricing Guide →</a>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(0,230,118,0.06),rgba(41,121,255,0.10));border:1px solid rgba(0,230,118,0.20);border-radius:18px;padding:30px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:inline-block;align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--green);background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.22);border-radius:50px;padding:5px 12px">UK Use-Case Guide · 2026</div>
+        <h3 style="font-family:var(--font-head);font-size:22px;font-weight:800;color:#fff;line-height:1.25;margin:0">AI Automation for UK Business: Use Cases &amp; Tools</h3>
+        <p style="color:var(--white-60);font-size:15px;line-height:1.6;margin:0;flex:1">The 8 highest-ROI automation use cases for UK SMEs, when to choose Zapier vs Make.com vs n8n, and a 3-step path from idea to first live workflow.</p>
+        <a href="ai-automation-for-uk-business" class="btn btn-primary" style="align-self:flex-start">Read the Use-Case Guide →</a>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(255,165,0,0.07),rgba(41,121,255,0.10));border:1px solid rgba(255,165,0,0.22);border-radius:18px;padding:30px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:inline-block;align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#ffb35a;background:rgba(255,165,0,0.08);border:1px solid rgba(255,165,0,0.25);border-radius:50px;padding:5px 12px">UK Tool Comparison · 2026</div>
+        <h3 style="font-family:var(--font-head);font-size:22px;font-weight:800;color:#fff;line-height:1.25;margin:0">Zapier vs Make.com vs n8n: UK Decision Guide</h3>
+        <p style="color:var(--white-60);font-size:15px;line-height:1.6;margin:0;flex:1">Honest UK comparison of Zapier, Make.com, n8n &amp; Power Automate — real pricing at 100/1k/10k/100k tasks per month, GDPR fit, learning curve, and which to pick.</p>
+        <a href="zapier-vs-make-vs-n8n-uk" class="btn btn-primary" style="align-self:flex-start">Read the Comparison →</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -612,8 +727,8 @@
         <ul class="footer-links">
           <li><a href="providers.html">Browse All Experts</a></li>
           <li><a href="categories.html">Categories</a></li>
+          <li><a href="reviews">Reviews · 4.8/5</a></li>
           <li><a href="providers.html?filter=featured">Featured Providers</a></li>
-          <li><a href="providers.html?filter=new">New Listings</a></li>
           <li><a href="request-quote.html">Get Matched</a></li>
         </ul>
       </div>

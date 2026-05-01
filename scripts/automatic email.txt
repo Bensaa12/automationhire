@@ -1,0 +1,33 @@
+                                                                                                          
+● Domain verified — automationhire.co.uk is ready to send emails from Resend. DNS verified in under 5
+  minutes through Vercel.                                                                                  
+                                                                                                             All 5 of your email addresses are now live and ready:                                                    
+  - experts@automationhire.co.uk                                                                             - solutions@automationhire.co.uk                                                                           - confirmation@automationhire.co.uk                                                                        - noreply@automationhire.co.uk                                                                             - hello@automationhire.co.uk                                                                             
+
+  ---
+  One optional thing while you're here
+
+  You saw "Enable tracking metrics" on that screen. Worth doing — it lets you see who opened your emails   
+  and clicked your links. Takes 2 minutes:
+
+  1. Click Configure under "Enable tracking metrics"
+  2. Resend will give you a CNAME record like track.resend.com
+  3. Add it in Vercel DNS (same way as before)
+
+  This tells you which of your 11 experts opened the invite email — useful for knowing who to follow up    
+  with personally.
+
+  ---
+  Now fire the first emails
+
+  Open scripts/leads.json, replace the PASTE_EMAIL_X_HERE placeholders with your real 11 emails, then run: 
+
+  cd Desktop/automationhire
+  node scripts/lead-manager.js run
+
+  All 11 will receive the invite from experts@automationhire.co.uk within seconds. Check your dashboard    
+  after:
+
+  node scripts/lead-manager.js status
+
+  When any of them reply, it lands in hello@automationhire.co.uk.

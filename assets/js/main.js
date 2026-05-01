@@ -83,6 +83,44 @@
 })();
 
 
+/* --- THEME TOGGLE --- */
+(function initTheme() {
+  const saved = localStorage.getItem('ah-theme') || 'dark';
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+
+  function inject() {
+    const cta = document.querySelector('.nav-cta');
+    if (!cta || document.querySelector('.theme-toggle')) return;
+
+    const btn = document.createElement('button');
+    btn.className = 'theme-toggle';
+    btn.setAttribute('aria-label', 'Toggle light/dark mode');
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    btn.textContent = isDark ? '☀️' : '🌙';
+
+    btn.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('ah-theme', 'dark');
+        btn.textContent = '☀️';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('ah-theme', 'light');
+        btn.textContent = '🌙';
+      }
+    });
+
+    cta.insertBefore(btn, cta.firstChild);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inject);
+  } else {
+    inject();
+  }
+})();
+
 /* --- NAVBAR SCROLL EFFECT --- */
 (function initNav() {
   const nav = document.querySelector('.nav');

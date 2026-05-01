@@ -1,0 +1,45 @@
+# robots.txt — AutomationHire
+# https://automationhire.co.uk
+
+User-agent: *
+Allow: /
+
+# Block admin / authenticated / utility pages
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /dashboard
+Disallow: /dashboard.html
+Disallow: /thank-you
+Disallow: /thank-you.html
+Disallow: /provider-profile
+Disallow: /provider-profile.html
+
+# Block API and infrastructure
+Disallow: /api/
+Disallow: /node_modules/
+Disallow: /automations/
+Disallow: /scripts/
+
+# Block internal/strategy docs
+Disallow: /automationhire_seo_strategy_2026
+Disallow: /automationhire_seo_strategy_2026.html
+
+# Block crawl traps from query strings on listing pages
+Disallow: /providers?
+Disallow: /*?filter=
+Disallow: /*?sort=
+
+# AI scraper directives — keep open for major search engines, block the most aggressive trainers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://automationhire.co.uk/sitemap.xml
