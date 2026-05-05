@@ -51,7 +51,7 @@ module.exports = async function handler(req, res) {
     .select('id, contact_email, business_name, plan, categories, rating_avg')
     .eq('is_active', true)
     .eq('is_approved', true)
-    .in('plan', ['starter', 'growth', 'pro', 'agency'])
+    .in('plan', ['growth', 'pro', 'agency'])
     .order('is_featured', { ascending: false })
     .order('rating_avg',  { ascending: false })
     .limit(5);

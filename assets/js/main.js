@@ -132,7 +132,31 @@
   const burger = document.querySelector('.nav-hamburger');
   const links  = document.querySelector('.nav-links');
   if (burger && links) {
-    burger.addEventListener('click', () => links.classList.toggle('open'));
+    const cta = document.querySelector('.nav-cta');
+    // Inject a cloned CTA block into the menu so users can still reach
+    // "List Your Business" / "Hire an Expert" on mobile.
+    if (cta && !links.querySelector('.nav-cta-mobile')) {
+      const wrapper = document.createElement('li');
+      wrapper.className = 'nav-cta-mobile';
+      wrapper.innerHTML = cta.innerHTML;
+      links.appendChild(wrapper);
+    }
+    const closeMenu = () => {
+      links.classList.remove('open');
+      burger.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+    burger.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      burger.classList.toggle('active', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    links.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') closeMenu();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && links.classList.contains('open')) closeMenu();
+    });
   }
 })();
 

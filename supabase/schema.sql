@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS providers (
   certifications        JSONB DEFAULT '[]',
 
   -- Subscription / Plan
-  plan                  TEXT DEFAULT 'free' CHECK (plan IN ('free','starter','growth','pro','agency')),
+  plan                  TEXT DEFAULT 'free' CHECK (plan IN ('free','growth','pro','agency')),
   plan_expires_at       TIMESTAMPTZ,
   stripe_customer_id    TEXT UNIQUE,
   stripe_subscription_id TEXT UNIQUE,
@@ -355,7 +355,6 @@ CREATE TABLE IF NOT EXISTS plans (
 
 INSERT INTO plans VALUES
   ('free',    'Free',    0,     0,     NULL, NULL, 0,  1,  0,  '["Basic listing","Appear in search"]'),
-  ('starter', 'Starter', 2900,  20300, NULL, NULL, 5,  3,  1,  '["Full profile","5 leads/mo","Analytics"]'),
   ('growth',  'Growth',  7900,  55300, NULL, NULL, 20, 5,  3,  '["Verified badge","20 leads/mo","Featured in category"]'),
   ('pro',     'Pro',     14900, 104300,NULL, NULL, NULL,NULL,NULL,'["Everything","Unlimited leads","Homepage featured"]'),
   ('agency',  'Agency',  29900, 209300,NULL, NULL, NULL,NULL,NULL,'["10 profiles","White-label","API access"]')

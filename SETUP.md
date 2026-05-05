@@ -40,7 +40,6 @@
 
    | Plan    | Monthly | Yearly |
    |---------|---------|--------|
-   | Starter | £29/mo  | £20/mo |
    | Growth  | £79/mo  | £55/mo |
    | Pro     | £149/mo | £104/mo |
    | Agency  | £299/mo | £209/mo |

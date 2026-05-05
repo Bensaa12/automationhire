@@ -70,8 +70,8 @@ module.exports = async function handler(req, res) {
       return err(res, 'This provider is on the free plan and cannot receive leads. Ask them to upgrade.', 402);
     }
 
-    // ---- Monthly lead count check for starter/growth plans ----
-    const planLimits = { starter: 5, growth: 20, pro: Infinity, agency: Infinity };
+    // ---- Monthly lead count check for paid plans ----
+    const planLimits = { growth: 20, pro: Infinity, agency: Infinity };
     const limit = planLimits[p.plan];
     if (limit !== Infinity) {
       const startOfMonth = new Date();

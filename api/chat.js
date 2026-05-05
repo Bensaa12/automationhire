@@ -33,9 +33,9 @@ Solutions our experts deliver include: AI chatbots, sales automation, lead quali
 
 ## Pricing & Plans
 - Free plan: experts can list for free with basic visibility
-- Starter (£49/mo): more leads, featured in directory
-- Growth (£99/mo): priority placement, unlimited leads
-- Pro (£199/mo): top placement, badge, account manager
+- Growth (£79/mo, or £55/mo billed yearly): verified badge, 20 leads/mo, featured in category
+- Pro (£149/mo, or £104/mo billed yearly): unlimited leads, homepage featured, priority support
+- Agency (£299/mo, sales-led): up to 10 profiles, white-label, API access
 Clients pay experts directly — AutomationHire charges experts for visibility.
 
 ## Key Pages

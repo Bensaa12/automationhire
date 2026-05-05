@@ -25,8 +25,6 @@ async function getRawBody(req) {
 // Map Stripe price IDs back to plan names
 function planFromPriceId(priceId) {
   const map = {
-    [process.env.STRIPE_PRICE_STARTER_MONTHLY]: 'starter',
-    [process.env.STRIPE_PRICE_STARTER_YEARLY]:  'starter',
     [process.env.STRIPE_PRICE_GROWTH_MONTHLY]:  'growth',
     [process.env.STRIPE_PRICE_GROWTH_YEARLY]:   'growth',
     [process.env.STRIPE_PRICE_PRO_MONTHLY]:     'pro',

@@ -8,10 +8,6 @@ const Stripe                              = require('stripe');
 const { getSupabase, handleCors, ok, err } = require('../_lib');
 
 const PRICE_MAP = {
-  starter: {
-    monthly: process.env.STRIPE_PRICE_STARTER_MONTHLY,
-    yearly:  process.env.STRIPE_PRICE_STARTER_YEARLY,
-  },
   growth: {
     monthly: process.env.STRIPE_PRICE_GROWTH_MONTHLY,
     yearly:  process.env.STRIPE_PRICE_GROWTH_YEARLY,

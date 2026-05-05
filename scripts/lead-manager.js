@@ -218,12 +218,12 @@ function emailUpgrade(name) {
   </div>
   <div style="background:#fff;padding:32px;border-radius:0 0 12px 12px;border:1px solid #eee">
     <p style="font-size:16px">${greeting}</p>
-    <p>Your free profile has been live for a week. Here's what upgrading to our <strong>Starter plan (£49/month)</strong> gets you:</p>
+    <p>Your free profile has been live for a week. Here's what upgrading to our <strong>Growth plan (£79/month, or £55/month billed yearly)</strong> gets you:</p>
     <table style="width:100%;border-collapse:collapse;margin:20px 0">
       <tr style="background:#f9f9f9">
         <td style="padding:10px;border:1px solid #eee"></td>
         <td style="padding:10px;border:1px solid #eee;text-align:center;font-weight:700">Free</td>
-        <td style="padding:10px;border:1px solid #eee;text-align:center;font-weight:700;background:#f0fdf4">Starter £49/mo</td>
+        <td style="padding:10px;border:1px solid #eee;text-align:center;font-weight:700;background:#f0fdf4">Growth £79/mo</td>
       </tr>
       <tr>
         <td style="padding:10px;border:1px solid #eee">Directory listing</td>
