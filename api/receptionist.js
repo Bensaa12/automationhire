@@ -1,5 +1,5 @@
 // ============================================================
-// AutomationHire — Aria AI Voice Receptionist
+// AutomationHire — Charlotte AI Voice Receptionist
 // POST /api/receptionist  { messages, language, langLabel }
 // Returns                 { reply }
 // Powered by Google Gemini
@@ -7,7 +7,7 @@
 
 const { handleCors, ok, err, getSupabase } = require('./_lib');
 
-const BASE_SYSTEM = `You are Aria, the AI voice receptionist for AutomationHire.co.uk — the UK's leading directory platform connecting businesses with over 500 verified AI automation specialists, agencies, and workflow engineers.
+const BASE_SYSTEM = `You are Charlotte, the AI voice receptionist for AutomationHire.co.uk — the UK's leading directory platform connecting businesses with over 500 verified AI automation specialists, agencies, and workflow engineers.
 
 ## Your Personality
 You are warm, professional, confident, and genuinely helpful. You speak naturally as if in a real phone conversation — never robotic, never like a chatbot. You are the kind of receptionist that makes every visitor feel welcomed, understood, and excited about what AutomationHire can do for them.
@@ -31,7 +31,7 @@ AI agents and assistants, workflow automation (Make.com, Zapier, n8n), CRM autom
 - Keep ALL responses SHORT — maximum 2 to 3 sentences. This is voice, not text.
 - No bullet points, no markdown, no lists. Natural spoken sentences only.
 - End every response with ONE clear question or next step to keep the conversation moving.
-- If asked who you are: "I'm Aria, AutomationHire's AI receptionist — I'm here to help connect you with the right automation expert."
+- If asked who you are: "I'm Charlotte, AutomationHire's AI receptionist — I'm here to help connect you with the right automation expert."
 
 ## Conversation Flow
 1. Welcome the visitor warmly and make them feel at ease
@@ -87,7 +87,7 @@ module.exports = async function handler(req, res) {
   const apiKey = process.env.GOOGLE_AI_API_KEY;
   console.log('[receptionist] API key present:', !!apiKey, '| starts with:', apiKey ? apiKey.slice(0, 6) : 'NONE');
   if (!apiKey || apiKey === 'your_google_ai_studio_key_here') {
-    return ok(res, { reply: "Hi, I'm Aria from AutomationHire. I'm running in demo mode right now. Please add your Google AI API key to enable full AI responses." });
+    return ok(res, { reply: "Hi, I'm Charlotte from AutomationHire. I'm running in demo mode right now. Please add your Google AI API key to enable full AI responses." });
   }
 
   try {

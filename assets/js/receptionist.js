@@ -1,5 +1,5 @@
 /* ============================================================
-   AutomationHire — Aria AI Voice Receptionist
+   AutomationHire — Charlotte AI Voice Receptionist
    Powered by Google Gemini + Web Speech API
    ============================================================ */
 
@@ -26,7 +26,7 @@
   ];
 
   const API_ENDPOINT   = '/api/receptionist';
-  const OPENING_MSG    = "Hello! Welcome to AutomationHire. I'm Aria, your AI receptionist. How can I help you today? Are you looking to automate part of your business, or would you like to find an automation expert?";
+  const OPENING_MSG    = "Hello! Welcome to AutomationHire. I'm Charlotte, your AI receptionist. How can I help you today? Are you looking to automate part of your business, or would you like to find an automation expert?";
 
   /* ── State ── */
   let selectedVoice    = VOICE_OPTIONS[0];
@@ -438,7 +438,7 @@
     const overlay = document.createElement('div');
     overlay.id = 'aria-overlay';
     overlay.setAttribute('role', 'dialog');
-    overlay.setAttribute('aria-label', 'Aria AI Voice Receptionist');
+    overlay.setAttribute('aria-label', 'Charlotte AI Voice Receptionist');
     overlay.innerHTML = `
       <div id="aria-modal">
 
@@ -446,7 +446,7 @@
         <div id="aria-header">
           <div id="aria-avatar">🎙️</div>
           <div id="aria-header-info">
-            <h3>Aria</h3>
+            <h3>Charlotte</h3>
             <p>AI Voice Receptionist · AutomationHire</p>
           </div>
           <button id="aria-close" aria-label="Close">✕</button>
@@ -543,7 +543,7 @@
 
     utt.onstart = () => {
       isSpeaking = true;
-      setStatus('speaking', '🔊 Aria is speaking…');
+      setStatus('speaking', '🔊 Charlotte is speaking…');
       setWave(true);
       document.getElementById('aria-mic-btn').className = 'speaking';
     };
@@ -693,7 +693,7 @@
       speak(reply);
 
     } catch (e) {
-      console.error('[Aria]', e.message);
+      console.error('[Charlotte]', e.message);
       isThinking = false;
       const sorry = "I'm having a little trouble right now. Could you try again?";
       addBubble('aria', sorry);
