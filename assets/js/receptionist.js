@@ -503,63 +503,62 @@
   }
 
   /* ────────────────────────────────────────────────────────── */
-  /*  Voice helpers                                            */
+  /*  Voice — OpenAI TTS                                       */
   /* ────────────────────────────────────────────────────────── */
-  function loadBrowserVoices() {
-    browserVoices = window.speechSynthesis.getVoices();
-  }
+  let currentAudio = null;
 
-  function findVoice(option) {
-    if (!browserVoices.length) browserVoices = window.speechSynthesis.getVoices();
-    const searches = option.search || [option.code];
-
-    // Try each search term — prefer female voices
-    for (const term of searches) {
-      const match = browserVoices.find(v =>
-        (v.name.toLowerCase().includes(term.toLowerCase()) || v.lang === term) &&
-        !v.name.toLowerCase().includes('male')
-      );
-      if (match) return match;
+  async function speak(text) {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
     }
-    // Fallback — any voice matching the language code prefix
-    const langPrefix = option.code.split('-')[0];
-    const fallback = browserVoices.find(v => v.lang.startsWith(langPrefix));
-    if (fallback) return fallback;
 
-    // Last resort — first available voice
-    return browserVoices[0] || null;
-  }
+    isSpeaking = true;
+    setStatus('speaking', '🔊 Charlotte is speaking…');
+    setWave(true);
+    document.getElementById('aria-mic-btn').className = 'speaking';
 
-  function speak(text) {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
+    try {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voice: 'nova' }),
+      });
 
-    const utt = new SpeechSynthesisUtterance(text);
-    const voice = findVoice(selectedVoice);
-    if (voice) utt.voice = voice;
-    utt.lang  = selectedVoice.code;
-    utt.rate  = 0.95;
-    utt.pitch = 1.05;
+      if (!res.ok) throw new Error('TTS request failed');
 
-    utt.onstart = () => {
-      isSpeaking = true;
-      setStatus('speaking', '🔊 Charlotte is speaking…');
-      setWave(true);
-      document.getElementById('aria-mic-btn').className = 'speaking';
-    };
-    utt.onend = utt.onerror = () => {
+      const blob = await res.blob();
+      const url  = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      currentAudio = audio;
+
+      const onDone = () => {
+        isSpeaking = false;
+        currentAudio = null;
+        URL.revokeObjectURL(url);
+        setStatus('', 'Tap the mic to respond');
+        setWave(false);
+        document.getElementById('aria-mic-btn').className = '';
+      };
+
+      audio.onended = onDone;
+      audio.onerror = onDone;
+      audio.play();
+
+    } catch (e) {
+      console.error('[Charlotte TTS]', e.message);
       isSpeaking = false;
       setStatus('', 'Tap the mic to respond');
       setWave(false);
       document.getElementById('aria-mic-btn').className = '';
-    };
-
-    currentUtterance = utt;
-    window.speechSynthesis.speak(utt);
+    }
   }
 
   function stopSpeaking() {
-    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
     isSpeaking = false;
     setStatus('', 'Tap the mic to respond');
     setWave(false);
@@ -738,12 +737,6 @@
   document.addEventListener('DOMContentLoaded', function () {
     injectStyles();
     buildDOM();
-
-    // Load voices async (Chrome loads them async)
-    if (window.speechSynthesis) {
-      loadBrowserVoices();
-      window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
-    }
 
     const ariaBtn   = document.getElementById('aria-btn');
     const closeBtn  = document.getElementById('aria-close');
