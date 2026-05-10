@@ -540,30 +540,35 @@
 
   async function speak(text) {
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-
-    isSpeaking = true;
-    setStatus('speaking', '🔊 Charlotte is speaking…');
-    setWave(true);
-    document.getElementById('aria-mic-btn').className = 'speaking';
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
 
     const resetUI = () => {
-      isSpeaking = false;
+      isSpeaking   = false;
       currentAudio = null;
       setStatus('', 'Tap the mic to respond');
       setWave(false);
-      document.getElementById('aria-mic-btn').className = '';
+      const btn = document.getElementById('aria-mic-btn');
+      if (btn) btn.className = '';
     };
 
+    // Show loading state while fetching — do NOT set isSpeaking yet
+    setStatus('thinking', '⏳ Charlotte is thinking…');
+
     try {
+      // Abort fetch after 20 seconds to prevent permanent freeze
+      const controller = new AbortController();
+      const fetchTimer = setTimeout(() => controller.abort(), 20000);
+
       const res = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, voice: 'nova' }),
+        signal: controller.signal,
       });
+      clearTimeout(fetchTimer);
 
       if (!res.ok) {
-        console.warn('[Charlotte TTS] API error', res.status, '— falling back to browser TTS');
-        resetUI();
+        console.warn('[Charlotte TTS] API returned', res.status, '— using browser TTS');
         speakFallback(text);
         return;
       }
@@ -572,21 +577,42 @@
       const url   = URL.createObjectURL(blob);
       const audio = new Audio(url);
       currentAudio = audio;
-      audio.onended = () => { resetUI(); URL.revokeObjectURL(url); };
-      audio.onerror = () => { resetUI(); URL.revokeObjectURL(url); };
+
+      // Only set speaking state when audio actually begins
+      audio.onplay = () => {
+        isSpeaking = true;
+        setStatus('speaking', '🔊 Charlotte is speaking…');
+        setWave(true);
+        const btn = document.getElementById('aria-mic-btn');
+        if (btn) btn.className = 'speaking';
+      };
+
+      // Safety watchdog — force-reset if onended never fires
+      let watchdog = null;
+      const clearWatchdog = () => { if (watchdog) { clearTimeout(watchdog); watchdog = null; } };
+
+      audio.onended = () => { clearWatchdog(); resetUI(); URL.revokeObjectURL(url); };
+      audio.onerror = () => {
+        clearWatchdog();
+        console.warn('[Charlotte TTS] Audio error — using browser TTS');
+        resetUI();
+        URL.revokeObjectURL(url);
+        speakFallback(text);
+      };
 
       try {
         await audio.play();
+        // Set watchdog: if audio plays but onended never fires within 2 min, unfreeze
+        watchdog = setTimeout(() => { audio.pause(); resetUI(); URL.revokeObjectURL(url); }, 120000);
       } catch (playErr) {
-        // Autoplay blocked — fall back to browser TTS
-        console.warn('[Charlotte TTS] Autoplay blocked — falling back to browser TTS');
+        console.warn('[Charlotte TTS] Autoplay blocked — using browser TTS');
         resetUI();
         URL.revokeObjectURL(url);
         speakFallback(text);
       }
 
     } catch (e) {
-      console.error('[Charlotte TTS]', e.message);
+      console.error('[Charlotte TTS]', e.name === 'AbortError' ? 'Fetch timed out' : e.message);
       resetUI();
       speakFallback(text);
     }
