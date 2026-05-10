@@ -505,18 +505,54 @@
   /* ────────────────────────────────────────────────────────── */
   /*  Voice — OpenAI TTS                                       */
   /* ────────────────────────────────────────────────────────── */
-  let currentAudio = null;
+  let currentAudio  = null;
+  let audioUnlocked = false;
+
+  // Browsers block audio until a user gesture. Call this on every user click.
+  function unlockAudio() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+    const a = new Audio();
+    a.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+    a.play().catch(() => {});
+  }
+
+  function speakFallback(text) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utt  = new SpeechSynthesisUtterance(text);
+    utt.lang   = selectedVoice.code;
+    utt.rate   = 0.95;
+    utt.onstart = () => {
+      isSpeaking = true;
+      setStatus('speaking', '🔊 Charlotte is speaking…');
+      setWave(true);
+      document.getElementById('aria-mic-btn').className = 'speaking';
+    };
+    utt.onend = utt.onerror = () => {
+      isSpeaking = false;
+      setStatus('', 'Tap the mic to respond');
+      setWave(false);
+      document.getElementById('aria-mic-btn').className = '';
+    };
+    window.speechSynthesis.speak(utt);
+  }
 
   async function speak(text) {
-    if (currentAudio) {
-      currentAudio.pause();
-      currentAudio = null;
-    }
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
 
     isSpeaking = true;
     setStatus('speaking', '🔊 Charlotte is speaking…');
     setWave(true);
     document.getElementById('aria-mic-btn').className = 'speaking';
+
+    const resetUI = () => {
+      isSpeaking = false;
+      currentAudio = null;
+      setStatus('', 'Tap the mic to respond');
+      setWave(false);
+      document.getElementById('aria-mic-btn').className = '';
+    };
 
     try {
       const res = await fetch('/api/tts', {
@@ -525,40 +561,40 @@
         body: JSON.stringify({ text, voice: 'nova' }),
       });
 
-      if (!res.ok) throw new Error('TTS request failed');
+      if (!res.ok) {
+        console.warn('[Charlotte TTS] API error', res.status, '— falling back to browser TTS');
+        resetUI();
+        speakFallback(text);
+        return;
+      }
 
-      const blob = await res.blob();
-      const url  = URL.createObjectURL(blob);
+      const blob  = await res.blob();
+      const url   = URL.createObjectURL(blob);
       const audio = new Audio(url);
       currentAudio = audio;
+      audio.onended = () => { resetUI(); URL.revokeObjectURL(url); };
+      audio.onerror = () => { resetUI(); URL.revokeObjectURL(url); };
 
-      const onDone = () => {
-        isSpeaking = false;
-        currentAudio = null;
+      try {
+        await audio.play();
+      } catch (playErr) {
+        // Autoplay blocked — fall back to browser TTS
+        console.warn('[Charlotte TTS] Autoplay blocked — falling back to browser TTS');
+        resetUI();
         URL.revokeObjectURL(url);
-        setStatus('', 'Tap the mic to respond');
-        setWave(false);
-        document.getElementById('aria-mic-btn').className = '';
-      };
-
-      audio.onended = onDone;
-      audio.onerror = onDone;
-      audio.play();
+        speakFallback(text);
+      }
 
     } catch (e) {
       console.error('[Charlotte TTS]', e.message);
-      isSpeaking = false;
-      setStatus('', 'Tap the mic to respond');
-      setWave(false);
-      document.getElementById('aria-mic-btn').className = '';
+      resetUI();
+      speakFallback(text);
     }
   }
 
   function stopSpeaking() {
-    if (currentAudio) {
-      currentAudio.pause();
-      currentAudio = null;
-    }
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
     isSpeaking = false;
     setStatus('', 'Tap the mic to respond');
     setWave(false);
@@ -747,7 +783,7 @@
     const overlay   = document.getElementById('aria-overlay');
     const langGrid  = document.getElementById('aria-lang-grid');
 
-    ariaBtn.addEventListener('click', openReceptionist);
+    ariaBtn.addEventListener('click', () => { unlockAudio(); openReceptionist(); });
     closeBtn.addEventListener('click', closeReceptionist);
 
     // Close on overlay background click
@@ -760,7 +796,7 @@
       if (e.key === 'Escape' && isOpen) closeReceptionist();
     });
 
-    micBtn.addEventListener('click', toggleListening);
+    micBtn.addEventListener('click', () => { unlockAudio(); toggleListening(); });
     stopBtn.addEventListener('click', stopSpeaking);
 
     // Language selection
