@@ -132,16 +132,22 @@ module.exports = async function handler(req, res) {
     return err(res, 'Failed to create listing', 500, insertError.message);
   }
 
+  // ---- Auto-login: sign in right after registration ----
+  let session = null;
+  const { data: signIn } = await supabase.auth.signInWithPassword({
+    email:    email.trim().toLowerCase(),
+    password: password,
+  });
+  if (signIn?.session) session = signIn.session;
+
   // ---- Send emails (fire and forget) ----
   Promise.all([
-    // Welcome/confirmation email to provider — from confirmation@
     resend.emails.send({
       from:     `AutomationHire <${getSender('confirmation')}>`,
       reply_to: getSender('expert'),
       to:       email.trim().toLowerCase(),
       ...emails.listingSubmitted({ name: contact_name || business_name }),
     }),
-    // Alert to admin — from system (noreply@)
     resend.emails.send({
       from:  `AutomationHire <${getSender('system')}>`,
       to:    process.env.ADMIN_EMAIL || 'admin@automationhire.co.uk',
@@ -150,7 +156,10 @@ module.exports = async function handler(req, res) {
   ]).catch(e => console.error('Email send error:', e));
 
   return ok(res, {
-    message:  'Listing submitted successfully. Under review within 24 hours.',
-    provider: { id: provider.id, slug: provider.slug },
+    message:       'Listing submitted successfully. Under review within 24 hours.',
+    provider:      { id: provider.id, slug: provider.slug, business_name: provider.business_name, plan: 'free' },
+    access_token:  session?.access_token  || null,
+    refresh_token: session?.refresh_token || null,
+    expires_in:    session?.expires_in    || null,
   }, 201);
 };

@@ -58,12 +58,13 @@
       <span class="nav-logo-text">Automation<span>Hire</span></span>
     </a>
     <ul class="nav-links">
-      <li><a href="provider-profile.html">My Profile →</a></li>
+      <li><a id="dash-profile-link" href="provider-profile.html">My Profile →</a></li>
     </ul>
     <div class="nav-cta">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--blue));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">FC</div>
-        <span style="font-size:14px;font-weight:600">FlowCraft Agency</span>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div id="dash-nav-avatar" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--blue));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">…</div>
+        <span id="dash-nav-name" style="font-size:14px;font-weight:600">Loading…</span>
+        <button onclick="Auth.logout()" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--white-60);font-size:12px;padding:5px 10px;cursor:pointer;font-family:var(--font-body)">Log out</button>
       </div>
     </div>
   </div>
@@ -88,7 +89,7 @@
     </div>
     <div class="dash-nav-section">
       <span class="dash-nav-label">Account</span>
-      <a class="dash-nav-item" href="pricing.html"><span class="dash-nav-icon">💳</span> Billing <span class="tag tag-green" style="font-size:10px;padding:2px 7px;margin-left:auto">Growth</span></a>
+      <a class="dash-nav-item" href="pricing.html"><span class="dash-nav-icon">💳</span> Billing <span id="dash-plan-badge" class="tag tag-green" style="font-size:10px;padding:2px 7px;margin-left:auto">Free</span></a>
       <a class="dash-nav-item"><span class="dash-nav-icon">⚙️</span> Settings</a>
       <a class="dash-nav-item"><span class="dash-nav-icon">🔒</span> Security</a>
       <a class="dash-nav-item" href="index.html"><span class="dash-nav-icon">→</span> Back to Site</a>
@@ -100,16 +101,16 @@
     <!-- Plan bar -->
     <div class="plan-bar">
       <div class="plan-bar-info">
-        <span class="plan-badge-large">Growth Plan</span>
-        <span style="font-size:14px;color:var(--white-60)">15 of 20 leads used this month</span>
-        <div class="progress-bar" style="width:160px"><div class="progress-fill" data-width="75%" style="width:0"></div></div>
+        <span id="dash-plan-name" class="plan-badge-large">Free Plan</span>
+        <span id="dash-leads-usage" style="font-size:14px;color:var(--white-60)">Loading…</span>
+        <div class="progress-bar" style="width:160px"><div id="dash-leads-bar" class="progress-fill" data-width="0%" style="width:0"></div></div>
       </div>
-      <a href="pricing.html" class="btn btn-primary btn-sm">Upgrade to Pro →</a>
+      <a href="pricing.html" class="btn btn-primary btn-sm">Upgrade Plan →</a>
     </div>
 
     <div class="dash-header">
       <div>
-        <h1 class="dash-title">Welcome back, FlowCraft 👋</h1>
+        <h1 id="dash-welcome" class="dash-title">Welcome back 👋</h1>
         <p class="dash-subtitle">Here's what's happening with your listing today.</p>
       </div>
       <div style="display:flex;gap:10px">
@@ -122,23 +123,23 @@
     <div class="metrics-grid">
       <div class="metric-card reveal">
         <div class="metric-label">Profile Views</div>
-        <div class="metric-val" style="color:var(--green)" data-count="2847" data-suffix="">0</div>
-        <div class="metric-change metric-up">↑ 18% vs last month</div>
+        <div id="dash-views" class="metric-val" style="color:var(--green)">—</div>
+        <div class="metric-change metric-up">Total all time</div>
       </div>
       <div class="metric-card reveal reveal-delay-1">
         <div class="metric-label">Leads Received</div>
-        <div class="metric-val" style="color:var(--blue)" data-count="15" data-suffix="">0</div>
-        <div class="metric-change metric-up">↑ 5 this week</div>
+        <div id="dash-leads" class="metric-val" style="color:var(--blue)">—</div>
+        <div class="metric-change metric-up">Total all time</div>
       </div>
       <div class="metric-card reveal reveal-delay-2">
-        <div class="metric-label">Quote Requests</div>
-        <div class="metric-val" data-count="8" data-suffix="">0</div>
-        <div class="metric-change metric-up">↑ 3 new today</div>
+        <div class="metric-label">Avg Rating</div>
+        <div id="dash-rating" class="metric-val">—</div>
+        <div id="dash-reviews" class="metric-change">— reviews</div>
       </div>
       <div class="metric-card reveal reveal-delay-3">
-        <div class="metric-label">Profile Conversion</div>
-        <div class="metric-val" data-count="4" data-suffix=".2%">0</div>
-        <div class="metric-change metric-up">↑ Above average</div>
+        <div class="metric-label">This Month</div>
+        <div id="dash-month-leads" class="metric-val">—</div>
+        <div class="metric-change">leads this month</div>
       </div>
     </div>
 
@@ -147,57 +148,9 @@
       <div class="dash-card reveal">
         <div class="dash-card-title">
           Recent Lead Requests
-          <a href="#" class="btn btn-sm btn-ghost" style="font-size:12px">View All</a>
         </div>
-
-        <div class="lead-item">
-          <div class="lead-avatar">SC</div>
-          <div class="lead-info">
-            <div class="lead-name">Sarah Clarke · TechScale Ltd</div>
-            <div class="lead-preview">Need CRM automation for HubSpot — lead routing + follow-up sequences for 500+ leads/month</div>
-            <div class="lead-time">2 hours ago · Budget: £2,000–£5,000</div>
-          </div>
-          <div class="lead-badge"><span class="tag tag-green" style="padding:5px 10px">New</span></div>
-        </div>
-
-        <div class="lead-item">
-          <div class="lead-avatar">JB</div>
-          <div class="lead-info">
-            <div class="lead-name">James Brown · StartupHub</div>
-            <div class="lead-preview">Looking for Make.com expert to build investor pipeline automation from Airtable to email</div>
-            <div class="lead-time">5 hours ago · Budget: £500–£2,000</div>
-          </div>
-          <div class="lead-badge"><span class="tag tag-green" style="padding:5px 10px">New</span></div>
-        </div>
-
-        <div class="lead-item">
-          <div class="lead-avatar">RP</div>
-          <div class="lead-info">
-            <div class="lead-name">Rachel Patel · ShopDirect</div>
-            <div class="lead-preview">E-commerce order management automation — Shopify + Make.com integration needed</div>
-            <div class="lead-time">Yesterday · Budget: £1,000–£2,000</div>
-          </div>
-          <div class="lead-badge"><span class="tag tag-blue" style="padding:5px 10px">Replied</span></div>
-        </div>
-
-        <div class="lead-item">
-          <div class="lead-avatar">MC</div>
-          <div class="lead-info">
-            <div class="lead-name">Mark Collins · Bloom Marketing</div>
-            <div class="lead-preview">AI agent for lead qualification — need GPT-4 scoring system integrated with CRM</div>
-            <div class="lead-time">2 days ago · Budget: £5,000+</div>
-          </div>
-          <div class="lead-badge"><span class="tag tag-white" style="padding:5px 10px">Quoted</span></div>
-        </div>
-
-        <div class="lead-item">
-          <div class="lead-avatar">AT</div>
-          <div class="lead-info">
-            <div class="lead-name">Alex Thompson · PropTech UK</div>
-            <div class="lead-preview">Document automation for real estate contracts using GPT-4 — DocuSign integration</div>
-            <div class="lead-time">3 days ago · Budget: £2,000–£5,000</div>
-          </div>
-          <div class="lead-badge"><span class="tag tag-white" style="padding:5px 10px">Won ✓</span></div>
+        <div id="dash-leads-list">
+          <div style="text-align:center;padding:32px;color:var(--white-30);font-size:14px">Loading leads…</div>
         </div>
       </div>
 
@@ -253,6 +206,110 @@
 <script src="assets/js/main.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/chat.js"></script>
-  <script src="assets/js/receptionist.js"></script>
+<script src="assets/js/receptionist.js"></script>
+<script>
+(async function () {
+  const authed = await Auth.requireAuth();
+  if (!authed) return;
+
+  // Load dashboard data
+  let data;
+  try {
+    const res = await fetch('/api/dashboard', {
+      headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
+    });
+    if (!res.ok) { Auth.logout(); return; }
+    data = await res.json();
+  } catch {
+    document.getElementById('dash-welcome').textContent = 'Failed to load dashboard. Please refresh.';
+    return;
+  }
+
+  const p = data.provider;
+
+  // Nav
+  const initials = (p.business_name || '?').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('dash-nav-avatar').textContent = p.avatar_emoji || initials;
+  document.getElementById('dash-nav-name').textContent   = p.business_name;
+  if (p.slug) document.getElementById('dash-profile-link').href = `provider-profile.html?slug=${p.slug}`;
+
+  // Welcome
+  const firstName = (p.business_name || '').split(' ')[0];
+  document.getElementById('dash-welcome').textContent = `Welcome back, ${firstName} 👋`;
+
+  // Plan bar
+  const planLabel = p.plan.charAt(0).toUpperCase() + p.plan.slice(1);
+  document.getElementById('dash-plan-name').textContent  = `${planLabel} Plan`;
+  document.getElementById('dash-plan-badge').textContent = planLabel;
+  if (data.plan_limit) {
+    const pct = Math.min(100, Math.round((data.leads_this_month / data.plan_limit) * 100));
+    document.getElementById('dash-leads-usage').textContent = `${data.leads_this_month} of ${data.plan_limit} leads used this month`;
+    const bar = document.getElementById('dash-leads-bar');
+    bar.dataset.width = pct + '%';
+    setTimeout(() => { bar.style.width = pct + '%'; }, 300);
+  } else {
+    document.getElementById('dash-leads-usage').textContent = `${data.leads_this_month} leads this month · Unlimited`;
+  }
+
+  // Metrics
+  document.getElementById('dash-views').textContent       = (p.profile_views || 0).toLocaleString();
+  document.getElementById('dash-leads').textContent       = (p.lead_count    || 0).toLocaleString();
+  document.getElementById('dash-rating').textContent      = p.rating_avg ? p.rating_avg.toFixed(1) : '—';
+  document.getElementById('dash-reviews').textContent     = `${p.review_count || 0} reviews`;
+  document.getElementById('dash-month-leads').textContent = data.leads_this_month;
+
+  // Leads list
+  const leadsList = document.getElementById('dash-leads-list');
+  if (!data.leads.length) {
+    leadsList.innerHTML = `
+      <div style="text-align:center;padding:32px 16px;color:var(--white-30)">
+        <div style="font-size:36px;margin-bottom:12px">📭</div>
+        <p style="font-size:14px">No leads yet. Upgrade your plan to start receiving enquiries.</p>
+        <a href="pricing.html" class="btn btn-primary btn-sm" style="margin-top:14px;display:inline-flex">View Plans →</a>
+      </div>`;
+  } else {
+    leadsList.innerHTML = data.leads.map(lead => {
+      const name    = escHtml(lead.client_name || 'Anonymous');
+      const company = lead.client_company ? ` · ${escHtml(lead.client_company)}` : '';
+      const preview = escHtml((lead.description || '').slice(0, 120));
+      const budget  = lead.budget ? ` · Budget: ${escHtml(lead.budget)}` : '';
+      const ago     = timeAgo(lead.created_at);
+      const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const statusColors = { new:'tag-green', viewed:'tag-blue', contacted:'tag-blue', quoted:'tag-white', won:'tag-green', lost:'tag-white', spam:'tag-white' };
+      const statusLabel  = { new:'New', viewed:'Viewed', contacted:'Replied', quoted:'Quoted', won:'Won ✓', lost:'Lost', spam:'Spam' };
+      const tag = statusColors[lead.status] || 'tag-white';
+      return `
+        <div class="lead-item">
+          <div class="lead-avatar">${initials}</div>
+          <div class="lead-info">
+            <div class="lead-name">${name}${company}</div>
+            <div class="lead-preview">${preview}</div>
+            <div class="lead-time">${ago}${budget}</div>
+          </div>
+          <div class="lead-badge"><span class="tag ${tag}" style="padding:5px 10px">${statusLabel[lead.status] || lead.status}</span></div>
+        </div>`;
+    }).join('');
+  }
+
+  // Show upgrade toast after Stripe payment
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('upgraded') === 'true') {
+    const plan = params.get('plan') || '';
+    toast(`You're now on the ${plan.charAt(0).toUpperCase()+plan.slice(1)} plan!`, '🎉');
+  }
+  if (params.get('new') === 'true') {
+    toast('Listing submitted! We\'ll review it within 24 hours.', '🎉');
+  }
+
+  function timeAgo(iso) {
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.floor(diff / 60000);
+    if (m < 60)   return `${m || 1}m ago`;
+    if (m < 1440) return `${Math.floor(m/60)}h ago`;
+    if (m < 2880) return 'Yesterday';
+    return `${Math.floor(m/1440)}d ago`;
+  }
+})();
+</script>
 </body>
 </html>

@@ -22,10 +22,11 @@ const CONFIG = {
    ============================================================ */
 
 async function apiPost(endpoint, body) {
+  const headers = { 'Content-Type': 'application/json' };
+  const token = Auth.getToken();
+  if (token) headers['Authorization'] = `Bearer ${token}`;
   const res = await fetch(`${CONFIG.apiBase}/api/${endpoint}`, {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify(body),
+    method: 'POST', headers, body: JSON.stringify(body),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
@@ -33,13 +34,90 @@ async function apiPost(endpoint, body) {
 }
 
 async function apiGet(endpoint, params = {}) {
+  const headers = {};
+  const token = Auth.getToken();
+  if (token) headers['Authorization'] = `Bearer ${token}`;
   const qs  = new URLSearchParams(params).toString();
   const url = `${CONFIG.apiBase}/api/${endpoint}${qs ? '?' + qs : ''}`;
-  const res = await fetch(url);
+  const res = await fetch(url, { headers });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
   return data;
 }
+
+
+/* ============================================================
+   AUTH — session management
+   ============================================================ */
+
+const Auth = {
+  KEYS: ['ah_access_token','ah_refresh_token','ah_token_expires','ah_provider_id','ah_provider_slug','ah_plan','ah_provider_name'],
+
+  getToken()    { return localStorage.getItem('ah_access_token'); },
+
+  getProvider() {
+    const id = localStorage.getItem('ah_provider_id');
+    if (!id) return null;
+    return {
+      id,
+      slug: localStorage.getItem('ah_provider_slug') || '',
+      plan: localStorage.getItem('ah_plan') || 'free',
+      name: localStorage.getItem('ah_provider_name') || '',
+    };
+  },
+
+  save(result) {
+    if (result.access_token)  localStorage.setItem('ah_access_token',  result.access_token);
+    if (result.refresh_token) localStorage.setItem('ah_refresh_token', result.refresh_token);
+    if (result.expires_in)    localStorage.setItem('ah_token_expires', String(Date.now() + result.expires_in * 1000));
+    if (result.provider?.id) {
+      localStorage.setItem('ah_provider_id',   result.provider.id);
+      localStorage.setItem('ah_provider_slug', result.provider.slug         || '');
+      localStorage.setItem('ah_plan',          result.provider.plan         || 'free');
+      localStorage.setItem('ah_provider_name', result.provider.business_name || '');
+    }
+  },
+
+  clear() { this.KEYS.forEach(k => localStorage.removeItem(k)); },
+
+  logout() {
+    this.clear();
+    window.location.href = 'login.html';
+  },
+
+  isLoggedIn() { return !!this.getToken(); },
+
+  async refresh() {
+    const refreshToken = localStorage.getItem('ah_refresh_token');
+    if (!refreshToken) return false;
+    try {
+      const res = await fetch('/api/auth/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+      if (!res.ok) return false;
+      const data = await res.json();
+      if (data.access_token)  localStorage.setItem('ah_access_token',  data.access_token);
+      if (data.refresh_token) localStorage.setItem('ah_refresh_token', data.refresh_token);
+      if (data.expires_in)    localStorage.setItem('ah_token_expires', String(Date.now() + data.expires_in * 1000));
+      return true;
+    } catch { return false; }
+  },
+
+  async requireAuth() {
+    if (!this.getToken()) {
+      window.location.href = `login.html?next=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+      return false;
+    }
+    const expires = parseInt(localStorage.getItem('ah_token_expires') || '0');
+    if (expires && Date.now() > expires - 60000) {
+      const ok = await this.refresh();
+      if (!ok) { this.logout(); return false; }
+    }
+    return true;
+  },
+};
 
 
 /* ============================================================
@@ -123,10 +201,12 @@ function initSubmitListingForm() {
 
       const result = await apiPost('submit-listing', payload);
 
+      // Auto-login with tokens returned from registration
+      Auth.save(result);
+
       toast(result.message || 'Listing submitted! Under review within 24 hours.', '🎉');
       form.reset();
 
-      // Redirect to dashboard after 2s
       setTimeout(() => {
         window.location.href = `dashboard.html?new=true&slug=${result.provider?.slug || ''}`;
       }, 2000);
@@ -451,13 +531,13 @@ function initUpgradeButtons() {
       const plan    = btn.dataset.upgradePlan;
       const billing = document.querySelector('.toggle-switch')?.classList.contains('active') ? 'yearly' : 'monthly';
 
-      // Get provider_id from local storage (set on login)
-      const providerId = localStorage.getItem('ah_provider_id');
-      if (!providerId) {
+      const provider = Auth.getProvider();
+      if (!provider?.id) {
         toast('Please log in to upgrade your plan.', '🔒', true);
-        setTimeout(() => { window.location.href = 'submit-listing.html'; }, 1500);
+        setTimeout(() => { window.location.href = `login.html?next=${encodeURIComponent(window.location.pathname)}`; }, 1500);
         return;
       }
+      const providerId = provider.id;
 
       setButtonLoading(btn, true);
 
@@ -494,22 +574,16 @@ function initLoginForm() {
     setButtonLoading(btn, true);
 
     try {
-      const result = await apiPost('auth/register', {
+      const result = await apiPost('auth/login', {
         email:    form.querySelector('[name="email"]')?.value?.trim(),
         password: form.querySelector('[name="password"]')?.value,
       });
 
-      // Store session
-      localStorage.setItem('ah_access_token',  result.access_token);
-      localStorage.setItem('ah_refresh_token', result.refresh_token);
-      if (result.provider?.id) {
-        localStorage.setItem('ah_provider_id',   result.provider.id);
-        localStorage.setItem('ah_provider_slug', result.provider.slug || '');
-        localStorage.setItem('ah_plan',          result.provider.plan || 'free');
-      }
+      Auth.save(result);
 
       toast('Welcome back! Redirecting...', '✅');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+      const next = new URLSearchParams(window.location.search).get('next');
+      setTimeout(() => { window.location.href = next || 'dashboard.html'; }, 800);
 
     } catch (e) {
       toast(e.message || 'Login failed.', '❌', true);

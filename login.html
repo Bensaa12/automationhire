@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Provider Login | AutomationHire</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <style>
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,230,118,0.06) 0%, transparent 70%),
+                  var(--black);
+    }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--black-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    }
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 32px;
+      text-decoration: none;
+    }
+    .login-logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .login-logo-text {
+      font-family: var(--font-head);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .login-logo-text span { color: var(--green); }
+    .login-heading {
+      font-family: var(--font-head);
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .login-sub {
+      font-size: 14px;
+      color: var(--white-60);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white-60);
+      margin-bottom: 7px;
+    }
+    .form-input {
+      width: 100%;
+      background: var(--black-3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--white);
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+    .form-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(0,230,118,0.08);
+    }
+    .form-input::placeholder { color: var(--white-30); }
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      color: var(--black);
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: opacity 0.2s, transform 0.2s;
+      margin-top: 4px;
+    }
+    .login-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .login-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .login-divider {
+      text-align: center;
+      font-size: 13px;
+      color: var(--white-30);
+      margin: 22px 0 18px;
+      position: relative;
+    }
+    .login-divider::before, .login-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: calc(50% - 60px);
+      height: 1px;
+      background: var(--border);
+    }
+    .login-divider::before { left: 0; }
+    .login-divider::after  { right: 0; }
+    .login-footer {
+      text-align: center;
+      font-size: 13px;
+      color: var(--white-60);
+    }
+    .login-footer a { color: var(--green); text-decoration: none; font-weight: 600; }
+    .login-footer a:hover { text-decoration: underline; }
+    .login-error {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: var(--radius-sm);
+      padding: 11px 14px;
+      font-size: 13px;
+      color: #f87171;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .login-error.show { display: block; }
+    .password-wrap { position: relative; }
+    .password-toggle {
+      position: absolute;
+      right: 12px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--white-30); cursor: pointer;
+      font-size: 16px; padding: 4px;
+      transition: color 0.15s;
+    }
+    .password-toggle:hover { color: var(--white-60); }
+  </style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<div class="login-wrap">
+  <div class="login-card">
+
+    <a href="index.html" class="login-logo">
+      <div class="login-logo-icon">⚡</div>
+      <div class="login-logo-text">Automation<span>Hire</span></div>
+    </a>
+
+    <h1 class="login-heading">Welcome back</h1>
+    <p class="login-sub">Sign in to your expert dashboard</p>
+
+    <div id="login-error" class="login-error"></div>
+
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="login-email">Email address</label>
+        <input id="login-email" class="form-input" type="email" name="email"
+               placeholder="you@company.com" autocomplete="email" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="login-password">Password</label>
+        <div class="password-wrap">
+          <input id="login-password" class="form-input" type="password" name="password"
+                 placeholder="••••••••" autocomplete="current-password" required
+                 style="padding-right:44px" />
+          <button type="button" class="password-toggle" id="pwd-toggle" aria-label="Toggle password">👁</button>
+        </div>
+      </div>
+
+      <button type="submit" class="login-btn" id="login-submit">Sign in</button>
+    </form>
+
+    <div class="login-divider">or</div>
+
+    <div class="login-footer" style="margin-bottom:14px">
+      Don't have an account?
+      <a href="submit-listing.html">List your business →</a>
+    </div>
+    <div class="login-footer">
+      <a href="index.html" style="color:var(--white-30)">← Back to site</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+<script>
+  // Redirect if already logged in
+  if (Auth.isLoggedIn()) {
+    const next = new URLSearchParams(window.location.search).get('next');
+    window.location.replace(next || 'dashboard.html');
+  }
+
+  // Show inline error instead of toast on this page
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl  = document.getElementById('login-error');
+    const btn    = document.getElementById('login-submit');
+    errEl.classList.remove('show');
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+
+    try {
+      const result = await apiPost('auth/login', {
+        email:    document.getElementById('login-email').value.trim(),
+        password: document.getElementById('login-password').value,
+      });
+      Auth.save(result);
+      const next = new URLSearchParams(window.location.search).get('next');
+      window.location.href = next || 'dashboard.html';
+    } catch (err) {
+      errEl.textContent = err.message || 'Invalid email or password.';
+      errEl.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Sign in';
+    }
+  });
+
+  // Password show/hide
+  document.getElementById('pwd-toggle').addEventListener('click', () => {
+    const input = document.getElementById('login-password');
+    input.type = input.type === 'password' ? 'text' : 'password';
+  });
+</script>
+</body>
+</html>
