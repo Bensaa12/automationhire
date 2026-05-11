@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signing in… | AutomationHire</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--black); }
+    .cb-card {
+      text-align: center;
+      padding: 48px 40px;
+      max-width: 380px;
+      width: 100%;
+    }
+    .cb-spinner {
+      width: 52px; height: 52px;
+      border: 3px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 28px;
+    }
+    .cb-title {
+      font-family: var(--font-head);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .cb-sub { font-size: 14px; color: var(--white-60); }
+    .cb-error {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: 14px;
+      color: #f87171;
+      margin-top: 20px;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="cb-card">
+  <div class="cb-spinner" id="cb-spinner"></div>
+  <div class="cb-title" id="cb-title">Signing you in…</div>
+  <div class="cb-sub" id="cb-sub">Please wait while we verify your account.</div>
+  <div class="cb-error" id="cb-error"></div>
+</div>
+
+<script>
+  const SUPABASE_URL  = 'https://lywcjlhfpucohuaxthem.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5d2NqbGhmcHVjb2h1YXh0aGVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MDMxMDIsImV4cCI6MjA5MDk3OTEwMn0.SYzs_uWk2A-aSyVCAsKJZldFbeZHwOCi75i_S5LSlVg';
+
+  function showError(msg) {
+    document.getElementById('cb-spinner').style.display = 'none';
+    document.getElementById('cb-title').textContent = 'Sign-in failed';
+    document.getElementById('cb-sub').textContent   = 'You can close this tab and try again.';
+    const errEl = document.getElementById('cb-error');
+    errEl.textContent = msg;
+    errEl.style.display = 'block';
+  }
+
+  async function handleCallback() {
+    const params   = new URLSearchParams(window.location.search);
+    const code     = params.get('code');
+    const errorMsg = params.get('error_description') || params.get('error');
+
+    if (errorMsg) { showError(decodeURIComponent(errorMsg)); return; }
+    if (!code)    { showError('No authorisation code found. Please try again.'); return; }
+
+    const verifier = sessionStorage.getItem('pkce_verifier');
+    if (!verifier) { showError('Session expired. Please start the sign-in again.'); return; }
+    sessionStorage.removeItem('pkce_verifier');
+
+    // Exchange code for session via Supabase REST
+    const tokenRes = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=pkce`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
+      body:    JSON.stringify({ auth_code: code, code_verifier: verifier }),
+    });
+    const tokenData = await tokenRes.json();
+
+    if (!tokenRes.ok || !tokenData.access_token) {
+      showError(tokenData.error_description || tokenData.message || 'Token exchange failed.');
+      return;
+    }
+
+    // Save base session
+    localStorage.setItem('ah_access_token',  tokenData.access_token);
+    localStorage.setItem('ah_refresh_token', tokenData.refresh_token);
+    localStorage.setItem('ah_token_expires', String(Date.now() + (tokenData.expires_in || 3600) * 1000));
+
+    // Fetch provider info
+    const meRes = await fetch('/api/auth/me', {
+      headers: { 'Authorization': `Bearer ${tokenData.access_token}` },
+    });
+    const meData = await meRes.json();
+
+    const provider = meData.provider;
+    if (provider) {
+      localStorage.setItem('ah_provider_id',   provider.id   || '');
+      localStorage.setItem('ah_provider_slug', provider.slug || '');
+      localStorage.setItem('ah_plan',          provider.plan || 'free');
+      localStorage.setItem('ah_provider_name', provider.business_name || '');
+    }
+
+    const next = sessionStorage.getItem('oauth_next') || '';
+    sessionStorage.removeItem('oauth_next');
+
+    // New Google user with no provider → onboard them
+    if (!provider) {
+      window.location.replace('submit-listing.html?google=1');
+      return;
+    }
+
+    window.location.replace(next || 'dashboard.html');
+  }
+
+  handleCallback().catch(e => showError(e.message || 'Unexpected error.'));
+</script>
+</body>
+</html>

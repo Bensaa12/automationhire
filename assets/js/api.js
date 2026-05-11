@@ -50,7 +50,7 @@ async function apiGet(endpoint, params = {}) {
    AUTH — session management
    ============================================================ */
 
-const Auth = {
+const Auth = window.Auth = {
   KEYS: ['ah_access_token','ah_refresh_token','ah_token_expires','ah_provider_id','ah_provider_slug','ah_plan','ah_provider_name'],
 
   getToken()    { return localStorage.getItem('ah_access_token'); },
@@ -568,10 +568,22 @@ function initLoginForm() {
   const form = document.getElementById('login-form');
   if (!form) return;
 
+  const errEl = document.getElementById('login-error');
+
+  function showLoginError(msg) {
+    if (errEl) {
+      errEl.textContent = msg;
+      errEl.classList.add('show');
+    } else {
+      toast(msg, '❌', true);
+    }
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btn = form.querySelector('button[type="submit"]');
-    setButtonLoading(btn, true);
+    const btn = document.getElementById('login-submit') || form.querySelector('button[type="submit"]');
+    if (errEl) errEl.classList.remove('show');
+    if (btn) { btn.disabled = true; btn.textContent = 'Signing in…'; }
 
     try {
       const result = await apiPost('auth/login', {
@@ -581,13 +593,12 @@ function initLoginForm() {
 
       Auth.save(result);
 
-      toast('Welcome back! Redirecting...', '✅');
       const next = new URLSearchParams(window.location.search).get('next');
-      setTimeout(() => { window.location.href = next || 'dashboard.html'; }, 800);
+      window.location.href = next || 'dashboard.html';
 
     } catch (e) {
-      toast(e.message || 'Login failed.', '❌', true);
-      setButtonLoading(btn, false);
+      showLoginError(e.message || 'Invalid email or password.');
+      if (btn) { btn.disabled = false; btn.textContent = 'Sign in'; }
     }
   });
 }
@@ -619,6 +630,50 @@ if (new URLSearchParams(window.location.search).get('upgraded') === 'true') {
 
 
 /* ============================================================
+   GOOGLE OAUTH — PKCE helpers
+   ============================================================ */
+
+function _b64url(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function _pkce() {
+  const verifier  = _b64url(crypto.getRandomValues(new Uint8Array(48)));
+  const hashBuf   = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
+  const challenge = _b64url(hashBuf);
+  return { verifier, challenge };
+}
+
+async function startGoogleLogin(redirectAfter) {
+  const { verifier, challenge } = await _pkce();
+  sessionStorage.setItem('pkce_verifier', verifier);
+  if (redirectAfter) sessionStorage.setItem('oauth_next', redirectAfter);
+
+  const callbackUrl = window.location.origin + '/auth-callback';
+  const params = new URLSearchParams({
+    provider:              'google',
+    redirect_to:           callbackUrl,
+    code_challenge:        challenge,
+    code_challenge_method: 'S256',
+  });
+  window.location.href = `${CONFIG.supabaseUrl}/auth/v1/authorize?${params}`;
+}
+
+function initGoogleLoginButton() {
+  document.querySelectorAll('[data-google-login]').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = 'Redirecting…';
+      const next = new URLSearchParams(window.location.search).get('next') || '';
+      await startGoogleLogin(next);
+    });
+  });
+}
+
+
+/* ============================================================
    INIT — run all initializers on DOMContentLoaded
    ============================================================ */
 
@@ -630,4 +685,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initDirectoryPage();
   initUpgradeButtons();
   initLoginForm();
+  initGoogleLoginButton();
 });
