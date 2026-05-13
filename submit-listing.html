@@ -357,6 +357,35 @@
 <script src="assets/js/main.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/chat.js"></script>
-  <script src="assets/js/receptionist.js"></script>
+<script src="assets/js/receptionist.js"></script>
+<script>
+  // Google OAuth mode: hide password, pre-fill email, skip password validation
+  if (new URLSearchParams(window.location.search).get('google') === '1') {
+    document.addEventListener('DOMContentLoaded', () => {
+      // Hide password group
+      const pwdInput = document.querySelector('input[name="password"]');
+      if (pwdInput) {
+        pwdInput.removeAttribute('required');
+        pwdInput.closest('.form-group').style.display = 'none';
+      }
+      // Pre-fill + lock email
+      const emailInput = document.querySelector('input[name="email"]');
+      const savedEmail = sessionStorage.getItem('google_email');
+      if (emailInput && savedEmail) {
+        emailInput.value    = savedEmail;
+        emailInput.readOnly = true;
+        emailInput.style.opacity = '0.7';
+      }
+      // Add a notice near the top of the account section
+      const emailGroup = emailInput?.closest('.form-group');
+      if (emailGroup) {
+        const notice = document.createElement('div');
+        notice.style.cssText = 'background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--white-60);margin-bottom:16px';
+        notice.innerHTML = '✓ Signed in with Google — no password needed.';
+        emailGroup.parentElement.insertBefore(notice, emailGroup);
+      }
+    });
+  }
+</script>
 </body>
 </html>

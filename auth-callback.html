@@ -108,6 +108,11 @@
       localStorage.setItem('ah_provider_name', provider.business_name || '');
     }
 
+    // Save email so submit-listing can pre-fill it
+    if (meData.user?.email) {
+      sessionStorage.setItem('google_email', meData.user.email);
+    }
+
     const next = sessionStorage.getItem('oauth_next') || '';
     sessionStorage.removeItem('oauth_next');
 

@@ -13,10 +13,26 @@ module.exports = async function handler(req, res) {
   const supabase = getSupabase();
   const resend   = getResend();
 
+  // ---- Detect Google/OAuth users (already have a Supabase auth account) ----
+  let oauthUserId    = null;
+  let oauthUserEmail = null;
+  let oauthSession   = null;
+
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith('Bearer ')) {
+    const token = authHeader.slice(7);
+    const { data: { user } } = await supabase.auth.getUser(token);
+    if (user) {
+      oauthUserId    = user.id;
+      oauthUserEmail = user.email;
+      oauthSession   = { access_token: token };
+    }
+  }
+
   const {
     // Account
     contact_name,
-    email,
+    email: bodyEmail,
     password,
     // Business
     business_name,
@@ -39,42 +55,50 @@ module.exports = async function handler(req, res) {
     industries,
   } = req.body;
 
+  const email = bodyEmail?.trim() || oauthUserEmail;
+
   // ---- Validation ----
   if (!business_name?.trim()) return err(res, 'Business name is required');
-  if (!email?.trim())         return err(res, 'Email is required');
-  if (!password || password.length < 8) return err(res, 'Password must be at least 8 characters');
-  if (!description?.trim())  return err(res, 'Description is required');
-  if (!provider_type)        return err(res, 'Provider type is required');
+  if (!email)                  return err(res, 'Email is required');
+  if (!oauthUserId && (!password || password.length < 8)) return err(res, 'Password must be at least 8 characters');
+  if (!description?.trim())   return err(res, 'Description is required');
+  if (!provider_type)         return err(res, 'Provider type is required');
 
-  // ---- Check for duplicate email ----
+  // ---- Check for duplicate provider listing ----
   const { data: existing } = await supabase
     .from('providers')
     .select('id')
     .eq('contact_email', email.toLowerCase().trim())
     .single();
 
-  if (existing) return err(res, 'An account with this email already exists', 409);
+  if (existing) return err(res, 'A listing with this email already exists', 409);
 
-  // ---- Create Supabase Auth user ----
-  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-    email:    email.trim().toLowerCase(),
-    password: password,
-    email_confirm: true,
-    user_metadata: {
-      full_name:     contact_name || business_name,
-      business_name: business_name,
-    }
-  });
+  // ---- Auth: use existing OAuth user or create new account ----
+  let userId;
 
-  if (authError) {
-    if (authError.message?.includes('already registered')) {
-      return err(res, 'An account with this email already exists', 409);
+  if (oauthUserId) {
+    userId = oauthUserId;
+  } else {
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      email:    email.trim().toLowerCase(),
+      password: password,
+      email_confirm: true,
+      user_metadata: {
+        full_name:     contact_name || business_name,
+        business_name: business_name,
+      }
+    });
+
+    if (authError) {
+      if (authError.message?.includes('already registered')) {
+        return err(res, 'An account with this email already exists', 409);
+      }
+      console.error('Auth error:', authError);
+      return err(res, 'Failed to create account', 500, authError.message);
     }
-    console.error('Auth error:', authError);
-    return err(res, 'Failed to create account', 500, authError.message);
+
+    userId = authData.user.id;
   }
-
-  const userId = authData.user.id;
 
   // ---- Parse hourly rate range ----
   let rateMin = null, rateMax = null;
@@ -127,18 +151,21 @@ module.exports = async function handler(req, res) {
 
   if (insertError) {
     console.error('Insert error:', insertError);
-    // Roll back auth user if provider insert fails
-    await supabase.auth.admin.deleteUser(userId);
+    if (!oauthUserId) await supabase.auth.admin.deleteUser(userId);
     return err(res, 'Failed to create listing', 500, insertError.message);
   }
 
-  // ---- Auto-login: sign in right after registration ----
+  // ---- Auto-login: sign in right after registration (skip for OAuth users) ----
   let session = null;
-  const { data: signIn } = await supabase.auth.signInWithPassword({
-    email:    email.trim().toLowerCase(),
-    password: password,
-  });
-  if (signIn?.session) session = signIn.session;
+  if (oauthUserId) {
+    session = oauthSession;
+  } else {
+    const { data: signIn } = await supabase.auth.signInWithPassword({
+      email:    email.trim().toLowerCase(),
+      password: password,
+    });
+    if (signIn?.session) session = signIn.session;
+  }
 
   // ---- Send emails (fire and forget) ----
   Promise.all([
