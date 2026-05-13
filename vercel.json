@@ -16,6 +16,11 @@
       ]
     }
   ],
+  "rewrites": [
+    { "source": "/api/auth/login",   "destination": "/api/auth?action=login"   },
+    { "source": "/api/auth/me",      "destination": "/api/auth?action=me"      },
+    { "source": "/api/auth/refresh", "destination": "/api/auth?action=refresh" }
+  ],
   "functions": {
     "api/**/*.js": {
       "maxDuration": 30
