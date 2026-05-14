@@ -335,7 +335,7 @@
         : '';
       const kw   = (p.keywords || [])[0] || 'AI Automation';
       const emoji = EMOJIS[i % EMOJIS.length];
-      const cls   = i === 0 ? 'blog-card featured-post reveal' : 'blog-card reveal';
+      const cls   = i === 0 ? 'blog-card featured-post' : 'blog-card';
       const thumbN = (i % 3) + 1;
       return `
         <a href="/blog/${p.slug}" class="${cls}">
