@@ -223,5 +223,72 @@ module.exports = async function handler(req, res) {
     return ok(res, { post: { ...parsed, id: data.id, slug: data.slug, status: 'draft' } });
   }
 
+  // ── Generate social media copy ────────────────────────────────────────
+  if (action === 'social' && req.method === 'POST') {
+    const { post_id } = req.body || {};
+    if (!post_id) return err(res, 'post_id required');
+
+    const { data: post, error: fetchErr } = await supabase
+      .from('blog_posts')
+      .select('title,excerpt,keywords,content,slug')
+      .eq('id', post_id)
+      .single();
+    if (fetchErr || !post) return err(res, 'Post not found', 404);
+
+    // Strip HTML tags from content for the prompt
+    const plainContent = (post.content || '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 1200);
+
+    // Tavily: fresh 30-day context on the topic
+    const keyword = (post.keywords || [])[0] || post.title;
+    const results = await tavilySearch(`${keyword} UK automation 2025`, 30, 6);
+    const ctx = results
+      .map(r => `• ${r.title}: ${(r.content || '').slice(0, 200)}`)
+      .join('\n');
+
+    const postUrl = `https://automationhire.co.uk/blog/${post.slug}`;
+
+    const raw = await askClaude(
+      `You are a social media copywriter for AutomationHire.co.uk — a UK directory for AI automation experts. Write punchy, engaging social copy that drives clicks. Use UK English. Return ONLY valid JSON — no markdown, no commentary.`,
+      `Generate social media posts for this blog article:
+
+Title: ${post.title}
+Excerpt: ${post.excerpt}
+Key content: ${plainContent}
+Post URL: ${postUrl}
+
+Fresh web context (last 30 days — use for hooks/stats if relevant):
+${ctx || '[use your knowledge of UK automation trends]'}
+
+Return this exact JSON:
+{
+  "linkedin": {
+    "hook": "string (opening line — bold claim or surprising stat, max 20 words)",
+    "body": "string (150–200 words; 3–4 short paragraphs; practical insight; UK audience; end with a soft CTA + URL)",
+    "hashtags": ["#Automation","#AI","#UKBusiness","#NoCode","#Zapier"]
+  },
+  "twitter": {
+    "thread": [
+      "string (tweet 1 — hook, max 270 chars, include a number or stat)",
+      "string (tweet 2 — key insight, max 270 chars)",
+      "string (tweet 3 — practical tip, max 270 chars)",
+      "string (tweet 4 — contrarian or surprising angle, max 270 chars)",
+      "string (tweet 5 — CTA + URL, max 270 chars)"
+    ]
+  }
+}`,
+      2000
+    );
+
+    const parsed = parseJson(raw);
+    if (!parsed?.linkedin || !parsed?.twitter) {
+      return err(res, 'AI failed to generate social copy. Please try again.', 500);
+    }
+    return ok(res, { social: parsed, post: { title: post.title, slug: post.slug } });
+  }
+
   return err(res, 'Unknown action', 404);
 };

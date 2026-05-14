@@ -155,6 +155,27 @@
     .toast-ok  { background: rgba(0,230,118,.12); border: 1px solid rgba(0,230,118,.28); color: var(--green); }
     .toast-err { background: rgba(248,113,113,.10); border: 1px solid rgba(248,113,113,.22); color: var(--red); }
     @keyframes tUp { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* ── Social Posts ── */
+    .social-picker { display: flex; gap: 10px; align-items: center; margin-bottom: 24px; }
+    .social-select { flex: 1; background: var(--card); border: 1px solid var(--border2); color: var(--text); padding: 10px 14px; border-radius: var(--rsm); font-size: 14px; outline: none; }
+    .social-select:focus { border-color: var(--green); }
+    .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 700px) { .social-grid { grid-template-columns: 1fr; } }
+    .social-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+    .social-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .social-platform { font-size: 13px; font-weight: 700; color: var(--text); }
+    .social-hook { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.4; }
+    .social-body { font-size: 13px; color: rgba(255,255,255,.72); line-height: 1.75; white-space: pre-wrap; }
+    .social-tags { margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .social-tag { font-size: 12px; color: var(--blue); }
+    .tweet-list { display: flex; flex-direction: column; gap: 10px; }
+    .tweet-item { background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 1.65; color: var(--text); }
+    .tweet-num { font-size: 11px; color: var(--muted); margin-bottom: 5px; font-weight: 600; }
+    .copy-btn { font-size: 12px; padding: 5px 12px; background: rgba(255,255,255,.07); border: 1px solid var(--border2); border-radius: 5px; color: var(--text); cursor: pointer; transition: all .15s; }
+    .copy-btn:hover { background: rgba(255,255,255,.13); }
+    .copy-btn.copied { color: var(--green); border-color: rgba(0,230,118,.4); }
+    .social-empty { color: var(--muted); font-size: 13px; text-align: center; padding: 48px 20px; line-height: 1.7; }
   </style>
 </head>
 <body>
@@ -187,7 +208,7 @@
     <div class="tabs">
       <button class="tab active" data-tab="blog">Blog Pipeline</button>
       <button class="tab" data-tab="posts">All Posts</button>
-      <button class="tab soon" title="Coming soon — Phase 2">Social Posts</button>
+      <button class="tab" data-tab="social">Social Posts</button>
       <button class="tab soon" title="Coming soon — Phase 3">SEO Brief</button>
     </div>
 
@@ -234,6 +255,54 @@
       </div>
     </div>
 
+    <!-- ── Social Posts ── -->
+    <div id="tab-social" class="tab-pane">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Social Media Copy</div>
+          <div class="sec-sub">AI-written LinkedIn post + X thread, enriched with 30-day web research</div>
+        </div>
+      </div>
+
+      <div class="social-picker">
+        <select class="social-select" id="social-post-select">
+          <option value="">— Select a published post —</option>
+        </select>
+        <button class="btn btn-green" id="social-btn" onclick="generateSocial()">▶ Generate</button>
+      </div>
+
+      <div id="social-hint" class="social-empty">
+        Select a published post above and click <strong>Generate</strong>.<br>
+        Claude will read the article and pull fresh UK automation news from the last 30 days to write copy that feels timely, not generic.
+      </div>
+
+      <div id="social-results" style="display:none">
+        <div class="social-grid">
+
+          <!-- LinkedIn -->
+          <div class="social-card">
+            <div class="social-card-head">
+              <div class="social-platform">💼 LinkedIn Post</div>
+              <button class="copy-btn" id="li-copy-btn" onclick="copyLinkedIn()">Copy</button>
+            </div>
+            <div class="social-hook" id="li-hook"></div>
+            <div class="social-body" id="li-body"></div>
+            <div class="social-tags" id="li-tags"></div>
+          </div>
+
+          <!-- X / Twitter thread -->
+          <div class="social-card">
+            <div class="social-card-head">
+              <div class="social-platform">𝕏 Thread (5 tweets)</div>
+              <button class="copy-btn" id="tw-copy-btn" onclick="copyThread()">Copy All</button>
+            </div>
+            <div class="tweet-list" id="tw-thread"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -265,7 +334,7 @@
 // ════════════════════════════════════════════
 const TOKEN_KEY = 'cs_token';
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const S = { topics: [], dayPosts: {}, posts: [], previewDay: null };
+const S = { topics: [], dayPosts: {}, posts: [], previewDay: null, social: null };
 
 function csToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
 
@@ -356,6 +425,7 @@ function initTabs() {
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById('tab-' + btn.dataset.tab)?.classList.add('active');
+      if (btn.dataset.tab === 'social') populateSocialSelect();
     });
   });
 }
@@ -556,6 +626,77 @@ function toast(msg, type='ok') {
   const el = document.createElement('div');
   el.className = `toast toast-${type}`; el.textContent = msg;
   document.body.appendChild(el); setTimeout(()=>el.remove(), 4000);
+}
+
+// ════════════════════════════════════════════
+// Social Posts
+// ════════════════════════════════════════════
+function populateSocialSelect() {
+  const sel = document.getElementById('social-post-select');
+  const published = (S.posts || []).filter(p => p.status === 'published');
+  if (!published.length) {
+    sel.innerHTML = '<option value="">No published posts yet — publish one first</option>';
+    return;
+  }
+  sel.innerHTML = '<option value="">— Select a published post —</option>' +
+    published.map(p => `<option value="${esc(p.id)}">${esc(p.title)}</option>`).join('');
+}
+
+async function generateSocial() {
+  const postId = document.getElementById('social-post-select').value;
+  if (!postId) return toast('Select a published post first', 'err');
+
+  const btn = document.getElementById('social-btn');
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner-sm"></span> Researching + Writing…`;
+  document.getElementById('social-hint').style.display = 'none';
+  document.getElementById('social-results').style.display = 'none';
+
+  const d = await apiCall('/api/agent?action=social', 'POST', { post_id: postId });
+  btn.disabled = false;
+  btn.textContent = '▶ Generate';
+
+  if (!d.ok) {
+    document.getElementById('social-hint').style.display = 'block';
+    return toast(d.error || 'Generation failed', 'err');
+  }
+
+  S.social = d.social;
+
+  // LinkedIn
+  document.getElementById('li-hook').textContent = d.social.linkedin?.hook || '';
+  document.getElementById('li-body').textContent = d.social.linkedin?.body || '';
+  document.getElementById('li-tags').innerHTML = (d.social.linkedin?.hashtags || [])
+    .map(h => `<span class="social-tag">${esc(h)}</span>`).join('');
+
+  // X thread
+  document.getElementById('tw-thread').innerHTML = (d.social.twitter?.thread || [])
+    .map((t, i) => `<div class="tweet-item"><div class="tweet-num">Tweet ${i + 1} / 5</div>${esc(t)}</div>`)
+    .join('');
+
+  document.getElementById('social-results').style.display = 'block';
+  toast('Social copy generated ✓', 'ok');
+}
+
+function copyLinkedIn() {
+  if (!S.social) return;
+  const { hook, body, hashtags } = S.social.linkedin;
+  const text = [hook, '', body, '', (hashtags || []).join(' ')].join('\n');
+  navigator.clipboard.writeText(text).then(() => flashCopy('li-copy-btn', 'Copy'));
+}
+
+function copyThread() {
+  if (!S.social) return;
+  const text = (S.social.twitter?.thread || []).map((t, i) => `${i + 1}/ ${t}`).join('\n\n');
+  navigator.clipboard.writeText(text).then(() => flashCopy('tw-copy-btn', 'Copy All'));
+}
+
+function flashCopy(btnId, resetLabel) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.textContent = 'Copied!';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = resetLabel; btn.classList.remove('copied'); }, 2000);
 }
 
 // Boot
