@@ -110,7 +110,7 @@ module.exports = async function handler(req, res) {
     allow_promotion_codes: true,
     billing_address_collection: 'auto',
     tax_id_collection: { enabled: true },
-    customer_update: { name: 'auto' },
+    customer_update: { name: 'auto', address: 'auto' },
   });
 
   return ok(res, {
