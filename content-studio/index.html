@@ -12,7 +12,6 @@
       --black:   #060810;
       --bg:      #0d1117;
       --card:    #111827;
-      --card2:   #161b27;
       --border:  rgba(255,255,255,0.07);
       --border2: rgba(255,255,255,0.13);
       --green:   #00e676;
@@ -25,26 +24,35 @@
       --rsm:     6px;
     }
     body { background: var(--black); color: var(--text); font-family: Inter, -apple-system, sans-serif; font-size: 14px; min-height: 100vh; }
-    a { color: var(--green); text-decoration: none; }
 
-    /* ── Loading ── */
-    #loading { position: fixed; inset: 0; background: var(--black); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 200; }
-    .spinner { width: 40px; height: 40px; border: 3px solid var(--border2); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; }
+    /* ── Spinner ── */
+    .spinner    { width: 40px; height: 40px; border: 3px solid var(--border2); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; }
     .spinner-sm { width: 16px; height: 16px; border: 2px solid var(--border2); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; vertical-align: middle; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Unauth screen ── */
-    #unauthorized { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 12px; text-align: center; }
+    /* ── Login screen ── */
+    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .login-card { background: var(--bg); border: 1px solid var(--border2); border-radius: 16px; padding: 44px 40px; width: 100%; max-width: 380px; text-align: center; }
+    .login-logo { font-size: 36px; margin-bottom: 16px; }
+    .login-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .login-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+    .login-label { display: block; text-align: left; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+    .login-input { width: 100%; background: rgba(255,255,255,.05); border: 1px solid var(--border2); border-radius: var(--rsm); padding: 11px 14px; color: var(--text); font-size: 15px; outline: none; transition: border-color .2s; }
+    .login-input:focus { border-color: var(--green); }
+    .login-btn { width: 100%; margin-top: 16px; padding: 12px; background: var(--green); color: #060810; border: none; border-radius: var(--rsm); font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity .2s; }
+    .login-btn:hover:not(:disabled) { opacity: .85; }
+    .login-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .login-err { margin-top: 12px; font-size: 13px; color: var(--red); min-height: 18px; }
 
-    /* ── Admin header ── */
+    /* ── Main app ── */
+    #main { display: none; }
+
+    /* ── Header ── */
     .ah-header { background: var(--bg); border-bottom: 1px solid var(--border); height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 20; }
     .ah-logo { font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 8px; }
     .ah-logo .badge { background: var(--green); color: #060810; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; letter-spacing: .5px; }
-    .ah-user { display: flex; align-items: center; gap: 12px; }
-    .ah-email { color: var(--muted); font-size: 13px; }
 
-    /* ── Main wrapper ── */
-    #main { display: none; }
+    /* ── Container ── */
     .container { max-width: 1360px; margin: 0 auto; padding: 24px 20px; }
 
     /* ── Tabs ── */
@@ -75,7 +83,7 @@
     .warn-banner { background: rgba(251,191,36,.07); border: 1px solid rgba(251,191,36,.22); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--yellow); margin-bottom: 20px; }
     .warn-banner code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 3px; font-size: 12px; }
 
-    /* ── Calendar grid ── */
+    /* ── Calendar ── */
     .week-hint { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
     .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
     @media (max-width: 1100px) { .cal-grid { grid-template-columns: repeat(4, 1fr); } }
@@ -151,30 +159,27 @@
 </head>
 <body>
 
-<!-- Loading state -->
-<div id="loading">
-  <div class="spinner"></div>
-  <div style="color:var(--muted);font-size:13px">Checking access…</div>
+<!-- ── Login screen ── -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">⚡</div>
+    <div class="login-title">Content Studio</div>
+    <div class="login-sub">AutomationHire — Site Management</div>
+    <form id="login-form">
+      <label class="login-label" for="login-pass">Admin Password</label>
+      <input class="login-input" type="password" id="login-pass" placeholder="Enter your admin password" autocomplete="current-password" />
+      <button class="login-btn" type="submit" id="login-btn">Enter Studio →</button>
+      <div class="login-err" id="login-err"></div>
+    </form>
+  </div>
 </div>
 
-<!-- Unauthorised state -->
-<div id="unauthorized" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:10px;text-align:center;padding:20px">
-  <div style="font-size:40px">🔒</div>
-  <div style="font-size:20px;font-weight:700">Admin access required</div>
-  <div style="color:var(--muted)">Your account doesn't have admin permissions.</div>
-  <div style="color:var(--muted);font-size:13px">Make sure <code style="background:rgba(255,255,255,.08);padding:2px 6px;border-radius:3px">ADMIN_EMAIL</code> is set in Vercel to your email.</div>
-  <a href="/login.html" style="margin-top:12px">← Back to login</a>
-</div>
-
-<!-- Main app -->
+<!-- ── Main dashboard ── -->
 <div id="main">
 
   <header class="ah-header">
     <div class="ah-logo">⚡ AutomationHire <span class="badge">CONTENT STUDIO</span></div>
-    <div class="ah-user">
-      <span class="ah-email" id="admin-email"></span>
-      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
-    </div>
+    <button class="btn btn-ghost btn-sm" onclick="logout()">Lock</button>
   </header>
 
   <div class="container">
@@ -201,7 +206,6 @@
       </div>
 
       <div class="week-hint" id="week-hint">Click "Research Topics" to get 7 AI-generated blog ideas for this week.</div>
-
       <div class="cal-grid" id="cal-grid"></div>
     </div>
 
@@ -233,7 +237,7 @@
   </div>
 </div>
 
-<!-- Preview slide-in -->
+<!-- ── Preview panel ── -->
 <div class="prev-overlay" id="prev-overlay">
   <div class="prev-panel">
     <div class="prev-hd">
@@ -256,35 +260,67 @@
 </div>
 
 <script>
-// ════════════════════════════════════════════════════
-// State
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
+// Auth — simple password, no expert login
+// ════════════════════════════════════════════
+const TOKEN_KEY = 'cs_token';
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const S = { user: null, topics: [], dayPosts: {}, posts: [], previewDay: null };
+const S = { topics: [], dayPosts: {}, posts: [], previewDay: null };
 
-function tok() { return localStorage.getItem('ah_access_token') || ''; }
+function csToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
 
-function logout() { localStorage.clear(); window.location.href = '/login.html'; }
+function logout() {
+  localStorage.removeItem(TOKEN_KEY);
+  document.getElementById('main').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-err').textContent = '';
+}
 
-// ════════════════════════════════════════════════════
-// Boot
-// ════════════════════════════════════════════════════
-async function init() {
-  if (!tok()) { window.location.href = '/login.html?next=/content-studio'; return; }
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn  = document.getElementById('login-btn');
+  const pass = document.getElementById('login-pass').value.trim();
+  const errEl = document.getElementById('login-err');
+  if (!pass) return;
 
-  const me = await api('/api/auth?action=me', 'GET');
-  if (!me.ok || !me.user) { window.location.href = '/login.html?next=/content-studio'; return; }
-  S.user = me.user;
-  document.getElementById('admin-email').textContent = me.user.email || '';
+  btn.disabled = true;
+  btn.textContent = 'Checking…';
+  errEl.textContent = '';
 
-  const chk = await api('/api/agent?action=check', 'GET');
-  if (chk._status === 401) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('unauthorized').style.display = 'flex';
+  const d = await fetch('/api/agent?action=auth', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ password: pass }),
+  }).then(r => r.json()).catch(() => ({ ok: false, error: 'Network error' }));
+
+  btn.disabled = false;
+  btn.textContent = 'Enter Studio →';
+
+  if (!d.ok) {
+    errEl.textContent = d.error === 'ADMIN_PASSWORD not set in Vercel env vars.'
+      ? '⚠️ ADMIN_PASSWORD not configured in Vercel yet.'
+      : 'Incorrect password — try again.';
     return;
   }
 
-  document.getElementById('loading').style.display = 'none';
+  localStorage.setItem(TOKEN_KEY, d.token);
+  showDashboard();
+});
+
+async function init() {
+  const token = csToken();
+  if (token) {
+    // Verify token is still valid
+    const chk = await apiCall('/api/agent?action=check', 'GET');
+    if (chk.ok) { showDashboard(); return; }
+    localStorage.removeItem(TOKEN_KEY);
+  }
+  // Show login (already visible by default)
+}
+
+function showDashboard() {
+  document.getElementById('login-screen').style.display = 'none';
   document.getElementById('main').style.display = 'block';
   initTabs();
   renderWeekLabel();
@@ -292,14 +328,14 @@ async function init() {
   loadPosts();
 }
 
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 // API helper
-// ════════════════════════════════════════════════════
-async function api(path, method = 'GET', body = null) {
+// ════════════════════════════════════════════
+async function apiCall(path, method = 'GET', body = null) {
   try {
     const opts = {
       method,
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok()}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${csToken()}` },
     };
     if (body) opts.body = JSON.stringify(body);
     const r = await fetch(path, opts);
@@ -310,9 +346,9 @@ async function api(path, method = 'GET', body = null) {
   }
 }
 
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 // Tabs
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 function initTabs() {
   document.querySelectorAll('.tab:not(.soon)').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -324,9 +360,9 @@ function initTabs() {
   });
 }
 
-// ════════════════════════════════════════════════════
-// Week utilities
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
+// Week
+// ════════════════════════════════════════════
 function getWeekDays() {
   const t = new Date();
   const mon = new Date(t);
@@ -345,22 +381,18 @@ function renderWeekLabel() {
   document.getElementById('week-label').textContent = `Week of ${a} – ${b}`;
 }
 
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 // Calendar
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 function renderCalendar() {
   const days = getWeekDays();
   document.getElementById('cal-grid').innerHTML = days.map(day => {
     const topic = S.topics.find(t => t.day === day.name);
     const post  = S.dayPosts[day.name];
-    const cls   = post?.status === 'published' ? 'has-published'
-                : post?.status === 'draft'     ? 'has-draft' : '';
+    const cls   = post?.status === 'published' ? 'has-published' : post?.status === 'draft' ? 'has-draft' : '';
     return `<div class="day-card ${cls}">
       <div class="day-head">
-        <div>
-          <div class="day-name">${day.short}</div>
-          <div class="day-date">${day.label}</div>
-        </div>
+        <div><div class="day-name">${day.short}</div><div class="day-date">${day.label}</div></div>
         ${post?.status ? `<span class="sbadge sbadge-${post.status}">${post.status}</span>` : ''}
       </div>
       ${dayBody(day.name, topic, post)}
@@ -369,165 +401,116 @@ function renderCalendar() {
 }
 
 function dayBody(dayName, topic, post) {
-  if (post?.status === 'writing') {
-    return `<div class="day-writing"><span class="spinner-sm"></span> Writing…</div>`;
-  }
-  if (post?.status === 'error') {
-    return `<div style="color:var(--red);font-size:12px;flex:1">${esc(post.error || 'Failed')}</div>
-            <button class="btn btn-outline btn-sm" onclick="retryWrite('${dayName}')">Retry</button>`;
-  }
+  if (post?.status === 'writing') return `<div class="day-writing"><span class="spinner-sm"></span> Writing…</div>`;
+  if (post?.status === 'error') return `<div style="color:var(--red);font-size:12px;flex:1">${esc(post.error||'Failed')}</div><button class="btn btn-outline btn-sm" onclick="retryWrite('${dayName}')">Retry</button>`;
   if (post?.status === 'draft' || post?.status === 'published') {
-    return `<div class="post-body">
-      <div class="post-body-title">${esc(post.title || '')}</div>
-      <div class="post-body-meta">${post.word_count || '?'} words · ${post.reading_time || 5} min read</div>
-    </div>
+    return `<div class="post-body"><div class="post-body-title">${esc(post.title||'')}</div><div class="post-body-meta">${post.word_count||'?'} words · ${post.reading_time||5} min read</div></div>
     <div class="card-btns">
       <button class="btn btn-outline btn-sm" onclick="showPreview('${dayName}')">Preview</button>
-      ${post.status === 'draft'
-        ? `<button class="btn btn-green btn-sm" onclick="publishFromCard('${post.id}','${dayName}')">Publish</button>`
-        : `<span class="live-label">✓ Live</span>`}
+      ${post.status==='draft'?`<button class="btn btn-green btn-sm" onclick="publishFromCard('${post.id}','${dayName}')">Publish</button>`:`<span class="live-label">✓ Live</span>`}
     </div>`;
   }
   if (topic) {
-    return `<div class="topic-body">
-      <div class="topic-title">${esc(topic.title)}</div>
-      <div class="topic-kw">🔑 ${esc(topic.primary_keyword || '')}</div>
-      <span class="topic-reader">${topic.target_reader || 'both'}</span>
-    </div>
+    return `<div class="topic-body"><div class="topic-title">${esc(topic.title)}</div><div class="topic-kw">🔑 ${esc(topic.primary_keyword||'')}</div><span class="topic-reader">${topic.target_reader||'both'}</span></div>
     <button class="btn btn-green btn-sm" onclick="writePost('${dayName}')">▶ Write Post</button>`;
   }
-  return `<div class="day-empty">Click "Research Topics" above to fill this week</div>`;
+  return `<div class="day-empty">Click "Research Topics" to fill this week</div>`;
 }
 
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 // Research
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 async function researchTopics() {
   const btn = document.getElementById('research-btn');
   btn.disabled = true;
   btn.innerHTML = `<span class="spinner-sm"></span> Researching…`;
-
-  const d = await api('/api/agent?action=research', 'POST', {});
-
+  const d = await apiCall('/api/agent?action=research', 'POST', {});
   btn.disabled = false;
   btn.textContent = '▶ Research Topics';
-
   if (!d.ok) {
     if (d._status === 503) document.getElementById('key-warn').style.display = 'block';
     return toast(d.error || 'Research failed', 'err');
   }
-
   S.topics = d.topics || [];
   if (!S.topics.length) return toast('No topics returned — try again', 'err');
-
   document.getElementById('week-hint').style.display = 'none';
   renderCalendar();
   toast(`${S.topics.length} topics researched for this week ✓`, 'ok');
 }
 
-// ════════════════════════════════════════════════════
-// Write post
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
+// Write
+// ════════════════════════════════════════════
 async function writePost(dayName) {
   const topic = S.topics.find(t => t.day === dayName);
   if (!topic) return toast('No topic for this day', 'err');
-
   S.dayPosts[dayName] = { status: 'writing', title: topic.title };
   renderCalendar();
-
-  const d = await api('/api/agent?action=write', 'POST', {
-    title:   topic.title,
-    keyword: topic.primary_keyword,
-    angle:   topic.angle,
-  });
-
+  const d = await apiCall('/api/agent?action=write', 'POST', { title: topic.title, keyword: topic.primary_keyword, angle: topic.angle });
   if (!d.ok) {
     S.dayPosts[dayName] = { status: 'error', title: topic.title, error: d.error || 'Write failed' };
     renderCalendar();
     return toast(d.error || 'Write failed', 'err');
   }
-
   S.dayPosts[dayName] = { ...d.post, status: 'draft' };
   renderCalendar();
   toast('Post written! Click "Preview" to review before publishing.', 'ok');
 }
 
-async function retryWrite(dayName) {
-  delete S.dayPosts[dayName];
-  renderCalendar();
-  await writePost(dayName);
-}
+async function retryWrite(dayName) { delete S.dayPosts[dayName]; renderCalendar(); await writePost(dayName); }
 
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 // Publish
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 async function publishPost(postId, dayName) {
-  const d = await api('/api/agent?action=publish', 'POST', { post_id: postId });
+  const d = await apiCall('/api/agent?action=publish', 'POST', { post_id: postId });
   if (!d.ok) return toast(d.error || 'Publish failed', 'err');
   if (dayName && S.dayPosts[dayName]) S.dayPosts[dayName].status = 'published';
   renderCalendar();
   await loadPosts();
-  toast('Post published — it\'s now live on the blog ✓', 'ok');
+  toast("Post published — it's now live on the blog ✓", 'ok');
 }
 
 async function publishFromCard(postId, dayName) { await publishPost(postId, dayName); }
 
 async function publishFromPreview() {
-  const dayName = S.previewDay;
-  const post = dayName ? S.dayPosts[dayName] : null;
+  const post = S.previewDay ? S.dayPosts[S.previewDay] : null;
   if (!post?.id) return toast('Cannot find post ID', 'err');
-
   const btn = document.getElementById('prev-publish-btn');
-  btn.disabled = true;
-  btn.innerHTML = `<span class="spinner-sm"></span> Publishing…`;
-
-  await publishPost(post.id, dayName);
-
-  if (S.dayPosts[dayName]?.status === 'published') {
-    btn.textContent = '✓ Published';
-    btn.disabled = true;
-  } else {
-    btn.textContent = 'Publish Post';
-    btn.disabled = false;
-  }
+  btn.disabled = true; btn.innerHTML = `<span class="spinner-sm"></span> Publishing…`;
+  await publishPost(post.id, S.previewDay);
+  if (S.dayPosts[S.previewDay]?.status === 'published') {
+    btn.textContent = '✓ Published'; btn.disabled = true;
+  } else { btn.textContent = 'Publish Post'; btn.disabled = false; }
 }
 
-// ════════════════════════════════════════════════════
-// Preview panel
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
+// Preview
+// ════════════════════════════════════════════
 function showPreview(dayName) {
   const post = S.dayPosts[dayName];
   if (!post) return;
-
   S.previewDay = dayName;
-  document.getElementById('prev-title').textContent   = post.title || 'Post Preview';
-  document.getElementById('prev-desc').textContent    = post.meta_description || '';
-  document.getElementById('prev-kws').innerHTML       = (post.keywords || []).map(k => `<span class="prev-kw">${esc(k)}</span>`).join('');
-  document.getElementById('prev-stats').textContent   = `${post.word_count || '?'} words · ${post.reading_time || 5} min read`;
-  document.getElementById('prev-content').innerHTML   = post.content || '<p>No content.</p>';
-
+  document.getElementById('prev-title').textContent  = post.title || 'Post Preview';
+  document.getElementById('prev-desc').textContent   = post.meta_description || '';
+  document.getElementById('prev-kws').innerHTML      = (post.keywords||[]).map(k=>`<span class="prev-kw">${esc(k)}</span>`).join('');
+  document.getElementById('prev-stats').textContent  = `${post.word_count||'?'} words · ${post.reading_time||5} min read`;
+  document.getElementById('prev-content').innerHTML  = post.content || '<p>No content.</p>';
   const btn = document.getElementById('prev-publish-btn');
   btn.textContent = post.status === 'published' ? '✓ Already Published' : 'Publish Post';
   btn.disabled    = post.status === 'published';
-
   document.getElementById('prev-overlay').classList.add('open');
 }
 
-function closePreview() {
-  document.getElementById('prev-overlay').classList.remove('open');
-  S.previewDay = null;
-}
-
-document.getElementById('prev-overlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('prev-overlay')) closePreview();
-});
+function closePreview() { document.getElementById('prev-overlay').classList.remove('open'); S.previewDay = null; }
+document.getElementById('prev-overlay').addEventListener('click', e => { if (e.target===document.getElementById('prev-overlay')) closePreview(); });
 document.getElementById('prev-close-btn').addEventListener('click', closePreview);
 
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 // Posts list
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 async function loadPosts() {
-  const d = await api('/api/agent?action=posts', 'GET');
+  const d = await apiCall('/api/agent?action=posts', 'GET');
   if (!d.ok) return;
   S.posts = d.posts || [];
   renderPosts();
@@ -535,72 +518,48 @@ async function loadPosts() {
 
 function renderPosts() {
   const count = S.posts.length;
-  document.getElementById('posts-count').textContent = `${count} post${count !== 1 ? 's' : ''}`;
+  document.getElementById('posts-count').textContent = `${count} post${count!==1?'s':''}`;
   const tbody = document.getElementById('posts-tbody');
-
-  if (!count) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:36px">No posts yet — write your first from the Blog Pipeline tab.</td></tr>`;
-    return;
-  }
-
+  if (!count) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:36px">No posts yet — write your first from the Blog Pipeline tab.</td></tr>`; return; }
   tbody.innerHTML = S.posts.map(p => `
     <tr>
-      <td>
-        <div class="pt-title">${esc(p.title)}</div>
-        <div class="pt-excerpt">${esc(p.excerpt || '')}</div>
-        <div class="pt-slug">/blog/${p.slug}</div>
-      </td>
+      <td><div class="pt-title">${esc(p.title)}</div><div class="pt-excerpt">${esc(p.excerpt||'')}</div><div class="pt-slug">/blog/${p.slug}</div></td>
       <td><span class="sbadge sbadge-${p.status}">${p.status}</span></td>
-      <td style="color:var(--muted)">${p.word_count || '—'}</td>
-      <td style="color:var(--muted);font-size:12px;white-space:nowrap">
-        ${p.published_at ? new Date(p.published_at).toLocaleDateString('en-GB') : '—'}
-      </td>
-      <td>
-        <div class="tbl-actions">
-          ${p.status === 'draft'     ? `<button class="btn btn-green btn-sm" onclick="quickPublish('${p.id}')">Publish</button>` : ''}
-          ${p.status === 'published' ? `<a href="/blog/${p.slug}" target="_blank" class="btn btn-outline btn-sm">View ↗</a>` : ''}
-          <button class="btn btn-red btn-sm" onclick="deletePost('${p.id}')">Delete</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+      <td style="color:var(--muted)">${p.word_count||'—'}</td>
+      <td style="color:var(--muted);font-size:12px;white-space:nowrap">${p.published_at?new Date(p.published_at).toLocaleDateString('en-GB'):'—'}</td>
+      <td><div class="tbl-actions">
+        ${p.status==='draft'?`<button class="btn btn-green btn-sm" onclick="quickPublish('${p.id}')">Publish</button>`:''}
+        ${p.status==='published'?`<a href="/blog/${p.slug}" target="_blank" class="btn btn-outline btn-sm">View ↗</a>`:''}
+        <button class="btn btn-red btn-sm" onclick="deletePost('${p.id}')">Delete</button>
+      </div></td>
+    </tr>`).join('');
 }
 
 async function quickPublish(postId) {
-  const d = await api('/api/agent?action=publish', 'POST', { post_id: postId });
-  if (!d.ok) return toast(d.error || 'Publish failed', 'err');
-  await loadPosts();
-  toast('Post published ✓', 'ok');
+  const d = await apiCall('/api/agent?action=publish', 'POST', { post_id: postId });
+  if (!d.ok) return toast(d.error||'Publish failed','err');
+  await loadPosts(); toast('Post published ✓','ok');
 }
 
 async function deletePost(postId) {
-  if (!confirm('Delete this post permanently? This cannot be undone.')) return;
-  const d = await api('/api/agent?action=delete', 'POST', { post_id: postId });
-  if (!d.ok) return toast(d.error || 'Delete failed', 'err');
-  await loadPosts();
-  toast('Post deleted', 'ok');
+  if (!confirm('Delete this post permanently?')) return;
+  const d = await apiCall('/api/agent?action=delete', 'POST', { post_id: postId });
+  if (!d.ok) return toast(d.error||'Delete failed','err');
+  await loadPosts(); toast('Post deleted','ok');
 }
 
-// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════
 // Helpers
-// ════════════════════════════════════════════════════
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function toast(msg, type = 'ok') {
+// ════════════════════════════════════════════
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(msg, type='ok') {
   const el = document.createElement('div');
-  el.className = `toast toast-${type}`;
-  el.textContent = msg;
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 4000);
+  el.className = `toast toast-${type}`; el.textContent = msg;
+  document.body.appendChild(el); setTimeout(()=>el.remove(), 4000);
 }
 
 // Boot
-init().catch(() => {
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('unauthorized').style.display = 'flex';
-});
+init();
 </script>
 </body>
 </html>

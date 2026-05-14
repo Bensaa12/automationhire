@@ -5,17 +5,30 @@
 // ============================================================
 
 const Anthropic = require('@anthropic-ai/sdk');
+const crypto    = require('crypto');
 const { getSupabase, handleCors, ok, err, toSlug } = require('./_lib');
 
 const MODEL = 'claude-sonnet-4-6';
 
-// --- Admin auth guard ---
+// --- Admin password token (HMAC of ADMIN_PASSWORD) ---
+function makeToken(pass) {
+  return crypto.createHmac('sha256', pass).update('cs-auth').digest('hex');
+}
+
+// --- Admin auth guard: accepts either HMAC token or Supabase JWT ---
 async function isAdmin(req) {
   const h = req.headers.authorization;
   if (!h?.startsWith('Bearer ')) return false;
+  const token = h.slice(7);
+
+  // Method 1: simple admin password token
+  const adminPass = process.env.ADMIN_PASSWORD;
+  if (adminPass && token === makeToken(adminPass)) return true;
+
+  // Method 2: Supabase JWT (fallback for existing expert accounts)
   try {
     const sb = getSupabase();
-    const { data: { user } } = await sb.auth.getUser(h.slice(7));
+    const { data: { user } } = await sb.auth.getUser(token);
     if (!user) return false;
     const allowed = (process.env.ADMIN_EMAIL || '').split(',').map(e => e.trim().toLowerCase());
     return allowed.includes(user.email.toLowerCase());
@@ -89,7 +102,16 @@ module.exports = async function handler(req, res) {
     return ok(res, { post: data });
   }
 
-  // ── All admin actions require auth ────────────────────────────────────
+  // ── Password login (public — no auth required) ───────────────────────
+  if (action === 'auth' && req.method === 'POST') {
+    const { password } = req.body || {};
+    const adminPass = process.env.ADMIN_PASSWORD;
+    if (!adminPass) return err(res, 'ADMIN_PASSWORD not set in Vercel env vars.', 503);
+    if (!password || password !== adminPass) return err(res, 'Incorrect password', 401);
+    return ok(res, { token: makeToken(adminPass) });
+  }
+
+  // ── All other admin actions require auth ──────────────────────────────
   const admin = await isAdmin(req);
   if (!admin) return err(res, 'Unauthorised', 401);
 
