@@ -26,8 +26,18 @@ module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
   if (req.method !== 'POST') return err(res, 'Method not allowed', 405);
 
-  const stripe   = new Stripe(process.env.STRIPE_SECRET_KEY);
-  const supabase = getSupabase();
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return err(res, 'Payments are not configured yet. Please contact support.', 503);
+  }
+
+  let stripe, supabase;
+  try {
+    stripe   = new Stripe(process.env.STRIPE_SECRET_KEY);
+    supabase = getSupabase();
+  } catch (e) {
+    console.error('Init error:', e.message);
+    return err(res, 'Payment service unavailable. Please try again later.', 503);
+  }
 
   const {
     plan        = 'growth',
@@ -43,6 +53,8 @@ module.exports = async function handler(req, res) {
 
   const priceId = PRICE_MAP[plan][billing];
   if (!priceId) return err(res, `Stripe price not configured for ${plan}/${billing}. Check your env vars.`, 500);
+
+  try {
 
   // ---- Fetch provider to get/create Stripe customer ----
   const { data: provider, error: pErr } = await supabase
@@ -104,4 +116,9 @@ module.exports = async function handler(req, res) {
     checkout_url: session.url,
     session_id:   session.id,
   });
+
+  } catch (e) {
+    console.error('Stripe error:', e.message);
+    return err(res, e.message || 'Failed to create checkout session.', 500);
+  }
 };
