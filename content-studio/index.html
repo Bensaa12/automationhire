@@ -270,10 +270,10 @@ function logout() { localStorage.clear(); window.location.href = '/login.html'; 
 // Boot
 // ════════════════════════════════════════════════════
 async function init() {
-  if (!tok()) { window.location.href = '/login.html?next=/admin'; return; }
+  if (!tok()) { window.location.href = '/login.html?next=/content-studio'; return; }
 
   const me = await api('/api/auth?action=me', 'GET');
-  if (!me.ok || !me.user) { window.location.href = '/login.html?next=/admin'; return; }
+  if (!me.ok || !me.user) { window.location.href = '/login.html?next=/content-studio'; return; }
   S.user = me.user;
   document.getElementById('admin-email').textContent = me.user.email || '';
 
