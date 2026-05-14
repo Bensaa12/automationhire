@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Loading… | AutomationHire Blog</title>
+  <meta name="description" id="page-desc" content="" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+
+  <!-- OG tags injected by JS after post loads -->
+  <style>
+    .post-hero { padding: 64px 0 40px; border-bottom: 1px solid var(--border); }
+    .post-hero-inner { max-width: 760px; margin: 0 auto; }
+    .post-cat { font-size: 12px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+    .post-h1 { font-family: var(--font-head, sans-serif); font-size: clamp(26px, 5vw, 44px); font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+    .post-deck { font-size: 17px; color: var(--white-60, rgba(255,255,255,.6)); line-height: 1.65; margin-bottom: 22px; max-width: 660px; }
+    .post-byline { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white-40, rgba(255,255,255,.4)); }
+    .post-av { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--green, #00e676), #2979ff); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #060810; flex-shrink: 0; }
+    .post-kws { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px; }
+    .post-kw { font-size: 11px; padding: 3px 9px; background: rgba(0,230,118,.08); border: 1px solid rgba(0,230,118,.18); border-radius: 4px; color: var(--green, #00e676); }
+
+    .post-layout { display: grid; grid-template-columns: 1fr 280px; gap: 48px; align-items: start; max-width: 1060px; margin: 0 auto; padding: 48px 20px; }
+    @media (max-width: 860px) { .post-layout { grid-template-columns: 1fr; } .post-sidebar { display: none; } }
+
+    .post-body { min-width: 0; }
+    .post-content { font-size: 16px; line-height: 1.85; color: var(--white-80, rgba(255,255,255,.8)); }
+    .post-content h2 { font-family: var(--font-head, sans-serif); font-size: 22px; font-weight: 700; margin: 36px 0 14px; color: #fff; }
+    .post-content h3 { font-size: 18px; font-weight: 700; margin: 28px 0 10px; color: #fff; }
+    .post-content p { margin-bottom: 18px; }
+    .post-content ul, .post-content ol { margin: 0 0 18px 22px; }
+    .post-content li { margin-bottom: 8px; }
+    .post-content strong { color: #fff; }
+    .post-content a { color: var(--green, #00e676); }
+    .post-content a:hover { text-decoration: underline; }
+    .post-content blockquote { border-left: 3px solid var(--green, #00e676); padding: 12px 20px; margin: 24px 0; background: rgba(0,230,118,.04); color: rgba(255,255,255,.7); font-style: italic; }
+
+    /* Sidebar */
+    .post-sidebar { position: sticky; top: 80px; }
+    .sidebar-card { background: rgba(255,255,255,.04); border: 1px solid var(--border, rgba(255,255,255,.08)); border-radius: 12px; padding: 22px; margin-bottom: 20px; }
+    .sidebar-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 12px; color: #fff; }
+    .sidebar-card p { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.6; margin-bottom: 14px; }
+
+    /* Loading / error states */
+    .post-loading { text-align: center; padding: 100px 20px; color: rgba(255,255,255,.4); }
+    .post-error   { text-align: center; padding: 80px 20px; }
+    .post-error h2 { font-size: 24px; margin-bottom: 10px; }
+    .post-error p  { color: rgba(255,255,255,.5); margin-bottom: 24px; }
+
+    .spinner { width: 36px; height: 36px; border: 3px solid rgba(255,255,255,.1); border-top-color: var(--green, #00e676); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="login.html" style="color:var(--green);font-weight:700">Expert Login</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
+      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- Hero (populated by JS) -->
+<section class="post-hero" id="post-hero" style="display:none">
+  <div class="container">
+    <div class="post-hero-inner">
+      <div class="post-cat" id="post-cat"></div>
+      <h1 class="post-h1" id="post-h1"></h1>
+      <p class="post-deck" id="post-deck"></p>
+      <div class="post-byline">
+        <div class="post-av">AH</div>
+        <div>
+          <span>AutomationHire Team</span>
+          <span style="margin:0 6px">·</span>
+          <span id="post-date"></span>
+          <span id="post-read"></span>
+        </div>
+      </div>
+      <div class="post-kws" id="post-kws"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Loading state -->
+<div class="post-loading" id="post-loading">
+  <div class="spinner"></div>
+  <div>Loading article…</div>
+</div>
+
+<!-- Error state -->
+<div class="post-error" id="post-error" style="display:none">
+  <h2>Post not found</h2>
+  <p>This article may have been moved or removed.</p>
+  <a href="blog.html" class="btn btn-primary">← Back to Blog</a>
+</div>
+
+<!-- Post content (populated by JS) -->
+<div id="post-main" style="display:none">
+  <div class="post-layout">
+    <article class="post-body">
+      <div class="post-content" id="post-content"></div>
+    </article>
+    <aside class="post-sidebar">
+      <div class="sidebar-card">
+        <h4>Find an Automation Expert</h4>
+        <p>Looking for help implementing what you've read? Browse verified UK automation specialists on AutomationHire.</p>
+        <a href="providers.html" class="btn btn-primary" style="width:100%;text-align:center;display:block">Browse Experts →</a>
+      </div>
+      <div class="sidebar-card">
+        <h4>List Your Business</h4>
+        <p>Are you an automation expert or agency? Get found by UK businesses actively looking for your skills.</p>
+        <a href="submit-listing.html" class="btn btn-secondary" style="width:100%;text-align:center;display:block">List Free →</a>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Bottom CTA -->
+  <section style="background:var(--black-2,#0d1117);border-top:1px solid var(--border);padding:56px 0">
+    <div class="container">
+      <div class="cta-banner">
+        <div class="cta-banner-title">Ready to Automate Your Business?</div>
+        <p class="cta-banner-sub">Connect with verified UK automation experts who specialise in exactly this.</p>
+        <div class="cta-banner-actions">
+          <a href="providers.html" class="btn btn-primary btn-lg">Find an Expert →</a>
+          <a href="blog.html" class="btn btn-ghost btn-lg" style="margin-left:8px">← More Articles</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div><a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a> &nbsp;·&nbsp; <a href="privacy.html#cookies">Cookies</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+
+<script>
+(async function () {
+  // Extract slug from path: /blog/my-post-slug
+  const parts = window.location.pathname.split('/');
+  const slug  = parts[parts.length - 1] || parts[parts.length - 2];
+
+  if (!slug || slug === 'blog-post') {
+    showError(); return;
+  }
+
+  try {
+    const r    = await fetch(`/api/agent?action=post&slug=${encodeURIComponent(slug)}&public=1`);
+    const data = await r.json();
+
+    if (!r.ok || !data.post) { showError(); return; }
+
+    const p = data.post;
+
+    // Update <head>
+    document.getElementById('page-title').textContent   = `${p.title} | AutomationHire Blog`;
+    document.getElementById('page-desc').content        = p.meta_description || p.excerpt || '';
+
+    // Populate hero
+    const kw = (p.keywords || [])[0] || 'AI Automation';
+    document.getElementById('post-cat').textContent     = kw;
+    document.getElementById('post-h1').textContent      = p.title;
+    document.getElementById('post-deck').textContent    = p.excerpt || '';
+    document.getElementById('post-date').textContent    = p.published_at
+      ? new Date(p.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+      : '';
+    document.getElementById('post-read').textContent    = p.reading_time ? ` · ${p.reading_time} min read` : '';
+    document.getElementById('post-kws').innerHTML       = (p.keywords || [])
+      .map(k => `<span class="post-kw">${esc(k)}</span>`).join('');
+
+    // Populate content
+    document.getElementById('post-content').innerHTML   = p.content || '';
+
+    // Show post
+    document.getElementById('post-loading').style.display = 'none';
+    document.getElementById('post-hero').style.display    = 'block';
+    document.getElementById('post-main').style.display    = 'block';
+
+  } catch { showError(); }
+})();
+
+function showError() {
+  document.getElementById('post-loading').style.display = 'none';
+  document.getElementById('post-error').style.display   = 'block';
+}
+
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>

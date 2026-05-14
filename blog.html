@@ -98,7 +98,9 @@
   <div class="container">
     <div class="blog-grid">
 
-      <!-- AUTOBLOG_INSERT -->
+      <!-- Dynamic posts from the blog agent — inserted at runtime -->
+      <div id="dynamic-posts" style="display:contents"></div>
+      <!-- /dynamic -->
 
       <a href="blog-posts/ai-chatbots-vs-live-chat-2025.html" class="blog-card reveal reveal-delay-3">
         <div class="blog-thumb blog-thumb-1">💬</div>
@@ -307,6 +309,49 @@
 <script src="assets/js/main.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/chat.js"></script>
-  <script src="assets/js/receptionist.js"></script>
+<script src="assets/js/receptionist.js"></script>
+
+<script>
+// Load agent-published posts and prepend them to the blog grid
+(async function () {
+  try {
+    const r = await fetch('/api/agent?action=posts&public=1');
+    if (!r.ok) return;
+    const { posts } = await r.json();
+    if (!posts?.length) return;
+
+    const container = document.getElementById('dynamic-posts');
+    const EMOJIS = ['🤖','⚡','🚀','💡','🔧','📊','🎯','🌐'];
+
+    container.innerHTML = posts.map((p, i) => {
+      const date = p.published_at
+        ? new Date(p.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+        : '';
+      const kw   = (p.keywords || [])[0] || 'AI Automation';
+      const emoji = EMOJIS[i % EMOJIS.length];
+      const cls   = i === 0 ? 'blog-card featured-post reveal' : 'blog-card reveal';
+      const thumbN = (i % 3) + 1;
+      return `
+        <a href="/blog/${p.slug}" class="${cls}">
+          <div class="blog-thumb blog-thumb-${thumbN}">${emoji}</div>
+          <div class="blog-body">
+            <div class="blog-category">${escH(kw)}</div>
+            <h2 class="blog-title">${escH(p.title)}</h2>
+            <p class="blog-excerpt">${escH(p.excerpt || '')}</p>
+            <div class="blog-meta">
+              <div class="blog-author"><div class="blog-author-av">AH</div> AutomationHire</div>
+              <span>${date}${p.reading_time ? ' · ' + p.reading_time + ' min' : ''}</span>
+            </div>
+          </div>
+        </a>
+      `;
+    }).join('');
+  } catch { /* silent — static posts remain */ }
+})();
+
+function escH(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
 </body>
 </html>

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — AutomationHire</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:   #060810;
+      --bg:      #0d1117;
+      --card:    #111827;
+      --card2:   #161b27;
+      --border:  rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.13);
+      --green:   #00e676;
+      --text:    #e5e7eb;
+      --muted:   rgba(255,255,255,0.45);
+      --red:     #f87171;
+      --yellow:  #fbbf24;
+      --blue:    #60a5fa;
+      --radius:  10px;
+      --rsm:     6px;
+    }
+    body { background: var(--black); color: var(--text); font-family: Inter, -apple-system, sans-serif; font-size: 14px; min-height: 100vh; }
+    a { color: var(--green); text-decoration: none; }
+
+    /* ── Loading ── */
+    #loading { position: fixed; inset: 0; background: var(--black); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 200; }
+    .spinner { width: 40px; height: 40px; border: 3px solid var(--border2); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; }
+    .spinner-sm { width: 16px; height: 16px; border: 2px solid var(--border2); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Unauth screen ── */
+    #unauthorized { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 12px; text-align: center; }
+
+    /* ── Admin header ── */
+    .ah-header { background: var(--bg); border-bottom: 1px solid var(--border); height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 20; }
+    .ah-logo { font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+    .ah-logo .badge { background: var(--green); color: #060810; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; letter-spacing: .5px; }
+    .ah-user { display: flex; align-items: center; gap: 12px; }
+    .ah-email { color: var(--muted); font-size: 13px; }
+
+    /* ── Main wrapper ── */
+    #main { display: none; }
+    .container { max-width: 1360px; margin: 0 auto; padding: 24px 20px; }
+
+    /* ── Tabs ── */
+    .tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 28px; }
+    .tab { background: none; border: none; color: var(--muted); padding: 10px 18px; cursor: pointer; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s, border-color .15s; }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--green); border-bottom-color: var(--green); }
+    .tab.soon { opacity: .35; cursor: not-allowed; font-style: italic; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ── Section header ── */
+    .sec-head { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px; }
+    .sec-title { font-size: 20px; font-weight: 700; }
+    .sec-sub { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+    /* ── Buttons ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: var(--rsm); border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .15s; }
+    .btn:hover:not(:disabled) { opacity: .82; }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-green { background: var(--green); color: #060810; }
+    .btn-outline { background: transparent; border: 1px solid var(--border2); color: var(--text); }
+    .btn-ghost { background: rgba(255,255,255,0.05); color: var(--text); }
+    .btn-red { background: rgba(239,68,68,.12); color: var(--red); border: 1px solid rgba(239,68,68,.2); }
+    .btn-sm { padding: 6px 12px; font-size: 13px; }
+
+    /* ── Warning banner ── */
+    .warn-banner { background: rgba(251,191,36,.07); border: 1px solid rgba(251,191,36,.22); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--yellow); margin-bottom: 20px; }
+    .warn-banner code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+
+    /* ── Calendar grid ── */
+    .week-hint { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+    @media (max-width: 1100px) { .cal-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 640px)  { .cal-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .day-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; min-height: 185px; display: flex; flex-direction: column; gap: 10px; transition: border-color .2s; }
+    .day-card.has-draft { border-color: rgba(251,191,36,.25); }
+    .day-card.has-published { border-color: rgba(0,230,118,.35); background: rgba(0,230,118,.03); }
+
+    .day-head { display: flex; justify-content: space-between; align-items: flex-start; }
+    .day-name { font-weight: 700; font-size: 13px; }
+    .day-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .sbadge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; letter-spacing: .4px; }
+    .sbadge-draft { background: rgba(251,191,36,.14); color: var(--yellow); }
+    .sbadge-published { background: rgba(0,230,118,.14); color: var(--green); }
+    .sbadge-writing { background: rgba(96,165,250,.14); color: var(--blue); }
+    .sbadge-error { background: rgba(248,113,113,.14); color: var(--red); }
+
+    .day-empty { color: var(--muted); font-size: 12px; font-style: italic; flex: 1; display: flex; align-items: center; }
+    .day-writing { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--blue); flex: 1; }
+
+    .topic-body { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+    .topic-title { font-size: 12px; font-weight: 600; line-height: 1.45; }
+    .topic-kw { font-size: 11px; color: var(--muted); }
+    .topic-reader { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,.06); color: var(--muted); text-transform: uppercase; }
+
+    .post-body { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+    .post-body-title { font-size: 12px; font-weight: 600; line-height: 1.4; }
+    .post-body-meta { font-size: 11px; color: var(--muted); }
+    .card-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .live-label { font-size: 11px; color: var(--green); font-weight: 600; }
+
+    /* ── Posts table ── */
+    .posts-wrap { overflow-x: auto; }
+    .posts-tbl { width: 100%; border-collapse: collapse; }
+    .posts-tbl th { text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border); }
+    .posts-tbl td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .posts-tbl tr:hover td { background: rgba(255,255,255,.015); }
+    .pt-title { font-weight: 600; }
+    .pt-excerpt { font-size: 12px; color: var(--muted); margin-top: 3px; max-width: 380px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pt-slug { font-size: 11px; color: var(--muted); margin-top: 3px; font-family: monospace; }
+    .tbl-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* ── Preview overlay ── */
+    .prev-overlay { position: fixed; inset: 0; background: rgba(6,8,16,.82); z-index: 50; display: none; }
+    .prev-overlay.open { display: flex; align-items: stretch; }
+    .prev-panel { margin-left: auto; width: 640px; max-width: 100vw; background: var(--bg); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+    .prev-hd { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .prev-hd h3 { font-size: 15px; font-weight: 700; max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .prev-close { background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; line-height: 1; padding: 0 4px; }
+    .prev-close:hover { color: var(--text); }
+    .prev-body { flex: 1; overflow-y: auto; padding: 22px; }
+    .prev-meta { border-bottom: 1px solid var(--border); padding-bottom: 18px; margin-bottom: 22px; }
+    .prev-meta-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+    .prev-kws { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+    .prev-kw { font-size: 11px; padding: 3px 8px; background: rgba(0,230,118,.08); border: 1px solid rgba(0,230,118,.2); border-radius: 4px; color: var(--green); }
+    .prev-stats { font-size: 12px; color: var(--muted); }
+    .prev-content { line-height: 1.8; font-size: 14px; }
+    .prev-content h2 { font-size: 17px; font-weight: 700; margin: 24px 0 10px; }
+    .prev-content p { margin-bottom: 13px; }
+    .prev-content ul, .prev-content ol { margin: 0 0 13px 20px; }
+    .prev-content li { margin-bottom: 5px; }
+    .prev-content strong { color: #fff; }
+    .prev-ft { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+
+    /* ── Toasts ── */
+    .toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 18px; border-radius: var(--rsm); font-size: 13px; font-weight: 500; z-index: 300; animation: tUp .25s ease; max-width: 340px; }
+    .toast-ok  { background: rgba(0,230,118,.12); border: 1px solid rgba(0,230,118,.28); color: var(--green); }
+    .toast-err { background: rgba(248,113,113,.10); border: 1px solid rgba(248,113,113,.22); color: var(--red); }
+    @keyframes tUp { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  </style>
+</head>
+<body>
+
+<!-- Loading state -->
+<div id="loading">
+  <div class="spinner"></div>
+  <div style="color:var(--muted);font-size:13px">Checking access…</div>
+</div>
+
+<!-- Unauthorised state -->
+<div id="unauthorized" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:10px;text-align:center;padding:20px">
+  <div style="font-size:40px">🔒</div>
+  <div style="font-size:20px;font-weight:700">Admin access required</div>
+  <div style="color:var(--muted)">Your account doesn't have admin permissions.</div>
+  <div style="color:var(--muted);font-size:13px">Make sure <code style="background:rgba(255,255,255,.08);padding:2px 6px;border-radius:3px">ADMIN_EMAIL</code> is set in Vercel to your email.</div>
+  <a href="/login.html" style="margin-top:12px">← Back to login</a>
+</div>
+
+<!-- Main app -->
+<div id="main">
+
+  <header class="ah-header">
+    <div class="ah-logo">⚡ AutomationHire <span class="badge">ADMIN</span></div>
+    <div class="ah-user">
+      <span class="ah-email" id="admin-email"></span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <div class="tabs">
+      <button class="tab active" data-tab="blog">Blog Pipeline</button>
+      <button class="tab" data-tab="posts">All Posts</button>
+      <button class="tab soon" title="Coming soon — Phase 2">Social Posts</button>
+      <button class="tab soon" title="Coming soon — Phase 3">SEO Brief</button>
+    </div>
+
+    <!-- ── Blog Pipeline ── -->
+    <div id="tab-blog" class="tab-pane active">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">Blog Pipeline</div>
+          <div class="sec-sub" id="week-label">Loading week…</div>
+        </div>
+        <button class="btn btn-green" id="research-btn" onclick="researchTopics()">▶ Research Topics</button>
+      </div>
+
+      <div id="key-warn" class="warn-banner" style="display:none">
+        ⚠️ <code>ANTHROPIC_API_KEY</code> is not configured. Go to <strong>Vercel → Project → Settings → Environment Variables</strong>, add it, then redeploy.
+      </div>
+
+      <div class="week-hint" id="week-hint">Click "Research Topics" to get 7 AI-generated blog ideas for this week.</div>
+
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <!-- ── All Posts ── -->
+    <div id="tab-posts" class="tab-pane">
+      <div class="sec-head">
+        <div>
+          <div class="sec-title">All Posts</div>
+          <div class="sec-sub" id="posts-count">Loading…</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="loadPosts()">↻ Refresh</button>
+      </div>
+      <div class="posts-wrap">
+        <table class="posts-tbl">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Words</th>
+              <th>Published</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="posts-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Preview slide-in -->
+<div class="prev-overlay" id="prev-overlay">
+  <div class="prev-panel">
+    <div class="prev-hd">
+      <h3 id="prev-title">Post Preview</h3>
+      <button class="prev-close" id="prev-close-btn">×</button>
+    </div>
+    <div class="prev-body">
+      <div class="prev-meta">
+        <div class="prev-meta-desc" id="prev-desc"></div>
+        <div class="prev-kws" id="prev-kws"></div>
+        <div class="prev-stats" id="prev-stats"></div>
+      </div>
+      <div class="prev-content" id="prev-content"></div>
+    </div>
+    <div class="prev-ft">
+      <button class="btn btn-green" id="prev-publish-btn" onclick="publishFromPreview()">Publish Post</button>
+      <button class="btn btn-ghost btn-sm" onclick="closePreview()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════
+// State
+// ════════════════════════════════════════════════════
+const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const S = { user: null, topics: [], dayPosts: {}, posts: [], previewDay: null };
+
+function tok() { return localStorage.getItem('ah_access_token') || ''; }
+
+function logout() { localStorage.clear(); window.location.href = '/login.html'; }
+
+// ════════════════════════════════════════════════════
+// Boot
+// ════════════════════════════════════════════════════
+async function init() {
+  if (!tok()) { window.location.href = '/login.html?next=/admin'; return; }
+
+  const me = await api('/api/auth?action=me', 'GET');
+  if (!me.ok || !me.user) { window.location.href = '/login.html?next=/admin'; return; }
+  S.user = me.user;
+  document.getElementById('admin-email').textContent = me.user.email || '';
+
+  const chk = await api('/api/agent?action=check', 'GET');
+  if (chk._status === 401) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('unauthorized').style.display = 'flex';
+    return;
+  }
+
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('main').style.display = 'block';
+  initTabs();
+  renderWeekLabel();
+  renderCalendar();
+  loadPosts();
+}
+
+// ════════════════════════════════════════════════════
+// API helper
+// ════════════════════════════════════════════════════
+async function api(path, method = 'GET', body = null) {
+  try {
+    const opts = {
+      method,
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tok()}` },
+    };
+    if (body) opts.body = JSON.stringify(body);
+    const r = await fetch(path, opts);
+    const d = await r.json().catch(() => ({ ok: false, error: 'Server returned non-JSON response' }));
+    return Object.assign(d, { _status: r.status });
+  } catch (e) {
+    return { ok: false, error: e.message, _status: 0 };
+  }
+}
+
+// ════════════════════════════════════════════════════
+// Tabs
+// ════════════════════════════════════════════════════
+function initTabs() {
+  document.querySelectorAll('.tab:not(.soon)').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab)?.classList.add('active');
+    });
+  });
+}
+
+// ════════════════════════════════════════════════════
+// Week utilities
+// ════════════════════════════════════════════════════
+function getWeekDays() {
+  const t = new Date();
+  const mon = new Date(t);
+  mon.setDate(t.getDate() - ((t.getDay() + 6) % 7));
+  return DAYS.map((name, i) => {
+    const d = new Date(mon);
+    d.setDate(mon.getDate() + i);
+    return { name, short: name.slice(0, 3), date: d, label: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) };
+  });
+}
+
+function renderWeekLabel() {
+  const days = getWeekDays();
+  const a = days[0].date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+  const b = days[6].date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  document.getElementById('week-label').textContent = `Week of ${a} – ${b}`;
+}
+
+// ════════════════════════════════════════════════════
+// Calendar
+// ════════════════════════════════════════════════════
+function renderCalendar() {
+  const days = getWeekDays();
+  document.getElementById('cal-grid').innerHTML = days.map(day => {
+    const topic = S.topics.find(t => t.day === day.name);
+    const post  = S.dayPosts[day.name];
+    const cls   = post?.status === 'published' ? 'has-published'
+                : post?.status === 'draft'     ? 'has-draft' : '';
+    return `<div class="day-card ${cls}">
+      <div class="day-head">
+        <div>
+          <div class="day-name">${day.short}</div>
+          <div class="day-date">${day.label}</div>
+        </div>
+        ${post?.status ? `<span class="sbadge sbadge-${post.status}">${post.status}</span>` : ''}
+      </div>
+      ${dayBody(day.name, topic, post)}
+    </div>`;
+  }).join('');
+}
+
+function dayBody(dayName, topic, post) {
+  if (post?.status === 'writing') {
+    return `<div class="day-writing"><span class="spinner-sm"></span> Writing…</div>`;
+  }
+  if (post?.status === 'error') {
+    return `<div style="color:var(--red);font-size:12px;flex:1">${esc(post.error || 'Failed')}</div>
+            <button class="btn btn-outline btn-sm" onclick="retryWrite('${dayName}')">Retry</button>`;
+  }
+  if (post?.status === 'draft' || post?.status === 'published') {
+    return `<div class="post-body">
+      <div class="post-body-title">${esc(post.title || '')}</div>
+      <div class="post-body-meta">${post.word_count || '?'} words · ${post.reading_time || 5} min read</div>
+    </div>
+    <div class="card-btns">
+      <button class="btn btn-outline btn-sm" onclick="showPreview('${dayName}')">Preview</button>
+      ${post.status === 'draft'
+        ? `<button class="btn btn-green btn-sm" onclick="publishFromCard('${post.id}','${dayName}')">Publish</button>`
+        : `<span class="live-label">✓ Live</span>`}
+    </div>`;
+  }
+  if (topic) {
+    return `<div class="topic-body">
+      <div class="topic-title">${esc(topic.title)}</div>
+      <div class="topic-kw">🔑 ${esc(topic.primary_keyword || '')}</div>
+      <span class="topic-reader">${topic.target_reader || 'both'}</span>
+    </div>
+    <button class="btn btn-green btn-sm" onclick="writePost('${dayName}')">▶ Write Post</button>`;
+  }
+  return `<div class="day-empty">Click "Research Topics" above to fill this week</div>`;
+}
+
+// ════════════════════════════════════════════════════
+// Research
+// ════════════════════════════════════════════════════
+async function researchTopics() {
+  const btn = document.getElementById('research-btn');
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner-sm"></span> Researching…`;
+
+  const d = await api('/api/agent?action=research', 'POST', {});
+
+  btn.disabled = false;
+  btn.textContent = '▶ Research Topics';
+
+  if (!d.ok) {
+    if (d._status === 503) document.getElementById('key-warn').style.display = 'block';
+    return toast(d.error || 'Research failed', 'err');
+  }
+
+  S.topics = d.topics || [];
+  if (!S.topics.length) return toast('No topics returned — try again', 'err');
+
+  document.getElementById('week-hint').style.display = 'none';
+  renderCalendar();
+  toast(`${S.topics.length} topics researched for this week ✓`, 'ok');
+}
+
+// ════════════════════════════════════════════════════
+// Write post
+// ════════════════════════════════════════════════════
+async function writePost(dayName) {
+  const topic = S.topics.find(t => t.day === dayName);
+  if (!topic) return toast('No topic for this day', 'err');
+
+  S.dayPosts[dayName] = { status: 'writing', title: topic.title };
+  renderCalendar();
+
+  const d = await api('/api/agent?action=write', 'POST', {
+    title:   topic.title,
+    keyword: topic.primary_keyword,
+    angle:   topic.angle,
+  });
+
+  if (!d.ok) {
+    S.dayPosts[dayName] = { status: 'error', title: topic.title, error: d.error || 'Write failed' };
+    renderCalendar();
+    return toast(d.error || 'Write failed', 'err');
+  }
+
+  S.dayPosts[dayName] = { ...d.post, status: 'draft' };
+  renderCalendar();
+  toast('Post written! Click "Preview" to review before publishing.', 'ok');
+}
+
+async function retryWrite(dayName) {
+  delete S.dayPosts[dayName];
+  renderCalendar();
+  await writePost(dayName);
+}
+
+// ════════════════════════════════════════════════════
+// Publish
+// ════════════════════════════════════════════════════
+async function publishPost(postId, dayName) {
+  const d = await api('/api/agent?action=publish', 'POST', { post_id: postId });
+  if (!d.ok) return toast(d.error || 'Publish failed', 'err');
+  if (dayName && S.dayPosts[dayName]) S.dayPosts[dayName].status = 'published';
+  renderCalendar();
+  await loadPosts();
+  toast('Post published — it\'s now live on the blog ✓', 'ok');
+}
+
+async function publishFromCard(postId, dayName) { await publishPost(postId, dayName); }
+
+async function publishFromPreview() {
+  const dayName = S.previewDay;
+  const post = dayName ? S.dayPosts[dayName] : null;
+  if (!post?.id) return toast('Cannot find post ID', 'err');
+
+  const btn = document.getElementById('prev-publish-btn');
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner-sm"></span> Publishing…`;
+
+  await publishPost(post.id, dayName);
+
+  if (S.dayPosts[dayName]?.status === 'published') {
+    btn.textContent = '✓ Published';
+    btn.disabled = true;
+  } else {
+    btn.textContent = 'Publish Post';
+    btn.disabled = false;
+  }
+}
+
+// ════════════════════════════════════════════════════
+// Preview panel
+// ════════════════════════════════════════════════════
+function showPreview(dayName) {
+  const post = S.dayPosts[dayName];
+  if (!post) return;
+
+  S.previewDay = dayName;
+  document.getElementById('prev-title').textContent   = post.title || 'Post Preview';
+  document.getElementById('prev-desc').textContent    = post.meta_description || '';
+  document.getElementById('prev-kws').innerHTML       = (post.keywords || []).map(k => `<span class="prev-kw">${esc(k)}</span>`).join('');
+  document.getElementById('prev-stats').textContent   = `${post.word_count || '?'} words · ${post.reading_time || 5} min read`;
+  document.getElementById('prev-content').innerHTML   = post.content || '<p>No content.</p>';
+
+  const btn = document.getElementById('prev-publish-btn');
+  btn.textContent = post.status === 'published' ? '✓ Already Published' : 'Publish Post';
+  btn.disabled    = post.status === 'published';
+
+  document.getElementById('prev-overlay').classList.add('open');
+}
+
+function closePreview() {
+  document.getElementById('prev-overlay').classList.remove('open');
+  S.previewDay = null;
+}
+
+document.getElementById('prev-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('prev-overlay')) closePreview();
+});
+document.getElementById('prev-close-btn').addEventListener('click', closePreview);
+
+// ════════════════════════════════════════════════════
+// Posts list
+// ════════════════════════════════════════════════════
+async function loadPosts() {
+  const d = await api('/api/agent?action=posts', 'GET');
+  if (!d.ok) return;
+  S.posts = d.posts || [];
+  renderPosts();
+}
+
+function renderPosts() {
+  const count = S.posts.length;
+  document.getElementById('posts-count').textContent = `${count} post${count !== 1 ? 's' : ''}`;
+  const tbody = document.getElementById('posts-tbody');
+
+  if (!count) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:36px">No posts yet — write your first from the Blog Pipeline tab.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = S.posts.map(p => `
+    <tr>
+      <td>
+        <div class="pt-title">${esc(p.title)}</div>
+        <div class="pt-excerpt">${esc(p.excerpt || '')}</div>
+        <div class="pt-slug">/blog/${p.slug}</div>
+      </td>
+      <td><span class="sbadge sbadge-${p.status}">${p.status}</span></td>
+      <td style="color:var(--muted)">${p.word_count || '—'}</td>
+      <td style="color:var(--muted);font-size:12px;white-space:nowrap">
+        ${p.published_at ? new Date(p.published_at).toLocaleDateString('en-GB') : '—'}
+      </td>
+      <td>
+        <div class="tbl-actions">
+          ${p.status === 'draft'     ? `<button class="btn btn-green btn-sm" onclick="quickPublish('${p.id}')">Publish</button>` : ''}
+          ${p.status === 'published' ? `<a href="/blog/${p.slug}" target="_blank" class="btn btn-outline btn-sm">View ↗</a>` : ''}
+          <button class="btn btn-red btn-sm" onclick="deletePost('${p.id}')">Delete</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function quickPublish(postId) {
+  const d = await api('/api/agent?action=publish', 'POST', { post_id: postId });
+  if (!d.ok) return toast(d.error || 'Publish failed', 'err');
+  await loadPosts();
+  toast('Post published ✓', 'ok');
+}
+
+async function deletePost(postId) {
+  if (!confirm('Delete this post permanently? This cannot be undone.')) return;
+  const d = await api('/api/agent?action=delete', 'POST', { post_id: postId });
+  if (!d.ok) return toast(d.error || 'Delete failed', 'err');
+  await loadPosts();
+  toast('Post deleted', 'ok');
+}
+
+// ════════════════════════════════════════════════════
+// Helpers
+// ════════════════════════════════════════════════════
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toast(msg, type = 'ok') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+// Boot
+init().catch(() => {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('unauthorized').style.display = 'flex';
+});
+</script>
+</body>
+</html>
