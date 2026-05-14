@@ -94,13 +94,17 @@
   </div>
 </div>
 
+<!-- Agent-published posts (hidden until posts exist) -->
+<section id="dynamic-blog-section" style="display:none;padding-bottom:0" class="section">
+  <div class="container">
+    <div class="section-label" style="margin-bottom:12px">Latest from the Blog</div>
+    <div class="blog-grid" id="dynamic-posts"></div>
+  </div>
+</section>
+
 <section class="section">
   <div class="container">
     <div class="blog-grid">
-
-      <!-- Dynamic posts from the blog agent — inserted at runtime -->
-      <div id="dynamic-posts" style="display:contents"></div>
-      <!-- /dynamic -->
 
       <a href="blog-posts/ai-chatbots-vs-live-chat-2025.html" class="blog-card reveal reveal-delay-3">
         <div class="blog-thumb blog-thumb-1">💬</div>
@@ -320,9 +324,11 @@
     const { posts } = await r.json();
     if (!posts?.length) return;
 
+    const section   = document.getElementById('dynamic-blog-section');
     const container = document.getElementById('dynamic-posts');
     const EMOJIS = ['🤖','⚡','🚀','💡','🔧','📊','🎯','🌐'];
 
+    section.style.display = 'block';
     container.innerHTML = posts.map((p, i) => {
       const date = p.published_at
         ? new Date(p.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
