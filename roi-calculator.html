@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automation ROI Calculator — AutomationHire</title>
+  <meta name="description" content="Free automation ROI calculator. Enter your hourly rate, task frequency and tool cost — instantly see your payback period and annual return on investment." />
+  <link rel="canonical" href="https://automationhire.co.uk/roi-calculator" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+  <style>
+    .roi-page { max-width: 1100px; margin: 0 auto; padding: 0 20px 80px; }
+
+    /* Two-column grid */
+    .roi-grid {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media(max-width: 900px) { .roi-grid { grid-template-columns: 1fr; } }
+
+    /* ── Input Panel ── */
+    .input-panel {
+      background: var(--black-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px;
+      position: sticky;
+      top: 90px;
+    }
+    .input-section { margin-bottom: 22px; }
+    .input-section:last-child { margin-bottom: 0; }
+    .inp-section-title {
+      font-size: 10px; font-weight: 800; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--green);
+      display: flex; align-items: center; gap: 7px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .inp-row { margin-bottom: 16px; }
+    .inp-row:last-child { margin-bottom: 0; }
+    .inp-label {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 13px; font-weight: 600; color: var(--white);
+      margin-bottom: 8px;
+    }
+    .inp-label-val { font-size: 15px; font-weight: 800; color: var(--green); }
+    .inp-hint { font-size: 11px; color: var(--muted); margin-top: 5px; line-height: 1.4; }
+
+    .roi-slider {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 4px; border-radius: 2px;
+      background: var(--border); outline: none; cursor: pointer;
+    }
+    .roi-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(0,230,118,.15), 0 0 10px rgba(0,230,118,.4);
+      cursor: pointer; transition: box-shadow .2s;
+    }
+    .roi-slider::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 0 5px rgba(0,230,118,.2), 0 0 16px rgba(0,230,118,.6);
+    }
+
+    .freq-select {
+      width: 100%; padding: 10px 12px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--white); font-size: 13px; cursor: pointer;
+      outline: none; transition: border-color .2s;
+    }
+    .freq-select:focus { border-color: rgba(0,230,118,.4); }
+
+    .cost-wrap { position: relative; }
+    .cost-prefix {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: var(--green); font-weight: 700; font-size: 14px;
+      pointer-events: none;
+    }
+    .cost-input {
+      width: 100%; box-sizing: border-box;
+      padding: 10px 12px 10px 24px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--white); font-size: 14px; font-weight: 600;
+      outline: none; transition: border-color .2s;
+    }
+    .cost-input:focus { border-color: rgba(0,230,118,.4); }
+
+    /* ── Results Panel ── */
+    .results-panel { display: flex; flex-direction: column; gap: 18px; }
+
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width: 480px) { .metric-grid { grid-template-columns: 1fr; } }
+
+    .metric-card {
+      background: var(--black-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px;
+    }
+    .metric-card.hero {
+      background: linear-gradient(135deg, rgba(0,230,118,.09), rgba(0,196,180,.06));
+      border-color: rgba(0,230,118,.28);
+    }
+    .metric-lbl { font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .metric-val {
+      font-size: 30px; font-weight: 900; font-family: var(--font-head);
+      color: var(--white); line-height: 1;
+    }
+    .metric-card.hero .metric-val { color: var(--green); }
+    .metric-note { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+    /* ROI status block */
+    .roi-block {
+      background: var(--black-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 24px;
+    }
+    .roi-block-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .roi-block-lbl { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+    .roi-badge {
+      font-size: 10px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .badge-great { background: rgba(0,230,118,.14); color: var(--green); border: 1px solid rgba(0,230,118,.3); }
+    .badge-good  { background: rgba(251,191,36,.12); color: #fbbf24; border: 1px solid rgba(251,191,36,.28); }
+    .badge-marg  { background: rgba(251,191,36,.08); color: #fb923c; border: 1px solid rgba(251,191,36,.2); }
+    .badge-loss  { background: rgba(239,68,68,.1);   color: #f87171; border: 1px solid rgba(239,68,68,.25); }
+    .badge-none  { background: rgba(148,163,184,.08); color: var(--muted); border: 1px solid var(--border); }
+
+    .roi-pct { font-size: 44px; font-weight: 900; font-family: var(--font-head); line-height: 1; }
+    .col-green { color: var(--green); }
+    .col-amber { color: #fbbf24; }
+    .col-red   { color: #f87171; }
+    .col-grey  { color: var(--muted); }
+
+    .roi-bar-track { height: 5px; border-radius: 3px; background: rgba(255,255,255,.08); margin: 12px 0 8px; overflow: hidden; }
+    .roi-bar-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.34,1.56,.64,1), background .4s; }
+    .roi-explain { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* Payback callout */
+    .callout {
+      display: flex; align-items: flex-start; gap: 14px;
+      border-radius: 12px; padding: 16px 20px;
+      border: 1px solid rgba(0,230,118,.22);
+      background: rgba(0,230,118,.06);
+    }
+    .callout.warn   { border-color: rgba(251,191,36,.22); background: rgba(251,191,36,.06); }
+    .callout.danger { border-color: rgba(239,68,68,.22);  background: rgba(239,68,68,.06); }
+    .callout-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+    .callout-strong { font-size: 14px; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+    .callout-sub { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* Chart */
+    .chart-block {
+      background: var(--black-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 24px;
+    }
+    .chart-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+    .chart-sub   { font-size: 11px; color: var(--muted); margin-bottom: 18px; }
+    #roi-chart   { width: 100%; border-radius: 4px; display: block; }
+    .chart-legend { display: flex; gap: 18px; margin-top: 12px; flex-wrap: wrap; }
+    .chart-leg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+    .chart-leg-dot  { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+    /* CTA */
+    .roi-cta {
+      background: linear-gradient(135deg, rgba(0,230,118,.1), rgba(0,196,180,.06));
+      border: 1px solid rgba(0,230,118,.22);
+      border-radius: 14px; padding: 30px;
+      text-align: center;
+    }
+    .roi-cta h3 { font-family: var(--font-head); font-size: 20px; margin-bottom: 8px; }
+    .roi-cta p  { color: var(--white-60); font-size: 13px; margin-bottom: 22px; max-width: 440px; margin-left: auto; margin-right: auto; }
+    .roi-cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* Download strip */
+    .download-strip {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 20px;
+      margin-bottom: 8px;
+    }
+    .download-strip-text { font-size: 13px; color: var(--white-60); }
+    .download-strip-text strong { color: var(--white); }
+  </style>
+</head>
+<body class="dark">
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li class="nav-sep" aria-hidden="true"></li>
+      <li><a href="free.html" style="color:var(--green);font-weight:700">Free Tools</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="login.html" class="nav-expert-link">Expert Login</a>
+      <a href="request-quote.html" class="nav-pill nav-pill-primary">Get Matched</a>
+      <a href="book.html" class="nav-pill nav-pill-outline"><span class="nav-live-dot"></span>Book a Call</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero" style="padding-bottom:36px">
+  <div class="container">
+    <a href="free.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:20px;transition:color .2s" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Free Tools
+    </a>
+    <div class="section-label">Free Calculator</div>
+    <h1 class="page-hero-title" style="font-size:clamp(26px,5vw,46px)">Automation ROI Calculator</h1>
+    <p class="page-hero-sub" style="max-width:520px;margin:0 auto">
+      Plug in your hourly rate, task frequency and tool cost — instantly see your automation payback period and annual return.
+    </p>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<div class="roi-page">
+
+  <!-- Download strip -->
+  <div class="download-strip">
+    <div class="download-strip-text"><strong>Take it with you</strong> — download this calculator as a standalone HTML file, no internet required.</div>
+    <button class="btn btn-outline btn-sm" onclick="downloadSelf()" style="white-space:nowrap;flex-shrink:0">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download HTML
+    </button>
+  </div>
+
+  <div class="roi-grid">
+
+    <!-- ── LEFT: INPUTS ── -->
+    <div class="input-panel">
+
+      <div class="input-section">
+        <div class="inp-section-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Your Time
+        </div>
+
+        <div class="inp-row">
+          <div class="inp-label">
+            Hourly rate (fully loaded)
+            <span class="inp-label-val" id="lbl-rate">£75/hr</span>
+          </div>
+          <input type="range" class="roi-slider" id="sl-rate" min="10" max="500" step="5" value="75"
+            oninput="syncSlider('rate',+this.value,'£','/hr'); recalc()" />
+          <div class="inp-hint">Include salary, NI contributions, pension &amp; overheads</div>
+        </div>
+
+        <div class="inp-row">
+          <div class="inp-label">
+            Minutes per task occurrence
+            <span class="inp-label-val" id="lbl-mins">30 min</span>
+          </div>
+          <input type="range" class="roi-slider" id="sl-mins" min="1" max="480" step="1" value="30"
+            oninput="syncSlider('mins',+this.value,'','min'); recalc()" />
+          <div class="inp-hint">Time spent on this task each time it's done</div>
+        </div>
+
+        <div class="inp-row">
+          <div class="inp-label" style="margin-bottom:9px">Task frequency</div>
+          <select class="freq-select" id="sl-freq" onchange="recalc()">
+            <option value="21.67">Every working day  (≈22×/month)</option>
+            <option value="13">3× per week  (≈13×/month)</option>
+            <option value="8.67">2× per week  (≈9×/month)</option>
+            <option value="4.33" selected>Weekly  (≈4×/month)</option>
+            <option value="2.17">Bi-weekly  (≈2×/month)</option>
+            <option value="1">Monthly  (1×/month)</option>
+          </select>
+        </div>
+
+        <div class="inp-row">
+          <div class="inp-label">
+            Number of tasks automated
+            <span class="inp-label-val" id="lbl-tasks">3 tasks</span>
+          </div>
+          <input type="range" class="roi-slider" id="sl-tasks" min="1" max="30" step="1" value="3"
+            oninput="syncSlider('tasks',+this.value,'',this.value==1?' task':' tasks'); recalc()" />
+          <div class="inp-hint">Distinct repetitive processes you're eliminating</div>
+        </div>
+      </div>
+
+      <div class="input-section">
+        <div class="inp-section-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Your Costs
+        </div>
+
+        <div class="inp-row">
+          <div class="inp-label" style="margin-bottom:8px">One-time setup / build cost</div>
+          <div class="cost-wrap">
+            <div class="cost-prefix">£</div>
+            <input type="number" class="cost-input" id="inp-setup" min="0" step="100" value="2500"
+              oninput="recalc()" />
+          </div>
+          <div class="inp-hint">Agency fee, freelancer build, or platform onboarding. Set to 0 if self-built.</div>
+        </div>
+
+        <div class="inp-row">
+          <div class="inp-label" style="margin-bottom:8px">
+            Monthly tool subscription
+            <span style="font-size:11px;font-weight:500;color:var(--muted)">/month</span>
+          </div>
+          <div class="cost-wrap">
+            <div class="cost-prefix">£</div>
+            <input type="number" class="cost-input" id="inp-monthly" min="0" step="10" value="150"
+              oninput="recalc()" />
+          </div>
+          <div class="inp-hint">Zapier, Make.com, n8n cloud, API fees, hosting, etc.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── RIGHT: RESULTS ── -->
+    <div class="results-panel">
+
+      <!-- Metric cards -->
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-lbl">Hours saved / month</div>
+          <div class="metric-val" id="m-hours">—</div>
+          <div class="metric-note" id="m-hours-note"></div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-lbl">Labour value saved / month</div>
+          <div class="metric-val" id="m-labour">—</div>
+          <div class="metric-note" id="m-labour-note">at your hourly rate</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-lbl">Net saving / month</div>
+          <div class="metric-val" id="m-net">—</div>
+          <div class="metric-note">after tool subscription cost</div>
+        </div>
+        <div class="metric-card hero">
+          <div class="metric-lbl">Payback period</div>
+          <div class="metric-val" id="m-payback">—</div>
+          <div class="metric-note" id="m-payback-note">to break even on setup cost</div>
+        </div>
+      </div>
+
+      <!-- Annual ROI block -->
+      <div class="roi-block">
+        <div class="roi-block-top">
+          <div class="roi-block-lbl">Annual ROI</div>
+          <div class="roi-badge badge-none" id="roi-badge">Calculating…</div>
+        </div>
+        <div class="roi-pct col-grey" id="roi-pct">—</div>
+        <div class="roi-bar-track">
+          <div class="roi-bar-fill" id="roi-bar" style="width:0%"></div>
+        </div>
+        <div class="roi-explain" id="roi-explain"></div>
+      </div>
+
+      <!-- Payback callout -->
+      <div class="callout" id="callout">
+        <div class="callout-icon" id="callout-icon">📊</div>
+        <div>
+          <div class="callout-strong" id="callout-strong">Adjust the inputs to see your result</div>
+          <div class="callout-sub" id="callout-sub">Results update live as you move the sliders.</div>
+        </div>
+      </div>
+
+      <!-- 12-month chart -->
+      <div class="chart-block">
+        <div class="chart-title">12-Month Cumulative Net Savings</div>
+        <div class="chart-sub">Stacked net profit after all costs. Negative = still recovering setup investment.</div>
+        <canvas id="roi-chart" height="140"></canvas>
+        <div class="chart-legend">
+          <div class="chart-leg-item">
+            <div class="chart-leg-dot" style="background:linear-gradient(135deg,#00e676,#00c4b4)"></div>
+            In profit
+          </div>
+          <div class="chart-leg-item">
+            <div class="chart-leg-dot" style="background:linear-gradient(135deg,#f87171,#fb923c)"></div>
+            Recovering setup cost
+          </div>
+        </div>
+      </div>
+
+      <!-- Year 1 summary -->
+      <div style="background:var(--black-2);border:1px solid var(--border);border-radius:12px;padding:20px 24px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Year 1 Breakdown</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+          <div>
+            <div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px">Labour saved</div>
+            <div style="font-size:16px;font-weight:800;color:var(--white)" id="y1-labour">—</div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px">Total costs</div>
+            <div style="font-size:16px;font-weight:800;color:#f87171" id="y1-costs">—</div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px">Net Year 1</div>
+            <div style="font-size:16px;font-weight:800" id="y1-net">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="roi-cta">
+        <h3>Ready to build your automation?</h3>
+        <p>Our vetted UK experts can deliver it faster and cheaper than you think. Free, no-obligation match in 24 hours.</p>
+        <div class="roi-cta-btns">
+          <a href="request-quote.html" class="btn btn-primary" style="text-decoration:none">Get Matched — Free</a>
+          <a href="book.html" class="btn btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px">
+            <span class="nav-live-dot" style="width:6px;height:6px"></span>Book a Strategy Call
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/main.js"></script>
+<script>
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
+function fmtGbp(n) {
+  if (!isFinite(n)) return n > 0 ? '∞' : '-∞';
+  const abs = Math.abs(n);
+  const sign = n < 0 ? '-' : '';
+  if (abs >= 1000000) return sign + '£' + (abs/1e6).toFixed(1) + 'M';
+  if (abs >= 10000)   return sign + '£' + (abs/1000).toFixed(1) + 'k';
+  if (abs >= 1000)    return sign + '£' + (abs/1000).toFixed(2) + 'k';
+  return sign + '£' + Math.round(abs).toLocaleString('en-GB');
+}
+function fmtNum(n, dec = 0) {
+  if (!isFinite(n)) return '—';
+  return n.toLocaleString('en-GB', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+
+function syncSlider(key, val, pre, post) {
+  const el = document.getElementById('lbl-' + key);
+  if (!el) return;
+  el.textContent = pre + (Number.isInteger(val) ? val : val.toFixed(0)) + post;
+}
+
+// ── Main calc ────────────────────────────────────────────────────────────────
+
+function recalc() {
+  const rate    = +document.getElementById('sl-rate').value    || 0;
+  const mins    = +document.getElementById('sl-mins').value    || 0;
+  const freq    = +document.getElementById('sl-freq').value    || 0;
+  const tasks   = +document.getElementById('sl-tasks').value   || 0;
+  const setup   = +document.getElementById('inp-setup').value  || 0;
+  const monthly = +document.getElementById('inp-monthly').value|| 0;
+
+  const hoursPerMonth  = (mins / 60) * freq * tasks;
+  const labourPerMonth = hoursPerMonth * rate;
+  const netPerMonth    = labourPerMonth - monthly;
+  const paybackMonths  = (setup > 0 && netPerMonth > 0) ? setup / netPerMonth
+                       : (setup === 0)                  ? 0
+                       : null;
+  const annualLabour = labourPerMonth * 12;
+  const annualCosts  = setup + monthly * 12;
+  const annualNet    = annualLabour - annualCosts;
+  const annualROI    = (setup > 0 && netPerMonth > 0) ? (annualNet / setup) * 100 : null;
+
+  // ── Metric cards
+  const mH = document.getElementById('m-hours');
+  mH.textContent = fmtNum(hoursPerMonth, 1) + 'h';
+  document.getElementById('m-hours-note').textContent =
+    fmtNum(hoursPerMonth * 12, 0) + ' hrs/year · ' + fmtNum(hoursPerMonth * 60, 0) + ' min/month';
+
+  document.getElementById('m-labour').textContent = fmtGbp(labourPerMonth);
+  document.getElementById('m-labour-note').textContent = fmtGbp(labourPerMonth * 12) + '/year at your rate';
+
+  const netEl = document.getElementById('m-net');
+  netEl.textContent = fmtGbp(netPerMonth);
+  netEl.style.color = netPerMonth >= 0 ? 'var(--green)' : '#f87171';
+
+  const pbEl   = document.getElementById('m-payback');
+  const pbNote = document.getElementById('m-payback-note');
+  if (setup === 0) {
+    pbEl.textContent = 'Instant';
+    pbNote.textContent = 'No setup cost — ROI starts day 1';
+  } else if (paybackMonths === null) {
+    pbEl.textContent = '—';
+    pbNote.textContent = 'Net saving must exceed tool cost';
+  } else if (paybackMonths < 1) {
+    pbEl.textContent = Math.round(paybackMonths * 30) + ' days';
+    pbNote.textContent = 'to break even on setup cost';
+  } else {
+    pbEl.textContent = fmtNum(paybackMonths, 1) + ' mo';
+    pbNote.textContent = 'to break even on setup cost';
+  }
+
+  // ── Annual ROI block
+  const roiPct   = document.getElementById('roi-pct');
+  const roiBadge = document.getElementById('roi-badge');
+  const roiBar   = document.getElementById('roi-bar');
+  const roiExpl  = document.getElementById('roi-explain');
+
+  if (annualROI === null) {
+    roiPct.textContent  = '—';
+    roiPct.className    = 'roi-pct col-grey';
+    roiBadge.textContent = netPerMonth <= 0 ? 'Loss' : 'No Setup Cost';
+    roiBadge.className  = 'roi-badge ' + (netPerMonth <= 0 ? 'badge-loss' : 'badge-none');
+    roiBar.style.width  = '0%';
+    roiBar.style.background = 'var(--muted)';
+    roiExpl.textContent = netPerMonth <= 0
+      ? 'Labour saving is less than your monthly tool cost. Increase task frequency or reduce costs.'
+      : 'No setup cost — you\'re profitable from month 1. Annual net: ' + fmtGbp(annualNet);
+  } else {
+    const display = annualROI > 9999 ? '9,999%+' : fmtNum(annualROI, 0) + '%';
+    roiPct.textContent = display;
+    roiBar.style.width = Math.min(100, annualROI / 10) + '%';
+
+    if (annualROI >= 300) {
+      roiPct.className = 'roi-pct col-green';
+      roiBadge.textContent = 'Excellent ROI';
+      roiBadge.className   = 'roi-badge badge-great';
+      roiBar.style.background = 'linear-gradient(90deg,#00e676,#00c4b4)';
+    } else if (annualROI >= 100) {
+      roiPct.className = 'roi-pct col-green';
+      roiBadge.textContent = 'Strong ROI';
+      roiBadge.className   = 'roi-badge badge-great';
+      roiBar.style.background = 'linear-gradient(90deg,#00e676,#00c4b4)';
+    } else if (annualROI >= 20) {
+      roiPct.className = 'roi-pct col-amber';
+      roiBadge.textContent = 'Good ROI';
+      roiBadge.className   = 'roi-badge badge-good';
+      roiBar.style.background = 'linear-gradient(90deg,#fbbf24,#fb923c)';
+    } else if (annualROI > 0) {
+      roiPct.className = 'roi-pct col-amber';
+      roiBadge.textContent = 'Marginal';
+      roiBadge.className   = 'roi-badge badge-marg';
+      roiBar.style.background = 'linear-gradient(90deg,#fb923c,#f87171)';
+    } else {
+      roiPct.className = 'roi-pct col-red';
+      roiBadge.textContent = 'Negative';
+      roiBadge.className   = 'roi-badge badge-loss';
+      roiBar.style.background = 'linear-gradient(90deg,#f87171,#ef4444)';
+    }
+
+    roiExpl.textContent = 'Year 1 net: ' + fmtGbp(annualNet) + ' · Labour saved: ' + fmtGbp(annualLabour) + ' · Total costs: ' + fmtGbp(annualCosts);
+  }
+
+  // ── Callout
+  updateCallout(paybackMonths, netPerMonth, setup);
+
+  // ── Year 1 summary
+  document.getElementById('y1-labour').textContent = fmtGbp(annualLabour);
+  document.getElementById('y1-costs').textContent  = fmtGbp(annualCosts);
+  const y1Net = document.getElementById('y1-net');
+  y1Net.textContent = fmtGbp(annualNet);
+  y1Net.style.color = annualNet >= 0 ? 'var(--green)' : '#f87171';
+
+  // ── Chart
+  drawChart(netPerMonth, setup);
+}
+
+function updateCallout(payback, net, setup) {
+  const box    = document.getElementById('callout');
+  const icon   = document.getElementById('callout-icon');
+  const strong = document.getElementById('callout-strong');
+  const sub    = document.getElementById('callout-sub');
+
+  box.className = 'callout';
+
+  if (net <= 0) {
+    box.classList.add('danger');
+    icon.textContent  = '⚠️';
+    strong.textContent = 'Not yet viable with these numbers';
+    sub.textContent    = 'Your monthly tool cost (' + fmtGbp(+document.getElementById('inp-monthly').value) + ') exceeds the labour saving. Try daily tasks, higher rate, or a cheaper tool.';
+    return;
+  }
+  if (setup === 0) {
+    icon.textContent  = '✅';
+    strong.textContent = 'Zero setup cost — immediate profit';
+    sub.textContent    = 'You save ' + fmtGbp(net) + ' every month from day one. That\'s ' + fmtGbp(net * 12) + ' in year one.';
+    return;
+  }
+  if (payback <= 2) {
+    icon.textContent  = '🚀';
+    strong.textContent = 'Pays back in ' + (payback < 1 ? Math.round(payback*30) + ' days' : payback.toFixed(1) + ' months') + ' — compelling case';
+    sub.textContent    = 'After that you pocket ' + fmtGbp(net) + ' every month, net of tool costs.';
+  } else if (payback <= 6) {
+    icon.textContent  = '📈';
+    strong.textContent = 'Payback in ' + payback.toFixed(1) + ' months — solid investment';
+    sub.textContent    = 'Then ' + fmtGbp(net) + '/month in clear profit. Most businesses consider < 6 months excellent.';
+  } else if (payback <= 12) {
+    box.classList.add('warn');
+    icon.textContent  = '📊';
+    strong.textContent = 'Payback in ' + payback.toFixed(0) + ' months — reasonable, but check assumptions';
+    sub.textContent    = 'Consider whether task frequency or time estimates could be higher. Even modest increases drastically shorten payback.';
+  } else {
+    box.classList.add('warn');
+    icon.textContent  = '🕐';
+    strong.textContent = payback.toFixed(0) + '-month payback — negotiate a lower build cost';
+    sub.textContent    = 'Long payback usually means setup cost is too high relative to the saving. Ask for a phased build or simpler MVP.';
+  }
+}
+
+// ── Canvas Chart ─────────────────────────────────────────────────────────────
+
+function drawChart(netPerMonth, setup) {
+  const canvas = document.getElementById('roi-chart');
+  const dpr    = window.devicePixelRatio || 1;
+  const W      = canvas.clientWidth;
+  const H      = 140;
+
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.height = H + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // 12 months cumulative
+  const months = Array.from({ length: 12 }, (_, i) => -setup + netPerMonth * (i + 1));
+  const minV   = Math.min(0, ...months);
+  const maxV   = Math.max(0, ...months);
+  const range  = maxV - minV || 1;
+
+  const pad   = { top: 10, bottom: 22, left: 4, right: 4 };
+  const cW    = W - pad.left - pad.right;
+  const cH    = H - pad.top - pad.bottom;
+  const barGap = 4;
+  const barW  = cW / 12 - barGap;
+
+  // Zero line position from top
+  const zeroY = pad.top + (maxV / range) * cH;
+
+  // Zero line
+  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+  ctx.lineWidth   = 1;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(pad.left, zeroY);
+  ctx.lineTo(W - pad.right, zeroY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Bars
+  months.forEach((val, i) => {
+    const x    = pad.left + i * (cW / 12) + barGap / 2;
+    const barH = Math.max(2, (Math.abs(val) / range) * cH);
+    const y    = val >= 0 ? zeroY - barH : zeroY;
+    const isPos = val >= 0;
+
+    const grad = ctx.createLinearGradient(0, y, 0, y + barH);
+    if (isPos) {
+      grad.addColorStop(0, '#00c4b4');
+      grad.addColorStop(1, '#00e676');
+    } else {
+      grad.addColorStop(0, '#f87171');
+      grad.addColorStop(1, '#fb923c');
+    }
+    ctx.fillStyle = grad;
+
+    // Rounded top corners
+    const r = 3;
+    ctx.beginPath();
+    if (isPos) {
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + barW - r, y);
+      ctx.quadraticCurveTo(x + barW, y, x + barW, y + r);
+      ctx.lineTo(x + barW, y + barH);
+      ctx.lineTo(x, y + barH);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+    } else {
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + barW, y);
+      ctx.lineTo(x + barW, y + barH - r);
+      ctx.quadraticCurveTo(x + barW, y + barH, x + barW - r, y + barH);
+      ctx.lineTo(x + r, y + barH);
+      ctx.quadraticCurveTo(x, y + barH, x, y + barH - r);
+      ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fill();
+
+    // Month labels
+    ctx.fillStyle = 'rgba(148,163,184,0.7)';
+    ctx.font = `${10 * dpr / dpr}px -apple-system, system-ui, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText('M' + (i + 1), x + barW / 2, H - 5);
+
+    // Value tooltip on first / payback / last bar
+    if (i === 0 || i === 11) {
+      const labelY = isPos ? y - 4 : y + barH + 12;
+      ctx.fillStyle = isPos ? '#00e676' : '#f87171';
+      ctx.font = `bold ${10 * dpr / dpr}px -apple-system, system-ui, sans-serif`;
+      ctx.fillText(fmtGbp(val), x + barW / 2, labelY);
+    }
+  });
+}
+
+// ── Self-download ─────────────────────────────────────────────────────────────
+function downloadSelf() {
+  const html = document.documentElement.outerHTML;
+  const blob = new Blob([html], { type: 'text/html' });
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = 'automation-roi-calculator.html';
+  a.click();
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+recalc();
+window.addEventListener('resize', () => {
+  const net   = (+document.getElementById('sl-rate').value || 0)
+              * (+document.getElementById('sl-mins').value / 60)
+              * +document.getElementById('sl-freq').value
+              * +document.getElementById('sl-tasks').value
+              - (+document.getElementById('inp-monthly').value || 0);
+  const setup = +document.getElementById('inp-setup').value || 0;
+  drawChart(net, setup);
+});
+</script>
+</body>
+</html>
