@@ -24,34 +24,6 @@
     .tool-name { font-family:var(--font-head);font-weight:700;font-size:18px; }
     .tool-desc { font-size:13px;color:var(--white-60);line-height:1.65;margin-top:2px; }
 
-    /* ── Image Converter ── */
-    .img-drop { border:2px dashed var(--border);border-radius:var(--radius);padding:32px 20px;text-align:center;cursor:pointer;transition:all .25s;background:rgba(255,255,255,.02); }
-    .img-drop.drag-over { border-color:var(--green);background:rgba(0,230,118,.05); }
-    .img-drop-icon { font-size:32px;margin-bottom:8px; }
-    .img-drop-text { font-size:13px;color:var(--white-60); }
-    .img-drop-text strong { color:var(--white); }
-    .img-drop input { display:none; }
-
-    .fmt-row { display:flex;gap:8px;flex-wrap:wrap; }
-    .fmt-btn { padding:7px 14px;border-radius:6px;border:1px solid var(--border2);background:rgba(255,255,255,.05);color:var(--white-60);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s; }
-    .fmt-btn.active { background:var(--green);border-color:var(--green);color:#060810; }
-    .fmt-btn:hover:not(.active){ border-color:rgba(255,255,255,.3);color:var(--white); }
-
-    .quality-row { display:flex;align-items:center;gap:12px; }
-    .quality-row label { font-size:12px;color:var(--muted);white-space:nowrap; }
-    .quality-row input[type=range]{ flex:1;accent-color:var(--green); }
-    .quality-val { font-size:12px;font-weight:700;color:var(--green);min-width:28px;text-align:right; }
-
-    .img-preview { display:none;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--rsm);padding:12px; }
-    .img-preview img { width:56px;height:56px;object-fit:cover;border-radius:6px;flex-shrink:0; }
-    .img-preview-info { flex:1;min-width:0; }
-    .img-preview-name { font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-    .img-preview-size { font-size:11px;color:var(--muted);margin-top:2px; }
-
-    .convert-result { display:none;align-items:center;gap:12px;padding:12px;background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2);border-radius:var(--rsm); }
-    .convert-result svg { flex-shrink:0; }
-    .convert-result-text { flex:1;font-size:13px;font-weight:600;color:var(--green); }
-
     /* ── Dictation ── */
     .dict-transcript { min-height:140px;max-height:260px;overflow-y:auto;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:14px;line-height:1.75;color:var(--white-60); }
     .dict-transcript .final { color:var(--white); }
@@ -171,61 +143,47 @@
 
     <div class="tools-grid">
 
-      <!-- ─ IMAGE CONVERTER ─────────────────────────────────────────── -->
-      <div class="tool-card">
+      <!-- ─ BATCH IMAGE RESIZER ─────────────────────────────────────── -->
+      <div class="tool-card" style="position:relative;overflow:hidden">
+        <!-- Featured ribbon -->
+        <div style="position:absolute;top:14px;right:-20px;background:linear-gradient(135deg,#00e676,#00c4b4);color:#060810;font-size:10px;font-weight:800;letter-spacing:.7px;padding:4px 36px;transform:rotate(35deg);text-transform:uppercase">New</div>
+
         <div class="tool-card-head">
-          <div class="tool-icon tool-icon-img">🖼️</div>
+          <div class="tool-icon tool-icon-img" style="font-size:24px">📐</div>
           <div>
-            <div class="tool-name">Image Converter</div>
-            <div class="tool-desc">Convert JPG, PNG, WebP — client-side, instant, private.</div>
+            <div class="tool-name">Batch Image Resizer</div>
+            <div class="tool-desc">Resize, crop &amp; rename dozens of images in seconds. Presets for newsletters, social, OG images. Download as ZIP.</div>
           </div>
         </div>
 
-        <!-- Drop zone -->
-        <div class="img-drop" id="img-drop" onclick="document.getElementById('img-file').click()">
-          <div class="img-drop-icon">📂</div>
-          <div class="img-drop-text"><strong>Click to select</strong> or drag &amp; drop<br><span style="font-size:11px;color:var(--white-30)">JPG · PNG · WebP · GIF · BMP</span></div>
-          <input type="file" id="img-file" accept="image/*" />
+        <!-- Feature pills -->
+        <div style="display:flex;flex-wrap:wrap;gap:7px">
+          <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px;background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.2);color:var(--green)">Fit / Fill / Stretch</span>
+          <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px;background:rgba(41,121,255,.1);border:1px solid rgba(41,121,255,.2);color:#60a5fa">JPG · PNG · WebP</span>
+          <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);color:#a78bfa">Auto-rename</span>
+          <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);color:#fbbf24">ZIP download</span>
         </div>
 
-        <!-- Preview -->
-        <div class="img-preview" id="img-preview">
-          <img id="img-thumb" src="" alt="preview" />
-          <div class="img-preview-info">
-            <div class="img-preview-name" id="img-name">filename.jpg</div>
-            <div class="img-preview-size" id="img-size">—</div>
+        <!-- Size presets preview -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:11px;font-weight:700;color:var(--white)">Newsletter</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">600 × 400</div>
           </div>
-          <button class="fmt-btn" onclick="clearImage()" style="padding:5px 10px;font-size:11px">✕ Clear</button>
-        </div>
-
-        <!-- Format picker -->
-        <div>
-          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600">Convert to</div>
-          <div class="fmt-row">
-            <button class="fmt-btn active" data-fmt="image/jpeg" data-ext="jpg" onclick="selectFmt(this)">JPG</button>
-            <button class="fmt-btn" data-fmt="image/png" data-ext="png" onclick="selectFmt(this)">PNG</button>
-            <button class="fmt-btn" data-fmt="image/webp" data-ext="webp" onclick="selectFmt(this)">WebP</button>
+          <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:11px;font-weight:700;color:var(--white)">Social Square</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">1080 × 1080</div>
+          </div>
+          <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:11px;font-weight:700;color:var(--white)">Hero / OG</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">1200 × 630</div>
           </div>
         </div>
 
-        <!-- Quality -->
-        <div id="quality-wrap">
-          <div class="quality-row">
-            <label for="img-quality">Quality</label>
-            <input type="range" id="img-quality" min="0.1" max="1" step="0.05" value="0.9" oninput="document.getElementById('qval').textContent=Math.round(this.value*100)+'%'" />
-            <div class="quality-val" id="qval">90%</div>
-          </div>
-        </div>
-
-        <!-- Convert button -->
-        <button class="btn btn-primary" id="convert-btn" onclick="convertImage()" disabled style="width:100%;justify-content:center">Convert &amp; Download</button>
-
-        <!-- Result -->
-        <div class="convert-result" id="convert-result">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <div class="convert-result-text" id="convert-result-text">Ready to download</div>
-          <a id="convert-dl-link" class="btn btn-green btn-sm" style="border-radius:6px">Download</a>
-        </div>
+        <a href="/image-tool" class="btn btn-primary" style="width:100%;justify-content:center;text-decoration:none;display:flex;align-items:center;gap:8px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Open Batch Resizer
+        </a>
       </div>
 
       <!-- ─ AI DICTATION ──────────────────────────────────────────────── -->
@@ -503,93 +461,6 @@
 <script src="assets/js/main.js"></script>
 
 <script>
-// ══════════════════════════════════════════════
-// IMAGE CONVERTER
-// ══════════════════════════════════════════════
-let imgFile = null;
-let selectedFmt = 'image/jpeg';
-let selectedExt = 'jpg';
-
-const dropEl   = document.getElementById('img-drop');
-const fileInp  = document.getElementById('img-file');
-const prevEl   = document.getElementById('img-preview');
-const convertBtn = document.getElementById('convert-btn');
-const resultEl = document.getElementById('convert-result');
-
-// Drag & drop
-dropEl.addEventListener('dragover',  e => { e.preventDefault(); dropEl.classList.add('drag-over'); });
-dropEl.addEventListener('dragleave', ()  => dropEl.classList.remove('drag-over'));
-dropEl.addEventListener('drop', e => {
-  e.preventDefault(); dropEl.classList.remove('drag-over');
-  const f = e.dataTransfer.files[0];
-  if (f && f.type.startsWith('image/')) loadImage(f);
-});
-fileInp.addEventListener('change', () => { if (fileInp.files[0]) loadImage(fileInp.files[0]); });
-
-function loadImage(f) {
-  imgFile = f;
-  const url = URL.createObjectURL(f);
-  document.getElementById('img-thumb').src = url;
-  document.getElementById('img-name').textContent = f.name;
-  document.getElementById('img-size').textContent = formatBytes(f.size);
-  prevEl.style.display = 'flex';
-  resultEl.style.display = 'none';
-  convertBtn.disabled = false;
-}
-
-function clearImage() {
-  imgFile = null; fileInp.value = '';
-  prevEl.style.display = 'none';
-  resultEl.style.display = 'none';
-  convertBtn.disabled = true;
-  document.getElementById('img-thumb').src = '';
-}
-
-function selectFmt(btn) {
-  document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedFmt = btn.dataset.fmt;
-  selectedExt = btn.dataset.ext;
-  document.getElementById('quality-wrap').style.display =
-    (selectedFmt === 'image/png') ? 'none' : 'block';
-}
-
-function convertImage() {
-  if (!imgFile) return;
-  const quality = parseFloat(document.getElementById('img-quality').value);
-  const img = new Image();
-  const url = URL.createObjectURL(imgFile);
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width  = img.naturalWidth;
-    canvas.height = img.naturalHeight;
-    const ctx = canvas.getContext('2d');
-    if (selectedFmt === 'image/jpeg') {
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-    ctx.drawImage(img, 0, 0);
-    URL.revokeObjectURL(url);
-    canvas.toBlob(blob => {
-      const dlUrl  = URL.createObjectURL(blob);
-      const baseName = imgFile.name.replace(/\.[^.]+$/, '');
-      const link   = document.getElementById('convert-dl-link');
-      link.href     = dlUrl;
-      link.download = `${baseName}-converted.${selectedExt}`;
-      document.getElementById('convert-result-text').textContent =
-        `${selectedExt.toUpperCase()} ready — ${formatBytes(blob.size)}`;
-      resultEl.style.display = 'flex';
-    }, selectedFmt, quality);
-  };
-  img.src = url;
-}
-
-function formatBytes(b) {
-  if (b < 1024) return b + ' B';
-  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
-  return (b / 1048576).toFixed(1) + ' MB';
-}
-
 // ══════════════════════════════════════════════
 // AI DICTATION (Web Speech API)
 // ══════════════════════════════════════════════

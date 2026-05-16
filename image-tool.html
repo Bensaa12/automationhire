@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Batch Image Resizer & Renamer — Free Tool | AutomationHire</title>
+  <meta name="description" content="Free browser-based batch image resizer and renamer. Resize, convert and auto-rename images in bulk. No upload, no account, runs in your browser." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+  <style>
+    /* ── Layout ── */
+    .tool-page { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+
+    /* ── Drop Zone ── */
+    .drop-zone {
+      border: 2px dashed rgba(0,230,118,0.3);
+      border-radius: 16px;
+      padding: 56px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: rgba(0,230,118,0.03);
+      position: relative;
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: var(--green);
+      background: rgba(0,230,118,0.07);
+      box-shadow: 0 0 40px rgba(0,230,118,0.1);
+    }
+    .drop-icon { font-size: 52px; margin-bottom: 16px; line-height: 1; }
+    .drop-title { font-size: 22px; font-weight: 800; font-family: var(--font-head); margin-bottom: 8px; }
+    .drop-sub { font-size: 14px; color: var(--white-60); }
+    .drop-sub span { color: var(--green); font-weight: 600; }
+    .drop-zone input { display: none; }
+    .drop-formats { margin-top: 16px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+    .drop-fmt-tag { font-size: 11px; padding: 3px 8px; border-radius: 4px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--white-60); }
+
+    /* ── Settings panel ── */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      margin-top: 28px;
+    }
+    @media(max-width:860px){ .settings-grid{ grid-template-columns: 1fr; } }
+
+    .setting-card {
+      background: var(--black-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .setting-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; color: var(--green);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .setting-title svg { flex-shrink: 0; }
+
+    /* Presets */
+    .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 12px; }
+    .preset-btn {
+      padding: 8px 6px; border-radius: 8px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04); color: var(--white-60);
+      font-size: 11px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; text-align: center; line-height: 1.4;
+    }
+    .preset-btn:hover { border-color: rgba(0,230,118,0.3); color: var(--white); }
+    .preset-btn.active { background: rgba(0,230,118,0.12); border-color: var(--green); color: var(--green); }
+
+    .dim-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+    .dim-input {
+      flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border2);
+      color: var(--text); padding: 9px 10px; border-radius: 6px; font-size: 14px;
+      text-align: center; font-weight: 700; outline: none;
+    }
+    .dim-input:focus { border-color: var(--green); }
+    .dim-x { font-size: 13px; color: var(--muted); }
+    .dim-lock {
+      width: 32px; height: 32px; border-radius: 6px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border2);
+      color: var(--white-60); cursor: pointer; display: flex;
+      align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
+    }
+    .dim-lock.locked { background: rgba(0,230,118,0.1); border-color: var(--green); color: var(--green); }
+
+    .mode-row { display: flex; gap: 6px; }
+    .mode-btn {
+      flex: 1; padding: 7px 4px; border-radius: 6px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04); color: var(--white-60);
+      font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+      text-align: center;
+    }
+    .mode-btn:hover { color: var(--white); }
+    .mode-btn.active { background: rgba(41,121,255,0.12); border-color: rgba(41,121,255,0.5); color: #60a5fa; }
+
+    /* Format */
+    .fmt-row { display: flex; gap: 8px; margin-bottom: 14px; }
+    .fmt-btn {
+      flex: 1; padding: 9px 4px; border-radius: 8px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04); color: var(--white-60);
+      font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .fmt-btn:hover { color: var(--white); }
+    .fmt-btn.active { background: rgba(0,230,118,0.12); border-color: var(--green); color: var(--green); }
+
+    .quality-wrap { margin-top: 4px; }
+    .quality-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .quality-label span { color: var(--green); font-weight: 700; }
+    input[type=range] { width: 100%; accent-color: var(--green); }
+
+    /* Naming */
+    .name-input-wrap { margin-bottom: 10px; }
+    .name-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+    .name-input {
+      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border2);
+      color: var(--text); padding: 9px 12px; border-radius: 6px; font-size: 13px; outline: none;
+      box-sizing: border-box;
+    }
+    .name-input:focus { border-color: var(--green); }
+
+    .name-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .name-select {
+      flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border2);
+      color: var(--text); padding: 8px 10px; border-radius: 6px; font-size: 12px; outline: none;
+    }
+
+    .name-toggle { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 13px; color: var(--white-60); cursor: pointer; user-select: none; }
+    .toggle-sw { width: 36px; height: 20px; border-radius: 10px; background: rgba(255,255,255,0.1); position: relative; transition: background 0.2s; flex-shrink: 0; }
+    .toggle-sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform 0.2s; }
+    .toggle-sw.on { background: var(--green); }
+    .toggle-sw.on::after { transform: translateX(16px); }
+
+    .name-preview {
+      background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      border-radius: 6px; padding: 10px 12px;
+      font-size: 12px; font-family: monospace; color: var(--green);
+      word-break: break-all; margin-top: 10px;
+    }
+    .name-preview-label { font-size: 10px; color: var(--muted); font-family: var(--font-main); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ── File preview grid ── */
+    .files-section { margin-top: 28px; }
+    .files-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .files-count { font-size: 14px; font-weight: 700; }
+    .files-count span { color: var(--green); }
+    .clear-btn { font-size: 12px; color: var(--muted); cursor: pointer; background: none; border: none; padding: 4px 8px; border-radius: 4px; transition: color 0.2s; }
+    .clear-btn:hover { color: var(--red); }
+
+    .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+    .file-card {
+      background: var(--black-2); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; position: relative;
+    }
+    .file-thumb { width: 100%; height: 100px; object-fit: cover; display: block; background: rgba(255,255,255,0.03); }
+    .file-thumb-placeholder { width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 28px; background: linear-gradient(135deg,rgba(0,230,118,0.1),rgba(41,121,255,0.1)); }
+    .file-info { padding: 8px; }
+    .file-name { font-size: 11px; color: var(--white-60); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-size { font-size: 10px; color: var(--white-30); margin-top: 2px; }
+    .file-remove {
+      position: absolute; top: 5px; right: 5px; width: 20px; height: 20px;
+      border-radius: 50%; background: rgba(0,0,0,0.7); border: none;
+      color: #fff; font-size: 12px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s;
+    }
+    .file-card:hover .file-remove { opacity: 1; }
+
+    /* ── Process bar ── */
+    .process-bar {
+      position: sticky; bottom: 0; left: 0; right: 0;
+      background: var(--black); border-top: 1px solid var(--border);
+      padding: 16px 20px; display: flex; align-items: center; gap: 16px;
+      margin: 0 -20px; z-index: 50;
+    }
+    .process-summary { flex: 1; font-size: 13px; color: var(--white-60); }
+    .process-summary strong { color: var(--white); }
+    .process-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px; border-radius: 100px;
+      background: linear-gradient(135deg, var(--green), #00c4b4);
+      color: #060810; font-size: 15px; font-weight: 800;
+      border: none; cursor: pointer; transition: all 0.25s;
+      white-space: nowrap;
+    }
+    .process-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(0,230,118,0.35); }
+    .process-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .process-btn svg { flex-shrink: 0; }
+
+    /* ── Progress overlay ── */
+    .progress-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(6,8,16,0.85);
+      z-index: 200; align-items: center; justify-content: center; flex-direction: column; gap: 20px;
+    }
+    .progress-overlay.show { display: flex; }
+    .progress-box { background: var(--black-2); border: 1px solid var(--border); border-radius: 16px; padding: 40px 48px; text-align: center; min-width: 320px; }
+    .progress-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+    .progress-sub { font-size: 14px; color: var(--white-60); margin-bottom: 24px; }
+    .progress-bar-wrap { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--green), #00c4b4); border-radius: 3px; transition: width 0.3s ease; }
+    .progress-count { font-size: 13px; color: var(--muted); margin-top: 12px; }
+
+    /* ── Done state ── */
+    .done-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(6,8,16,0.85);
+      z-index: 200; align-items: center; justify-content: center;
+    }
+    .done-overlay.show { display: flex; }
+    .done-box { background: var(--black-2); border: 1px solid rgba(0,230,118,0.3); border-radius: 16px; padding: 40px 48px; text-align: center; max-width: 380px; }
+    .done-icon { font-size: 48px; margin-bottom: 16px; }
+    .done-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .done-sub { font-size: 14px; color: var(--white-60); margin-bottom: 24px; }
+    .done-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .process-btn, .drop-zone, .file-card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li class="nav-sep" aria-hidden="true"></li>
+      <li><a href="free.html" style="color:var(--green);font-weight:700">Free Tools</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="login.html" class="nav-expert-link">Expert Login</a>
+      <a href="request-quote.html" class="nav-pill nav-pill-primary">Get Matched</a>
+      <a href="book.html" class="nav-pill nav-pill-outline"><span class="nav-live-dot"></span>Book a Call</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="page-hero" style="padding-bottom:32px">
+  <div class="container">
+    <a href="free.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:20px;transition:color .2s" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Free Tools
+    </a>
+    <div class="section-label">Free Browser Tool</div>
+    <h1 class="page-hero-title" style="font-size:clamp(28px,5vw,48px)">Batch Image Resizer &amp; Renamer</h1>
+    <p class="page-hero-sub" style="max-width:560px;margin:0 auto">
+      Drop your images, set your size, format and naming convention — download them all as a ZIP. Runs entirely in your browser. Nothing is uploaded anywhere.
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;margin-top:20px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--white-60)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> No upload to server
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--white-60)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Batch process multiple files
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--white-60)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Auto-rename with your convention
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--white-60)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Download as ZIP
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MAIN TOOL ══ -->
+<div class="tool-page">
+
+  <!-- Drop zone -->
+  <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+    <div class="drop-icon">📂</div>
+    <div class="drop-title">Drop your images here</div>
+    <p class="drop-sub">or <span>click to browse files</span> — select as many as you like</p>
+    <div class="drop-formats">
+      <span class="drop-fmt-tag">JPG</span>
+      <span class="drop-fmt-tag">PNG</span>
+      <span class="drop-fmt-tag">WebP</span>
+      <span class="drop-fmt-tag">GIF</span>
+      <span class="drop-fmt-tag">BMP</span>
+      <span class="drop-fmt-tag">TIFF</span>
+      <span class="drop-fmt-tag">SVG</span>
+    </div>
+    <input type="file" id="file-input" accept="image/*" multiple />
+  </div>
+
+  <!-- Settings -->
+  <div class="settings-grid">
+
+    <!-- ── RESIZE ── -->
+    <div class="setting-card">
+      <div class="setting-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        Resize
+      </div>
+      <div class="preset-grid">
+        <button class="preset-btn" data-w="600"  data-h="400"  onclick="applyPreset(this)">Newsletter<br><small>600 × 400</small></button>
+        <button class="preset-btn" data-w="1080" data-h="1080" onclick="applyPreset(this)">Social Square<br><small>1080 × 1080</small></button>
+        <button class="preset-btn" data-w="1200" data-h="630"  onclick="applyPreset(this)">Hero / OG<br><small>1200 × 630</small></button>
+        <button class="preset-btn" data-w="1500" data-h="500"  onclick="applyPreset(this)">Twitter Banner<br><small>1500 × 500</small></button>
+        <button class="preset-btn" data-w="320"  data-h="200"  onclick="applyPreset(this)">Thumbnail<br><small>320 × 200</small></button>
+        <button class="preset-btn" data-w="1920" data-h="1080" onclick="applyPreset(this)">Full HD<br><small>1920 × 1080</small></button>
+      </div>
+      <div class="dim-row">
+        <input type="number" class="dim-input" id="dim-w" value="600" min="1" max="8000" placeholder="W" oninput="onDimChange('w')" />
+        <div class="dim-x">×</div>
+        <input type="number" class="dim-input" id="dim-h" value="400" min="1" max="8000" placeholder="H" oninput="onDimChange('h')" />
+        <button class="dim-lock locked" id="lock-btn" onclick="toggleLock()" title="Lock aspect ratio">
+          <svg id="lock-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Resize mode</div>
+      <div class="mode-row">
+        <button class="mode-btn active" data-mode="fit"     onclick="setMode(this)">Fit</button>
+        <button class="mode-btn"        data-mode="fill"    onclick="setMode(this)">Fill &amp; Crop</button>
+        <button class="mode-btn"        data-mode="stretch" onclick="setMode(this)">Stretch</button>
+      </div>
+      <div style="font-size:11px;color:var(--white-30);margin-top:8px;line-height:1.6" id="mode-desc">
+        Fit: scales image to fit within bounds, keeping original proportions.
+      </div>
+    </div>
+
+    <!-- ── FORMAT ── -->
+    <div class="setting-card">
+      <div class="setting-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Format &amp; Quality
+      </div>
+      <div class="fmt-row">
+        <button class="fmt-btn active" data-fmt="image/jpeg" data-ext="jpg"  onclick="setFmt(this)">JPG</button>
+        <button class="fmt-btn"        data-fmt="image/png"  data-ext="png"  onclick="setFmt(this)">PNG</button>
+        <button class="fmt-btn"        data-fmt="image/webp" data-ext="webp" onclick="setFmt(this)">WebP</button>
+      </div>
+
+      <div class="quality-wrap" id="quality-wrap">
+        <div class="quality-label">Quality <span id="q-val">90%</span></div>
+        <input type="range" id="quality-slider" min="10" max="100" value="90" oninput="document.getElementById('q-val').textContent=this.value+'%'" />
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:600">Format notes</div>
+        <div id="fmt-note" style="font-size:12px;color:var(--white-60);line-height:1.7">
+          JPG — best for photos. Transparent areas filled white. Smaller file size.
+        </div>
+      </div>
+
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+        <label class="name-toggle" onclick="toggleBg()">
+          <div class="toggle-sw" id="bg-toggle"></div>
+          Custom background colour
+        </label>
+        <div id="bg-wrap" style="display:none;margin-top:8px">
+          <input type="color" id="bg-color" value="#ffffff" style="width:100%;height:36px;border:1px solid var(--border2);border-radius:6px;background:none;cursor:pointer;padding:2px" />
+          <div style="font-size:11px;color:var(--muted);margin-top:5px">Applied when converting transparent images to JPG/WebP</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NAMING ── -->
+    <div class="setting-card">
+      <div class="setting-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Naming Convention
+      </div>
+
+      <div class="name-input-wrap">
+        <div class="name-label">Prefix</div>
+        <input type="text" class="name-input" id="name-prefix" value="newsletter-" placeholder="e.g. newsletter-" oninput="updatePreview()" />
+      </div>
+
+      <label class="name-toggle" onclick="toggleDate()">
+        <div class="toggle-sw on" id="date-toggle"></div>
+        Include date
+      </label>
+
+      <div id="date-wrap">
+        <div class="name-row">
+          <select class="name-select" id="date-fmt" onchange="updatePreview()">
+            <option value="YYYYMMDD">YYYYMMDD (20260516)</option>
+            <option value="YYYY-MM-DD">YYYY-MM-DD (2026-05-16)</option>
+            <option value="YYYY_MM_DD">YYYY_MM_DD (2026_05_16)</option>
+            <option value="DD-MM-YYYY">DD-MM-YYYY (16-05-2026)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="name-input-wrap">
+        <div class="name-label">Separator before number</div>
+        <select class="name-select" id="name-sep" onchange="updatePreview()" style="width:100%">
+          <option value="-">Hyphen  —</option>
+          <option value="_">Underscore  _</option>
+          <option value="">None</option>
+        </select>
+      </div>
+
+      <div class="name-input-wrap">
+        <div class="name-label">Number format</div>
+        <select class="name-select" id="num-fmt" onchange="updatePreview()" style="width:100%">
+          <option value="3">3 digits (001, 002 …)</option>
+          <option value="2">2 digits (01, 02 …)</option>
+          <option value="1">No padding (1, 2 …)</option>
+        </select>
+      </div>
+
+      <div class="name-input-wrap">
+        <div class="name-label">Suffix (optional)</div>
+        <input type="text" class="name-input" id="name-suffix" placeholder="e.g. -final" oninput="updatePreview()" />
+      </div>
+
+      <div class="name-preview">
+        <div class="name-preview-label">Preview</div>
+        <div id="name-preview-text">newsletter-20260516-001.jpg</div>
+        <div id="name-preview-text2" style="opacity:.55;margin-top:2px">newsletter-20260516-002.jpg</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Files grid -->
+  <div class="files-section" id="files-section" style="display:none">
+    <div class="files-header">
+      <div class="files-count"><span id="files-count-num">0</span> images ready to process</div>
+      <button class="clear-btn" onclick="clearAll()">✕ Clear all</button>
+    </div>
+    <div class="files-grid" id="files-grid"></div>
+  </div>
+
+  <!-- Sticky process bar -->
+  <div class="process-bar" id="process-bar" style="display:none">
+    <div class="process-summary">
+      <strong id="pb-count">0 images</strong> · <span id="pb-size">0 × 0</span> · <span id="pb-fmt">JPG</span> · <span id="pb-name">newsletter-…</span>
+    </div>
+    <button class="process-btn" id="process-btn" onclick="processAll()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Process &amp; Download ZIP
+    </button>
+  </div>
+</div>
+
+<!-- ══ Progress overlay ══ -->
+<div class="progress-overlay" id="progress-overlay">
+  <div class="progress-box">
+    <div class="progress-title">Processing images…</div>
+    <div class="progress-sub" id="prog-sub">Resizing and converting</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="prog-bar" style="width:0%"></div>
+    </div>
+    <div class="progress-count" id="prog-count">0 / 0</div>
+  </div>
+</div>
+
+<!-- ══ Done overlay ══ -->
+<div class="done-overlay" id="done-overlay">
+  <div class="done-box">
+    <div class="done-icon">✅</div>
+    <div class="done-title">All done!</div>
+    <div class="done-sub" id="done-sub">Your ZIP is downloading now.</div>
+    <div class="done-actions">
+      <button class="btn btn-primary" onclick="closeDone()">Process more images</button>
+      <a href="free.html" class="btn btn-ghost btn-sm" style="justify-content:center">← Back to Free Tools</a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer" style="margin-top:0">
+  <div class="container">
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div><a href="free.html">← Free Tools</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
+const state = {
+  files:      [],
+  width:      600,
+  height:     400,
+  aspectLock: true,
+  aspectRatio: 600/400,
+  mode:       'fit',          // fit | fill | stretch
+  fmt:        'image/jpeg',
+  ext:        'jpg',
+  quality:    0.9,
+  bgColor:    '#ffffff',
+  useBg:      false,
+  useDate:    true,
+  prefix:     'newsletter-',
+  dateFmt:    'YYYYMMDD',
+  sep:        '-',
+  numDigits:  3,
+  suffix:     '',
+};
+
+// ══════════════════════════════════════════════════════════
+// DROP ZONE
+// ══════════════════════════════════════════════════════════
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', ()  => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('drag-over');
+  addFiles([...e.dataTransfer.files].filter(f => f.type.startsWith('image/')));
+});
+document.getElementById('file-input').addEventListener('change', function () {
+  addFiles([...this.files]); this.value = '';
+});
+
+function addFiles(newFiles) {
+  newFiles.forEach(f => {
+    if (!state.files.find(x => x.name === f.name && x.size === f.size)) {
+      state.files.push(f);
+    }
+  });
+  renderGrid();
+}
+
+function clearAll() {
+  state.files = []; renderGrid();
+}
+
+function removeFile(i) {
+  state.files.splice(i, 1); renderGrid();
+}
+
+function renderGrid() {
+  const section   = document.getElementById('files-section');
+  const bar       = document.getElementById('process-bar');
+  const grid      = document.getElementById('files-grid');
+  const countEl   = document.getElementById('files-count-num');
+  const pbCount   = document.getElementById('pb-count');
+
+  if (!state.files.length) {
+    section.style.display = 'none';
+    bar.style.display     = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+  bar.style.display     = 'flex';
+  countEl.textContent   = state.files.length;
+  pbCount.textContent   = `${state.files.length} image${state.files.length !== 1 ? 's' : ''}`;
+
+  grid.innerHTML = state.files.map((f, i) => {
+    const url = URL.createObjectURL(f);
+    return `
+      <div class="file-card">
+        <img class="file-thumb" src="${url}" alt="${esc(f.name)}" loading="lazy" />
+        <div class="file-info">
+          <div class="file-name" title="${esc(f.name)}">${esc(f.name)}</div>
+          <div class="file-size">${fmtBytes(f.size)}</div>
+        </div>
+        <button class="file-remove" onclick="removeFile(${i})" title="Remove">✕</button>
+      </div>`;
+  }).join('');
+
+  updateBar();
+}
+
+function updateBar() {
+  document.getElementById('pb-size').textContent = `${state.width} × ${state.height}`;
+  document.getElementById('pb-fmt').textContent  = state.ext.toUpperCase();
+  document.getElementById('pb-name').textContent = buildName(0);
+}
+
+// ══════════════════════════════════════════════════════════
+// RESIZE SETTINGS
+// ══════════════════════════════════════════════════════════
+function applyPreset(btn) {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.width  = parseInt(btn.dataset.w);
+  state.height = parseInt(btn.dataset.h);
+  state.aspectRatio = state.width / state.height;
+  document.getElementById('dim-w').value = state.width;
+  document.getElementById('dim-h').value = state.height;
+  updateBar();
+}
+
+let lockRatio = null;
+
+function onDimChange(changed) {
+  const w = parseInt(document.getElementById('dim-w').value) || 1;
+  const h = parseInt(document.getElementById('dim-h').value) || 1;
+  if (state.aspectLock && lockRatio) {
+    if (changed === 'w') {
+      const newH = Math.round(w / lockRatio);
+      document.getElementById('dim-h').value = newH;
+      state.width = w; state.height = newH;
+    } else {
+      const newW = Math.round(h * lockRatio);
+      document.getElementById('dim-w').value = newW;
+      state.height = h; state.width = newW;
+    }
+  } else {
+    state.width = w; state.height = h;
+  }
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  updateBar();
+}
+
+function toggleLock() {
+  state.aspectLock = !state.aspectLock;
+  const btn  = document.getElementById('lock-btn');
+  const icon = document.getElementById('lock-icon');
+  if (state.aspectLock) {
+    lockRatio = state.width / state.height;
+    btn.classList.add('locked');
+    icon.innerHTML = '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>';
+  } else {
+    btn.classList.remove('locked');
+    icon.innerHTML = '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>';
+  }
+}
+
+// Init lock ratio
+lockRatio = state.width / state.height;
+
+function setMode(btn) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.mode = btn.dataset.mode;
+  const descs = {
+    fit:     'Fit: scales image to fit within bounds, keeping original proportions.',
+    fill:    'Fill & Crop: crops the centre of the image to exactly fill the dimensions.',
+    stretch: 'Stretch: forces image to exactly the dimensions. May distort.',
+  };
+  document.getElementById('mode-desc').textContent = descs[state.mode];
+}
+
+// ══════════════════════════════════════════════════════════
+// FORMAT SETTINGS
+// ══════════════════════════════════════════════════════════
+const fmtNotes = {
+  'image/jpeg': 'JPG — best for photos. Transparent areas filled white. Smaller file size.',
+  'image/png':  'PNG — lossless. Preserves transparency. Larger files.',
+  'image/webp': 'WebP — modern format, best size/quality ratio. Supports transparency.',
+};
+
+function setFmt(btn) {
+  document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.fmt = btn.dataset.fmt;
+  state.ext = btn.dataset.ext;
+  document.getElementById('fmt-note').textContent = fmtNotes[state.fmt];
+  document.getElementById('quality-wrap').style.display = (state.fmt === 'image/png') ? 'none' : 'block';
+  updatePreview();
+  updateBar();
+}
+
+document.getElementById('quality-slider').addEventListener('input', function () {
+  state.quality = this.value / 100;
+});
+
+let bgOn = false;
+function toggleBg() {
+  bgOn = !bgOn;
+  document.getElementById('bg-toggle').classList.toggle('on', bgOn);
+  document.getElementById('bg-wrap').style.display = bgOn ? 'block' : 'none';
+  state.useBg = bgOn;
+}
+document.getElementById('bg-color').addEventListener('input', function () {
+  state.bgColor = this.value;
+});
+
+// ══════════════════════════════════════════════════════════
+// NAMING
+// ══════════════════════════════════════════════════════════
+let dateOn = true;
+function toggleDate() {
+  dateOn = !dateOn;
+  document.getElementById('date-toggle').classList.toggle('on', dateOn);
+  document.getElementById('date-wrap').style.display = dateOn ? 'block' : 'none';
+  state.useDate = dateOn;
+  updatePreview();
+}
+
+function updatePreview() {
+  state.prefix    = document.getElementById('name-prefix').value;
+  state.dateFmt   = document.getElementById('date-fmt').value;
+  state.sep       = document.getElementById('name-sep').value;
+  state.numDigits = parseInt(document.getElementById('num-fmt').value);
+  state.suffix    = document.getElementById('name-suffix').value;
+
+  document.getElementById('name-preview-text').textContent  = buildName(0);
+  document.getElementById('name-preview-text2').textContent = buildName(1);
+  updateBar();
+}
+
+function buildName(index) {
+  const prefix = state.prefix || '';
+  let date = '';
+  if (state.useDate) {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const formats = {
+      'YYYYMMDD':   `${y}${m}${d}`,
+      'YYYY-MM-DD': `${y}-${m}-${d}`,
+      'YYYY_MM_DD': `${y}_${m}_${d}`,
+      'DD-MM-YYYY': `${d}-${m}-${y}`,
+    };
+    date = (formats[state.dateFmt] || `${y}${m}${d}`) + state.sep;
+  }
+  const num    = String(index + 1).padStart(state.numDigits, '0');
+  const suffix = state.suffix || '';
+  return `${prefix}${date}${num}${suffix}.${state.ext}`;
+}
+
+// ══════════════════════════════════════════════════════════
+// IMAGE PROCESSING
+// ══════════════════════════════════════════════════════════
+async function processAll() {
+  if (!state.files.length) return;
+
+  const overlay = document.getElementById('progress-overlay');
+  const bar     = document.getElementById('prog-bar');
+  const count   = document.getElementById('prog-count');
+  const sub     = document.getElementById('prog-sub');
+  overlay.classList.add('show');
+
+  document.getElementById('process-btn').disabled = true;
+
+  const zip     = new JSZip();
+  const total   = state.files.length;
+
+  for (let i = 0; i < total; i++) {
+    const f    = state.files[i];
+    const name = buildName(i);
+    sub.textContent   = `Processing: ${f.name}`;
+    count.textContent = `${i + 1} / ${total}`;
+    bar.style.width   = `${Math.round(((i) / total) * 100)}%`;
+
+    try {
+      const blob = await processImage(f);
+      zip.file(name, blob);
+    } catch (e) {
+      console.warn('Failed:', f.name, e);
+    }
+
+    // Yield to browser to keep UI responsive
+    await new Promise(r => setTimeout(r, 0));
+  }
+
+  bar.style.width   = '100%';
+  sub.textContent   = 'Building ZIP…';
+  count.textContent = `${total} / ${total}`;
+
+  const zipBlob = await zip.generateAsync({ type: 'blob' }, meta => {
+    bar.style.width = `${Math.round(meta.percent)}%`;
+  });
+
+  const url = URL.createObjectURL(zipBlob);
+  const a   = document.createElement('a');
+  a.href     = url;
+  a.download = `processed-images-${Date.now()}.zip`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  overlay.classList.remove('show');
+  document.getElementById('process-btn').disabled = false;
+
+  const doneEl = document.getElementById('done-overlay');
+  document.getElementById('done-sub').textContent =
+    `${total} image${total !== 1 ? 's' : ''} resized, converted and zipped.`;
+  doneEl.classList.add('show');
+}
+
+function processImage(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const canvas = document.createElement('canvas');
+      const ctx    = canvas.getContext('2d');
+      const tw     = state.width;
+      const th     = state.height;
+
+      if (state.mode === 'stretch') {
+        canvas.width = tw; canvas.height = th;
+        fillBg(ctx, tw, th);
+        ctx.drawImage(img, 0, 0, tw, th);
+
+      } else if (state.mode === 'fit') {
+        const scale  = Math.min(tw / img.width, th / img.height);
+        canvas.width = Math.max(1, Math.round(img.width  * scale));
+        canvas.height= Math.max(1, Math.round(img.height * scale));
+        fillBg(ctx, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      } else { // fill
+        canvas.width = tw; canvas.height = th;
+        const scale  = Math.max(tw / img.width, th / img.height);
+        const sw     = img.width  * scale;
+        const sh     = img.height * scale;
+        const ox     = (tw - sw) / 2;
+        const oy     = (th - sh) / 2;
+        fillBg(ctx, tw, th);
+        ctx.drawImage(img, ox, oy, sw, sh);
+      }
+
+      canvas.toBlob(blob => {
+        if (blob) resolve(blob);
+        else reject(new Error('toBlob failed'));
+      }, state.fmt, state.quality);
+    };
+
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+function fillBg(ctx, w, h) {
+  if (state.fmt === 'image/jpeg' || state.useBg) {
+    ctx.fillStyle = state.useBg ? state.bgColor : '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+  }
+}
+
+function closeDone() {
+  document.getElementById('done-overlay').classList.remove('show');
+}
+
+// ══════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════
+function fmtBytes(b) {
+  if (b < 1024)    return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(1) + ' MB';
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Init
+updatePreview();
+</script>
+</body>
+</html>
