@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
   <style>
     /* ── Layout ── */
     .tool-page { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
@@ -285,12 +286,13 @@
       <span class="drop-fmt-tag">JPG</span>
       <span class="drop-fmt-tag">PNG</span>
       <span class="drop-fmt-tag">WebP</span>
+      <span class="drop-fmt-tag" style="color:var(--green);border-color:rgba(0,230,118,.3)">HEIC</span>
       <span class="drop-fmt-tag">GIF</span>
       <span class="drop-fmt-tag">BMP</span>
       <span class="drop-fmt-tag">TIFF</span>
-      <span class="drop-fmt-tag">SVG</span>
     </div>
-    <input type="file" id="file-input" accept="image/*" multiple />
+    <div style="margin-top:8px;font-size:11px;color:rgba(0,230,118,.7)">iPhone HEIC photos supported — auto-converted</div>
+    <input type="file" id="file-input" accept="image/*,.heic,.heif" multiple />
   </div>
 
   <!-- Settings -->
@@ -513,11 +515,20 @@ dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('dr
 dz.addEventListener('dragleave', ()  => dz.classList.remove('drag-over'));
 dz.addEventListener('drop', e => {
   e.preventDefault(); dz.classList.remove('drag-over');
-  addFiles([...e.dataTransfer.files].filter(f => f.type.startsWith('image/')));
+  addFiles([...e.dataTransfer.files].filter(f => isAcceptedImage(f)));
 });
 document.getElementById('file-input').addEventListener('change', function () {
   addFiles([...this.files]); this.value = '';
 });
+
+function isHeic(file) {
+  return /\.(heic|heif)$/i.test(file.name) ||
+         file.type === 'image/heic' ||
+         file.type === 'image/heif';
+}
+function isAcceptedImage(file) {
+  return file.type.startsWith('image/') || isHeic(file);
+}
 
 function addFiles(newFiles) {
   newFiles.forEach(f => {
@@ -780,10 +791,21 @@ async function processAll() {
   doneEl.classList.add('show');
 }
 
-function processImage(file) {
+async function processImage(file) {
+  // HEIC/HEIF from iPhone — convert to JPEG blob first, then process normally
+  let srcBlob = file;
+  if (isHeic(file)) {
+    try {
+      const result = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.95 });
+      srcBlob = Array.isArray(result) ? result[0] : result;
+    } catch (e) {
+      throw new Error('HEIC conversion failed: ' + e.message);
+    }
+  }
+
   return new Promise((resolve, reject) => {
     const img = new Image();
-    const url = URL.createObjectURL(file);
+    const url = URL.createObjectURL(srcBlob);
 
     img.onload = () => {
       URL.revokeObjectURL(url);
@@ -821,7 +843,7 @@ function processImage(file) {
       }, state.fmt, state.quality);
     };
 
-    img.onerror = reject;
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Image load failed')); };
     img.src = url;
   });
 }
