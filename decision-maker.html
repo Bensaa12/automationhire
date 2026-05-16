@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decision Maker — AutomationHire Free Tools</title>
+  <meta name="description" content="Free AI-powered decision making app. Choose your thinking style — side-by-side comparison, cost-benefit analysis, weighted scoring, devil's advocate or gut check. Get a clear recommendation instantly." />
+  <link rel="canonical" href="https://automationhire.co.uk/decision-maker" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>" />
+  <script src="https://cdn.jsdelivr.net/npm/marked@9.1.6/marked.min.js"></script>
+  <style>
+    /* ── App shell ── */
+    .app-shell {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      min-height: calc(100vh - 68px);
+      align-items: start;
+    }
+    @media(max-width:960px) { .app-shell { grid-template-columns: 1fr; } }
+
+    /* ── Left: Input pane ── */
+    .input-pane {
+      border-right: 1px solid var(--border);
+      padding: 28px 24px 60px;
+      position: sticky;
+      top: 68px;
+      max-height: calc(100vh - 68px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    @media(max-width:960px) { .input-pane { position:static; max-height:none; border-right:none; border-bottom:1px solid var(--border); } }
+
+    /* ── Style chips ── */
+    .style-section-lbl { font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px; }
+    .style-chips { display:flex;gap:7px;flex-wrap:wrap;margin-bottom:24px; }
+    .style-chip {
+      flex:1; min-width:70px;
+      display:flex;flex-direction:column;align-items:center;gap:3px;
+      padding:10px 8px;border-radius:10px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      cursor:pointer;transition:all .2s;
+      color:inherit; font:inherit;
+    }
+    .style-chip:hover { border-color:rgba(255,255,255,.2); background:rgba(255,255,255,.06); }
+    .style-chip.active { background:var(--chip-bg); border-color:var(--chip-color); box-shadow:0 0 16px var(--chip-glow); }
+    .chip-icon  { font-size:18px; line-height:1; }
+    .chip-label { font-size:10px;font-weight:800;letter-spacing:.4px;color:var(--muted);transition:color .2s; }
+    .chip-desc  { font-size:9px;color:var(--white-30);text-align:center;line-height:1.3; }
+    .style-chip.active .chip-label { color:var(--chip-color); }
+
+    /* ── Form sections ── */
+    .form-section { margin-bottom:20px; }
+    .form-lbl { font-size:12px;font-weight:700;color:var(--white-60);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center; }
+    .form-lbl span { font-size:10px;font-weight:500;color:var(--muted); }
+
+    .q-textarea {
+      width:100%;box-sizing:border-box;
+      min-height:88px;resize:vertical;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border);border-radius:10px;
+      color:var(--white);font-size:14px;line-height:1.6;
+      padding:12px 14px;outline:none;font-family:inherit;
+      transition:border-color .2s;
+    }
+    .q-textarea:focus { border-color:rgba(255,255,255,.25); }
+    .q-textarea::placeholder { color:var(--white-30); }
+
+    /* Options */
+    .option-list { display:flex;flex-direction:column;gap:8px;margin-bottom:10px; }
+    .option-row { display:flex;align-items:center;gap:8px; }
+    .option-letter {
+      width:26px;height:26px;border-radius:6px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;
+      font-size:11px;font-weight:800;
+      background:rgba(255,255,255,.08);color:var(--white-60);
+    }
+    .option-input {
+      flex:1;background:rgba(255,255,255,.04);
+      border:1px solid var(--border);border-radius:8px;
+      color:var(--white);font-size:13px;padding:9px 11px;
+      outline:none;transition:border-color .2s;font-family:inherit;
+    }
+    .option-input:focus { border-color:rgba(255,255,255,.25); }
+    .option-input::placeholder { color:var(--white-30); }
+    .remove-btn {
+      width:28px;height:28px;border-radius:6px;flex-shrink:0;
+      background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);
+      color:#f87171;font-size:13px;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      transition:all .2s;
+    }
+    .remove-btn:hover { background:rgba(239,68,68,.2); }
+    .add-btn {
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:12px;font-weight:700;color:var(--muted);
+      background:none;border:1px dashed var(--border);border-radius:7px;
+      padding:7px 12px;cursor:pointer;transition:all .2s;width:100%;
+      justify-content:center;
+    }
+    .add-btn:hover { border-color:rgba(255,255,255,.25);color:var(--white-60); }
+
+    /* Criteria collapsible */
+    .collapse-toggle {
+      display:flex;align-items:center;justify-content:space-between;width:100%;
+      background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;
+      padding:10px 14px;cursor:pointer;color:var(--white-60);font-size:12px;font-weight:700;
+      transition:all .2s;
+    }
+    .collapse-toggle:hover { border-color:rgba(255,255,255,.2);color:var(--white); }
+    .collapse-toggle svg { transition:transform .25s; }
+    .collapse-toggle.open svg { transform:rotate(180deg); }
+    .criteria-wrap { padding-top:10px;display:flex;flex-direction:column;gap:7px; }
+    .criteria-row { display:flex;align-items:center;gap:7px; }
+    .criteria-num { font-size:11px;font-weight:700;color:var(--muted);width:16px;text-align:center;flex-shrink:0; }
+    .criteria-input {
+      flex:1;background:rgba(255,255,255,.04);
+      border:1px solid var(--border);border-radius:8px;
+      color:var(--white);font-size:13px;padding:8px 11px;
+      outline:none;font-family:inherit;
+    }
+    .criteria-input:focus { border-color:rgba(255,255,255,.25); }
+    .criteria-input::placeholder { color:var(--white-30); }
+
+    /* Pill rows */
+    .pill-row { display:flex;gap:7px;flex-wrap:wrap; }
+    .pill-btn {
+      padding:7px 13px;border-radius:100px;border:1px solid var(--border);
+      background:rgba(255,255,255,.04);color:var(--white-60);
+      font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;
+    }
+    .pill-btn:hover { border-color:rgba(255,255,255,.2);color:var(--white); }
+    .pill-btn.active {
+      background:rgba(0,230,118,.12);border-color:rgba(0,230,118,.35);
+      color:var(--green);
+    }
+
+    /* Analyse button */
+    .analyse-btn {
+      width:100%;padding:14px;border-radius:12px;border:none;
+      background:linear-gradient(135deg,#00e676,#00c4b4);
+      color:#060810;font-size:15px;font-weight:800;
+      cursor:pointer;transition:all .25s;margin-top:4px;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .analyse-btn:hover { box-shadow:0 6px 28px rgba(0,230,118,.35);transform:translateY(-1px); }
+    .analyse-btn:disabled { opacity:.5;cursor:not-allowed;transform:none;box-shadow:none; }
+    .form-error { font-size:12px;color:#f87171;margin-top:10px;padding:10px 12px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:7px;display:none; }
+
+    /* ── Right: Output pane ── */
+    .output-pane { padding:28px;min-height:calc(100vh - 68px); }
+    @media(max-width:960px) { .output-pane { padding:24px 20px; } }
+
+    /* States */
+    .state-panel { display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:400px;gap:16px; }
+    .empty-icon  { font-size:64px;line-height:1;filter:grayscale(.3); }
+    .state-panel h3 { font-family:var(--font-head);font-size:22px;margin:0; }
+    .state-panel p  { color:var(--white-60);font-size:14px;max-width:360px;margin:0; }
+
+    /* Style preview grid */
+    .style-preview-grid { display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px;margin-top:8px; }
+    .spg-card { background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:12px 14px;text-align:left; }
+    .spg-icon { font-size:16px;margin-bottom:4px; }
+    .spg-name { font-size:12px;font-weight:700;color:var(--white);margin-bottom:3px; }
+    .spg-desc { font-size:11px;color:var(--muted);line-height:1.4; }
+
+    /* Loading */
+    .loading-icon { font-size:52px;animation:rotateBrain 3s ease-in-out infinite; }
+    @keyframes rotateBrain { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+    .loading-msg { font-size:14px;color:var(--white-60);font-style:italic; }
+    .dot-pulse { display:flex;gap:6px;margin-top:8px; }
+    .dot-pulse span { width:7px;height:7px;border-radius:50%;background:var(--green);animation:dpulse 1.2s ease-in-out infinite; }
+    .dot-pulse span:nth-child(2) { animation-delay:.2s; }
+    .dot-pulse span:nth-child(3) { animation-delay:.4s; }
+    @keyframes dpulse { 0%,80%,100%{opacity:.2;transform:scale(.8);} 40%{opacity:1;transform:scale(1);} }
+
+    /* Result */
+    .rec-card {
+      background:var(--black-2);border:1px solid rgba(0,230,118,.25);
+      border-radius:14px;padding:22px 24px;margin-bottom:22px;
+      background:linear-gradient(135deg,rgba(0,230,118,.07),rgba(0,196,180,.04));
+    }
+    .rec-top { display:flex;justify-content:space-between;align-items:center;margin-bottom:8px; }
+    .rec-top-lbl { font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted); }
+    .style-tag { font-size:10px;font-weight:800;padding:3px 9px;border-radius:100px;letter-spacing:.5px; }
+
+    .rec-option { font-family:var(--font-head);font-size:28px;font-weight:900;color:var(--green);margin-bottom:14px;line-height:1.2; }
+
+    .conf-wrap { margin-bottom:14px; }
+    .conf-lbl { display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px; }
+    .conf-track { height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden; }
+    .conf-bar { height:100%;border-radius:3px;transition:width 1s cubic-bezier(.34,1.56,.64,1); }
+
+    .key-insight {
+      font-size:13px;line-height:1.65;color:var(--white);
+      border-left:3px solid var(--green);padding-left:12px;
+      font-style:italic;
+    }
+
+    /* Analysis body (markdown) */
+    .analysis-wrap {
+      background:var(--black-2);border:1px solid var(--border);
+      border-radius:14px;padding:24px;margin-bottom:18px;
+    }
+    .analysis-wrap h2 { font-size:15px;font-weight:800;color:var(--white);margin:20px 0 10px;padding-top:8px;border-top:1px solid var(--border); }
+    .analysis-wrap h2:first-child { margin-top:0;padding-top:0;border-top:none; }
+    .analysis-wrap h3 { font-size:13px;font-weight:700;color:var(--white-60);margin:14px 0 8px; }
+    .analysis-wrap p  { font-size:13px;line-height:1.75;color:var(--white-60);margin-bottom:12px; }
+    .analysis-wrap ul,.analysis-wrap ol { padding-left:18px;margin-bottom:12px; }
+    .analysis-wrap li { font-size:13px;line-height:1.7;color:var(--white-60);margin-bottom:4px; }
+    .analysis-wrap strong { color:var(--white);font-weight:700; }
+    .analysis-wrap em { color:var(--white-60);font-style:italic; }
+    .analysis-wrap table { width:100%;border-collapse:collapse;font-size:12px;margin:14px 0; }
+    .analysis-wrap th { background:rgba(255,255,255,.06);padding:8px 12px;text-align:left;border:1px solid var(--border);font-weight:700;color:var(--white); }
+    .analysis-wrap td { padding:8px 12px;border:1px solid var(--border);color:var(--white-60); }
+    .analysis-wrap hr { border:none;border-top:1px solid var(--border);margin:20px 0; }
+    .analysis-wrap code { background:rgba(255,255,255,.07);padding:2px 6px;border-radius:4px;font-size:12px;color:var(--green); }
+
+    /* Gut check */
+    .gut-check { background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:18px; }
+    .gut-q { font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px; }
+    .gut-btns { display:flex;gap:8px;flex-wrap:wrap; }
+    .gut-btn {
+      padding:8px 14px;border-radius:8px;border:1px solid var(--border);
+      background:rgba(255,255,255,.04);color:var(--white-60);
+      font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;
+    }
+    .gut-btn:hover { border-color:rgba(255,255,255,.2);color:var(--white); }
+    .gut-response { font-size:12px;color:var(--white-60);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:none; }
+
+    /* Result actions */
+    .result-actions { display:flex;gap:10px;flex-wrap:wrap; }
+    .action-btn {
+      display:inline-flex;align-items:center;gap:7px;
+      padding:10px 18px;border-radius:8px;border:1px solid var(--border);
+      background:rgba(255,255,255,.04);color:var(--white-60);
+      font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;
+    }
+    .action-btn:hover { border-color:rgba(255,255,255,.2);color:var(--white); }
+    .action-btn.primary { background:rgba(0,230,118,.1);border-color:rgba(0,230,118,.3);color:var(--green); }
+    .action-btn.primary:hover { background:rgba(0,230,118,.18);box-shadow:0 0 16px rgba(0,230,118,.15); }
+
+    /* CTA strip */
+    .cta-strip {
+      margin-top:24px;
+      background:linear-gradient(135deg,rgba(0,230,118,.08),rgba(41,121,255,.06));
+      border:1px solid rgba(0,230,118,.18);border-radius:12px;
+      padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    }
+    .cta-strip-text strong { display:block;font-size:14px;font-weight:800;color:var(--white);margin-bottom:3px; }
+    .cta-strip-text span { font-size:12px;color:var(--muted); }
+  </style>
+</head>
+<body class="dark">
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li class="nav-sep" aria-hidden="true"></li>
+      <li><a href="free.html" style="color:var(--green);font-weight:700">Free Tools</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="login.html" class="nav-expert-link">Expert Login</a>
+      <a href="request-quote.html" class="nav-pill nav-pill-primary">Get Matched</a>
+      <a href="book.html" class="nav-pill nav-pill-outline"><span class="nav-live-dot"></span>Book a Call</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- ══ APP SHELL ══ -->
+<div class="app-shell">
+
+  <!-- ── LEFT: INPUT PANE ── -->
+  <div class="input-pane">
+
+    <!-- Back link -->
+    <a href="free.html" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);text-decoration:none;margin-bottom:20px;transition:color .2s" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Free Tools
+    </a>
+
+    <!-- Title -->
+    <h1 style="font-family:var(--font-head);font-size:22px;font-weight:900;margin:0 0 4px">Decision Maker</h1>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 22px;line-height:1.5">AI-powered analysis, adapted to how <em>you</em> think.</p>
+
+    <!-- Style picker -->
+    <div class="form-section">
+      <div class="style-section-lbl">Your thinking style</div>
+      <div class="style-chips">
+        <button class="style-chip" data-style="comparator"
+          style="--chip-color:#3b82f6;--chip-bg:rgba(59,130,246,.1);--chip-glow:rgba(59,130,246,.15)"
+          onclick="setStyle('comparator',this)" title="Side-by-side comparison">
+          <span class="chip-icon">⚖️</span>
+          <span class="chip-label">Compare</span>
+          <span class="chip-desc">Side by side</span>
+        </button>
+        <button class="style-chip active" data-style="analyst"
+          style="--chip-color:#00e676;--chip-bg:rgba(0,230,118,.1);--chip-glow:rgba(0,230,118,.15)"
+          onclick="setStyle('analyst',this)" title="Cost-benefit analysis">
+          <span class="chip-icon">📊</span>
+          <span class="chip-label">Analyst</span>
+          <span class="chip-desc">Cost-benefit</span>
+        </button>
+        <button class="style-chip" data-style="scorer"
+          style="--chip-color:#a78bfa;--chip-bg:rgba(167,139,250,.1);--chip-glow:rgba(167,139,250,.15)"
+          onclick="setStyle('scorer',this)" title="Weighted scoring">
+          <span class="chip-icon">🎯</span>
+          <span class="chip-label">Scorer</span>
+          <span class="chip-desc">Weighted score</span>
+        </button>
+        <button class="style-chip" data-style="challenger"
+          style="--chip-color:#fb923c;--chip-bg:rgba(251,146,60,.1);--chip-glow:rgba(251,146,60,.15)"
+          onclick="setStyle('challenger',this)" title="Devil's advocate">
+          <span class="chip-icon">🔍</span>
+          <span class="chip-label">Challenge</span>
+          <span class="chip-desc">Devil's advocate</span>
+        </button>
+        <button class="style-chip" data-style="gut"
+          style="--chip-color:#f472b6;--chip-bg:rgba(244,114,182,.1);--chip-glow:rgba(244,114,182,.15)"
+          onclick="setStyle('gut',this)" title="Gut instinct + validation">
+          <span class="chip-icon">⚡</span>
+          <span class="chip-label">Intuition</span>
+          <span class="chip-desc">Gut + reason</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Question -->
+    <div class="form-section">
+      <div class="form-lbl">What decision are you facing?</div>
+      <textarea class="q-textarea" id="q-question"
+        placeholder="e.g. Should I hire a freelancer or an agency for my automation project?"></textarea>
+    </div>
+
+    <!-- Options -->
+    <div class="form-section">
+      <div class="form-lbl">Your options <span id="opt-count-lbl">2 of 6 max</span></div>
+      <div class="option-list" id="option-list">
+        <div class="option-row">
+          <div class="option-letter">A</div>
+          <input class="option-input" type="text" placeholder="First option…" />
+          <button class="remove-btn" onclick="removeOption(this)" title="Remove" style="visibility:hidden">✕</button>
+        </div>
+        <div class="option-row">
+          <div class="option-letter">B</div>
+          <input class="option-input" type="text" placeholder="Second option…" />
+          <button class="remove-btn" onclick="removeOption(this)" title="Remove" style="visibility:hidden">✕</button>
+        </div>
+      </div>
+      <button class="add-btn" id="add-opt-btn" onclick="addOption()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add another option
+      </button>
+    </div>
+
+    <!-- Criteria (collapsible) -->
+    <div class="form-section">
+      <button class="collapse-toggle" id="crit-toggle" onclick="toggleCriteria()">
+        <span>What factors matter most? <span style="font-size:10px;color:var(--muted);font-weight:500">(optional)</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div id="crit-wrap" style="display:none">
+        <div class="criteria-wrap" id="crit-list">
+          <div class="criteria-row">
+            <div class="criteria-num">1</div>
+            <input class="criteria-input" type="text" placeholder="e.g. Cost…" />
+            <button class="remove-btn" onclick="removeCrit(this)" title="Remove">✕</button>
+          </div>
+          <div class="criteria-row">
+            <div class="criteria-num">2</div>
+            <input class="criteria-input" type="text" placeholder="e.g. Speed…" />
+            <button class="remove-btn" onclick="removeCrit(this)" title="Remove">✕</button>
+          </div>
+        </div>
+        <button class="add-btn" style="margin-top:8px" onclick="addCrit()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add criterion
+        </button>
+      </div>
+    </div>
+
+    <!-- Stakes -->
+    <div class="form-section">
+      <div class="form-lbl">Stakes</div>
+      <div class="pill-row">
+        <button class="pill-btn" data-group="stakes" data-val="low" onclick="setPill(this)">Low</button>
+        <button class="pill-btn active" data-group="stakes" data-val="medium" onclick="setPill(this)">Medium</button>
+        <button class="pill-btn" data-group="stakes" data-val="high" onclick="setPill(this)">High</button>
+      </div>
+    </div>
+
+    <!-- Timeframe -->
+    <div class="form-section">
+      <div class="form-lbl">How much time do you have?</div>
+      <div class="pill-row">
+        <button class="pill-btn" data-group="timeframe" data-val="quick" onclick="setPill(this)">Quick (today)</button>
+        <button class="pill-btn active" data-group="timeframe" data-val="considered" onclick="setPill(this)">Days to weeks</button>
+        <button class="pill-btn" data-group="timeframe" data-val="strategic" onclick="setPill(this)">Months</button>
+      </div>
+    </div>
+
+    <button class="analyse-btn" id="analyse-btn" onclick="analyse()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      Analyse My Decision
+    </button>
+    <div class="form-error" id="form-error"></div>
+
+  </div>
+
+  <!-- ── RIGHT: OUTPUT PANE ── -->
+  <div class="output-pane">
+
+    <!-- Empty state -->
+    <div id="state-empty" class="state-panel">
+      <div class="empty-icon">⚖️</div>
+      <h3>Your analysis will appear here</h3>
+      <p>Describe your decision on the left, choose your thinking style, and click Analyse.</p>
+      <div class="style-preview-grid">
+        <div class="spg-card"><div class="spg-icon">⚖️</div><div class="spg-name">Compare</div><div class="spg-desc">Structured side-by-side — instantly see what each option wins and loses on</div></div>
+        <div class="spg-card"><div class="spg-icon">📊</div><div class="spg-name">Analyst</div><div class="spg-desc">Deep cost-benefit with hidden costs, risks and opportunity cost exposed</div></div>
+        <div class="spg-card"><div class="spg-icon">🎯</div><div class="spg-name">Scorer</div><div class="spg-desc">Weighted scores against your criteria — best for complex multi-factor decisions</div></div>
+        <div class="spg-card"><div class="spg-icon">🔍</div><div class="spg-name">Challenge</div><div class="spg-desc">Devil's advocate — steelmanned then dismantled, so you see what survives scrutiny</div></div>
+        <div class="spg-card"><div class="spg-icon">⚡</div><div class="spg-name">Intuition</div><div class="spg-desc">Gut read first, then validated with evidence — for when instinct and data must agree</div></div>
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div id="state-loading" class="state-panel" style="display:none">
+      <div class="loading-icon">🧠</div>
+      <p class="loading-msg" id="loading-msg">Analysing your options…</p>
+      <div class="dot-pulse"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- Result state -->
+    <div id="state-result" style="display:none">
+
+      <!-- Recommendation card -->
+      <div class="rec-card">
+        <div class="rec-top">
+          <div class="rec-top-lbl">Recommendation</div>
+          <div class="style-tag" id="res-style-tag"></div>
+        </div>
+        <div class="rec-option" id="res-option">—</div>
+        <div class="conf-wrap">
+          <div class="conf-lbl"><span>Confidence</span><span id="res-conf-pct">—</span></div>
+          <div class="conf-track"><div class="conf-bar" id="res-conf-bar" style="width:0%"></div></div>
+        </div>
+        <div class="key-insight" id="res-insight"></div>
+      </div>
+
+      <!-- Full analysis -->
+      <div class="analysis-wrap" id="res-analysis"></div>
+
+      <!-- Gut check -->
+      <div class="gut-check">
+        <div class="gut-q">Does this match your gut feeling?</div>
+        <div class="gut-btns">
+          <button class="gut-btn" onclick="gutReact('yes')">👍 Yes, feels right</button>
+          <button class="gut-btn" onclick="gutReact('no')">🤔 Not quite sure</button>
+          <button class="gut-btn" onclick="gutReact('disagree')">👎 I'd choose differently</button>
+        </div>
+        <div class="gut-response" id="gut-response"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="result-actions">
+        <button class="action-btn primary" onclick="copyAnalysis()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span id="copy-btn-label">Copy Analysis</span>
+        </button>
+        <button class="action-btn" onclick="resetApp()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.1"/></svg>
+          New Decision
+        </button>
+        <button class="action-btn" onclick="reanalyse()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7"/></svg>
+          Try Different Style
+        </button>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-strip">
+        <div class="cta-strip-text">
+          <strong>Need help implementing the decision?</strong>
+          <span>Our automation experts can build whatever you decide — fast.</span>
+        </div>
+        <a href="request-quote.html" class="btn btn-primary" style="text-decoration:none;white-space:nowrap;flex-shrink:0">Get Matched Free</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/main.js"></script>
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+const STYLE_META = {
+  comparator: { label:'Comparator', icon:'⚖️', color:'#3b82f6' },
+  analyst:    { label:'Analyst',    icon:'📊', color:'#00e676' },
+  scorer:     { label:'Scorer',     icon:'🎯', color:'#a78bfa' },
+  challenger: { label:'Challenge',  icon:'🔍', color:'#fb923c' },
+  gut:        { label:'Intuition',  icon:'⚡', color:'#f472b6' },
+};
+
+const GUT_RESPONSES = {
+  yes: [
+    "Trust it. When data and gut agree, that's as close to certainty as decisions get. Move forward with confidence.",
+    "Alignment between analysis and instinct is rare — don't second-guess it. Act.",
+  ],
+  no: [
+    "Uncertainty here is worth sitting with. Re-read the key insight. What specifically feels off? That's where to look harder.",
+    "Try the Challenger style for a fresh angle — sometimes a devil's advocate view surfaces the nagging doubt.",
+  ],
+  disagree: [
+    "Interesting. Your gut has information the analysis doesn't. What does it know? Write it down — it's likely the most important criterion you forgot to add.",
+    "Add what your gut knows as a criterion and re-run the Scorer mode. Your instinct might be the deciding factor.",
+  ],
+};
+
+let appState = {
+  style:     localStorage.getItem('dm-style') || 'analyst',
+  stakes:    'medium',
+  timeframe: 'considered',
+  lastResult: null,
+};
+
+// Apply saved style on load
+(function init() {
+  const saved = appState.style;
+  document.querySelectorAll('.style-chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.style === saved);
+  });
+})();
+
+// ── Style picker ──────────────────────────────────────────────────────────────
+function setStyle(key, el) {
+  appState.style = key;
+  localStorage.setItem('dm-style', key);
+  document.querySelectorAll('.style-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── Options ───────────────────────────────────────────────────────────────────
+const LETTERS = 'ABCDEF';
+
+function rebuildLetters() {
+  const rows = document.querySelectorAll('#option-list .option-row');
+  rows.forEach((row, i) => {
+    row.querySelector('.option-letter').textContent = LETTERS[i];
+    const rm = row.querySelector('.remove-btn');
+    rm.style.visibility = rows.length > 2 ? 'visible' : 'hidden';
+  });
+  const count = rows.length;
+  document.getElementById('opt-count-lbl').textContent = `${count} of 6 max`;
+  document.getElementById('add-opt-btn').style.display = count >= 6 ? 'none' : 'flex';
+}
+
+function addOption() {
+  const list = document.getElementById('option-list');
+  const count = list.children.length;
+  if (count >= 6) return;
+  const row = document.createElement('div');
+  row.className = 'option-row';
+  row.innerHTML = `
+    <div class="option-letter">${LETTERS[count]}</div>
+    <input class="option-input" type="text" placeholder="Option ${LETTERS[count]}…" />
+    <button class="remove-btn" onclick="removeOption(this)" title="Remove">✕</button>`;
+  list.appendChild(row);
+  row.querySelector('input').focus();
+  rebuildLetters();
+}
+
+function removeOption(btn) {
+  const list = document.getElementById('option-list');
+  if (list.children.length <= 2) return;
+  btn.closest('.option-row').remove();
+  rebuildLetters();
+}
+
+// ── Criteria ──────────────────────────────────────────────────────────────────
+function toggleCriteria() {
+  const wrap = document.getElementById('crit-wrap');
+  const toggle = document.getElementById('crit-toggle');
+  const open = wrap.style.display === 'none';
+  wrap.style.display = open ? 'block' : 'none';
+  toggle.classList.toggle('open', open);
+}
+
+function addCrit() {
+  const list = document.getElementById('crit-list');
+  if (list.children.length >= 7) return;
+  const num = list.children.length + 1;
+  const row = document.createElement('div');
+  row.className = 'criteria-row';
+  row.innerHTML = `
+    <div class="criteria-num">${num}</div>
+    <input class="criteria-input" type="text" placeholder="e.g. Quality…" />
+    <button class="remove-btn" onclick="removeCrit(this)" title="Remove">✕</button>`;
+  list.appendChild(row);
+  row.querySelector('input').focus();
+  rebuildCritNums();
+}
+
+function removeCrit(btn) {
+  btn.closest('.criteria-row').remove();
+  rebuildCritNums();
+}
+
+function rebuildCritNums() {
+  document.querySelectorAll('#crit-list .criteria-num').forEach((el, i) => {
+    el.textContent = i + 1;
+  });
+}
+
+// ── Pills ─────────────────────────────────────────────────────────────────────
+function setPill(btn) {
+  const group = btn.dataset.group;
+  document.querySelectorAll(`.pill-btn[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  appState[group] = btn.dataset.val;
+}
+
+// ── Collect form values ───────────────────────────────────────────────────────
+function getFormValues() {
+  const question = document.getElementById('q-question').value.trim();
+  const options  = [...document.querySelectorAll('.option-input')].map(i => i.value.trim()).filter(Boolean);
+  const criteria = [...document.querySelectorAll('.criteria-input')].map(i => i.value.trim()).filter(Boolean);
+  return { question, options, criteria };
+}
+
+function showError(msg) {
+  const el = document.getElementById('form-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+// ── Main analysis call ────────────────────────────────────────────────────────
+async function analyse() {
+  const { question, options, criteria } = getFormValues();
+
+  if (!question) return showError('Please describe your decision first.');
+  if (options.length < 2) return showError('Please enter at least 2 options.');
+
+  showState('loading');
+  const meta = STYLE_META[appState.style];
+  document.getElementById('loading-msg').textContent =
+    `${meta.icon} Applying ${meta.label} analysis…`;
+
+  const btn = document.getElementById('analyse-btn');
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/agent?action=decision', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question, options, criteria,
+        style:     appState.style,
+        stakes:    appState.stakes,
+        timeframe: appState.timeframe,
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Analysis failed');
+
+    appState.lastResult = data;
+    renderResult(data);
+    showState('result');
+    document.querySelector('.output-pane').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch (e) {
+    showState('empty');
+    showError(e.message || 'Something went wrong — please try again.');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ── Render result ─────────────────────────────────────────────────────────────
+function renderResult(data) {
+  const meta = STYLE_META[data.style] || STYLE_META.analyst;
+
+  // Style tag
+  const tag = document.getElementById('res-style-tag');
+  tag.textContent = `${meta.icon} ${meta.label}`;
+  tag.style.cssText = `background:${meta.color}18;border:1px solid ${meta.color}40;color:${meta.color};padding:3px 9px;border-radius:100px;font-size:10px;font-weight:800;letter-spacing:.5px`;
+
+  // Recommendation
+  document.getElementById('res-option').textContent = data.recommendation || '—';
+
+  // Confidence
+  const conf = data.confidence || 0;
+  const confColor = conf >= 80 ? '#00e676' : conf >= 65 ? '#fbbf24' : '#fb923c';
+  document.getElementById('res-conf-pct').textContent = conf ? `${conf}%` : '—';
+  const bar = document.getElementById('res-conf-bar');
+  bar.style.width = '0%';
+  bar.style.background = `linear-gradient(90deg, ${confColor}, ${confColor}aa)`;
+  setTimeout(() => bar.style.width = conf + '%', 100);
+
+  // Key insight
+  document.getElementById('res-insight').textContent = data.keyInsight || '';
+
+  // Analysis (markdown)
+  const analysisEl = document.getElementById('res-analysis');
+  if (typeof marked !== 'undefined' && data.analysis) {
+    analysisEl.innerHTML = marked.parse(data.analysis);
+  } else {
+    analysisEl.textContent = data.analysis || '';
+  }
+
+  // Reset gut check
+  document.getElementById('gut-response').style.display = 'none';
+}
+
+// ── State switcher ────────────────────────────────────────────────────────────
+function showState(which) {
+  ['empty','loading','result'].forEach(s => {
+    document.getElementById('state-' + s).style.display = s === which ? (s === 'result' ? 'block' : 'flex') : 'none';
+  });
+}
+
+// ── Gut check ─────────────────────────────────────────────────────────────────
+function gutReact(key) {
+  const responses = GUT_RESPONSES[key];
+  const text = responses[Math.floor(Math.random() * responses.length)];
+  const el = document.getElementById('gut-response');
+  el.textContent = text;
+  el.style.display = 'block';
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+function copyAnalysis() {
+  if (!appState.lastResult) return;
+  const { recommendation, confidence, keyInsight, analysis } = appState.lastResult;
+  const txt = `DECISION ANALYSIS\n${'─'.repeat(40)}\n\nRecommendation: ${recommendation}\nConfidence: ${confidence}%\nKey Insight: ${keyInsight}\n\n${'─'.repeat(40)}\n\n${analysis}\n\n—\nGenerated by AutomationHire Decision Maker\nhttps://automationhire.co.uk/decision-maker`;
+
+  navigator.clipboard.writeText(txt).then(() => {
+    const lbl = document.getElementById('copy-btn-label');
+    lbl.textContent = 'Copied!';
+    setTimeout(() => lbl.textContent = 'Copy Analysis', 2000);
+  });
+}
+
+function resetApp() {
+  document.getElementById('q-question').value = '';
+  document.querySelectorAll('.option-input').forEach(i => i.value = '');
+  document.querySelectorAll('.criteria-input').forEach(i => i.value = '');
+  appState.lastResult = null;
+  showState('empty');
+  document.querySelector('.input-pane').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function reanalyse() {
+  showState('empty');
+  document.querySelector('.input-pane').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>

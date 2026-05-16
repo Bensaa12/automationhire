@@ -111,6 +111,65 @@ module.exports = async function handler(req, res) {
     return ok(res, { token: makeToken(adminPass) });
   }
 
+  // ── Public: AI decision analysis ─────────────────────────────────────────────
+  if (action === 'decision' && req.method === 'POST') {
+    if (!process.env.ANTHROPIC_API_KEY) return err(res, 'AI service not configured', 503);
+
+    const {
+      question, options = [], criteria = [],
+      style = 'analyst', stakes = 'medium', timeframe = 'considered',
+    } = req.body || {};
+
+    if (!question?.trim()) return err(res, 'question required');
+    const validOpts = options.filter(o => o?.trim());
+    if (validOpts.length < 2) return err(res, 'At least 2 options required');
+
+    const STYLE_SYSTEM = {
+      comparator: `You are a decision analyst who specialises in clear, structured side-by-side comparison. Compare options systematically across shared dimensions so trade-offs are immediately visible. Use tables or parallel lists with consistent categories. Be direct — pick a winner. End with one punchy recommendation sentence.`,
+      analyst:    `You are a rigorous cost-benefit analyst. For each option enumerate: concrete benefits, realistic costs (including hidden and opportunity costs), key risks, and the critical assumption that must hold. Quantify wherever possible. Challenge wishful thinking. Synthesise into a clear recommendation you'd stake your professional reputation on.`,
+      scorer:     `You are a decision scientist who builds weighted scoring models. Use the user's criteria if provided, or infer the 4–5 most important ones. Score each option 1–10 against each criterion and show your working. Apply weighting where criteria differ in importance. Calculate totals and rank. Explain any counterintuitive scores.`,
+      challenger: `You are a devil's advocate facilitator. For each option: (1) Steelman it — make the absolute strongest possible case FOR choosing it. (2) Then systematically dismantle it — present the most powerful argument AGAINST it. Do not be polite. Help the user see what they might be rationalising. End with which option survives the most scrutiny.`,
+      gut:        `You are an intuitive decision coach who honours both instinct and evidence. Open with your immediate gut read: "My gut says [option] because [rapid intuitive reason]." Validate or challenge that gut reaction with 3 specific considerations the user may not have weighed. Name the cognitive bias most likely at play. End with a recommendation that honours both data and instinct.`,
+    };
+
+    const sys = STYLE_SYSTEM[style] || STYLE_SYSTEM.analyst;
+    const optStr  = validOpts.map((o, i) => `${String.fromCharCode(65 + i)}. ${o.trim()}`).join('\n');
+    const critStr = criteria.filter(c => c?.trim()).length
+      ? `\nCriteria (in rough priority order):\n${criteria.filter(c=>c?.trim()).map((c,i)=>`${i+1}. ${c.trim()}`).join('\n')}`
+      : '';
+    const stakesLabel = { low:'low — reversible, low cost', medium:'medium — meaningful but recoverable', high:'high — hard to reverse, significant impact' }[stakes] || stakes;
+    const timeLabel   = { quick:'quick — decide today', considered:'considered — days to weeks', strategic:'strategic — months, long-term' }[timeframe] || timeframe;
+
+    const userMsg = `Decision: ${question.trim()}
+
+Options:
+${optStr}${critStr}
+
+Stakes: ${stakesLabel}
+Timeframe: ${timeLabel}
+
+Provide your analysis. Use ## headings. Be specific and actionable.
+
+End your response with EXACTLY this block (no variation in formatting):
+---RESULT---
+RECOMMENDATION: [exact option name]
+CONFIDENCE: [integer 50-95]
+KEY INSIGHT: [one sharp memorable sentence]
+---END---`;
+
+    let raw;
+    try { raw = await askClaude(sys, userMsg, 1800); }
+    catch (e) { return err(res, 'AI analysis failed — please try again', 500); }
+
+    const m = raw.match(/---RESULT---\s*\nRECOMMENDATION:\s*(.+)\nCONFIDENCE:\s*(\d+)\nKEY INSIGHT:\s*(.+)\n---END---/s);
+    const recommendation = m?.[1]?.trim() || null;
+    const confidence     = m ? Math.min(95, Math.max(50, parseInt(m[2]))) : null;
+    const keyInsight     = m?.[3]?.trim() || null;
+    const analysis       = raw.replace(/---RESULT---[\s\S]*---END---\s*$/, '').trim();
+
+    return ok(res, { analysis, recommendation, confidence, keyInsight, style });
+  }
+
   // ── All other admin actions require auth ──────────────────────────────
   const admin = await isAdmin(req);
   if (!admin) return err(res, 'Unauthorised', 401);
