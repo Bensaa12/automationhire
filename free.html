@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Tools & Resources — AutomationHire</title>
+  <meta name="description" content="Free AI tools, file converters, automation templates and focus music. All free, no sign-up. Built for UK businesses and automation professionals." />
+  <link rel="canonical" href="https://automationhire.co.uk/free" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <style>
+    /* ── Free page layout ── */
+    .free-hero-label { display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);padding:6px 14px;border-radius:100px;margin-bottom:20px; }
+    .free-hero-dot { width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(0,230,118,.9);animation:navDotPulse 2s ease-in-out infinite; }
+
+    .tools-grid { display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px; }
+    @media(max-width:860px){ .tools-grid{grid-template-columns:1fr} }
+
+    .tool-card { background:var(--black-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;display:flex;flex-direction:column;gap:20px; }
+    .tool-card-head { display:flex;align-items:center;gap:14px; }
+    .tool-icon { width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0; }
+    .tool-icon-img { background:linear-gradient(135deg,rgba(0,230,118,.15),rgba(41,121,255,.15)); }
+    .tool-icon-mic { background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(239,68,68,.15)); }
+    .tool-name { font-family:var(--font-head);font-weight:700;font-size:18px; }
+    .tool-desc { font-size:13px;color:var(--white-60);line-height:1.65;margin-top:2px; }
+
+    /* ── Image Converter ── */
+    .img-drop { border:2px dashed var(--border);border-radius:var(--radius);padding:32px 20px;text-align:center;cursor:pointer;transition:all .25s;background:rgba(255,255,255,.02); }
+    .img-drop.drag-over { border-color:var(--green);background:rgba(0,230,118,.05); }
+    .img-drop-icon { font-size:32px;margin-bottom:8px; }
+    .img-drop-text { font-size:13px;color:var(--white-60); }
+    .img-drop-text strong { color:var(--white); }
+    .img-drop input { display:none; }
+
+    .fmt-row { display:flex;gap:8px;flex-wrap:wrap; }
+    .fmt-btn { padding:7px 14px;border-radius:6px;border:1px solid var(--border2);background:rgba(255,255,255,.05);color:var(--white-60);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s; }
+    .fmt-btn.active { background:var(--green);border-color:var(--green);color:#060810; }
+    .fmt-btn:hover:not(.active){ border-color:rgba(255,255,255,.3);color:var(--white); }
+
+    .quality-row { display:flex;align-items:center;gap:12px; }
+    .quality-row label { font-size:12px;color:var(--muted);white-space:nowrap; }
+    .quality-row input[type=range]{ flex:1;accent-color:var(--green); }
+    .quality-val { font-size:12px;font-weight:700;color:var(--green);min-width:28px;text-align:right; }
+
+    .img-preview { display:none;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--rsm);padding:12px; }
+    .img-preview img { width:56px;height:56px;object-fit:cover;border-radius:6px;flex-shrink:0; }
+    .img-preview-info { flex:1;min-width:0; }
+    .img-preview-name { font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .img-preview-size { font-size:11px;color:var(--muted);margin-top:2px; }
+
+    .convert-result { display:none;align-items:center;gap:12px;padding:12px;background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2);border-radius:var(--rsm); }
+    .convert-result svg { flex-shrink:0; }
+    .convert-result-text { flex:1;font-size:13px;font-weight:600;color:var(--green); }
+
+    /* ── Dictation ── */
+    .dict-transcript { min-height:140px;max-height:260px;overflow-y:auto;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;font-size:14px;line-height:1.75;color:var(--white-60); }
+    .dict-transcript .final { color:var(--white); }
+    .dict-transcript .interim { color:var(--white-60);font-style:italic; }
+    .dict-transcript.active { border-color:rgba(124,58,237,.4); }
+    .dict-placeholder { color:var(--white-30);font-size:13px; }
+
+    .dict-controls { display:flex;gap:10px;align-items:center; }
+    .rec-btn { display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:100px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all .25s; }
+    .rec-btn-start { background:linear-gradient(135deg,#7c3aed,#c026d3);color:#fff; }
+    .rec-btn-start:hover { box-shadow:0 4px 20px rgba(124,58,237,.4); }
+    .rec-btn-stop { background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#f87171; }
+    .rec-dot { width:8px;height:8px;border-radius:50%;background:#f87171;animation:navDotPulse 1s ease-in-out infinite; }
+    .dict-status { font-size:12px;color:var(--muted);flex:1; }
+    .dict-no-support { font-size:13px;color:var(--yellow);background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:var(--rsm);padding:12px 14px;display:none; }
+
+    /* ── Downloads ── */
+    .dl-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-top:32px; }
+    .dl-card { background:var(--black-2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:14px;transition:border-color .25s; }
+    .dl-card:hover { border-color:rgba(0,230,118,.22); }
+    .dl-card-top { display:flex;align-items:flex-start;gap:12px; }
+    .dl-type { font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:3px 7px;border-radius:4px; }
+    .dl-type-pdf { background:rgba(239,68,68,.12);color:#f87171; }
+    .dl-type-xls { background:rgba(0,230,118,.12);color:var(--green); }
+    .dl-type-json { background:rgba(41,121,255,.12);color:#60a5fa; }
+    .dl-type-mp3 { background:rgba(124,58,237,.12);color:#a78bfa; }
+    .dl-card-title { font-weight:700;font-size:15px;line-height:1.35; }
+    .dl-card-desc { font-size:12px;color:var(--white-60);line-height:1.6;flex:1; }
+    .dl-btn { display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--rsm);background:rgba(255,255,255,.07);border:1px solid var(--border2);color:var(--text);font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;width:100%;justify-content:center; }
+    .dl-btn:hover { background:rgba(0,230,118,.1);border-color:rgba(0,230,118,.3);color:var(--green); }
+    .dl-btn svg { flex-shrink:0; }
+
+    /* ── Music Player ── */
+    .player-wrap { background:var(--black-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-top:32px; }
+    .player-track-list { display:flex;flex-direction:column;gap:8px;margin-bottom:24px; }
+    .player-track { display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--rsm);cursor:pointer;transition:background .2s;border:1px solid transparent; }
+    .player-track:hover { background:rgba(255,255,255,.05); }
+    .player-track.playing { background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.25); }
+    .player-track-num { width:20px;font-size:12px;color:var(--muted);text-align:center;flex-shrink:0; }
+    .player-track.playing .player-track-num { color:#a78bfa; }
+    .player-track-name { flex:1;font-size:13px;font-weight:600; }
+    .player-track-dur { font-size:12px;color:var(--muted); }
+    .player-controls { display:flex;align-items:center;gap:16px;padding-top:16px;border-top:1px solid var(--border); }
+    .player-btn { width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid var(--border2);color:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0; }
+    .player-btn:hover { background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.4); }
+    .player-btn-play { width:44px;height:44px;background:linear-gradient(135deg,#7c3aed,#c026d3);border:none; }
+    .player-btn-play:hover { box-shadow:0 4px 18px rgba(124,58,237,.45); }
+    .player-progress-wrap { flex:1;display:flex;flex-direction:column;gap:4px; }
+    .player-progress { width:100%;height:4px;border-radius:2px;background:rgba(255,255,255,.1);accent-color:#7c3aed;cursor:pointer; }
+    .player-time { display:flex;justify-content:space-between;font-size:11px;color:var(--muted); }
+    .player-vol { display:flex;align-items:center;gap:8px; }
+    .player-vol input[type=range] { width:72px;accent-color:#7c3aed; }
+    .player-now-playing { font-size:12px;color:#a78bfa;font-weight:600;margin-bottom:6px;min-height:16px; }
+
+    /* ── Curated external tools ── */
+    .ext-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:28px; }
+    .ext-card { background:var(--black-2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-decoration:none;color:inherit;transition:all .25s;display:block; }
+    .ext-card:hover { border-color:rgba(0,230,118,.22);transform:translateY(-2px); }
+    .ext-card-name { font-weight:700;font-size:14px;margin-bottom:4px; }
+    .ext-card-cat { font-size:11px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px; }
+    .ext-card-desc { font-size:12px;color:var(--white-60);line-height:1.55; }
+
+    @keyframes navDotPulse {
+      0%,100%{ opacity:1; box-shadow:0 0 6px rgba(0,230,118,.85); }
+      50%    { opacity:.4; box-shadow:0 0 2px rgba(0,230,118,.2); }
+    }
+  </style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li class="nav-sep" aria-hidden="true"></li>
+      <li><a href="ads.html">Ad Production</a></li>
+      <li><a href="ready-to-deploy.html">Ready to Deploy<span class="nav-live-badge">LIVE</span></a></li>
+      <li class="nav-sep" aria-hidden="true"></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="free.html" style="color:var(--green);font-weight:700">Free Tools</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="login.html" class="nav-expert-link">Expert Login</a>
+      <a href="request-quote.html" class="nav-pill nav-pill-primary">Get Matched</a>
+      <a href="book.html" class="nav-pill nav-pill-outline"><span class="nav-live-dot"></span>Book a Call</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════════════════════════════════ -->
+<section class="page-hero">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:0">
+      <div class="free-hero-label"><span class="free-hero-dot"></span> 100% Free — No Sign-Up</div>
+      <h1 class="page-hero-title">Free Tools &amp; Resources</h1>
+      <p class="page-hero-sub" style="max-width:580px;margin:0 auto">
+        Browser-based converters, AI dictation, automation templates and focus music — all built for UK business owners and automation professionals.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BROWSER TOOLS ══════════════════════════════════════════════════════ -->
+<section class="section" style="padding-top:48px">
+  <div class="container">
+    <div class="section-label">Browser Tools</div>
+    <h2 class="section-title" style="font-size:28px;margin-bottom:6px">No upload. No account. No catch.</h2>
+    <p style="color:var(--white-60);font-size:14px">These tools run entirely in your browser. Your files never leave your device.</p>
+
+    <div class="tools-grid">
+
+      <!-- ─ IMAGE CONVERTER ─────────────────────────────────────────── -->
+      <div class="tool-card">
+        <div class="tool-card-head">
+          <div class="tool-icon tool-icon-img">🖼️</div>
+          <div>
+            <div class="tool-name">Image Converter</div>
+            <div class="tool-desc">Convert JPG, PNG, WebP — client-side, instant, private.</div>
+          </div>
+        </div>
+
+        <!-- Drop zone -->
+        <div class="img-drop" id="img-drop" onclick="document.getElementById('img-file').click()">
+          <div class="img-drop-icon">📂</div>
+          <div class="img-drop-text"><strong>Click to select</strong> or drag &amp; drop<br><span style="font-size:11px;color:var(--white-30)">JPG · PNG · WebP · GIF · BMP</span></div>
+          <input type="file" id="img-file" accept="image/*" />
+        </div>
+
+        <!-- Preview -->
+        <div class="img-preview" id="img-preview">
+          <img id="img-thumb" src="" alt="preview" />
+          <div class="img-preview-info">
+            <div class="img-preview-name" id="img-name">filename.jpg</div>
+            <div class="img-preview-size" id="img-size">—</div>
+          </div>
+          <button class="fmt-btn" onclick="clearImage()" style="padding:5px 10px;font-size:11px">✕ Clear</button>
+        </div>
+
+        <!-- Format picker -->
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600">Convert to</div>
+          <div class="fmt-row">
+            <button class="fmt-btn active" data-fmt="image/jpeg" data-ext="jpg" onclick="selectFmt(this)">JPG</button>
+            <button class="fmt-btn" data-fmt="image/png" data-ext="png" onclick="selectFmt(this)">PNG</button>
+            <button class="fmt-btn" data-fmt="image/webp" data-ext="webp" onclick="selectFmt(this)">WebP</button>
+          </div>
+        </div>
+
+        <!-- Quality -->
+        <div id="quality-wrap">
+          <div class="quality-row">
+            <label for="img-quality">Quality</label>
+            <input type="range" id="img-quality" min="0.1" max="1" step="0.05" value="0.9" oninput="document.getElementById('qval').textContent=Math.round(this.value*100)+'%'" />
+            <div class="quality-val" id="qval">90%</div>
+          </div>
+        </div>
+
+        <!-- Convert button -->
+        <button class="btn btn-primary" id="convert-btn" onclick="convertImage()" disabled style="width:100%;justify-content:center">Convert &amp; Download</button>
+
+        <!-- Result -->
+        <div class="convert-result" id="convert-result">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="convert-result-text" id="convert-result-text">Ready to download</div>
+          <a id="convert-dl-link" class="btn btn-green btn-sm" style="border-radius:6px">Download</a>
+        </div>
+      </div>
+
+      <!-- ─ AI DICTATION ──────────────────────────────────────────────── -->
+      <div class="tool-card">
+        <div class="tool-card-head">
+          <div class="tool-icon tool-icon-mic">🎙️</div>
+          <div>
+            <div class="tool-name">AI Dictation</div>
+            <div class="tool-desc">Speak and get text instantly — powered by your browser's AI engine. No data sent anywhere.</div>
+          </div>
+        </div>
+
+        <!-- Browser warning -->
+        <div class="dict-no-support" id="dict-no-support">
+          ⚠️ Your browser doesn't support live speech recognition. Please use <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong> for this tool.
+        </div>
+
+        <!-- Transcript box -->
+        <div class="dict-transcript" id="dict-transcript">
+          <span class="dict-placeholder" id="dict-placeholder">Press "Start Dictating" — speak naturally and your words will appear here…</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="dict-controls">
+          <button class="rec-btn rec-btn-start" id="dict-start-btn" onclick="toggleDictation()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v7a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+            Start Dictating
+          </button>
+          <div class="dict-status" id="dict-status">Ready</div>
+        </div>
+
+        <!-- Action buttons -->
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-secondary btn-sm" onclick="copyTranscript()" style="flex:1;justify-content:center">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Text
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="clearTranscript()" style="flex:1;justify-content:center">Clear</button>
+        </div>
+
+        <!-- Language -->
+        <div style="display:flex;align-items:center;gap:10px">
+          <label style="font-size:12px;color:var(--muted)">Language</label>
+          <select id="dict-lang" style="flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border2);color:var(--text);padding:7px 10px;border-radius:6px;font-size:13px">
+            <option value="en-GB">English (UK)</option>
+            <option value="en-US">English (US)</option>
+            <option value="fr-FR">French</option>
+            <option value="de-DE">German</option>
+            <option value="es-ES">Spanish</option>
+            <option value="pt-BR">Portuguese</option>
+          </select>
+        </div>
+
+        <div style="font-size:11px;color:var(--white-30);line-height:1.6">
+          Uses your browser's built-in speech AI — works best in Chrome &amp; Edge. Audio stays on your device.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ FREE DOWNLOADS ════════════════════════════════════════════════════ -->
+<section class="section" style="background:var(--black-2);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="section-label">Free Downloads</div>
+    <h2 class="section-title" style="font-size:28px;margin-bottom:6px">Automation Templates &amp; Guides</h2>
+    <p style="color:var(--white-60);font-size:14px">Click to download from Google Drive — no account needed.</p>
+
+    <div class="dl-grid">
+
+      <!-- REPLACE href values with your Google Drive download links: https://drive.google.com/uc?id=YOUR_FILE_ID&export=download -->
+
+      <div class="dl-card">
+        <div class="dl-card-top">
+          <span class="dl-type dl-type-xls">XLSX</span>
+        </div>
+        <div class="dl-card-title">Automation ROI Calculator</div>
+        <div class="dl-card-desc">Plug in your hourly rate, task frequency and tool cost — instantly see your automation payback period.</div>
+        <a href="#" class="dl-btn" target="_blank" rel="noopener">
+          <!-- GOOGLE DRIVE LINK: replace # with https://drive.google.com/uc?id=YOUR_ID&export=download -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Free
+        </a>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-card-top">
+          <span class="dl-type dl-type-json">JSON</span>
+        </div>
+        <div class="dl-card-title">n8n Starter Workflow Pack</div>
+        <div class="dl-card-desc">5 ready-to-import n8n workflows: lead capture, email follow-up, Slack alerts, invoice reminders &amp; more.</div>
+        <a href="#" class="dl-btn" target="_blank" rel="noopener">
+          <!-- GOOGLE DRIVE LINK -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Free
+        </a>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-card-top">
+          <span class="dl-type dl-type-pdf">PDF</span>
+        </div>
+        <div class="dl-card-title">AI Prompt Pack — 50 Prompts</div>
+        <div class="dl-card-desc">50 battle-tested ChatGPT &amp; Claude prompts for UK freelancers: proposals, emails, SOPs and client reports.</div>
+        <a href="#" class="dl-btn" target="_blank" rel="noopener">
+          <!-- GOOGLE DRIVE LINK -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Free
+        </a>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-card-top">
+          <span class="dl-type dl-type-pdf">PDF</span>
+        </div>
+        <div class="dl-card-title">Automation Discovery Checklist</div>
+        <div class="dl-card-desc">A printable 40-point checklist to identify which processes in your business are ready to automate today.</div>
+        <a href="#" class="dl-btn" target="_blank" rel="noopener">
+          <!-- GOOGLE DRIVE LINK -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Free
+        </a>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-card-top">
+          <span class="dl-type dl-type-pdf">PDF</span>
+        </div>
+        <div class="dl-card-title">Make.com Automation Starter Kit</div>
+        <div class="dl-card-desc">Step-by-step guide to building your first 3 Make.com scenarios — no coding required. UK business examples throughout.</div>
+        <a href="#" class="dl-btn" target="_blank" rel="noopener">
+          <!-- GOOGLE DRIVE LINK -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Free
+        </a>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-card-top">
+          <span class="dl-type dl-type-pdf">PDF</span>
+        </div>
+        <div class="dl-card-title">Website Automation Audit</div>
+        <div class="dl-card-desc">Audit your website's missed automation opportunities — lead capture, follow-up, CRM sync and analytics gaps.</div>
+        <a href="#" class="dl-btn" target="_blank" rel="noopener">
+          <!-- GOOGLE DRIVE LINK -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Free
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOCUS MUSIC PLAYER ════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Focus Music</div>
+    <h2 class="section-title" style="font-size:28px;margin-bottom:6px">Deep Work Sessions</h2>
+    <p style="color:var(--white-60);font-size:14px">Royalty-free focus tracks — stream or download. Perfect for automation work sessions.</p>
+
+    <div class="player-wrap">
+      <div class="player-now-playing" id="player-now">Select a track below</div>
+
+      <div class="player-track-list" id="player-tracklist">
+        <!-- Tracks injected by JS from TRACKS array below -->
+      </div>
+
+      <div class="player-controls">
+        <!-- Prev -->
+        <button class="player-btn" onclick="prevTrack()" title="Previous">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+        <!-- Play/Pause -->
+        <button class="player-btn player-btn-play" id="player-play-btn" onclick="togglePlay()">
+          <svg id="player-play-icon" width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <!-- Next -->
+        <button class="player-btn" onclick="nextTrack()" title="Next">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+        <!-- Progress -->
+        <div class="player-progress-wrap">
+          <input type="range" class="player-progress" id="player-progress" value="0" min="0" step="0.1" oninput="seekTo(this.value)" />
+          <div class="player-time"><span id="player-cur">0:00</span><span id="player-dur">0:00</span></div>
+        </div>
+        <!-- Volume -->
+        <div class="player-vol">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          <input type="range" min="0" max="1" step="0.05" value="0.8" oninput="setVol(this.value)" />
+        </div>
+      </div>
+
+      <audio id="player-audio"></audio>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CURATED EXTERNAL TOOLS ════════════════════════════════════════════ -->
+<section class="section" style="background:var(--black-2);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="section-label">Best Free Tools Online</div>
+    <h2 class="section-title" style="font-size:28px;margin-bottom:6px">Curated — No Junk</h2>
+    <p style="color:var(--white-60);font-size:14px">Vetted tools our team actually uses. All free tiers included.</p>
+
+    <div class="ext-grid">
+      <a href="https://smallpdf.com" class="ext-card" target="_blank" rel="noopener">
+        <div class="ext-card-cat">PDF Tools</div>
+        <div class="ext-card-name">Smallpdf</div>
+        <div class="ext-card-desc">Compress, merge, split, and convert PDFs. No install. Browser-based.</div>
+      </a>
+      <a href="https://convertio.co" class="ext-card" target="_blank" rel="noopener">
+        <div class="ext-card-cat">File Converter</div>
+        <div class="ext-card-name">Convertio</div>
+        <div class="ext-card-desc">200+ formats: images, video, audio, documents. Drag & drop.</div>
+      </a>
+      <a href="https://squoosh.app" class="ext-card" target="_blank" rel="noopener">
+        <div class="ext-card-cat">Image Compression</div>
+        <div class="ext-card-name">Squoosh</div>
+        <div class="ext-card-desc">Google's image compressor. AVIF, WebP, MozJPEG — runs offline.</div>
+      </a>
+      <a href="https://otter.ai" class="ext-card" target="_blank" rel="noopener">
+        <div class="ext-card-cat">Transcription</div>
+        <div class="ext-card-name">Otter.ai</div>
+        <div class="ext-card-desc">Meeting transcription &amp; notes. 300 mins/month free.</div>
+      </a>
+      <a href="https://notebooklm.google.com" class="ext-card" target="_blank" rel="noopener">
+        <div class="ext-card-cat">AI Research</div>
+        <div class="ext-card-name">NotebookLM</div>
+        <div class="ext-card-desc">Upload docs, get AI summaries &amp; audio overviews. Free from Google.</div>
+      </a>
+      <a href="https://www.remove.bg" class="ext-card" target="_blank" rel="noopener">
+        <div class="ext-card-cat">Image Editing</div>
+        <div class="ext-card-name">Remove.bg</div>
+        <div class="ext-card-desc">AI background remover. Instant, free for standard resolution.</div>
+      </a>
+      <a href="https://app.diagrams.net" class="ext-card" target="_blank" rel="noopener">
+        <div class="ext-card-cat">Diagrams</div>
+        <div class="ext-card-name">draw.io</div>
+        <div class="ext-card-desc">Free flowchart &amp; process diagram builder. Perfect for automation mapping.</div>
+      </a>
+      <a href="https://n8n.io" class="ext-card" target="_blank" rel="noopener">
+        <div class="ext-card-cat">Automation</div>
+        <div class="ext-card-name">n8n Cloud Free</div>
+        <div class="ext-card-desc">5 active workflows free. Open-source automation powerhouse.</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══════════════════════════════════════════════════════════════ -->
+<section class="section-sm" style="background:var(--black-2);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="cta-banner">
+      <div class="cta-banner-title">Need Someone to Build It For You?</div>
+      <p class="cta-banner-sub">Connect with verified UK automation experts who turn these tools into real business workflows.</p>
+      <div class="cta-banner-actions">
+        <a href="providers.html" class="btn btn-primary btn-lg">Find an Expert →</a>
+        <a href="request-quote.html" class="btn btn-ghost btn-lg" style="margin-left:8px">Get Matched Free</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
+      <div><a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+
+<script>
+// ══════════════════════════════════════════════
+// IMAGE CONVERTER
+// ══════════════════════════════════════════════
+let imgFile = null;
+let selectedFmt = 'image/jpeg';
+let selectedExt = 'jpg';
+
+const dropEl   = document.getElementById('img-drop');
+const fileInp  = document.getElementById('img-file');
+const prevEl   = document.getElementById('img-preview');
+const convertBtn = document.getElementById('convert-btn');
+const resultEl = document.getElementById('convert-result');
+
+// Drag & drop
+dropEl.addEventListener('dragover',  e => { e.preventDefault(); dropEl.classList.add('drag-over'); });
+dropEl.addEventListener('dragleave', ()  => dropEl.classList.remove('drag-over'));
+dropEl.addEventListener('drop', e => {
+  e.preventDefault(); dropEl.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) loadImage(f);
+});
+fileInp.addEventListener('change', () => { if (fileInp.files[0]) loadImage(fileInp.files[0]); });
+
+function loadImage(f) {
+  imgFile = f;
+  const url = URL.createObjectURL(f);
+  document.getElementById('img-thumb').src = url;
+  document.getElementById('img-name').textContent = f.name;
+  document.getElementById('img-size').textContent = formatBytes(f.size);
+  prevEl.style.display = 'flex';
+  resultEl.style.display = 'none';
+  convertBtn.disabled = false;
+}
+
+function clearImage() {
+  imgFile = null; fileInp.value = '';
+  prevEl.style.display = 'none';
+  resultEl.style.display = 'none';
+  convertBtn.disabled = true;
+  document.getElementById('img-thumb').src = '';
+}
+
+function selectFmt(btn) {
+  document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedFmt = btn.dataset.fmt;
+  selectedExt = btn.dataset.ext;
+  document.getElementById('quality-wrap').style.display =
+    (selectedFmt === 'image/png') ? 'none' : 'block';
+}
+
+function convertImage() {
+  if (!imgFile) return;
+  const quality = parseFloat(document.getElementById('img-quality').value);
+  const img = new Image();
+  const url = URL.createObjectURL(imgFile);
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width  = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    if (selectedFmt === 'image/jpeg') {
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    ctx.drawImage(img, 0, 0);
+    URL.revokeObjectURL(url);
+    canvas.toBlob(blob => {
+      const dlUrl  = URL.createObjectURL(blob);
+      const baseName = imgFile.name.replace(/\.[^.]+$/, '');
+      const link   = document.getElementById('convert-dl-link');
+      link.href     = dlUrl;
+      link.download = `${baseName}-converted.${selectedExt}`;
+      document.getElementById('convert-result-text').textContent =
+        `${selectedExt.toUpperCase()} ready — ${formatBytes(blob.size)}`;
+      resultEl.style.display = 'flex';
+    }, selectedFmt, quality);
+  };
+  img.src = url;
+}
+
+function formatBytes(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(1) + ' MB';
+}
+
+// ══════════════════════════════════════════════
+// AI DICTATION (Web Speech API)
+// ══════════════════════════════════════════════
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let isRecording = false;
+let finalText   = '';
+
+if (!SR) {
+  document.getElementById('dict-no-support').style.display = 'block';
+  document.getElementById('dict-start-btn').disabled = true;
+} else {
+  recognition = new SR();
+  recognition.continuous     = true;
+  recognition.interimResults = true;
+
+  recognition.onresult = e => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalText += t + ' ';
+      else interim += t;
+    }
+    const box = document.getElementById('dict-transcript');
+    box.innerHTML =
+      `<span class="final">${escH(finalText)}</span><span class="interim">${escH(interim)}</span>`;
+    document.getElementById('dict-placeholder').style.display = 'none';
+    box.scrollTop = box.scrollHeight;
+  };
+
+  recognition.onerror = e => {
+    if (e.error !== 'no-speech') setRecState(false);
+    document.getElementById('dict-status').textContent = 'Error: ' + e.error;
+  };
+
+  recognition.onend = () => { if (isRecording) recognition.start(); };
+}
+
+function toggleDictation() {
+  if (!recognition) return;
+  if (isRecording) {
+    recognition.stop();
+    setRecState(false);
+  } else {
+    recognition.lang = document.getElementById('dict-lang').value;
+    recognition.start();
+    setRecState(true);
+  }
+}
+
+function setRecState(on) {
+  isRecording = on;
+  const btn   = document.getElementById('dict-start-btn');
+  const box   = document.getElementById('dict-transcript');
+  const status = document.getElementById('dict-status');
+  if (on) {
+    btn.className = 'rec-btn rec-btn-stop';
+    btn.innerHTML = `<span class="rec-dot"></span> Stop`;
+    box.classList.add('active');
+    status.textContent = 'Listening…';
+  } else {
+    btn.className = 'rec-btn rec-btn-start';
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v7a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg> Start Dictating`;
+    box.classList.remove('active');
+    status.textContent = 'Stopped';
+  }
+}
+
+function copyTranscript() {
+  const text = finalText.trim();
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('[onclick="copyTranscript()"]');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✓ Copied!';
+    setTimeout(() => { btn.innerHTML = orig; }, 2000);
+  });
+}
+
+function clearTranscript() {
+  if (isRecording) { recognition.stop(); setRecState(false); }
+  finalText = '';
+  const box = document.getElementById('dict-transcript');
+  box.innerHTML = '';
+  document.getElementById('dict-placeholder').style.display = 'inline';
+  document.getElementById('dict-status').textContent = 'Ready';
+}
+
+function escH(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ══════════════════════════════════════════════
+// FOCUS MUSIC PLAYER
+// ══════════════════════════════════════════════
+
+// ── REPLACE src URLs with your Google Drive streaming links ──
+// Format: https://drive.google.com/uc?id=YOUR_FILE_ID&export=download
+const TRACKS = [
+  { name: 'Deep Work Session', duration: '45:00', src: '#' /* GOOGLE DRIVE LINK */ },
+  { name: 'Creative Flow',     duration: '38:00', src: '#' /* GOOGLE DRIVE LINK */ },
+  { name: 'Morning Energy',    duration: '32:00', src: '#' /* GOOGLE DRIVE LINK */ },
+];
+
+const audio   = document.getElementById('player-audio');
+let curTrack  = -1;
+let playing   = false;
+
+// Build track list
+const tl = document.getElementById('player-tracklist');
+tl.innerHTML = TRACKS.map((t, i) => `
+  <div class="player-track" id="pt-${i}" onclick="selectTrack(${i})">
+    <div class="player-track-num" id="ptn-${i}">${i + 1}</div>
+    <div class="player-track-name">${t.name}</div>
+    <div class="player-track-dur">${t.duration}</div>
+  </div>
+`).join('');
+
+function selectTrack(i) {
+  curTrack = i;
+  document.querySelectorAll('.player-track').forEach((el, j) => el.classList.toggle('playing', j === i));
+  document.getElementById('player-now').textContent = TRACKS[i].name;
+  audio.src = TRACKS[i].src;
+  audio.volume = parseFloat(document.querySelector('[oninput="setVol(this.value)"]').value);
+  audio.play().then(() => setPlayIcon(true)).catch(() => {});
+  playing = true;
+}
+
+function togglePlay() {
+  if (curTrack < 0) { selectTrack(0); return; }
+  if (audio.paused) { audio.play(); playing = true; setPlayIcon(true); }
+  else              { audio.pause(); playing = false; setPlayIcon(false); }
+}
+
+function prevTrack() { selectTrack((curTrack - 1 + TRACKS.length) % TRACKS.length); }
+function nextTrack() { selectTrack((curTrack + 1) % TRACKS.length); }
+
+function setPlayIcon(p) {
+  document.getElementById('player-play-icon').innerHTML = p
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<polygon points="5 3 19 12 5 21 5 3"/>';
+}
+
+function setVol(v)    { audio.volume = parseFloat(v); }
+function seekTo(v)    { if (audio.duration) audio.currentTime = v; }
+
+audio.addEventListener('timeupdate', () => {
+  const p = document.getElementById('player-progress');
+  const c = document.getElementById('player-cur');
+  if (audio.duration) {
+    p.max   = audio.duration;
+    p.value = audio.currentTime;
+    c.textContent = fmtTime(audio.currentTime);
+  }
+});
+audio.addEventListener('loadedmetadata', () => {
+  document.getElementById('player-dur').textContent = fmtTime(audio.duration);
+});
+audio.addEventListener('ended', nextTrack);
+
+function fmtTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+</script>
+</body>
+</html>
