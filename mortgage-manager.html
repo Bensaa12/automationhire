@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HomePath — Mortgage Manager | AutomationHire Free Tools</title>
+  <meta name="description" content="Free mortgage manager app. Plan your deposit, track your mortgage, manage home maintenance and monthly costs — all in one place. No sign-up required." />
+  <link rel="canonical" href="https://automationhire.co.uk/mortgage-manager" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>" />
+  <style>
+    /* ── App shell ── */
+    .mm-app { max-width: 1200px; margin: 0 auto; padding: 0 20px 80px; }
+
+    /* ── Tab bar ── */
+    .mm-tabs {
+      display: flex; gap: 0; border-bottom: 1px solid var(--border);
+      margin-bottom: 28px; overflow-x: auto; scrollbar-width: none;
+    }
+    .mm-tabs::-webkit-scrollbar { display: none; }
+    .mm-tab {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 22px; font-size: 13px; font-weight: 700;
+      color: var(--muted); border: none; background: none;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+      cursor: pointer; transition: all .2s; white-space: nowrap;
+    }
+    .mm-tab:hover { color: var(--white); }
+    .mm-tab.active { color: var(--white); border-bottom-color: var(--tab-color); }
+    .mm-tab .tab-icon { font-size: 16px; }
+
+    /* ── Pro bar ── */
+    .pro-bar {
+      background: linear-gradient(135deg, rgba(251,191,36,.08), rgba(251,146,60,.06));
+      border: 1px solid rgba(251,191,36,.2);
+      border-radius: 10px; padding: 12px 18px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .pro-bar-text { font-size: 13px; color: var(--white-60); }
+    .pro-bar-text strong { color: var(--white); }
+    .pro-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 8px; border: none;
+      background: linear-gradient(135deg, #fbbf24, #fb923c);
+      color: #1a0a00; font-size: 12px; font-weight: 800;
+      cursor: pointer; white-space: nowrap; text-decoration: none;
+    }
+
+    /* ── Two-column layout ── */
+    .mm-grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
+    @media(max-width: 900px) { .mm-grid { grid-template-columns: 1fr; } }
+
+    /* ── Cards ── */
+    .mm-card {
+      background: var(--black-2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 22px;
+    }
+    .mm-card + .mm-card { margin-top: 16px; }
+    .mm-card-title { font-size: 11px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 7px; }
+
+    /* ── Form elements ── */
+    .mm-field { margin-bottom: 14px; }
+    .mm-field:last-child { margin-bottom: 0; }
+    .mm-label { font-size: 12px; font-weight: 700; color: var(--white-60); margin-bottom: 6px; display: flex; justify-content: space-between; }
+    .mm-label span { font-weight: 500; color: var(--muted); font-size: 11px; }
+    .mm-input {
+      width: 100%; box-sizing: border-box;
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--white); font-size: 14px;
+      padding: 9px 12px; outline: none; font-family: inherit;
+      transition: border-color .2s;
+    }
+    .mm-input:focus { border-color: rgba(255,255,255,.25); }
+    .mm-prefix-wrap { position: relative; }
+    .mm-prefix { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--green); font-weight: 700; font-size: 13px; pointer-events: none; }
+    .mm-prefix + .mm-input { padding-left: 24px; }
+    .mm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .mm-select {
+      width: 100%; box-sizing: border-box;
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--white); font-size: 13px;
+      padding: 9px 12px; outline: none; cursor: pointer;
+    }
+    .mm-hint { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+    .mm-section-divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+    .save-indicator { font-size: 11px; color: var(--green); opacity: 0; transition: opacity .3s; margin-left: auto; }
+    .save-indicator.show { opacity: 1; }
+
+    /* ── Metric cards ── */
+    .metric-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .metric-tile { background: var(--black-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .metric-tile.accent { background: linear-gradient(135deg, rgba(0,230,118,.08), rgba(0,196,180,.05)); border-color: rgba(0,230,118,.22); }
+    .metric-tile.warn   { background: rgba(251,191,36,.07); border-color: rgba(251,191,36,.22); }
+    .metric-tile.danger { background: rgba(239,68,68,.07);  border-color: rgba(239,68,68,.22); }
+    .tile-lbl { font-size: 10px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .tile-val { font-size: 22px; font-weight: 900; font-family: var(--font-head); color: var(--white); line-height: 1; }
+    .tile-val.green  { color: var(--green); }
+    .tile-val.amber  { color: #fbbf24; }
+    .tile-val.red    { color: #f87171; }
+    .tile-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+    /* ── Progress bars ── */
+    .prog-wrap { margin: 16px 0; }
+    .prog-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--white-60); margin-bottom: 7px; }
+    .prog-track { height: 8px; border-radius: 4px; background: rgba(255,255,255,.07); overflow: hidden; }
+    .prog-bar { height: 100%; border-radius: 4px; transition: width .8s cubic-bezier(.34,1.56,.64,1); }
+    .prog-bar.green { background: linear-gradient(90deg, #00e676, #00c4b4); }
+    .prog-bar.amber { background: linear-gradient(90deg, #fbbf24, #fb923c); }
+    .prog-bar.blue  { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+    .prog-bar.purple{ background: linear-gradient(90deg, #a78bfa, #ec4899); }
+
+    /* ── Readiness score ── */
+    .readiness-wrap { text-align: center; padding: 8px 0 20px; }
+    .readiness-ring { position: relative; width: 120px; height: 120px; margin: 0 auto 12px; }
+    .readiness-ring canvas { position: absolute; top: 0; left: 0; }
+    .readiness-num { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 28px; font-weight: 900; color: var(--white); line-height: 1; }
+    .readiness-num small { font-size: 12px; color: var(--muted); font-weight: 500; font-family: inherit; }
+    .readiness-label { font-size: 14px; font-weight: 700; }
+
+    /* ── Checklist ── */
+    .checklist { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+    .check-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--white-60); line-height: 1.4; }
+    .check-dot { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; margin-top: 1px; }
+    .check-dot.done   { background: rgba(0,230,118,.15); color: var(--green); border: 1px solid rgba(0,230,118,.3); }
+    .check-dot.todo   { background: rgba(148,163,184,.1); color: var(--muted); border: 1px solid var(--border); }
+    .check-dot.warn   { background: rgba(251,191,36,.15); color: #fbbf24; border: 1px solid rgba(251,191,36,.3); }
+
+    /* ── Alert box ── */
+    .mm-alert { border-radius: 9px; padding: 12px 14px; font-size: 13px; line-height: 1.5; margin-bottom: 14px; }
+    .mm-alert.green { background: rgba(0,230,118,.07); border: 1px solid rgba(0,230,118,.2); color: var(--green); }
+    .mm-alert.amber { background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.22); color: #fbbf24; }
+    .mm-alert.red   { background: rgba(239,68,68,.08);  border: 1px solid rgba(239,68,68,.22);  color: #f87171; }
+    .mm-alert.blue  { background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.22); color: #60a5fa; }
+
+    /* ── Overpayment simulator ── */
+    .ov-result { background: rgba(0,230,118,.07); border: 1px solid rgba(0,230,118,.18); border-radius: 8px; padding: 12px 14px; margin-top: 10px; font-size: 13px; line-height: 1.6; color: var(--white-60); display: none; }
+    .ov-result strong { color: var(--green); }
+
+    /* ── Maintenance ── */
+    .maint-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    @media(max-width:600px) { .maint-summary { grid-template-columns: 1fr 1fr; } }
+
+    .items-list { display: flex; flex-direction: column; gap: 10px; }
+    .item-row {
+      background: var(--black-2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+      display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+      transition: border-color .2s;
+    }
+    .item-row:hover { border-color: rgba(255,255,255,.14); }
+    .item-name { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+    .item-meta { font-size: 11px; color: var(--muted); display: flex; gap: 12px; flex-wrap: wrap; }
+    .status-pill { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 100px; white-space: nowrap; }
+    .status-ok     { background: rgba(0,230,118,.12); color: var(--green); border: 1px solid rgba(0,230,118,.25); }
+    .status-warn   { background: rgba(251,191,36,.12); color: #fbbf24; border: 1px solid rgba(251,191,36,.25); }
+    .status-danger { background: rgba(239,68,68,.12);  color: #f87171; border: 1px solid rgba(239,68,68,.25); }
+    .item-actions { display: flex; gap: 7px; align-items: center; }
+    .icon-btn { width: 30px; height: 30px; border-radius: 7px; border: 1px solid var(--border); background: rgba(255,255,255,.04); color: var(--muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+    .icon-btn:hover { border-color: rgba(255,255,255,.2); color: var(--white); }
+    .icon-btn.del:hover { border-color: rgba(239,68,68,.3); color: #f87171; background: rgba(239,68,68,.08); }
+
+    .add-item-btn {
+      width: 100%; padding: 12px; border-radius: 10px;
+      border: 1px dashed rgba(0,230,118,.3); background: rgba(0,230,118,.03);
+      color: var(--green); font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all .2s; margin-top: 12px;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
+    .add-item-btn:hover { background: rgba(0,230,118,.07); border-color: rgba(0,230,118,.5); }
+    .add-item-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ── Upcoming ── */
+    .upcoming-list { display: flex; flex-direction: column; gap: 8px; }
+    .upcoming-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--black-2); border: 1px solid var(--border); border-radius: 9px; }
+    .upcoming-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .upcoming-name { font-size: 13px; font-weight: 700; color: var(--white); flex: 1; }
+    .upcoming-due { font-size: 11px; color: var(--muted); }
+    .upcoming-type { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 100px; }
+    .type-warranty { background: rgba(239,68,68,.1); color: #f87171; }
+    .type-service  { background: rgba(59,130,246,.1);  color: #60a5fa; }
+
+    /* ── Modal ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); backdrop-filter: blur(6px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: #0d1525; border: 1px solid rgba(255,255,255,.12); border-radius: 16px; padding: 28px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+    .modal-title { font-family: var(--font-head); font-size: 18px; font-weight: 800; margin-bottom: 20px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+    /* ── Pro gate ── */
+    .pro-gate { background: linear-gradient(135deg, rgba(251,191,36,.08), rgba(251,146,60,.06)); border: 1px dashed rgba(251,191,36,.3); border-radius: 12px; padding: 24px; text-align: center; }
+    .pro-gate-icon { font-size: 36px; margin-bottom: 10px; }
+    .pro-gate h4 { font-size: 16px; font-weight: 800; color: var(--white); margin: 0 0 7px; }
+    .pro-gate p { font-size: 13px; color: var(--white-60); margin: 0 0 16px; line-height: 1.6; }
+
+    /* ── Costs tab ── */
+    .cost-categories { display: flex; flex-direction: column; gap: 10px; }
+    .cost-category { background: var(--black-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .cost-cat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; }
+    .cost-cat-icon { font-size: 18px; }
+    .cost-cat-title { font-size: 13px; font-weight: 700; color: var(--white); flex: 1; }
+    .cost-cat-total { font-size: 14px; font-weight: 800; color: var(--green); }
+    .cost-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    @media(max-width:480px) { .cost-fields { grid-template-columns: 1fr; } }
+
+    .costs-summary { background: var(--black-2); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+    .cost-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .cost-bar-lbl { font-size: 12px; color: var(--white-60); width: 120px; flex-shrink: 0; }
+    .cost-bar-track { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,.07); overflow: hidden; }
+    .cost-bar-fill { height: 100%; border-radius: 3px; }
+    .cost-bar-amt { font-size: 12px; font-weight: 700; color: var(--white); text-align: right; width: 55px; flex-shrink: 0; }
+    .cost-total-row { border-top: 1px solid var(--border); padding-top: 14px; margin-top: 6px; display: flex; justify-content: space-between; align-items: center; }
+    .cost-total-lbl { font-size: 13px; font-weight: 700; color: var(--white-60); }
+    .cost-total-val { font-size: 24px; font-weight: 900; font-family: var(--font-head); color: var(--white); }
+
+    /* ── Amortization mini chart ── */
+    #mortgage-chart { width: 100%; display: block; }
+
+    /* ── Misc ── */
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
+    .empty-state .ei { font-size: 40px; margin-bottom: 10px; }
+    .btn-primary-sm { padding: 9px 18px; border-radius: 8px; border: none; background: linear-gradient(135deg, #00e676, #00c4b4); color: #060810; font-size: 13px; font-weight: 800; cursor: pointer; transition: all .2s; }
+    .btn-primary-sm:hover { box-shadow: 0 4px 18px rgba(0,230,118,.3); }
+    .btn-outline-sm { padding: 9px 18px; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,.04); color: var(--white-60); font-size: 13px; font-weight: 700; cursor: pointer; transition: all .2s; }
+    .btn-outline-sm:hover { border-color: rgba(255,255,255,.2); color: var(--white); }
+    .mm-pane { display: none; }
+    .mm-pane.active { display: block; }
+  </style>
+</head>
+<body class="dark">
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li class="nav-sep" aria-hidden="true"></li>
+      <li><a href="free.html" style="color:var(--green);font-weight:700">Free Tools</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="login.html" class="nav-expert-link">Expert Login</a>
+      <a href="request-quote.html" class="nav-pill nav-pill-primary">Get Matched</a>
+      <a href="book.html" class="nav-pill nav-pill-outline"><span class="nav-live-dot"></span>Book a Call</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero" style="padding-bottom:20px">
+  <div class="container">
+    <a href="free.html" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);text-decoration:none;margin-bottom:18px;transition:color .2s" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Free Tools
+    </a>
+    <div class="section-label">Free App</div>
+    <h1 class="page-hero-title" style="font-size:clamp(26px,5vw,42px)">🏠 HomePath — Mortgage Manager</h1>
+    <p class="page-hero-sub" style="max-width:520px;margin:0 auto">Plan your deposit. Manage your mortgage. Stay on top of your home. All your data stays in your browser.</p>
+  </div>
+</section>
+
+<!-- APP -->
+<div class="mm-app">
+
+  <!-- Pro bar -->
+  <div class="pro-bar">
+    <div class="pro-bar-text"><strong>Free version</strong> — track up to 5 maintenance items. Unlock unlimited items, emergency fund tracker &amp; repair log.</div>
+    <a href="#pro-purchase" class="pro-pill" onclick="showProModal()">
+      🔓 Get Full App — £9.99
+    </a>
+  </div>
+
+  <!-- Tabs -->
+  <div class="mm-tabs">
+    <button class="mm-tab active" data-tab="ready" style="--tab-color:#3b82f6" onclick="switchTab('ready',this)">
+      <span class="tab-icon">📋</span> Getting Ready
+    </button>
+    <button class="mm-tab" data-tab="mortgage" style="--tab-color:#00e676" onclick="switchTab('mortgage',this)">
+      <span class="tab-icon">🏦</span> My Mortgage
+    </button>
+    <button class="mm-tab" data-tab="maintenance" style="--tab-color:#fbbf24" onclick="switchTab('maintenance',this)">
+      <span class="tab-icon">🔧</span> Home Maintenance
+    </button>
+    <button class="mm-tab" data-tab="costs" style="--tab-color:#a78bfa" onclick="switchTab('costs',this)">
+      <span class="tab-icon">💷</span> Monthly Costs
+    </button>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- TAB 1: GETTING READY                                   -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div id="pane-ready" class="mm-pane active">
+    <div class="mm-grid">
+
+      <!-- LEFT: INPUTS -->
+      <div>
+        <div class="mm-card">
+          <div class="mm-card-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Your Income
+            <span class="save-indicator" id="save-ready">✓ Saved</span>
+          </div>
+          <div class="mm-row">
+            <div class="mm-field">
+              <div class="mm-label">Your monthly income</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-income" placeholder="3500" oninput="saveReady();calcReady()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Partner's income <span>(if any)</span></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-partner" placeholder="0" oninput="saveReady();calcReady()" /></div>
+            </div>
+          </div>
+          <div class="mm-field">
+            <div class="mm-label">Total monthly expenses <span>(bills, food, travel, etc.)</span></div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-expenses" placeholder="1800" oninput="saveReady();calcReady()" /></div>
+          </div>
+          <div class="mm-field">
+            <div class="mm-label">Existing debt payments <span>(loans, credit cards /mo)</span></div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-debts" placeholder="0" oninput="saveReady();calcReady()" /></div>
+          </div>
+        </div>
+
+        <div class="mm-card">
+          <div class="mm-card-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Savings &amp; Goal
+          </div>
+          <div class="mm-row">
+            <div class="mm-field">
+              <div class="mm-label">Deposit saved so far</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-saved" placeholder="15000" oninput="saveReady();calcReady()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Monthly saving rate</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-monthly-save" placeholder="500" oninput="saveReady();calcReady()" /></div>
+            </div>
+          </div>
+          <div class="mm-field">
+            <div class="mm-label">Target property price</div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-target-price" placeholder="280000" oninput="saveReady();calcReady()" /></div>
+          </div>
+          <div class="mm-field">
+            <div class="mm-label">Target deposit %</div>
+            <select class="mm-select" id="r-deposit-pct" onchange="saveReady();calcReady()">
+              <option value="5">5% — minimum (high LTV)</option>
+              <option value="10" selected>10% — standard</option>
+              <option value="15">15% — good rates start here</option>
+              <option value="20">20% — strong position</option>
+              <option value="25">25% — excellent</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: DASHBOARD -->
+      <div>
+        <!-- Readiness score -->
+        <div class="mm-card" style="margin-bottom:16px">
+          <div class="mm-card-title">Mortgage Readiness</div>
+          <div class="readiness-wrap">
+            <div class="readiness-ring">
+              <canvas id="readiness-canvas" width="120" height="120"></canvas>
+              <div class="readiness-num">
+                <span id="r-score-num">0</span>
+                <small>/ 100</small>
+              </div>
+            </div>
+            <div class="readiness-label" id="r-score-label" style="color:var(--muted)">Add your details →</div>
+          </div>
+        </div>
+
+        <!-- Key metrics -->
+        <div class="metric-strip">
+          <div class="metric-tile">
+            <div class="tile-lbl">Max borrowing</div>
+            <div class="tile-val green" id="r-max-borrow">—</div>
+            <div class="tile-sub">~4.5× income</div>
+          </div>
+          <div class="metric-tile">
+            <div class="tile-lbl">Deposit needed</div>
+            <div class="tile-val" id="r-deposit-needed">—</div>
+            <div class="tile-sub" id="r-deposit-pct-lbl">—</div>
+          </div>
+          <div class="metric-tile">
+            <div class="tile-lbl">Time to target</div>
+            <div class="tile-val amber" id="r-time-to-go">—</div>
+            <div class="tile-sub">at current saving rate</div>
+          </div>
+          <div class="metric-tile">
+            <div class="tile-lbl">Disposable /mo</div>
+            <div class="tile-val" id="r-disposable">—</div>
+            <div class="tile-sub">after bills &amp; debts</div>
+          </div>
+        </div>
+
+        <!-- Deposit progress -->
+        <div class="mm-card" style="margin-bottom:16px">
+          <div class="mm-card-title">Deposit Progress</div>
+          <div class="prog-wrap">
+            <div class="prog-label">
+              <span id="r-saved-label">£0 saved</span>
+              <span id="r-target-label">Target: £—</span>
+            </div>
+            <div class="prog-track"><div class="prog-bar blue" id="r-deposit-bar" style="width:0%"></div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted)" id="r-deposit-msg">Fill in your details to see your progress.</div>
+        </div>
+
+        <!-- Affordability alert -->
+        <div class="mm-alert blue" id="r-afford-msg" style="display:none"></div>
+
+        <!-- Checklist -->
+        <div class="mm-card">
+          <div class="mm-card-title">Readiness Checklist</div>
+          <div class="checklist" id="r-checklist"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- TAB 2: MY MORTGAGE                                     -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div id="pane-mortgage" class="mm-pane">
+    <div class="mm-grid">
+
+      <!-- LEFT: INPUTS -->
+      <div>
+        <div class="mm-card">
+          <div class="mm-card-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            Mortgage Details
+            <span class="save-indicator" id="save-mortgage">✓ Saved</span>
+          </div>
+          <div class="mm-row">
+            <div class="mm-field">
+              <div class="mm-label">Property value</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="m-value" placeholder="280000" oninput="saveMortgage();calcMortgage()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Loan amount</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="m-loan" placeholder="224000" oninput="saveMortgage();calcMortgage()" /></div>
+            </div>
+          </div>
+          <div class="mm-row">
+            <div class="mm-field">
+              <div class="mm-label">Annual interest rate</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix" style="color:var(--muted)">%</span><input class="mm-input" type="number" id="m-rate" placeholder="4.5" step="0.01" oninput="saveMortgage();calcMortgage()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Term (years)</div>
+              <input class="mm-input" type="number" id="m-term" placeholder="25" min="1" max="40" oninput="saveMortgage();calcMortgage()" />
+            </div>
+          </div>
+          <div class="mm-row">
+            <div class="mm-field">
+              <div class="mm-label">Mortgage start date</div>
+              <input class="mm-input" type="date" id="m-start" oninput="saveMortgage();calcMortgage()" />
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Mortgage type</div>
+              <select class="mm-select" id="m-type" onchange="saveMortgage();calcMortgage()">
+                <option value="repayment">Repayment</option>
+                <option value="interest">Interest-only</option>
+              </select>
+            </div>
+          </div>
+          <hr class="mm-section-divider" />
+          <div class="mm-card-title" style="margin-bottom:12px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Deal / Rate Review
+          </div>
+          <div class="mm-row">
+            <div class="mm-field">
+              <div class="mm-label">Deal type</div>
+              <select class="mm-select" id="m-deal-type" onchange="saveMortgage();calcMortgage()">
+                <option value="fixed">Fixed rate</option>
+                <option value="variable">Variable</option>
+                <option value="tracker">Tracker</option>
+                <option value="svr">SVR</option>
+              </select>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Deal end date</div>
+              <input class="mm-input" type="date" id="m-deal-end" oninput="saveMortgage();calcMortgage()" />
+            </div>
+          </div>
+          <div class="mm-field">
+            <div class="mm-label">Lender <span>(optional)</span></div>
+            <input class="mm-input" type="text" id="m-lender" placeholder="e.g. Nationwide, Halifax…" oninput="saveMortgage()" />
+          </div>
+        </div>
+
+        <!-- Overpayment simulator -->
+        <div class="mm-card">
+          <div class="mm-card-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            Overpayment Simulator
+          </div>
+          <div class="mm-field">
+            <div class="mm-label">Extra monthly payment</div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="m-overpay" placeholder="100" oninput="calcOverpayment()" /></div>
+          </div>
+          <div class="ov-result" id="ov-result"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: DASHBOARD -->
+      <div>
+        <!-- Deal alert -->
+        <div id="m-deal-alert" style="display:none;margin-bottom:16px"></div>
+
+        <!-- Key metrics -->
+        <div class="metric-strip" style="margin-bottom:16px">
+          <div class="metric-tile accent">
+            <div class="tile-lbl">Monthly payment</div>
+            <div class="tile-val green" id="m-payment">—</div>
+            <div class="tile-sub">capital + interest</div>
+          </div>
+          <div class="metric-tile">
+            <div class="tile-lbl">Current balance</div>
+            <div class="tile-val" id="m-balance">—</div>
+            <div class="tile-sub" id="m-balance-date">—</div>
+          </div>
+          <div class="metric-tile">
+            <div class="tile-lbl">Equity</div>
+            <div class="tile-val green" id="m-equity">—</div>
+            <div class="tile-sub" id="m-equity-pct">—</div>
+          </div>
+          <div class="metric-tile">
+            <div class="tile-lbl">LTV</div>
+            <div class="tile-val" id="m-ltv">—</div>
+            <div class="tile-sub">loan to value</div>
+          </div>
+        </div>
+
+        <!-- LTV milestone progress -->
+        <div class="mm-card" style="margin-bottom:16px">
+          <div class="mm-card-title">LTV Milestones</div>
+          <div id="m-ltv-milestones"></div>
+        </div>
+
+        <!-- Balance chart -->
+        <div class="mm-card" style="margin-bottom:16px">
+          <div class="mm-card-title">Balance Over Term</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Remaining balance vs equity — yearly</div>
+          <canvas id="mortgage-chart" height="140"></canvas>
+        </div>
+
+        <!-- Total interest -->
+        <div class="mm-card">
+          <div class="mm-card-title">Loan Summary</div>
+          <div class="metric-strip">
+            <div class="metric-tile">
+              <div class="tile-lbl">Total repaid</div>
+              <div class="tile-val" id="m-total-repaid" style="font-size:18px">—</div>
+            </div>
+            <div class="metric-tile">
+              <div class="tile-lbl">Total interest</div>
+              <div class="tile-val red" id="m-total-interest" style="font-size:18px">—</div>
+            </div>
+            <div class="metric-tile">
+              <div class="tile-lbl">Months remaining</div>
+              <div class="tile-val" id="m-months-left" style="font-size:18px">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- TAB 3: HOME MAINTENANCE                                -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div id="pane-maintenance" class="mm-pane">
+
+    <!-- Summary -->
+    <div class="maint-summary">
+      <div class="metric-tile danger">
+        <div class="tile-lbl">Needs attention</div>
+        <div class="tile-val red" id="mt-urgent">0</div>
+        <div class="tile-sub">overdue or expired</div>
+      </div>
+      <div class="metric-tile warn">
+        <div class="tile-lbl">Coming up</div>
+        <div class="tile-val amber" id="mt-soon">0</div>
+        <div class="tile-sub">due within 90 days</div>
+      </div>
+      <div class="metric-tile">
+        <div class="tile-lbl">Items tracked</div>
+        <div class="tile-val" id="mt-total">0</div>
+        <div class="tile-sub" id="mt-limit-lbl">5 max on free</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start">
+      <div>
+        <!-- Upcoming -->
+        <div class="mm-card" style="margin-bottom:16px">
+          <div class="mm-card-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Upcoming (next 90 days)
+          </div>
+          <div class="upcoming-list" id="upcoming-list">
+            <div class="empty-state" style="padding:16px"><div class="ei">📅</div>Nothing due soon</div>
+          </div>
+        </div>
+
+        <!-- All items -->
+        <div class="mm-card">
+          <div class="mm-card-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            All Tracked Items
+          </div>
+          <div class="items-list" id="items-list"></div>
+          <button class="add-item-btn" id="add-item-btn" onclick="openAddItem()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Item
+          </button>
+          <div id="items-limit-msg" style="display:none;text-align:center;padding-top:12px"></div>
+        </div>
+      </div>
+
+      <!-- Right: Emergency fund (Pro gate) -->
+      <div>
+        <div class="mm-card" style="margin-bottom:16px" id="efund-section">
+          <div class="mm-card-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Emergency Fund
+          </div>
+          <!-- Pro gate overlay -->
+          <div class="pro-gate">
+            <div class="pro-gate-icon">🔒</div>
+            <h4>Pro Feature</h4>
+            <p>Track your home emergency fund target, current balance, and recommended pot size based on your property value.</p>
+            <a href="#pro-purchase" class="pro-pill" style="display:inline-flex" onclick="showProModal()">Get Full App — £9.99</a>
+          </div>
+        </div>
+
+        <div class="mm-card">
+          <div class="mm-card-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            Maintenance Tips
+          </div>
+          <div style="font-size:12px;color:var(--white-60);line-height:1.75">
+            <p style="margin:0 0 8px">🔥 <strong style="color:var(--white)">Boiler</strong> — service annually. Most failures happen Oct–Dec.</p>
+            <p style="margin:0 0 8px">🏚️ <strong style="color:var(--white)">Roof</strong> — inspect gutters spring &amp; autumn. Replace felt every 15–20 yrs.</p>
+            <p style="margin:0 0 8px">💧 <strong style="color:var(--white)">Plumbing</strong> — know where your stopcock is. Check for leaks annually.</p>
+            <p style="margin:0 0 8px">⚡ <strong style="color:var(--white)">Electrics</strong> — EICR certificate every 10 years for owner-occupiers.</p>
+            <p style="margin:0">🌿 <strong style="color:var(--white)">Budget</strong> — a common rule: set aside 1% of property value per year for maintenance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @media(max-width:860px) { #pane-maintenance > div:nth-child(2) { grid-template-columns: 1fr; } }
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- TAB 4: MONTHLY COSTS                                   -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div id="pane-costs" class="mm-pane">
+    <div class="mm-grid">
+
+      <!-- LEFT: COST INPUTS -->
+      <div>
+        <div class="mm-card">
+          <div class="mm-card-title">
+            <span style="color:#a78bfa">🏦</span> Mortgage
+            <span class="save-indicator" id="save-costs">✓ Saved</span>
+          </div>
+          <div class="mm-field">
+            <div class="mm-label">Monthly payment <span>(auto from My Mortgage)</span></div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-mortgage" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
+            <div class="mm-hint">Updates automatically if you've filled in My Mortgage.</div>
+          </div>
+        </div>
+
+        <div class="mm-card">
+          <div class="mm-card-title"><span>🏛️</span> Council Tax / Local Tax</div>
+          <div class="mm-field">
+            <div class="mm-label">Monthly council tax</div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-council" placeholder="160" oninput="saveCosts();calcCosts()" /></div>
+          </div>
+        </div>
+
+        <div class="mm-card">
+          <div class="mm-card-title"><span>⚡</span> Utilities</div>
+          <div class="cost-fields">
+            <div class="mm-field">
+              <div class="mm-label">Electricity</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-electric" placeholder="80" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Gas / Heating</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-gas" placeholder="60" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Water</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-water" placeholder="35" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Broadband</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-broadband" placeholder="35" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mm-card">
+          <div class="mm-card-title"><span>🛡️</span> Insurance</div>
+          <div class="cost-fields">
+            <div class="mm-field">
+              <div class="mm-label">Buildings</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-buildings" placeholder="25" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Contents</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-contents" placeholder="15" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Life / Critical illness</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-life" placeholder="30" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Boiler cover</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-boiler" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mm-card">
+          <div class="mm-card-title"><span>🏢</span> Other Home Costs</div>
+          <div class="cost-fields">
+            <div class="mm-field">
+              <div class="mm-label">Ground rent</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-ground" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Service charge</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-service" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Maintenance pot /mo</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-maint-pot" placeholder="100" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+            <div class="mm-field">
+              <div class="mm-label">Other</div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-other" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: SUMMARY -->
+      <div style="position:sticky;top:90px">
+        <div class="costs-summary">
+          <div class="mm-card-title" style="margin-bottom:18px">Monthly Breakdown</div>
+          <div id="cost-bars"></div>
+          <div class="cost-total-row">
+            <div class="cost-total-lbl">Total monthly commitment</div>
+            <div class="cost-total-val" id="cost-total">£0</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)">
+            <span>Annual cost</span>
+            <span id="cost-annual" style="font-weight:700;color:var(--white)">£0</span>
+          </div>
+        </div>
+
+        <div class="mm-card" style="margin-top:16px;text-align:center">
+          <canvas id="costs-chart" height="200" width="200" style="display:block;margin:0 auto"></canvas>
+          <div style="font-size:11px;color:var(--muted);margin-top:10px" id="cost-chart-legend"></div>
+        </div>
+
+        <div class="mm-card" style="margin-top:16px">
+          <div class="mm-card-title">Affordability Check</div>
+          <div id="cost-afford-check" style="font-size:13px;color:var(--white-60);line-height:1.7"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /mm-app -->
+
+<!-- ── ADD ITEM MODAL ── -->
+<div class="modal-overlay" id="item-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Add Maintenance Item</div>
+    <input type="hidden" id="edit-item-id" value="" />
+
+    <div class="mm-row">
+      <div class="mm-field" style="grid-column:1/-1">
+        <div class="mm-label">Item name <span style="color:#f87171">*</span></div>
+        <input class="mm-input" type="text" id="i-name" placeholder="e.g. Combi Boiler, Roof Tiles, Front Door…" />
+      </div>
+    </div>
+    <div class="mm-row">
+      <div class="mm-field">
+        <div class="mm-label">Category</div>
+        <select class="mm-select" id="i-category">
+          <option>Boiler / Heating</option>
+          <option>Roof &amp; Gutters</option>
+          <option>Windows &amp; Doors</option>
+          <option>Electrics</option>
+          <option>Plumbing</option>
+          <option>Kitchen</option>
+          <option>Appliances</option>
+          <option>Flooring</option>
+          <option>Garden / Outdoor</option>
+          <option>Security</option>
+          <option>Damp / Insulation</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="mm-field">
+        <div class="mm-label">Installed / purchased</div>
+        <input class="mm-input" type="date" id="i-installed" />
+      </div>
+    </div>
+    <div class="mm-row">
+      <div class="mm-field">
+        <div class="mm-label">Warranty (years) <span>0 = none</span></div>
+        <input class="mm-input" type="number" id="i-warranty" placeholder="0" min="0" max="50" />
+      </div>
+      <div class="mm-field">
+        <div class="mm-label">Service every (months) <span>0 = no service</span></div>
+        <input class="mm-input" type="number" id="i-service-interval" placeholder="0" min="0" />
+      </div>
+    </div>
+    <div class="mm-field">
+      <div class="mm-label">Last serviced <span>(if applicable)</span></div>
+      <input class="mm-input" type="date" id="i-last-service" />
+    </div>
+    <div class="mm-field">
+      <div class="mm-label">Notes <span>(optional)</span></div>
+      <input class="mm-input" type="text" id="i-notes" placeholder="Model number, contractor, anything useful…" />
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-primary-sm" onclick="saveItem()">Save Item</button>
+      <button class="btn-outline-sm" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PRO PURCHASE MODAL ── -->
+<div class="modal-overlay" id="pro-modal">
+  <div class="modal-box" style="max-width:420px;text-align:center">
+    <div style="font-size:48px;margin-bottom:12px">🏠</div>
+    <div class="modal-title">HomePath Full Version</div>
+    <p style="color:var(--white-60);font-size:14px;line-height:1.7;margin-bottom:20px">
+      One payment. Download once. Works offline, forever.
+    </p>
+    <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:20px;text-align:left">
+      <div style="font-size:12px;color:var(--white-60);line-height:1.8">
+        ✅ Unlimited maintenance items<br>
+        ✅ Emergency fund tracker<br>
+        ✅ Full repair cost log<br>
+        ✅ Complete amortization schedule<br>
+        ✅ Data export (JSON backup)<br>
+        ✅ Works 100% offline<br>
+        ✅ No subscription. Ever.
+      </div>
+    </div>
+    <div style="font-size:32px;font-weight:900;color:var(--green);margin-bottom:4px">£9.99</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:20px">One-time download. No recurring fees.</div>
+    <a href="#pro-download-link" class="pro-pill" style="display:inline-flex;font-size:14px;padding:12px 28px;border-radius:100px;margin-bottom:12px">
+      Buy &amp; Download — £9.99
+    </a>
+    <br>
+    <button class="btn-outline-sm" onclick="document.getElementById('pro-modal').classList.remove('open')" style="margin-top:8px">Maybe later</button>
+    <div style="font-size:11px;color:var(--muted);margin-top:12px">Payment via secure checkout. Download link sent immediately.</div>
+  </div>
+</div>
+
+<script src="assets/js/main.js"></script>
+<script>
+// ════════════════════════════════════════════════════════════════════════════
+// HomePath — Mortgage Manager  |  IS_PRO: set to true in downloaded version
+// ════════════════════════════════════════════════════════════════════════════
+const IS_PRO = false;
+const MAX_FREE_ITEMS = 5;
+const NS = 'mm_'; // localStorage namespace
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function switchTab(tab, btn) {
+  document.querySelectorAll('.mm-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mm-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'mortgage') { calcMortgage(); }
+  if (tab === 'costs') { calcCosts(); }
+  if (tab === 'maintenance') { renderItems(); }
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const fmtGbp = n => {
+  if (!isFinite(n)) return '—';
+  const abs = Math.abs(n), s = n < 0 ? '-' : '';
+  if (abs >= 1000000) return s + '£' + (abs/1e6).toFixed(2) + 'M';
+  if (abs >= 1000)    return s + '£' + (abs/1000).toFixed(0) + 'k';
+  return s + '£' + Math.round(abs).toLocaleString('en-GB');
+};
+const fmtGbpFull = n => isFinite(n) ? '£' + Math.round(n).toLocaleString('en-GB') : '—';
+const v = id => parseFloat(document.getElementById(id)?.value) || 0;
+const el = id => document.getElementById(id);
+const save = (key, obj) => { localStorage.setItem(NS + key, JSON.stringify(obj)); flashSave(key); };
+const load = key => { try { return JSON.parse(localStorage.getItem(NS + key) || 'null'); } catch { return null; } };
+
+function flashSave(key) {
+  const ind = el('save-' + key);
+  if (!ind) return;
+  ind.classList.add('show');
+  setTimeout(() => ind.classList.remove('show'), 1500);
+}
+
+function debounce(fn, ms = 600) {
+  let t;
+  return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+}
+
+// ── Mortgage payment formula ──────────────────────────────────────────────────
+function calcMonthlyPayment(P, annualRate, termYears, type = 'repayment') {
+  if (!P || !annualRate || !termYears) return 0;
+  if (type === 'interest') return P * (annualRate / 100 / 12);
+  const r = annualRate / 100 / 12;
+  const n = termYears * 12;
+  return P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+}
+
+function calcBalanceAfterMonths(P, annualRate, termYears, months, type = 'repayment') {
+  if (!P || !annualRate || !termYears) return P;
+  if (type === 'interest') return P;
+  const r = annualRate / 100 / 12;
+  const M = calcMonthlyPayment(P, annualRate, termYears, type);
+  return P * Math.pow(1 + r, months) - M * (Math.pow(1 + r, months) - 1) / r;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// TAB 1: GETTING READY
+// ════════════════════════════════════════════════════════════════════════════
+function saveReady() {
+  save('ready', {
+    income: v('r-income'), partner: v('r-partner'),
+    expenses: v('r-expenses'), debts: v('r-debts'),
+    saved: v('r-saved'), monthlySave: v('r-monthly-save'),
+    targetPrice: v('r-target-price'),
+    depositPct: parseFloat(el('r-deposit-pct')?.value) || 10,
+  });
+}
+
+function loadReady() {
+  const d = load('ready');
+  if (!d) return;
+  ['income','partner','expenses','debts','saved','monthly-save','target-price'].forEach(k => {
+    const key = k.replace('-','');
+    const val = d[key === 'monthlysave' ? 'monthlySave' : key === 'targetprice' ? 'targetPrice' : key];
+    if (val && el('r-' + k)) el('r-' + k).value = val;
+  });
+  if (d.depositPct && el('r-deposit-pct')) el('r-deposit-pct').value = d.depositPct;
+}
+
+function calcReady() {
+  const income      = v('r-income');
+  const partner     = v('r-partner');
+  const expenses    = v('r-expenses');
+  const debts       = v('r-debts');
+  const saved       = v('r-saved');
+  const monthly     = v('r-monthly-save');
+  const targetPrice = v('r-target-price');
+  const depositPct  = parseFloat(el('r-deposit-pct')?.value) || 10;
+
+  const totalIncome  = income + partner;
+  const disposable   = totalIncome - expenses - debts;
+  const maxBorrow    = totalIncome * 4.5;
+  const depositNeeded= targetPrice * depositPct / 100;
+  const remaining    = Math.max(0, depositNeeded - saved);
+  const monthsToGo   = monthly > 0 ? Math.ceil(remaining / monthly) : Infinity;
+  const pct          = depositNeeded > 0 ? Math.min(100, (saved / depositNeeded) * 100) : 0;
+
+  // Estimated monthly mortgage (on remaining after deposit)
+  const loanNeeded   = targetPrice - depositNeeded;
+  const estPayment   = calcMonthlyPayment(loanNeeded, 4.5, 25, 'repayment');
+  const canAfford    = disposable > estPayment + 200;
+
+  // Affordability
+  el('r-max-borrow').textContent = fmtGbp(maxBorrow);
+  el('r-deposit-needed').textContent = fmtGbp(depositNeeded);
+  el('r-deposit-pct-lbl').textContent = depositPct + '% of target';
+  el('r-disposable').textContent = fmtGbp(disposable);
+  el('r-disposable').className = 'tile-val ' + (disposable > 0 ? 'green' : 'red');
+
+  // Time to go
+  const ttEl = el('r-time-to-go');
+  if (remaining <= 0) { ttEl.textContent = 'Ready!'; ttEl.className = 'tile-val green'; }
+  else if (!isFinite(monthsToGo)) { ttEl.textContent = '—'; ttEl.className = 'tile-val'; }
+  else if (monthsToGo < 12) { ttEl.textContent = monthsToGo + ' mo'; ttEl.className = 'tile-val green'; }
+  else { ttEl.textContent = Math.ceil(monthsToGo/12) + ' yr'; ttEl.className = 'tile-val amber'; }
+
+  // Deposit bar
+  el('r-deposit-bar').style.width = pct + '%';
+  el('r-saved-label').textContent = fmtGbpFull(saved) + ' saved';
+  el('r-target-label').textContent = 'Target: ' + fmtGbpFull(depositNeeded);
+  el('r-deposit-msg').textContent = pct > 0
+    ? `${pct.toFixed(0)}% of deposit saved — ${remaining > 0 ? fmtGbpFull(remaining) + ' still needed.' : 'Deposit target reached!'}`
+    : 'Fill in your savings and target price to see your progress.';
+
+  // Affordability alert
+  const affordEl = el('r-afford-msg');
+  if (income > 0 && estPayment > 0) {
+    affordEl.style.display = 'block';
+    affordEl.className = 'mm-alert ' + (canAfford ? 'green' : 'amber');
+    affordEl.textContent = canAfford
+      ? `Estimated mortgage payment: ${fmtGbpFull(estPayment)}/mo — leaves you ${fmtGbpFull(disposable - estPayment)}/mo disposable. Looks manageable.`
+      : `Estimated mortgage: ${fmtGbpFull(estPayment)}/mo against ${fmtGbpFull(disposable)} disposable. Tight — consider a longer term or lower price.`;
+  } else {
+    affordEl.style.display = 'none';
+  }
+
+  // Readiness score
+  let score = 0;
+  if (income > 0) score += 15;
+  if (expenses > 0) score += 10;
+  if (saved >= depositNeeded * 0.05) score += 10;
+  if (saved >= depositNeeded * 0.5) score += 10;
+  if (saved >= depositNeeded) score += 15;
+  if (monthly > 0) score += 10;
+  if (canAfford) score += 15;
+  if (debts === 0) score += 10;
+  if (targetPrice > 0) score += 5;
+  score = Math.min(100, score);
+  drawReadinessRing(score);
+  el('r-score-num').textContent = score;
+
+  const labels = [[0,'Not started','var(--muted)'],[20,'Early planning','#f87171'],[40,'Building savings','#fb923c'],[60,'Getting closer','#fbbf24'],[80,'Almost there','#00e676'],[95,'Mortgage-ready!','var(--green)']];
+  const lbl = [...labels].reverse().find(([t]) => score >= t);
+  el('r-score-label').textContent = lbl?.[1] || '';
+  el('r-score-label').style.color = lbl?.[2] || 'var(--muted)';
+
+  // Checklist
+  const items = [
+    [income > 0,       '3 months of payslips ready',                 income > 0],
+    [expenses > 0,     'Monthly budget documented',                   expenses > 0],
+    [debts === 0,      debts === 0 ? 'No outstanding debts' : 'Reduce existing debts first', debts === 0],
+    [saved > 0,        'Deposit savings started',                     saved > 0],
+    [saved >= depositNeeded * 0.5, 'Over halfway to deposit target',  saved >= depositNeeded * 0.5],
+    [saved >= depositNeeded, 'Deposit target reached',                saved >= depositNeeded],
+    [canAfford,        'Monthly payments fit your budget',            canAfford],
+    [false,            'Credit report checked (Experian/Equifax)',    false],
+    [false,            'Mortgage in Principle obtained',              false],
+    [false,            'Solicitor / conveyancer identified',          false],
+  ];
+  el('r-checklist').innerHTML = items.map(([done, text]) => `
+    <div class="check-item">
+      <div class="check-dot ${done ? 'done' : 'todo'}">${done ? '✓' : '○'}</div>
+      <span style="color:${done ? 'var(--white)' : 'var(--white-60)'}">${text}</span>
+    </div>`).join('');
+}
+
+function drawReadinessRing(score) {
+  const canvas = el('readiness-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = 60, cy = 60, r = 50, lw = 10;
+  ctx.clearRect(0, 0, 120, 120);
+  // Track
+  ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI/2, 1.5*Math.PI);
+  ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.lineWidth = lw; ctx.stroke();
+  // Fill
+  const color = score >= 80 ? '#00e676' : score >= 50 ? '#fbbf24' : '#f87171';
+  const end = -Math.PI/2 + (score / 100) * 2 * Math.PI;
+  const grad = ctx.createLinearGradient(0, 0, 120, 120);
+  grad.addColorStop(0, color); grad.addColorStop(1, color + '88');
+  ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI/2, end);
+  ctx.strokeStyle = grad; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.stroke();
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// TAB 2: MY MORTGAGE
+// ════════════════════════════════════════════════════════════════════════════
+function saveMortgage() {
+  save('mortgage', {
+    value: v('m-value'), loan: v('m-loan'), rate: v('m-rate'), term: v('m-term'),
+    start: el('m-start')?.value, type: el('m-type')?.value,
+    dealType: el('m-deal-type')?.value, dealEnd: el('m-deal-end')?.value,
+    lender: el('m-lender')?.value,
+  });
+}
+
+function loadMortgage() {
+  const d = load('mortgage');
+  if (!d) return;
+  if (d.value) el('m-value').value = d.value;
+  if (d.loan)  el('m-loan').value  = d.loan;
+  if (d.rate)  el('m-rate').value  = d.rate;
+  if (d.term)  el('m-term').value  = d.term;
+  if (d.start) el('m-start').value = d.start;
+  if (d.type)  el('m-type').value  = d.type;
+  if (d.dealType) el('m-deal-type').value = d.dealType;
+  if (d.dealEnd)  el('m-deal-end').value  = d.dealEnd;
+  if (d.lender)   el('m-lender').value    = d.lender;
+}
+
+function calcMortgage() {
+  const P      = v('m-loan');
+  const val    = v('m-value');
+  const rate   = v('m-rate');
+  const term   = v('m-term');
+  const type   = el('m-type')?.value || 'repayment';
+  const start  = el('m-start')?.value;
+  const dealEnd= el('m-deal-end')?.value;
+
+  const monthly = calcMonthlyPayment(P, rate, term, type);
+  el('m-payment').textContent = monthly ? fmtGbpFull(monthly) : '—';
+
+  // Months elapsed since start
+  let elapsedMonths = 0;
+  if (start) {
+    const sd = new Date(start);
+    const now = new Date();
+    elapsedMonths = Math.max(0, (now.getFullYear() - sd.getFullYear()) * 12 + now.getMonth() - sd.getMonth());
+  }
+
+  const balance = calcBalanceAfterMonths(P, rate, term, elapsedMonths, type);
+  const equity  = val - balance;
+  const ltv     = val > 0 ? (balance / val) * 100 : 0;
+  const totalPayments = monthly * term * 12;
+  const totalInterest = totalPayments - P;
+  const monthsLeft = term * 12 - elapsedMonths;
+
+  el('m-balance').textContent = isFinite(balance) ? fmtGbpFull(balance) : '—';
+  el('m-balance-date').textContent = start ? 'as of today' : 'enter start date';
+  el('m-equity').textContent = val > 0 && isFinite(equity) ? fmtGbpFull(equity) : '—';
+  el('m-equity-pct').textContent = val > 0 ? Math.round((equity/val)*100) + '% of value' : '';
+  el('m-ltv').textContent = ltv > 0 ? ltv.toFixed(1) + '%' : '—';
+  el('m-ltv').className = 'tile-val ' + (ltv < 70 ? 'green' : ltv < 85 ? 'amber' : 'red');
+  el('m-total-repaid').textContent = isFinite(totalPayments) ? fmtGbp(totalPayments) : '—';
+  el('m-total-interest').textContent = isFinite(totalInterest) ? fmtGbp(totalInterest) : '—';
+  el('m-months-left').textContent = monthsLeft > 0 ? monthsLeft : '—';
+
+  // Deal expiry alert
+  const dealAlert = el('m-deal-alert');
+  if (dealEnd) {
+    const de = new Date(dealEnd);
+    const now = new Date();
+    const daysLeft = Math.round((de - now) / 86400000);
+    dealAlert.style.display = 'block';
+    if (daysLeft < 0) {
+      dealAlert.innerHTML = `<div class="mm-alert red">⚠️ Your ${el('m-deal-type')?.value || 'rate'} deal expired ${Math.abs(daysLeft)} days ago. You may be on your lender's SVR — consider remortgaging now.</div>`;
+    } else if (daysLeft < 90) {
+      dealAlert.innerHTML = `<div class="mm-alert amber">🔔 Your deal expires in ${daysLeft} days. Start comparing remortgage rates now — most offers are valid for 3–6 months.</div>`;
+    } else if (daysLeft < 180) {
+      dealAlert.innerHTML = `<div class="mm-alert blue">📅 Deal expires in ${Math.round(daysLeft/30)} months. Worth starting to watch rates.</div>`;
+    } else {
+      dealAlert.innerHTML = `<div class="mm-alert green">✓ Deal still has ${Math.round(daysLeft/30)} months left. No action needed yet.</div>`;
+    }
+  } else {
+    dealAlert.style.display = 'none';
+  }
+
+  // LTV milestones
+  const milestones = [95, 90, 85, 80, 75, 70, 60];
+  el('m-ltv-milestones').innerHTML = milestones.map(m => {
+    const balAtM = val * m / 100;
+    const paid = Math.max(0, balance - balAtM);
+    const reached = ltv <= m;
+    const progressPct = !P ? 0 : Math.min(100, Math.max(0, ((P - balance) / (P - balAtM)) * 100));
+    return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <div style="font-size:11px;font-weight:700;color:${reached ? 'var(--green)' : 'var(--muted)'};width:28px">${m}%</div>
+      <div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden">
+        <div style="height:100%;border-radius:3px;width:${reached ? 100 : progressPct}%;background:${reached ? '#00e676' : 'rgba(255,255,255,.15)'};transition:width .8s"></div>
+      </div>
+      <div style="font-size:10px;color:${reached ? 'var(--green)' : 'var(--muted)'};width:50px;text-align:right">${reached ? '✓ Done' : fmtGbp(paid) + ' left'}</div>
+    </div>`;
+  }).join('');
+
+  // Sync mortgage payment to costs tab
+  if (monthly) { const ce = el('c-mortgage'); if (ce && !ce._userEdited) ce.value = Math.round(monthly); }
+
+  // Draw balance chart
+  drawMortgageChart(P, rate, term, type, val);
+
+  // Overpayment
+  calcOverpayment();
+}
+
+function drawMortgageChart(P, rate, term, type, val) {
+  const canvas = el('mortgage-chart');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.clientWidth || 400;
+  const H = 140;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  if (!P || !rate || !term) { ctx.fillStyle='rgba(255,255,255,.05)'; ctx.fillRect(0,0,W,H); return; }
+
+  const years = Math.min(term, 30);
+  const pad = { top: 10, bottom: 22, left: 8, right: 8 };
+  const cW = W - pad.left - pad.right;
+  const cH = H - pad.top - pad.bottom;
+  const barW = Math.max(2, cW / years - 3);
+
+  for (let y = 0; y <= years; y++) {
+    const bal = Math.max(0, calcBalanceAfterMonths(P, rate, term, y * 12, type));
+    const equity = Math.max(0, val - bal);
+    const barH_bal = (bal / (val || P)) * cH;
+    const barH_eq  = (equity / (val || P)) * cH;
+    const x = pad.left + y * (cW / years);
+
+    // Balance bar
+    if (bal > 0) {
+      ctx.fillStyle = 'rgba(248,113,113,0.55)';
+      ctx.fillRect(x, pad.top + cH - barH_bal, barW, barH_bal);
+    }
+    // Equity bar
+    if (equity > 0) {
+      const g = ctx.createLinearGradient(0, pad.top, 0, pad.top + cH);
+      g.addColorStop(0, '#00c4b4'); g.addColorStop(1, '#00e67688');
+      ctx.fillStyle = g;
+      ctx.fillRect(x, pad.top + cH - barH_bal - barH_eq, barW, barH_eq);
+    }
+    // Year label
+    if (y % 5 === 0) {
+      ctx.fillStyle = 'rgba(148,163,184,.7)';
+      ctx.font = `${10}px system-ui,sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText('Yr' + y, x + barW/2, H - 5);
+    }
+  }
+}
+
+function calcOverpayment() {
+  const P = v('m-loan'), rate = v('m-rate'), term = v('m-term');
+  const extra = v('m-overpay');
+  const resultEl = el('ov-result');
+  if (!P || !rate || !term || !extra) { resultEl.style.display = 'none'; return; }
+
+  const stdPayment = calcMonthlyPayment(P, rate, term, 'repayment');
+  const newPayment = stdPayment + extra;
+  const r = rate / 100 / 12;
+
+  // Months to pay off with extra
+  let bal = P;
+  let months = 0;
+  while (bal > 0 && months < term * 12 * 2) {
+    const interest = bal * r;
+    const principal = newPayment - interest;
+    bal -= principal;
+    months++;
+  }
+  const stdMonths = term * 12;
+  const savedMonths = stdMonths - months;
+  const stdTotal = stdPayment * stdMonths;
+  const newTotal = newPayment * months;
+  const savedInterest = stdTotal - newTotal;
+
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = `Paying <strong>${fmtGbpFull(extra)}/mo extra</strong> saves you <strong>${fmtGbpFull(savedInterest)} in interest</strong> and pays off your mortgage <strong>${Math.floor(savedMonths/12)} yrs ${savedMonths%12} mo early</strong>.`;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// TAB 3: MAINTENANCE
+// ════════════════════════════════════════════════════════════════════════════
+let items = load('items') || [];
+let editingId = null;
+
+function renderItems() {
+  const now = new Date();
+  const soon90 = new Date(now); soon90.setDate(soon90.getDate() + 90);
+  const warn180 = new Date(now); warn180.setDate(warn180.getDate() + 180);
+
+  let urgent = 0, soon = 0;
+  const upcoming = [];
+
+  const rows = items.map(it => {
+    let overallStatus = 'ok';
+    const details = [];
+
+    // Warranty status
+    if (it.installedDate && it.warrantyYears > 0) {
+      const exp = new Date(it.installedDate);
+      exp.setFullYear(exp.getFullYear() + it.warrantyYears);
+      const daysLeft = Math.round((exp - now) / 86400000);
+      if (daysLeft < 0) {
+        details.push({ label: 'Warranty expired', status: 'danger' });
+        overallStatus = 'danger'; urgent++;
+        upcoming.push({ name: it.name, daysLeft, type: 'warranty', status: 'danger' });
+      } else if (exp <= warn180) {
+        details.push({ label: `Warranty: ${Math.round(daysLeft/30)}mo left`, status: 'warn' });
+        if (overallStatus === 'ok') { overallStatus = 'warn'; soon++; }
+        upcoming.push({ name: it.name, daysLeft, type: 'warranty', status: 'warn' });
+      } else {
+        details.push({ label: `Warranty: ${Math.round(daysLeft/30)}mo left`, status: 'ok' });
+      }
+    }
+
+    // Service status
+    if (it.serviceInterval > 0) {
+      const lastSvc = it.lastService ? new Date(it.lastService) : (it.installedDate ? new Date(it.installedDate) : null);
+      if (lastSvc) {
+        const nextSvc = new Date(lastSvc);
+        nextSvc.setMonth(nextSvc.getMonth() + it.serviceInterval);
+        const daysLeft = Math.round((nextSvc - now) / 86400000);
+        if (daysLeft < 0) {
+          details.push({ label: 'Service overdue', status: 'danger' });
+          if (overallStatus !== 'danger') { overallStatus = 'danger'; urgent++; }
+          upcoming.push({ name: it.name, daysLeft, type: 'service', status: 'danger' });
+        } else if (nextSvc <= soon90) {
+          details.push({ label: `Service in ${daysLeft}d`, status: 'warn' });
+          if (overallStatus === 'ok') { overallStatus = 'warn'; soon++; }
+          upcoming.push({ name: it.name, daysLeft, type: 'service', status: 'warn' });
+        } else {
+          details.push({ label: `Service in ${Math.round(daysLeft/30)}mo`, status: 'ok' });
+        }
+      }
+    }
+
+    if (!details.length) details.push({ label: 'No dates set', status: 'ok' });
+
+    const pillClass = { ok: 'status-ok', warn: 'status-warn', danger: 'status-danger' }[overallStatus];
+    const pillText  = { ok: '● OK', warn: '⚠ Due Soon', danger: '🔴 Action Needed' }[overallStatus];
+
+    return `<div class="item-row">
+      <div>
+        <div class="item-name">${escHtml(it.name)}</div>
+        <div class="item-meta">
+          <span>${escHtml(it.category)}</span>
+          ${it.installedDate ? `<span>Installed: ${new Date(it.installedDate).toLocaleDateString('en-GB')}</span>` : ''}
+          ${details.map(d => `<span style="color:${d.status === 'danger' ? '#f87171' : d.status === 'warn' ? '#fbbf24' : 'var(--muted)'}">${d.label}</span>`).join('')}
+        </div>
+      </div>
+      <div class="item-actions">
+        <span class="status-pill ${pillClass}">${pillText}</span>
+        <button class="icon-btn" onclick="openEditItem('${it.id}')" title="Edit">✏️</button>
+        <button class="icon-btn del" onclick="deleteItem('${it.id}')" title="Delete">🗑️</button>
+      </div>
+    </div>`;
+  }).join('') || `<div class="empty-state"><div class="ei">🔧</div>No items yet — add your boiler, roof, windows and more.</div>`;
+
+  el('items-list').innerHTML = rows;
+  el('mt-urgent').textContent = urgent;
+  el('mt-urgent').className   = 'tile-val ' + (urgent > 0 ? 'red' : 'green');
+  el('mt-soon').textContent   = soon;
+  el('mt-soon').className     = 'tile-val ' + (soon > 0 ? 'amber' : 'green');
+  el('mt-total').textContent  = items.length;
+  el('mt-limit-lbl').textContent = IS_PRO ? 'unlimited' : `${items.length} of ${MAX_FREE_ITEMS} free`;
+
+  // Upcoming list
+  upcoming.sort((a, b) => a.daysLeft - b.daysLeft);
+  el('upcoming-list').innerHTML = upcoming.slice(0, 8).map(u => {
+    const dotColor = u.status === 'danger' ? '#f87171' : '#fbbf24';
+    const dText = u.daysLeft < 0 ? `${Math.abs(u.daysLeft)}d overdue` : `in ${u.daysLeft}d`;
+    return `<div class="upcoming-row">
+      <div class="upcoming-dot" style="background:${dotColor}"></div>
+      <div class="upcoming-name">${escHtml(u.name)}</div>
+      <span class="upcoming-type type-${u.type}">${u.type === 'warranty' ? 'Warranty' : 'Service'}</span>
+      <div class="upcoming-due">${dText}</div>
+    </div>`;
+  }).join('') || `<div class="empty-state" style="padding:16px"><div class="ei">📅</div>Nothing due in the next 90 days</div>`;
+
+  // Add button
+  const canAdd = IS_PRO || items.length < MAX_FREE_ITEMS;
+  el('add-item-btn').disabled = !canAdd;
+  const limMsg = el('items-limit-msg');
+  if (!canAdd && !IS_PRO) {
+    limMsg.style.display = 'block';
+    limMsg.innerHTML = `<div class="pro-gate" style="margin-top:12px"><div class="pro-gate-icon">🔒</div><h4>Free limit reached</h4><p>You've used all ${MAX_FREE_ITEMS} free maintenance slots. Upgrade to track unlimited items.</p><a href="#" class="pro-pill" style="display:inline-flex" onclick="showProModal()">Get Full App — £9.99</a></div>`;
+  } else {
+    limMsg.style.display = 'none';
+  }
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function openAddItem() {
+  if (!IS_PRO && items.length >= MAX_FREE_ITEMS) { showProModal(); return; }
+  editingId = null;
+  el('modal-title').textContent = 'Add Maintenance Item';
+  ['i-name','i-notes'].forEach(id => el(id).value = '');
+  ['i-installed','i-last-service'].forEach(id => el(id).value = '');
+  el('i-category').selectedIndex = 0;
+  el('i-warranty').value = 0;
+  el('i-service-interval').value = 0;
+  el('item-modal').classList.add('open');
+}
+
+function openEditItem(id) {
+  const it = items.find(i => i.id === id);
+  if (!it) return;
+  editingId = id;
+  el('modal-title').textContent = 'Edit Item';
+  el('i-name').value = it.name;
+  el('i-category').value = it.category;
+  el('i-installed').value = it.installedDate || '';
+  el('i-warranty').value = it.warrantyYears || 0;
+  el('i-service-interval').value = it.serviceInterval || 0;
+  el('i-last-service').value = it.lastService || '';
+  el('i-notes').value = it.notes || '';
+  el('item-modal').classList.add('open');
+}
+
+function saveItem() {
+  const name = el('i-name').value.trim();
+  if (!name) { el('i-name').focus(); return; }
+  const item = {
+    id: editingId || Date.now().toString(36),
+    name,
+    category: el('i-category').value,
+    installedDate: el('i-installed').value,
+    warrantyYears: parseFloat(el('i-warranty').value) || 0,
+    serviceInterval: parseFloat(el('i-service-interval').value) || 0,
+    lastService: el('i-last-service').value,
+    notes: el('i-notes').value,
+  };
+  if (editingId) { items = items.map(i => i.id === editingId ? item : i); }
+  else { items.push(item); }
+  localStorage.setItem(NS + 'items', JSON.stringify(items));
+  closeModal();
+  renderItems();
+}
+
+function deleteItem(id) {
+  if (!confirm('Remove this item?')) return;
+  items = items.filter(i => i.id !== id);
+  localStorage.setItem(NS + 'items', JSON.stringify(items));
+  renderItems();
+}
+
+function closeModal() { el('item-modal').classList.remove('open'); }
+
+// ════════════════════════════════════════════════════════════════════════════
+// TAB 4: MONTHLY COSTS
+// ════════════════════════════════════════════════════════════════════════════
+function saveCosts() {
+  const ids = ['mortgage','council','electric','gas','water','broadband','buildings','contents','life','boiler','ground','service','maint-pot','other'];
+  const obj = {};
+  ids.forEach(id => { obj[id.replace('-','')] = v('c-' + id); });
+  save('costs', obj);
+}
+
+function loadCosts() {
+  const d = load('costs');
+  if (!d) return;
+  Object.entries(d).forEach(([k, val]) => {
+    const inputEl = el('c-' + k) || el('c-' + k.replace(/([a-z])([A-Z])/,'$1-$2').toLowerCase());
+    if (inputEl && val) inputEl.value = val;
+  });
+}
+
+function calcCosts() {
+  const CATS = [
+    { label: 'Mortgage', color: '#00e676', fields: ['mortgage'] },
+    { label: 'Council Tax', color: '#3b82f6', fields: ['council'] },
+    { label: 'Utilities', color: '#fbbf24', fields: ['electric','gas','water','broadband'] },
+    { label: 'Insurance', color: '#a78bfa', fields: ['buildings','contents','life','boiler'] },
+    { label: 'Other', color: '#fb923c', fields: ['ground','service','maint-pot','other'] },
+  ];
+
+  const catTotals = CATS.map(c => ({
+    ...c,
+    total: c.fields.reduce((s, f) => s + (v('c-' + f)), 0),
+  }));
+  const grand = catTotals.reduce((s, c) => s + c.total, 0);
+
+  el('cost-total').textContent = fmtGbpFull(grand);
+  el('cost-annual').textContent = fmtGbpFull(grand * 12);
+
+  // Bar chart
+  el('cost-bars').innerHTML = catTotals.filter(c => c.total > 0).map(c => {
+    const pct = grand > 0 ? (c.total / grand) * 100 : 0;
+    return `<div class="cost-bar-row">
+      <div class="cost-bar-lbl">${c.label}</div>
+      <div class="cost-bar-track"><div class="cost-bar-fill" style="width:${pct}%;background:${c.color};border-radius:3px"></div></div>
+      <div class="cost-bar-amt">${fmtGbpFull(c.total)}</div>
+    </div>`;
+  }).join('');
+
+  // Affordability check
+  const income = v('r-income') + v('r-partner');
+  const affordEl = el('cost-afford-check');
+  if (income > 0 && grand > 0) {
+    const pct = (grand / income) * 100;
+    const color = pct < 35 ? 'green' : pct < 50 ? 'amber' : 'red';
+    const msg = pct < 35
+      ? `Housing costs are ${pct.toFixed(0)}% of income — <strong>comfortable.</strong>`
+      : pct < 50 ? `Housing costs are ${pct.toFixed(0)}% of income — <strong>manageable but watch other spending.</strong>`
+      : `Housing costs are ${pct.toFixed(0)}% of income — <strong>high. Consider ways to reduce.</strong>`;
+    affordEl.innerHTML = `<div class="mm-alert ${color}">${msg}</div>`;
+  } else {
+    affordEl.innerHTML = `<div style="color:var(--muted)">Fill in your income in Getting Ready and your costs here for an affordability check.</div>`;
+  }
+
+  // Donut chart
+  drawCostsDonut(catTotals.filter(c => c.total > 0), grand);
+  el('cost-chart-legend').innerHTML = catTotals.filter(c=>c.total>0).map(c =>
+    `<span style="display:inline-flex;align-items:center;gap:4px;margin:3px 6px 3px 0"><span style="width:10px;height:10px;border-radius:2px;background:${c.color};display:inline-block"></span>${c.label}: ${fmtGbpFull(c.total)}</span>`
+  ).join('');
+}
+
+function drawCostsDonut(cats, grand) {
+  const canvas = el('costs-chart');
+  if (!canvas || !grand) return;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = 200 * dpr; canvas.height = 200 * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const cx = 100, cy = 100, r = 80, ir = 50;
+  let angle = -Math.PI / 2;
+  cats.forEach(c => {
+    const slice = (c.total / grand) * 2 * Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, angle, angle + slice);
+    ctx.closePath();
+    ctx.fillStyle = c.color;
+    ctx.fill();
+    angle += slice;
+  });
+  ctx.beginPath();
+  ctx.arc(cx, cy, ir, 0, 2 * Math.PI);
+  ctx.fillStyle = '#0d1525';
+  ctx.fill();
+  ctx.fillStyle = '#f1f5f9';
+  ctx.font = `bold 18px var(--font-head, system-ui)`;
+  ctx.textAlign = 'center';
+  ctx.fillText(fmtGbp(grand), cx, cy - 4);
+  ctx.font = `11px system-ui`;
+  ctx.fillStyle = '#94a3b8';
+  ctx.fillText('per month', cx, cy + 14);
+}
+
+// ── Pro modal ────────────────────────────────────────────────────────────────
+function showProModal() { el('pro-modal').classList.add('open'); }
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+// ── Init: load all saved data ─────────────────────────────────────────────────
+loadReady();    calcReady();
+loadMortgage(); calcMortgage();
+loadCosts();    calcCosts();
+renderItems();
+
+// Sync mortgage payment to costs field on mortgage tab changes (don't override user edits)
+el('c-mortgage').addEventListener('focus', () => el('c-mortgage')._userEdited = true);
+</script>
+</body>
+</html>
