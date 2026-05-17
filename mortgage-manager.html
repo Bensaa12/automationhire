@@ -942,32 +942,31 @@ function switchTab(tab, btn) {
   if (tab === 'maintenance') { renderItems(); }
 }
 
-// -- Currency system -----------------------------------------------------------
+// -- Currency system (initialised after load/save/el are defined) -------------
 const CURRENCIES = {
-  GBP: { symbol: '\u00A3', code: 'GBP', locale: 'en-GB', label: '\u00A3 GBP' },
-  EUR: { symbol: '\u20AC', code: 'EUR', locale: 'en-IE', label: '\u20AC EUR' },
-  USD: { symbol: '$', code: 'USD', locale: 'en-US', label: '$ USD'      },
+  GBP: { symbol: '\u00A3', code: 'GBP', locale: 'en-GB' },
+  EUR: { symbol: '\u20AC', code: 'EUR', locale: 'en-IE' },
+  USD: { symbol: '$',      code: 'USD', locale: 'en-US' },
 };
-let CUR = CURRENCIES[load('currency') || 'GBP'];
+let CUR = CURRENCIES.GBP; // safe default; overwritten by initCurrencyPicker()
 
 function setCurrency(code) {
   CUR = CURRENCIES[code] || CURRENCIES.GBP;
-  save('currency', code);
-  // Update picker button styles
+  localStorage.setItem(NS + 'currency', code);
+  // Update picker button highlight
   ['GBP','EUR','USD'].forEach(c => {
     const btn = el('cur-' + c);
     if (!btn) return;
-    if (c === code) {
-      btn.style.background = 'linear-gradient(135deg,#3db34a,#00e676)';
-      btn.style.color = '#060810';
-    } else {
-      btn.style.background = 'transparent';
-      btn.style.color = '#8aaac8';
-    }
+    btn.style.background = c === code ? 'linear-gradient(135deg,#3db34a,#00e676)' : 'transparent';
+    btn.style.color      = c === code ? '#060810' : '#8aaac8';
   });
-  // Re-render active tab
-  const activeTab = document.querySelector('.mm-tab.active');
-  if (activeTab) activeTab.click();
+  // Update all input prefix symbols
+  document.querySelectorAll('.mm-prefix').forEach(s => { s.textContent = CUR.symbol; });
+  // Re-render every tab so all numbers update
+  try { calcReady(); }       catch(e) {}
+  try { calcMortgage(); }    catch(e) {}
+  try { calcCosts(); }       catch(e) {}
+  try { renderItems(); }     catch(e) {}
 }
 
 // -- Helpers -------------------------------------------------------------------
@@ -1835,9 +1834,10 @@ function generateReport() {
   w.document.close();
 }
 
-// -- Currency picker: highlight saved selection on load -----------------------
+// -- Currency picker: restore saved selection on load -------------------------
 (function initCurrencyPicker() {
-  setCurrency(load('currency') || 'GBP');
+  const saved = localStorage.getItem(NS + 'currency') || 'GBP';
+  setCurrency(saved);
 })();
 
 // -- Pro bar: update appearance based on IS_PRO -------------------------------
