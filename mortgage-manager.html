@@ -955,14 +955,16 @@ function switchTab(tab, btn) {
 }
 
 // -- Helpers -------------------------------------------------------------------
+const GBP = '\u00A3';
+const DASH = '--';
 const fmtGbp = n => {
-  if (!isFinite(n)) return '&mdash;';
+  if (!isFinite(n)) return DASH;
   const abs = Math.abs(n), s = n < 0 ? '-' : '';
-  if (abs >= 1000000) return s + '&pound;' + (abs/1e6).toFixed(2) + 'M';
-  if (abs >= 1000)    return s + '&pound;' + (abs/1000).toFixed(0) + 'k';
-  return s + '&pound;' + Math.round(abs).toLocaleString('en-GB');
+  if (abs >= 1000000) return s + GBP + (abs/1e6).toFixed(2) + 'M';
+  if (abs >= 1000)    return s + GBP + (abs/1000).toFixed(0) + 'k';
+  return s + GBP + Math.round(abs).toLocaleString('en-GB');
 };
-const fmtGbpFull = n => isFinite(n) ? '&pound;' + Math.round(n).toLocaleString('en-GB') : '&mdash;';
+const fmtGbpFull = n => isFinite(n) ? GBP + Math.round(n).toLocaleString('en-GB') : DASH;
 const v = id => parseFloat(document.getElementById(id)?.value) || 0;
 const el = id => document.getElementById(id);
 const save = (key, obj) => { localStorage.setItem(NS + key, JSON.stringify(obj)); flashSave(key); };
@@ -1172,7 +1174,7 @@ function calcMortgage() {
   const dealEnd= el('m-deal-end')?.value;
 
   const monthly = calcMonthlyPayment(P, rate, term, type);
-  el('m-payment').textContent = monthly ? fmtGbpFull(monthly) : '&mdash;';
+  el('m-payment').textContent = monthly ? fmtGbpFull(monthly) : DASH;
 
   // Months elapsed since start
   let elapsedMonths = 0;
@@ -1189,15 +1191,15 @@ function calcMortgage() {
   const totalInterest = totalPayments - P;
   const monthsLeft = term * 12 - elapsedMonths;
 
-  el('m-balance').textContent = isFinite(balance) ? fmtGbpFull(balance) : '&mdash;';
+  el('m-balance').textContent = isFinite(balance) ? fmtGbpFull(balance) : DASH;
   el('m-balance-date').textContent = start ? 'as of today' : 'enter start date';
-  el('m-equity').textContent = val > 0 && isFinite(equity) ? fmtGbpFull(equity) : '&mdash;';
+  el('m-equity').textContent = val > 0 && isFinite(equity) ? fmtGbpFull(equity) : DASH;
   el('m-equity-pct').textContent = val > 0 ? Math.round((equity/val)*100) + '% of value' : '';
-  el('m-ltv').textContent = ltv > 0 ? ltv.toFixed(1) + '%' : '&mdash;';
+  el('m-ltv').textContent = ltv > 0 ? ltv.toFixed(1) + '%' : DASH;
   el('m-ltv').className = 'tile-val ' + (ltv < 70 ? 'green' : ltv < 85 ? 'amber' : 'red');
-  el('m-total-repaid').textContent = isFinite(totalPayments) ? fmtGbp(totalPayments) : '&mdash;';
-  el('m-total-interest').textContent = isFinite(totalInterest) ? fmtGbp(totalInterest) : '&mdash;';
-  el('m-months-left').textContent = monthsLeft > 0 ? monthsLeft : '&mdash;';
+  el('m-total-repaid').textContent = isFinite(totalPayments) ? fmtGbp(totalPayments) : DASH;
+  el('m-total-interest').textContent = isFinite(totalInterest) ? fmtGbp(totalInterest) : DASH;
+  el('m-months-left').textContent = monthsLeft > 0 ? monthsLeft : DASH;
 
   // Deal expiry alert
   const dealAlert = el('m-deal-alert');
@@ -1608,7 +1610,7 @@ function generateReport() {
 
   const gbp = (n, dec = 0) => isFinite(n) && n != null
     ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: dec, maximumFractionDigits: dec }).format(n)
-    : '&mdash;';
+    : DASH;
 
   // Readiness calcs
   const income      = (rd.income || 0) + (rd.partner || 0);
@@ -1622,7 +1624,7 @@ function generateReport() {
   const monthsToGo  = mSave > 0 ? Math.ceil(remaining / mSave) : null;
   const timeLabel   = remaining <= 0 ? 'Target reached!' : monthsToGo
     ? (monthsToGo < 12 ? monthsToGo + ' months' : Math.ceil(monthsToGo / 12) + ' yrs ' + (monthsToGo % 12) + ' mo')
-    : '&mdash;';
+    : DASH;
 
   // Mortgage calcs
   const P = md.loan || 0, rate = md.rate || 0, term = md.term || 0;
