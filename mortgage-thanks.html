@@ -6,87 +6,151 @@
   <title>Download HomePath &mdash; Thank You | AutomationHire</title>
   <meta name="description" content="Thank you for purchasing HomePath Mortgage Manager. Your download is ready." />
   <link rel="canonical" href="https://automationhire.co.uk/mortgage-thanks" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,10 90,50 80,50 80,90 60,90 60,65 40,65 40,90 20,90 20,50 10,50' fill='%23fbbf24'/></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,10 90,50 80,50 80,90 60,90 60,65 40,65 40,90 20,90 20,50 10,50' fill='%233db34a'/></svg>" />
   <style>
-    .thanks-wrap {
-      min-height: 80vh; display: flex; align-items: center; justify-content: center;
-      padding: 60px 20px;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #091730;
+      --bg2:    #0d1f3c;
+      --bg3:    #132644;
+      --green:  #3db34a;
+      --bright: #00e676;
+      --text:   #e8f0fe;
+      --text2:  #8aaac8;
+      --muted:  #4d6b88;
+      --border: rgba(255,255,255,.09);
     }
-    .thanks-box {
-      background: var(--black-2); border: 1px solid rgba(0,230,118,.25);
-      border-radius: 20px; padding: 48px 40px; max-width: 520px; width: 100%;
-      text-align: center;
-      box-shadow: 0 0 60px rgba(0,230,118,.08);
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
     }
-    .thanks-icon {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: linear-gradient(135deg,rgba(0,230,118,.15),rgba(0,196,180,.15));
-      border: 1px solid rgba(0,230,118,.3);
+
+    /* ---- top bar ---- */
+    .topbar {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .topbar-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg,#3db34a,#00e676);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .topbar-name  { font-size: 14px; font-weight: 800; color: var(--text); }
+    .topbar-sub   { font-size: 10px; color: var(--muted); }
+    .topbar-link  {
+      font-size: 12px; font-weight: 700; color: var(--bright);
+      text-decoration: none; border: 1px solid rgba(0,230,118,.3);
+      border-radius: 100px; padding: 6px 14px;
+    }
+    .topbar-link:hover { background: rgba(0,230,118,.08); }
+
+    /* ---- main ---- */
+    .wrap {
       display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 24px;
+      min-height: calc(100vh - 57px); padding: 40px 20px;
     }
-    .thanks-title {
-      font-family: var(--font-head); font-size: 28px; font-weight: 900;
-      color: var(--white); margin-bottom: 10px;
+    .box {
+      background: var(--bg2); border: 1px solid rgba(0,230,118,.25);
+      border-radius: 20px; padding: 48px 40px; max-width: 520px; width: 100%;
+      text-align: center; box-shadow: 0 0 60px rgba(0,230,118,.07);
     }
-    .thanks-sub {
-      color: var(--white-60); font-size: 15px; line-height: 1.65;
-      margin-bottom: 32px;
+
+    /* success icon */
+    .check-ring {
+      width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 24px;
+      background: linear-gradient(135deg,rgba(0,230,118,.15),rgba(0,196,180,.12));
+      border: 1px solid rgba(0,230,118,.35);
+      display: flex; align-items: center; justify-content: center;
     }
+
+    .title {
+      font-size: 28px; font-weight: 900; color: var(--text); margin-bottom: 10px;
+    }
+    .sub {
+      color: var(--text2); font-size: 15px; line-height: 1.65; margin-bottom: 28px;
+    }
+    .sub strong { color: var(--text); }
+
+    /* feature list */
+    .feat {
+      background: rgba(255,255,255,.03); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px 20px; margin-bottom: 28px; text-align: left;
+    }
+    .feat li {
+      list-style: none; font-size: 13px; color: var(--text2);
+      padding: 5px 0; display: flex; align-items: center; gap: 9px;
+    }
+    .feat li svg { flex-shrink: 0; color: var(--bright); }
+
+    /* download button */
     .dl-btn {
-      display: inline-flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
       background: linear-gradient(135deg,#00e676,#00c4b4);
       color: #060810; font-size: 15px; font-weight: 900;
       padding: 16px 32px; border-radius: 100px; text-decoration: none;
-      transition: box-shadow .25s; margin-bottom: 16px; width: 100%;
-      justify-content: center;
+      transition: box-shadow .25s, transform .15s; width: 100%;
     }
-    .dl-btn:hover { box-shadow: 0 6px 30px rgba(0,230,118,.4); }
-    .thanks-note {
-      font-size: 12px; color: var(--muted); margin-top: 20px; line-height: 1.7;
+    .dl-btn:hover {
+      box-shadow: 0 8px 32px rgba(0,230,118,.4);
+      transform: translateY(-1px);
     }
-    .thanks-note a { color: var(--green); }
-    .feature-list {
-      background: rgba(255,255,255,.03); border: 1px solid var(--border);
-      border-radius: 10px; padding: 18px 20px; margin-bottom: 28px;
-      text-align: left;
+
+    .note {
+      font-size: 12px; color: var(--muted); margin-top: 20px; line-height: 1.75;
     }
-    .feature-list li {
-      list-style: none; font-size: 13px; color: var(--white-60);
-      padding: 4px 0; display: flex; align-items: center; gap: 8px;
+    .note a { color: var(--bright); text-decoration: none; }
+    .note a:hover { text-decoration: underline; }
+
+    /* footer */
+    footer {
+      text-align: center; padding: 24px 20px;
+      font-size: 12px; color: var(--muted);
+      border-top: 1px solid var(--border);
     }
-    .feature-list li svg { flex-shrink: 0; color: var(--green); }
+    footer a { color: var(--bright); text-decoration: none; }
   </style>
 </head>
 <body>
 
-<header class="navbar">
-  <div class="nav-inner">
-    <a href="/" class="nav-logo">Automation<span>Hire</span></a>
-    <nav class="nav-links">
-      <a href="/free.html">Free Tools</a>
-      <a href="/mortgage-manager">Try Free Version</a>
-    </nav>
-  </div>
-</header>
+<div class="topbar">
+  <a href="https://automationhire.co.uk/mortgage-manager" class="topbar-logo">
+    <div class="topbar-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#060810" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <div>
+      <div class="topbar-name">HomePath</div>
+      <div class="topbar-sub">Mortgage Manager</div>
+    </div>
+  </a>
+  <a href="https://automationhire.co.uk/free" class="topbar-link">More Free Apps</a>
+</div>
 
-<div class="thanks-wrap">
-  <div class="thanks-box">
+<div class="wrap">
+  <div class="box">
 
-    <div class="thanks-icon">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <div class="check-ring">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="20 6 9 17 4 12"/>
       </svg>
     </div>
 
-    <div class="thanks-title">Payment confirmed!</div>
-    <p class="thanks-sub">
-      Thank you for purchasing <strong>HomePath &mdash; Mortgage Manager</strong>.
+    <div class="title">Payment confirmed!</div>
+    <p class="sub">
+      Thank you for purchasing <strong>HomePath &mdash; Mortgage Manager</strong>.<br>
       Your full version is ready to download below.
     </p>
 
-    <ul class="feature-list">
+    <ul class="feat">
       <li>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         Unlimited maintenance items + emergency fund tracker
@@ -98,6 +162,10 @@
       <li>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         Full repair cost log &amp; amortization schedule
+      </li>
+      <li>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Data export (JSON backup) &amp; amortization table
       </li>
       <li>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -115,20 +183,19 @@
       Download HomePath Full Version
     </a>
 
-    <p class="thanks-note">
+    <p class="note">
       Save the file anywhere on your device &mdash; it runs in any browser with no internet required.<br><br>
-      Having trouble? Email <a href="mailto:bensaa123@gmail.com">bensaa123@gmail.com</a> and we&rsquo;ll sort it immediately.
+      Also check your email from Gumroad for a backup download link.<br><br>
+      Having trouble? Email <a href="mailto:bensaa123@gmail.com">bensaa123@gmail.com</a> &mdash; we&rsquo;ll sort it right away.
     </p>
 
   </div>
 </div>
 
-<footer class="footer">
-  <div class="container">
-    <p style="text-align:center;color:var(--muted);font-size:13px">
-      &copy; 2025 AutomationHire &mdash; <a href="/free.html" style="color:var(--green)">Free Tools</a>
-    </p>
-  </div>
+<footer>
+  &copy; 2025 AutomationHire &mdash;
+  <a href="https://automationhire.co.uk/free">Free Tools</a> &mdash;
+  <a href="https://bensaa.gumroad.com/l/qekwn">Gumroad Store</a>
 </footer>
 
 </body>
