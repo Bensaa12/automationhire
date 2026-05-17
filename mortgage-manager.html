@@ -280,15 +280,15 @@
   <div style="display:flex;align-items:center;gap:10px">
     <!-- Currency picker -->
     <div id="currency-picker" style="display:flex;gap:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:3px">
-      <button id="cur-GBP" onclick="setCurrency('GBP')"
+      <button id="cur-GBP"
         style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:#8aaac8">
         &pound; GBP
       </button>
-      <button id="cur-EUR" onclick="setCurrency('EUR')"
+      <button id="cur-EUR"
         style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:#8aaac8">
         &euro; EUR
       </button>
-      <button id="cur-USD" onclick="setCurrency('USD')"
+      <button id="cur-USD"
         style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:#8aaac8">
         $ USD
       </button>
@@ -1834,9 +1834,19 @@ function generateReport() {
   w.document.close();
 }
 
-// -- Currency picker: restore saved selection on load -------------------------
+// -- Currency picker: wire buttons + restore saved selection ------------------
 (function initCurrencyPicker() {
-  const saved = localStorage.getItem(NS + 'currency') || 'GBP';
+  // Expose globally so any future inline onclick still works
+  window.setCurrency = setCurrency;
+
+  // Wire click listeners (avoids inline-onclick scope issues)
+  ['GBP','EUR','USD'].forEach(function(code) {
+    var btn = document.getElementById('cur-' + code);
+    if (btn) btn.addEventListener('click', function() { setCurrency(code); });
+  });
+
+  // Restore saved preference
+  var saved = localStorage.getItem('mm_currency') || 'GBP';
   setCurrency(saved);
 })();
 
