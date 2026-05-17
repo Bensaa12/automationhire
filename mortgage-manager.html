@@ -277,12 +277,29 @@
       <div style="font-size:10px;color:#4d6b88;font-weight:600;letter-spacing:.4px">Mortgage Manager</div>
     </div>
   </div>
-  <a href="https://automationhire.co.uk/free" target="_blank" rel="noopener"
-     style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#3db34a;text-decoration:none;background:rgba(61,179,74,.1);border:1px solid rgba(61,179,74,.25);padding:7px 14px;border-radius:100px;transition:all .2s"
-     onmouseover="this.style.background='rgba(61,179,74,.18)'" onmouseout="this.style.background='rgba(61,179,74,.1)'">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-    Get More Free Apps
-  </a>
+  <div style="display:flex;align-items:center;gap:10px">
+    <!-- Currency picker -->
+    <div id="currency-picker" style="display:flex;gap:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:3px">
+      <button id="cur-GBP" onclick="setCurrency('GBP')"
+        style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:#8aaac8">
+        &pound; GBP
+      </button>
+      <button id="cur-EUR" onclick="setCurrency('EUR')"
+        style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:#8aaac8">
+        &euro; EUR
+      </button>
+      <button id="cur-USD" onclick="setCurrency('USD')"
+        style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:#8aaac8">
+        $ USD
+      </button>
+    </div>
+    <a href="https://automationhire.co.uk/free" target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#3db34a;text-decoration:none;background:rgba(61,179,74,.1);border:1px solid rgba(61,179,74,.25);padding:7px 14px;border-radius:100px;transition:all .2s"
+       onmouseover="this.style.background='rgba(61,179,74,.18)'" onmouseout="this.style.background='rgba(61,179,74,.1)'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Get More Free Apps
+    </a>
+  </div>
 </div>
 
 <!-- APP -->
@@ -925,17 +942,44 @@ function switchTab(tab, btn) {
   if (tab === 'maintenance') { renderItems(); }
 }
 
+// -- Currency system -----------------------------------------------------------
+const CURRENCIES = {
+  GBP: { symbol: '\u00A3', code: 'GBP', locale: 'en-GB', label: '\u00A3 GBP' },
+  EUR: { symbol: '\u20AC', code: 'EUR', locale: 'en-IE', label: '\u20AC EUR' },
+  USD: { symbol: '$', code: 'USD', locale: 'en-US', label: '$ USD'      },
+};
+let CUR = CURRENCIES[load('currency') || 'GBP'];
+
+function setCurrency(code) {
+  CUR = CURRENCIES[code] || CURRENCIES.GBP;
+  save('currency', code);
+  // Update picker button styles
+  ['GBP','EUR','USD'].forEach(c => {
+    const btn = el('cur-' + c);
+    if (!btn) return;
+    if (c === code) {
+      btn.style.background = 'linear-gradient(135deg,#3db34a,#00e676)';
+      btn.style.color = '#060810';
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = '#8aaac8';
+    }
+  });
+  // Re-render active tab
+  const activeTab = document.querySelector('.mm-tab.active');
+  if (activeTab) activeTab.click();
+}
+
 // -- Helpers -------------------------------------------------------------------
-const GBP = '\u00A3';
 const DASH = '--';
 const fmtGbp = n => {
   if (!isFinite(n)) return DASH;
-  const abs = Math.abs(n), s = n < 0 ? '-' : '';
-  if (abs >= 1000000) return s + GBP + (abs/1e6).toFixed(2) + 'M';
-  if (abs >= 1000)    return s + GBP + (abs/1000).toFixed(0) + 'k';
-  return s + GBP + Math.round(abs).toLocaleString('en-GB');
+  const abs = Math.abs(n), s = n < 0 ? '-' : '', sym = CUR.symbol;
+  if (abs >= 1000000) return s + sym + (abs/1e6).toFixed(2) + 'M';
+  if (abs >= 1000)    return s + sym + (abs/1000).toFixed(0) + 'k';
+  return s + sym + Math.round(abs).toLocaleString(CUR.locale);
 };
-const fmtGbpFull = n => isFinite(n) ? GBP + Math.round(n).toLocaleString('en-GB') : DASH;
+const fmtGbpFull = n => isFinite(n) ? CUR.symbol + Math.round(n).toLocaleString(CUR.locale) : DASH;
 const v = id => parseFloat(document.getElementById(id)?.value) || 0;
 const el = id => document.getElementById(id);
 const save = (key, obj) => { localStorage.setItem(NS + key, JSON.stringify(obj)); flashSave(key); };
@@ -1580,7 +1624,7 @@ function generateReport() {
   const items = JSON.parse(localStorage.getItem(NS + 'items') || '[]');
 
   const gbp = (n, dec = 0) => isFinite(n) && n != null
-    ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: dec, maximumFractionDigits: dec }).format(n)
+    ? new Intl.NumberFormat(CUR.locale, { style: 'currency', currency: CUR.code, minimumFractionDigits: dec, maximumFractionDigits: dec }).format(n)
     : DASH;
 
   // Readiness calcs
@@ -1790,6 +1834,11 @@ function generateReport() {
   w.document.write(html);
   w.document.close();
 }
+
+// -- Currency picker: highlight saved selection on load -----------------------
+(function initCurrencyPicker() {
+  setCurrency(load('currency') || 'GBP');
+})();
 
 // -- Pro bar: update appearance based on IS_PRO -------------------------------
 (function initProBar() {
