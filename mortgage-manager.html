@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HomePath — Mortgage Manager | AutomationHire Free Tools</title>
-  <meta name="description" content="Free mortgage manager app. Plan your deposit, track your mortgage, manage home maintenance and monthly costs — all in one place. No sign-up required." />
+  <title>HomePath &mdash; Mortgage Manager | AutomationHire Free Tools</title>
+  <meta name="description" content="Free mortgage manager app. Plan your deposit, track your mortgage, manage home maintenance and monthly costs &mdash; all in one place. No sign-up required." />
   <link rel="canonical" href="https://automationhire.co.uk/mortgage-manager" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,10 90,50 80,50 80,90 60,90 60,65 40,65 40,90 20,90 20,50 10,50' fill='%23fbbf24'/></svg>" />
   <style>
-    /* ── App shell ── */
+    /* -- App shell -- */
     .mm-app { max-width: 1200px; margin: 0 auto; padding: 0 20px 80px; }
 
-    /* ── Tab bar ── */
+    /* -- Tab bar -- */
     .mm-tabs {
       display: flex; gap: 0; border-bottom: 1px solid var(--border);
       margin-bottom: 28px; overflow-x: auto; scrollbar-width: none;
@@ -29,7 +29,7 @@
     .mm-tab.active { color: var(--white); border-bottom-color: var(--tab-color); }
     .mm-tab .tab-icon { font-size: 16px; }
 
-    /* ── Pro bar ── */
+    /* -- Pro bar -- */
     .pro-bar {
       background: linear-gradient(135deg, rgba(251,191,36,.08), rgba(251,146,60,.06));
       border: 1px solid rgba(251,191,36,.2);
@@ -47,11 +47,11 @@
       cursor: pointer; white-space: nowrap; text-decoration: none;
     }
 
-    /* ── Two-column layout ── */
+    /* -- Two-column layout -- */
     .mm-grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
     @media(max-width: 900px) { .mm-grid { grid-template-columns: 1fr; } }
 
-    /* ── Cards ── */
+    /* -- Cards -- */
     .mm-card {
       background: var(--black-2); border: 1px solid var(--border);
       border-radius: 14px; padding: 22px;
@@ -59,7 +59,7 @@
     .mm-card + .mm-card { margin-top: 16px; }
     .mm-card-title { font-size: 11px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 7px; }
 
-    /* ── Form elements ── */
+    /* -- Form elements -- */
     .mm-field { margin-bottom: 14px; }
     .mm-field:last-child { margin-bottom: 0; }
     .mm-label { font-size: 12px; font-weight: 700; color: var(--white-60); margin-bottom: 6px; display: flex; justify-content: space-between; }
@@ -87,7 +87,7 @@
     .save-indicator { font-size: 11px; color: var(--green); opacity: 0; transition: opacity .3s; margin-left: auto; }
     .save-indicator.show { opacity: 1; }
 
-    /* ── Metric cards ── */
+    /* -- Metric cards -- */
     .metric-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 16px; }
     .metric-tile { background: var(--black-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
     .metric-tile.accent { background: linear-gradient(135deg, rgba(0,230,118,.08), rgba(0,196,180,.05)); border-color: rgba(0,230,118,.22); }
@@ -100,7 +100,7 @@
     .tile-val.red    { color: #f87171; }
     .tile-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
-    /* ── Progress bars ── */
+    /* -- Progress bars -- */
     .prog-wrap { margin: 16px 0; }
     .prog-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--white-60); margin-bottom: 7px; }
     .prog-track { height: 8px; border-radius: 4px; background: rgba(255,255,255,.07); overflow: hidden; }
@@ -110,7 +110,7 @@
     .prog-bar.blue  { background: linear-gradient(90deg, #3b82f6, #6366f1); }
     .prog-bar.purple{ background: linear-gradient(90deg, #a78bfa, #ec4899); }
 
-    /* ── Readiness score ── */
+    /* -- Readiness score -- */
     .readiness-wrap { text-align: center; padding: 8px 0 20px; }
     .readiness-ring { position: relative; width: 120px; height: 120px; margin: 0 auto 12px; }
     .readiness-ring canvas { position: absolute; top: 0; left: 0; }
@@ -118,7 +118,7 @@
     .readiness-num small { font-size: 12px; color: var(--muted); font-weight: 500; font-family: inherit; }
     .readiness-label { font-size: 14px; font-weight: 700; }
 
-    /* ── Checklist ── */
+    /* -- Checklist -- */
     .checklist { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
     .check-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--white-60); line-height: 1.4; }
     .check-dot { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; margin-top: 1px; }
@@ -126,18 +126,18 @@
     .check-dot.todo   { background: rgba(148,163,184,.1); color: var(--muted); border: 1px solid var(--border); }
     .check-dot.warn   { background: rgba(251,191,36,.15); color: #fbbf24; border: 1px solid rgba(251,191,36,.3); }
 
-    /* ── Alert box ── */
+    /* -- Alert box -- */
     .mm-alert { border-radius: 9px; padding: 12px 14px; font-size: 13px; line-height: 1.5; margin-bottom: 14px; }
     .mm-alert.green { background: rgba(0,230,118,.07); border: 1px solid rgba(0,230,118,.2); color: var(--green); }
     .mm-alert.amber { background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.22); color: #fbbf24; }
     .mm-alert.red   { background: rgba(239,68,68,.08);  border: 1px solid rgba(239,68,68,.22);  color: #f87171; }
     .mm-alert.blue  { background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.22); color: #60a5fa; }
 
-    /* ── Overpayment simulator ── */
+    /* -- Overpayment simulator -- */
     .ov-result { background: rgba(0,230,118,.07); border: 1px solid rgba(0,230,118,.18); border-radius: 8px; padding: 12px 14px; margin-top: 10px; font-size: 13px; line-height: 1.6; color: var(--white-60); display: none; }
     .ov-result strong { color: var(--green); }
 
-    /* ── Maintenance ── */
+    /* -- Maintenance -- */
     .maint-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
     @media(max-width:600px) { .maint-summary { grid-template-columns: 1fr 1fr; } }
 
@@ -170,7 +170,7 @@
     .add-item-btn:hover { background: rgba(0,230,118,.07); border-color: rgba(0,230,118,.5); }
     .add-item-btn:disabled { opacity: .4; cursor: not-allowed; }
 
-    /* ── Upcoming ── */
+    /* -- Upcoming -- */
     .upcoming-list { display: flex; flex-direction: column; gap: 8px; }
     .upcoming-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--black-2); border: 1px solid var(--border); border-radius: 9px; }
     .upcoming-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
@@ -180,20 +180,20 @@
     .type-warranty { background: rgba(239,68,68,.1); color: #f87171; }
     .type-service  { background: rgba(59,130,246,.1);  color: #60a5fa; }
 
-    /* ── Modal ── */
+    /* -- Modal -- */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); backdrop-filter: blur(6px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.open { display: flex; }
     .modal-box { background: #0d1525; border: 1px solid rgba(255,255,255,.12); border-radius: 16px; padding: 28px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
     .modal-title { font-family: var(--font-head); font-size: 18px; font-weight: 800; margin-bottom: 20px; }
     .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
 
-    /* ── Pro gate ── */
+    /* -- Pro gate -- */
     .pro-gate { background: linear-gradient(135deg, rgba(251,191,36,.08), rgba(251,146,60,.06)); border: 1px dashed rgba(251,191,36,.3); border-radius: 12px; padding: 24px; text-align: center; }
     .pro-gate-icon { font-size: 36px; margin-bottom: 10px; }
     .pro-gate h4 { font-size: 16px; font-weight: 800; color: var(--white); margin: 0 0 7px; }
     .pro-gate p { font-size: 13px; color: var(--white-60); margin: 0 0 16px; line-height: 1.6; }
 
-    /* ── Costs tab ── */
+    /* -- Costs tab -- */
     .cost-categories { display: flex; flex-direction: column; gap: 10px; }
     .cost-category { background: var(--black-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
     .cost-cat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; }
@@ -213,10 +213,10 @@
     .cost-total-lbl { font-size: 13px; font-weight: 700; color: var(--white-60); }
     .cost-total-val { font-size: 24px; font-weight: 900; font-family: var(--font-head); color: var(--white); }
 
-    /* ── Amortization mini chart ── */
+    /* -- Amortization mini chart -- */
     #mortgage-chart { width: 100%; display: block; }
 
-    /* ── Misc ── */
+    /* -- Misc -- */
     .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
     .empty-state .ei { font-size: 40px; margin-bottom: 10px; }
     .btn-primary-sm { padding: 9px 18px; border-radius: 8px; border: none; background: linear-gradient(135deg, #00e676, #00c4b4); color: #060810; font-size: 13px; font-weight: 800; cursor: pointer; transition: all .2s; }
@@ -233,7 +233,7 @@
 <nav class="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
-      <div class="nav-logo-icon">⚡</div>
+      <div class="nav-logo-icon"></div>
       <span class="nav-logo-text">Automation<span>Hire</span></span>
     </a>
     <ul class="nav-links">
@@ -277,7 +277,7 @@
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
         Save PDF Report
       </button>
-      <a href="#pro-purchase" class="pro-pill" id="pro-upgrade-btn" onclick="showProModal()">
+      <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" target="_blank" rel="noopener" class="pro-pill" id="pro-upgrade-btn">
         Get Full App &mdash; &pound;9.99
       </a>
     </div>
@@ -299,9 +299,9 @@
     </button>
   </div>
 
-  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- ======================================================== -->
   <!-- TAB 1: GETTING READY                                   -->
-  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- ======================================================== -->
   <div id="pane-ready" class="mm-pane active">
     <div class="mm-grid">
 
@@ -311,25 +311,25 @@
           <div class="mm-card-title">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             Your Income
-            <span class="save-indicator" id="save-ready">✓ Saved</span>
+            <span class="save-indicator" id="save-ready">&#10003; Saved</span>
           </div>
           <div class="mm-row">
             <div class="mm-field">
               <div class="mm-label">Your monthly income</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-income" placeholder="3500" oninput="saveReady();calcReady()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="r-income" placeholder="3500" oninput="saveReady();calcReady()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Partner's income <span>(if any)</span></div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-partner" placeholder="0" oninput="saveReady();calcReady()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="r-partner" placeholder="0" oninput="saveReady();calcReady()" /></div>
             </div>
           </div>
           <div class="mm-field">
             <div class="mm-label">Total monthly expenses <span>(bills, food, travel, etc.)</span></div>
-            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-expenses" placeholder="1800" oninput="saveReady();calcReady()" /></div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="r-expenses" placeholder="1800" oninput="saveReady();calcReady()" /></div>
           </div>
           <div class="mm-field">
             <div class="mm-label">Existing debt payments <span>(loans, credit cards /mo)</span></div>
-            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-debts" placeholder="0" oninput="saveReady();calcReady()" /></div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="r-debts" placeholder="0" oninput="saveReady();calcReady()" /></div>
           </div>
         </div>
 
@@ -341,25 +341,25 @@
           <div class="mm-row">
             <div class="mm-field">
               <div class="mm-label">Deposit saved so far</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-saved" placeholder="15000" oninput="saveReady();calcReady()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="r-saved" placeholder="15000" oninput="saveReady();calcReady()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Monthly saving rate</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-monthly-save" placeholder="500" oninput="saveReady();calcReady()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="r-monthly-save" placeholder="500" oninput="saveReady();calcReady()" /></div>
             </div>
           </div>
           <div class="mm-field">
             <div class="mm-label">Target property price</div>
-            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="r-target-price" placeholder="280000" oninput="saveReady();calcReady()" /></div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="r-target-price" placeholder="280000" oninput="saveReady();calcReady()" /></div>
           </div>
           <div class="mm-field">
             <div class="mm-label">Target deposit %</div>
             <select class="mm-select" id="r-deposit-pct" onchange="saveReady();calcReady()">
-              <option value="5">5% — minimum (high LTV)</option>
-              <option value="10" selected>10% — standard</option>
-              <option value="15">15% — good rates start here</option>
-              <option value="20">20% — strong position</option>
-              <option value="25">25% — excellent</option>
+              <option value="5">5% &mdash; minimum (high LTV)</option>
+              <option value="10" selected>10% &mdash; standard</option>
+              <option value="15">15% &mdash; good rates start here</option>
+              <option value="20">20% &mdash; strong position</option>
+              <option value="25">25% &mdash; excellent</option>
             </select>
           </div>
         </div>
@@ -378,7 +378,7 @@
                 <small>/ 100</small>
               </div>
             </div>
-            <div class="readiness-label" id="r-score-label" style="color:var(--muted)">Add your details →</div>
+            <div class="readiness-label" id="r-score-label" style="color:var(--muted)">Add your details &rarr;</div>
           </div>
         </div>
 
@@ -386,22 +386,22 @@
         <div class="metric-strip">
           <div class="metric-tile">
             <div class="tile-lbl">Max borrowing</div>
-            <div class="tile-val green" id="r-max-borrow">—</div>
-            <div class="tile-sub">~4.5× income</div>
+            <div class="tile-val green" id="r-max-borrow">&mdash;</div>
+            <div class="tile-sub">~4.5&times; income</div>
           </div>
           <div class="metric-tile">
             <div class="tile-lbl">Deposit needed</div>
-            <div class="tile-val" id="r-deposit-needed">—</div>
-            <div class="tile-sub" id="r-deposit-pct-lbl">—</div>
+            <div class="tile-val" id="r-deposit-needed">&mdash;</div>
+            <div class="tile-sub" id="r-deposit-pct-lbl">&mdash;</div>
           </div>
           <div class="metric-tile">
             <div class="tile-lbl">Time to target</div>
-            <div class="tile-val amber" id="r-time-to-go">—</div>
+            <div class="tile-val amber" id="r-time-to-go">&mdash;</div>
             <div class="tile-sub">at current saving rate</div>
           </div>
           <div class="metric-tile">
             <div class="tile-lbl">Disposable /mo</div>
-            <div class="tile-val" id="r-disposable">—</div>
+            <div class="tile-val" id="r-disposable">&mdash;</div>
             <div class="tile-sub">after bills &amp; debts</div>
           </div>
         </div>
@@ -411,8 +411,8 @@
           <div class="mm-card-title">Deposit Progress</div>
           <div class="prog-wrap">
             <div class="prog-label">
-              <span id="r-saved-label">£0 saved</span>
-              <span id="r-target-label">Target: £—</span>
+              <span id="r-saved-label">&pound;0 saved</span>
+              <span id="r-target-label">Target: &pound;&mdash;</span>
             </div>
             <div class="prog-track"><div class="prog-bar blue" id="r-deposit-bar" style="width:0%"></div></div>
           </div>
@@ -431,9 +431,9 @@
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- ======================================================== -->
   <!-- TAB 2: MY MORTGAGE                                     -->
-  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- ======================================================== -->
   <div id="pane-mortgage" class="mm-pane">
     <div class="mm-grid">
 
@@ -443,16 +443,16 @@
           <div class="mm-card-title">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
             Mortgage Details
-            <span class="save-indicator" id="save-mortgage">✓ Saved</span>
+            <span class="save-indicator" id="save-mortgage">&#10003; Saved</span>
           </div>
           <div class="mm-row">
             <div class="mm-field">
               <div class="mm-label">Property value</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="m-value" placeholder="280000" oninput="saveMortgage();calcMortgage()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="m-value" placeholder="280000" oninput="saveMortgage();calcMortgage()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Loan amount</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="m-loan" placeholder="224000" oninput="saveMortgage();calcMortgage()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="m-loan" placeholder="224000" oninput="saveMortgage();calcMortgage()" /></div>
             </div>
           </div>
           <div class="mm-row">
@@ -500,7 +500,7 @@
           </div>
           <div class="mm-field">
             <div class="mm-label">Lender <span>(optional)</span></div>
-            <input class="mm-input" type="text" id="m-lender" placeholder="e.g. Nationwide, Halifax…" oninput="saveMortgage()" />
+            <input class="mm-input" type="text" id="m-lender" placeholder="e.g. Nationwide, Halifax&hellip;" oninput="saveMortgage()" />
           </div>
         </div>
 
@@ -512,7 +512,7 @@
           </div>
           <div class="mm-field">
             <div class="mm-label">Extra monthly payment</div>
-            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="m-overpay" placeholder="100" oninput="calcOverpayment()" /></div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="m-overpay" placeholder="100" oninput="calcOverpayment()" /></div>
           </div>
           <div class="ov-result" id="ov-result"></div>
         </div>
@@ -527,22 +527,22 @@
         <div class="metric-strip" style="margin-bottom:16px">
           <div class="metric-tile accent">
             <div class="tile-lbl">Monthly payment</div>
-            <div class="tile-val green" id="m-payment">—</div>
+            <div class="tile-val green" id="m-payment">&mdash;</div>
             <div class="tile-sub">capital + interest</div>
           </div>
           <div class="metric-tile">
             <div class="tile-lbl">Current balance</div>
-            <div class="tile-val" id="m-balance">—</div>
-            <div class="tile-sub" id="m-balance-date">—</div>
+            <div class="tile-val" id="m-balance">&mdash;</div>
+            <div class="tile-sub" id="m-balance-date">&mdash;</div>
           </div>
           <div class="metric-tile">
             <div class="tile-lbl">Equity</div>
-            <div class="tile-val green" id="m-equity">—</div>
-            <div class="tile-sub" id="m-equity-pct">—</div>
+            <div class="tile-val green" id="m-equity">&mdash;</div>
+            <div class="tile-sub" id="m-equity-pct">&mdash;</div>
           </div>
           <div class="metric-tile">
             <div class="tile-lbl">LTV</div>
-            <div class="tile-val" id="m-ltv">—</div>
+            <div class="tile-val" id="m-ltv">&mdash;</div>
             <div class="tile-sub">loan to value</div>
           </div>
         </div>
@@ -556,7 +556,7 @@
         <!-- Balance chart -->
         <div class="mm-card" style="margin-bottom:16px">
           <div class="mm-card-title">Balance Over Term</div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Remaining balance vs equity — yearly</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Remaining balance vs equity &mdash; yearly</div>
           <canvas id="mortgage-chart" height="140"></canvas>
         </div>
 
@@ -566,15 +566,15 @@
           <div class="metric-strip">
             <div class="metric-tile">
               <div class="tile-lbl">Total repaid</div>
-              <div class="tile-val" id="m-total-repaid" style="font-size:18px">—</div>
+              <div class="tile-val" id="m-total-repaid" style="font-size:18px">&mdash;</div>
             </div>
             <div class="metric-tile">
               <div class="tile-lbl">Total interest</div>
-              <div class="tile-val red" id="m-total-interest" style="font-size:18px">—</div>
+              <div class="tile-val red" id="m-total-interest" style="font-size:18px">&mdash;</div>
             </div>
             <div class="metric-tile">
               <div class="tile-lbl">Months remaining</div>
-              <div class="tile-val" id="m-months-left" style="font-size:18px">—</div>
+              <div class="tile-val" id="m-months-left" style="font-size:18px">&mdash;</div>
             </div>
           </div>
         </div>
@@ -582,9 +582,9 @@
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- ======================================================== -->
   <!-- TAB 3: HOME MAINTENANCE                                -->
-  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- ======================================================== -->
   <div id="pane-maintenance" class="mm-pane">
 
     <!-- Summary -->
@@ -615,7 +615,7 @@
             Upcoming (next 90 days)
           </div>
           <div class="upcoming-list" id="upcoming-list">
-            <div class="empty-state" style="padding:16px"><div class="ei">📅</div>Nothing due soon</div>
+            <div class="empty-state" style="padding:16px"><div class="ei"></div>Nothing due soon</div>
           </div>
         </div>
 
@@ -643,10 +643,10 @@
           </div>
           <!-- Pro gate overlay -->
           <div class="pro-gate">
-            <div class="pro-gate-icon">🔒</div>
+            <div class="pro-gate-icon"></div>
             <h4>Pro Feature</h4>
             <p>Track your home emergency fund target, current balance, and recommended pot size based on your property value.</p>
-            <a href="#pro-purchase" class="pro-pill" style="display:inline-flex" onclick="showProModal()">Get Full App — £9.99</a>
+            <a href="#pro-purchase" class="pro-pill" style="display:inline-flex" onclick="showProModal()">Get Full App &mdash; &pound;9.99</a>
           </div>
         </div>
 
@@ -656,11 +656,11 @@
             Maintenance Tips
           </div>
           <div style="font-size:12px;color:var(--white-60);line-height:1.75">
-            <p style="margin:0 0 8px">🔥 <strong style="color:var(--white)">Boiler</strong> — service annually. Most failures happen Oct–Dec.</p>
-            <p style="margin:0 0 8px">🏚️ <strong style="color:var(--white)">Roof</strong> — inspect gutters spring &amp; autumn. Replace felt every 15–20 yrs.</p>
-            <p style="margin:0 0 8px">💧 <strong style="color:var(--white)">Plumbing</strong> — know where your stopcock is. Check for leaks annually.</p>
-            <p style="margin:0 0 8px">⚡ <strong style="color:var(--white)">Electrics</strong> — EICR certificate every 10 years for owner-occupiers.</p>
-            <p style="margin:0">🌿 <strong style="color:var(--white)">Budget</strong> — a common rule: set aside 1% of property value per year for maintenance.</p>
+            <p style="margin:0 0 8px"> <strong style="color:var(--white)">Boiler</strong> &mdash; service annually. Most failures happen Oct&ndash;Dec.</p>
+            <p style="margin:0 0 8px"> <strong style="color:var(--white)">Roof</strong> &mdash; inspect gutters spring &amp; autumn. Replace felt every 15&ndash;20 yrs.</p>
+            <p style="margin:0 0 8px"> <strong style="color:var(--white)">Plumbing</strong> &mdash; know where your stopcock is. Check for leaks annually.</p>
+            <p style="margin:0 0 8px"> <strong style="color:var(--white)">Electrics</strong> &mdash; EICR certificate every 10 years for owner-occupiers.</p>
+            <p style="margin:0"> <strong style="color:var(--white)">Budget</strong> &mdash; a common rule: set aside 1% of property value per year for maintenance.</p>
           </div>
         </div>
       </div>
@@ -669,9 +669,9 @@
     @media(max-width:860px) { #pane-maintenance > div:nth-child(2) { grid-template-columns: 1fr; } }
   </div>
 
-  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- ======================================================== -->
   <!-- TAB 4: MONTHLY COSTS                                   -->
-  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- ======================================================== -->
   <div id="pane-costs" class="mm-pane">
     <div class="mm-grid">
 
@@ -679,86 +679,86 @@
       <div>
         <div class="mm-card">
           <div class="mm-card-title">
-            <span style="color:#a78bfa">🏦</span> Mortgage
-            <span class="save-indicator" id="save-costs">✓ Saved</span>
+            <span style="color:#a78bfa"></span> Mortgage
+            <span class="save-indicator" id="save-costs">&#10003; Saved</span>
           </div>
           <div class="mm-field">
             <div class="mm-label">Monthly payment <span>(auto from My Mortgage)</span></div>
-            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-mortgage" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-mortgage" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
             <div class="mm-hint">Updates automatically if you've filled in My Mortgage.</div>
           </div>
         </div>
 
         <div class="mm-card">
-          <div class="mm-card-title"><span>🏛️</span> Council Tax / Local Tax</div>
+          <div class="mm-card-title"><span></span> Council Tax / Local Tax</div>
           <div class="mm-field">
             <div class="mm-label">Monthly council tax</div>
-            <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-council" placeholder="160" oninput="saveCosts();calcCosts()" /></div>
+            <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-council" placeholder="160" oninput="saveCosts();calcCosts()" /></div>
           </div>
         </div>
 
         <div class="mm-card">
-          <div class="mm-card-title"><span>⚡</span> Utilities</div>
+          <div class="mm-card-title"><span></span> Utilities</div>
           <div class="cost-fields">
             <div class="mm-field">
               <div class="mm-label">Electricity</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-electric" placeholder="80" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-electric" placeholder="80" oninput="saveCosts();calcCosts()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Gas / Heating</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-gas" placeholder="60" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-gas" placeholder="60" oninput="saveCosts();calcCosts()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Water</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-water" placeholder="35" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-water" placeholder="35" oninput="saveCosts();calcCosts()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Broadband</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-broadband" placeholder="35" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-broadband" placeholder="35" oninput="saveCosts();calcCosts()" /></div>
             </div>
           </div>
         </div>
 
         <div class="mm-card">
-          <div class="mm-card-title"><span>🛡️</span> Insurance</div>
+          <div class="mm-card-title"><span></span> Insurance</div>
           <div class="cost-fields">
             <div class="mm-field">
               <div class="mm-label">Buildings</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-buildings" placeholder="25" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-buildings" placeholder="25" oninput="saveCosts();calcCosts()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Contents</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-contents" placeholder="15" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-contents" placeholder="15" oninput="saveCosts();calcCosts()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Life / Critical illness</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-life" placeholder="30" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-life" placeholder="30" oninput="saveCosts();calcCosts()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Boiler cover</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-boiler" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-boiler" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
             </div>
           </div>
         </div>
 
         <div class="mm-card">
-          <div class="mm-card-title"><span>🏢</span> Other Home Costs</div>
+          <div class="mm-card-title"><span></span> Other Home Costs</div>
           <div class="cost-fields">
             <div class="mm-field">
               <div class="mm-label">Ground rent</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-ground" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-ground" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Service charge</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-service" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-service" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Maintenance pot /mo</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-maint-pot" placeholder="100" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-maint-pot" placeholder="100" oninput="saveCosts();calcCosts()" /></div>
             </div>
             <div class="mm-field">
               <div class="mm-label">Other</div>
-              <div class="mm-prefix-wrap"><span class="mm-prefix">£</span><input class="mm-input" type="number" id="c-other" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
+              <div class="mm-prefix-wrap"><span class="mm-prefix">&pound;</span><input class="mm-input" type="number" id="c-other" placeholder="0" oninput="saveCosts();calcCosts()" /></div>
             </div>
           </div>
         </div>
@@ -771,11 +771,11 @@
           <div id="cost-bars"></div>
           <div class="cost-total-row">
             <div class="cost-total-lbl">Total monthly commitment</div>
-            <div class="cost-total-val" id="cost-total">£0</div>
+            <div class="cost-total-val" id="cost-total">&pound;0</div>
           </div>
           <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)">
             <span>Annual cost</span>
-            <span id="cost-annual" style="font-weight:700;color:var(--white)">£0</span>
+            <span id="cost-annual" style="font-weight:700;color:var(--white)">&pound;0</span>
           </div>
         </div>
 
@@ -795,7 +795,7 @@
 
 </div><!-- /mm-app -->
 
-<!-- ── ADD ITEM MODAL ── -->
+<!-- -- ADD ITEM MODAL -- -->
 <div class="modal-overlay" id="item-modal">
   <div class="modal-box">
     <div class="modal-title" id="modal-title">Add Maintenance Item</div>
@@ -804,7 +804,7 @@
     <div class="mm-row">
       <div class="mm-field" style="grid-column:1/-1">
         <div class="mm-label">Item name <span style="color:#f87171">*</span></div>
-        <input class="mm-input" type="text" id="i-name" placeholder="e.g. Combi Boiler, Roof Tiles, Front Door…" />
+        <input class="mm-input" type="text" id="i-name" placeholder="e.g. Combi Boiler, Roof Tiles, Front Door&hellip;" />
       </div>
     </div>
     <div class="mm-row">
@@ -846,7 +846,7 @@
     </div>
     <div class="mm-field">
       <div class="mm-label">Notes <span>(optional)</span></div>
-      <input class="mm-input" type="text" id="i-notes" placeholder="Model number, contractor, anything useful…" />
+      <input class="mm-input" type="text" id="i-notes" placeholder="Model number, contractor, anything useful&hellip;" />
     </div>
 
     <div class="modal-actions">
@@ -856,7 +856,7 @@
   </div>
 </div>
 
-<!-- ── PRO PURCHASE MODAL ── -->
+<!-- -- PRO PURCHASE MODAL -- -->
 <div class="modal-overlay" id="pro-modal">
   <div class="modal-box" style="max-width:420px;text-align:center">
     <div style="margin-bottom:12px"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
@@ -875,10 +875,10 @@
         + No subscription. Ever.
       </div>
     </div>
-    <div style="font-size:32px;font-weight:900;color:var(--green);margin-bottom:4px">£9.99</div>
+    <div style="font-size:32px;font-weight:900;color:var(--green);margin-bottom:4px">&pound;9.99</div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:20px">One-time download. No recurring fees.</div>
-    <a href="https://drive.google.com/uc?export=download&id=1EpzrJqaaMAghMhApVdpga_hCmRTWWDWO" target="_blank" rel="noopener" class="pro-pill" style="display:inline-flex;font-size:14px;padding:12px 28px;border-radius:100px;margin-bottom:12px">
-      Download Full Version — £9.99
+    <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" target="_blank" rel="noopener" class="pro-pill" style="display:inline-flex;font-size:14px;padding:12px 28px;border-radius:100px;margin-bottom:12px">
+      Buy &amp; Download &mdash; &pound;9.99
     </a>
     <br>
     <button class="btn-outline-sm" onclick="document.getElementById('pro-modal').classList.remove('open')" style="margin-top:8px">Maybe later</button>
@@ -888,14 +888,14 @@
 
 <script src="assets/js/main.js"></script>
 <script>
-// ════════════════════════════════════════════════════════════════════════════
-// HomePath — Mortgage Manager  |  IS_PRO: set to true in downloaded version
-// ════════════════════════════════════════════════════════════════════════════
+// ============================================================================
+// HomePath &mdash; Mortgage Manager  |  IS_PRO: set to true in downloaded version
+// ============================================================================
 const IS_PRO = false;
 const MAX_FREE_ITEMS = 5;
 const NS = 'mm_'; // localStorage namespace
 
-// ── Tab switching ─────────────────────────────────────────────────────────────
+// -- Tab switching -------------------------------------------------------------
 function switchTab(tab, btn) {
   document.querySelectorAll('.mm-pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.mm-tab').forEach(b => b.classList.remove('active'));
@@ -906,15 +906,15 @@ function switchTab(tab, btn) {
   if (tab === 'maintenance') { renderItems(); }
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// -- Helpers -------------------------------------------------------------------
 const fmtGbp = n => {
-  if (!isFinite(n)) return '—';
+  if (!isFinite(n)) return '&mdash;';
   const abs = Math.abs(n), s = n < 0 ? '-' : '';
-  if (abs >= 1000000) return s + '£' + (abs/1e6).toFixed(2) + 'M';
-  if (abs >= 1000)    return s + '£' + (abs/1000).toFixed(0) + 'k';
-  return s + '£' + Math.round(abs).toLocaleString('en-GB');
+  if (abs >= 1000000) return s + '&pound;' + (abs/1e6).toFixed(2) + 'M';
+  if (abs >= 1000)    return s + '&pound;' + (abs/1000).toFixed(0) + 'k';
+  return s + '&pound;' + Math.round(abs).toLocaleString('en-GB');
 };
-const fmtGbpFull = n => isFinite(n) ? '£' + Math.round(n).toLocaleString('en-GB') : '—';
+const fmtGbpFull = n => isFinite(n) ? '&pound;' + Math.round(n).toLocaleString('en-GB') : '&mdash;';
 const v = id => parseFloat(document.getElementById(id)?.value) || 0;
 const el = id => document.getElementById(id);
 const save = (key, obj) => { localStorage.setItem(NS + key, JSON.stringify(obj)); flashSave(key); };
@@ -932,7 +932,7 @@ function debounce(fn, ms = 600) {
   return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
 }
 
-// ── Mortgage payment formula ──────────────────────────────────────────────────
+// -- Mortgage payment formula --------------------------------------------------
 function calcMonthlyPayment(P, annualRate, termYears, type = 'repayment') {
   if (!P || !annualRate || !termYears) return 0;
   if (type === 'interest') return P * (annualRate / 100 / 12);
@@ -949,9 +949,9 @@ function calcBalanceAfterMonths(P, annualRate, termYears, months, type = 'repaym
   return P * Math.pow(1 + r, months) - M * (Math.pow(1 + r, months) - 1) / r;
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ============================================================================
 // TAB 1: GETTING READY
-// ════════════════════════════════════════════════════════════════════════════
+// ============================================================================
 function saveReady() {
   save('ready', {
     income: v('r-income'), partner: v('r-partner'),
@@ -1006,7 +1006,7 @@ function calcReady() {
   // Time to go
   const ttEl = el('r-time-to-go');
   if (remaining <= 0) { ttEl.textContent = 'Ready!'; ttEl.className = 'tile-val green'; }
-  else if (!isFinite(monthsToGo)) { ttEl.textContent = '—'; ttEl.className = 'tile-val'; }
+  else if (!isFinite(monthsToGo)) { ttEl.textContent = '&mdash;'; ttEl.className = 'tile-val'; }
   else if (monthsToGo < 12) { ttEl.textContent = monthsToGo + ' mo'; ttEl.className = 'tile-val green'; }
   else { ttEl.textContent = Math.ceil(monthsToGo/12) + ' yr'; ttEl.className = 'tile-val amber'; }
 
@@ -1015,7 +1015,7 @@ function calcReady() {
   el('r-saved-label').textContent = fmtGbpFull(saved) + ' saved';
   el('r-target-label').textContent = 'Target: ' + fmtGbpFull(depositNeeded);
   el('r-deposit-msg').textContent = pct > 0
-    ? `${pct.toFixed(0)}% of deposit saved — ${remaining > 0 ? fmtGbpFull(remaining) + ' still needed.' : 'Deposit target reached!'}`
+    ? `${pct.toFixed(0)}% of deposit saved &mdash; ${remaining > 0 ? fmtGbpFull(remaining) + ' still needed.' : 'Deposit target reached!'}`
     : 'Fill in your savings and target price to see your progress.';
 
   // Affordability alert
@@ -1024,8 +1024,8 @@ function calcReady() {
     affordEl.style.display = 'block';
     affordEl.className = 'mm-alert ' + (canAfford ? 'green' : 'amber');
     affordEl.textContent = canAfford
-      ? `Estimated mortgage payment: ${fmtGbpFull(estPayment)}/mo — leaves you ${fmtGbpFull(disposable - estPayment)}/mo disposable. Looks manageable.`
-      : `Estimated mortgage: ${fmtGbpFull(estPayment)}/mo against ${fmtGbpFull(disposable)} disposable. Tight — consider a longer term or lower price.`;
+      ? `Estimated mortgage payment: ${fmtGbpFull(estPayment)}/mo &mdash; leaves you ${fmtGbpFull(disposable - estPayment)}/mo disposable. Looks manageable.`
+      : `Estimated mortgage: ${fmtGbpFull(estPayment)}/mo against ${fmtGbpFull(disposable)} disposable. Tight &mdash; consider a longer term or lower price.`;
   } else {
     affordEl.style.display = 'none';
   }
@@ -1065,7 +1065,7 @@ function calcReady() {
   ];
   el('r-checklist').innerHTML = items.map(([done, text]) => `
     <div class="check-item">
-      <div class="check-dot ${done ? 'done' : 'todo'}">${done ? '✓' : '○'}</div>
+      <div class="check-dot ${done ? 'done' : 'todo'}">${done ? '&#10003;' : 'o'}</div>
       <span style="color:${done ? 'var(--white)' : 'var(--white-60)'}">${text}</span>
     </div>`).join('');
 }
@@ -1088,9 +1088,9 @@ function drawReadinessRing(score) {
   ctx.strokeStyle = grad; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.stroke();
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ============================================================================
 // TAB 2: MY MORTGAGE
-// ════════════════════════════════════════════════════════════════════════════
+// ============================================================================
 function saveMortgage() {
   save('mortgage', {
     value: v('m-value'), loan: v('m-loan'), rate: v('m-rate'), term: v('m-term'),
@@ -1124,7 +1124,7 @@ function calcMortgage() {
   const dealEnd= el('m-deal-end')?.value;
 
   const monthly = calcMonthlyPayment(P, rate, term, type);
-  el('m-payment').textContent = monthly ? fmtGbpFull(monthly) : '—';
+  el('m-payment').textContent = monthly ? fmtGbpFull(monthly) : '&mdash;';
 
   // Months elapsed since start
   let elapsedMonths = 0;
@@ -1141,15 +1141,15 @@ function calcMortgage() {
   const totalInterest = totalPayments - P;
   const monthsLeft = term * 12 - elapsedMonths;
 
-  el('m-balance').textContent = isFinite(balance) ? fmtGbpFull(balance) : '—';
+  el('m-balance').textContent = isFinite(balance) ? fmtGbpFull(balance) : '&mdash;';
   el('m-balance-date').textContent = start ? 'as of today' : 'enter start date';
-  el('m-equity').textContent = val > 0 && isFinite(equity) ? fmtGbpFull(equity) : '—';
+  el('m-equity').textContent = val > 0 && isFinite(equity) ? fmtGbpFull(equity) : '&mdash;';
   el('m-equity-pct').textContent = val > 0 ? Math.round((equity/val)*100) + '% of value' : '';
-  el('m-ltv').textContent = ltv > 0 ? ltv.toFixed(1) + '%' : '—';
+  el('m-ltv').textContent = ltv > 0 ? ltv.toFixed(1) + '%' : '&mdash;';
   el('m-ltv').className = 'tile-val ' + (ltv < 70 ? 'green' : ltv < 85 ? 'amber' : 'red');
-  el('m-total-repaid').textContent = isFinite(totalPayments) ? fmtGbp(totalPayments) : '—';
-  el('m-total-interest').textContent = isFinite(totalInterest) ? fmtGbp(totalInterest) : '—';
-  el('m-months-left').textContent = monthsLeft > 0 ? monthsLeft : '—';
+  el('m-total-repaid').textContent = isFinite(totalPayments) ? fmtGbp(totalPayments) : '&mdash;';
+  el('m-total-interest').textContent = isFinite(totalInterest) ? fmtGbp(totalInterest) : '&mdash;';
+  el('m-months-left').textContent = monthsLeft > 0 ? monthsLeft : '&mdash;';
 
   // Deal expiry alert
   const dealAlert = el('m-deal-alert');
@@ -1183,7 +1183,7 @@ function calcMortgage() {
       <div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden">
         <div style="height:100%;border-radius:3px;width:${reached ? 100 : progressPct}%;background:${reached ? '#00e676' : 'rgba(255,255,255,.15)'};transition:width .8s"></div>
       </div>
-      <div style="font-size:10px;color:${reached ? 'var(--green)' : 'var(--muted)'};width:50px;text-align:right">${reached ? '✓ Done' : fmtGbp(paid) + ' left'}</div>
+      <div style="font-size:10px;color:${reached ? 'var(--green)' : 'var(--muted)'};width:50px;text-align:right">${reached ? '&#10003; Done' : fmtGbp(paid) + ' left'}</div>
     </div>`;
   }).join('');
 
@@ -1273,9 +1273,9 @@ function calcOverpayment() {
   resultEl.innerHTML = `Paying <strong>${fmtGbpFull(extra)}/mo extra</strong> saves you <strong>${fmtGbpFull(savedInterest)} in interest</strong> and pays off your mortgage <strong>${Math.floor(savedMonths/12)} yrs ${savedMonths%12} mo early</strong>.`;
 }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ============================================================================
 // TAB 3: MAINTENANCE
-// ════════════════════════════════════════════════════════════════════════════
+// ============================================================================
 let items = load('items') || [];
 let editingId = null;
 
@@ -1333,7 +1333,7 @@ function renderItems() {
     if (!details.length) details.push({ label: 'No dates set', status: 'ok' });
 
     const pillClass = { ok: 'status-ok', warn: 'status-warn', danger: 'status-danger' }[overallStatus];
-    const pillText  = { ok: '● OK', warn: '⚠ Due Soon', danger: '🔴 Action Needed' }[overallStatus];
+    const pillText  = { ok: '&bull; OK', warn: '(!) Due Soon', danger: ' Action Needed' }[overallStatus];
 
     return `<div class="item-row">
       <div>
@@ -1371,7 +1371,7 @@ function renderItems() {
       <span class="upcoming-type type-${u.type}">${u.type === 'warranty' ? 'Warranty' : 'Service'}</span>
       <div class="upcoming-due">${dText}</div>
     </div>`;
-  }).join('') || `<div class="empty-state" style="padding:16px"><div class="ei">📅</div>Nothing due in the next 90 days</div>`;
+  }).join('') || `<div class="empty-state" style="padding:16px"><div class="ei"></div>Nothing due in the next 90 days</div>`;
 
   // Add button
   const canAdd = IS_PRO || items.length < MAX_FREE_ITEMS;
@@ -1379,7 +1379,7 @@ function renderItems() {
   const limMsg = el('items-limit-msg');
   if (!canAdd && !IS_PRO) {
     limMsg.style.display = 'block';
-    limMsg.innerHTML = `<div class="pro-gate" style="margin-top:12px"><div class="pro-gate-icon">🔒</div><h4>Free limit reached</h4><p>You've used all ${MAX_FREE_ITEMS} free maintenance slots. Upgrade to track unlimited items.</p><a href="#" class="pro-pill" style="display:inline-flex" onclick="showProModal()">Get Full App — £9.99</a></div>`;
+    limMsg.innerHTML = `<div class="pro-gate" style="margin-top:12px"><div class="pro-gate-icon"></div><h4>Free limit reached</h4><p>You've used all ${MAX_FREE_ITEMS} free maintenance slots. Upgrade to track unlimited items.</p><a href="#" class="pro-pill" style="display:inline-flex" onclick="showProModal()">Get Full App &mdash; &pound;9.99</a></div>`;
   } else {
     limMsg.style.display = 'none';
   }
@@ -1445,9 +1445,9 @@ function deleteItem(id) {
 
 function closeModal() { el('item-modal').classList.remove('open'); }
 
-// ════════════════════════════════════════════════════════════════════════════
+// ============================================================================
 // TAB 4: MONTHLY COSTS
-// ════════════════════════════════════════════════════════════════════════════
+// ============================================================================
 function saveCosts() {
   const ids = ['mortgage','council','electric','gas','water','broadband','buildings','contents','life','boiler','ground','service','maint-pot','other'];
   const obj = {};
@@ -1499,9 +1499,9 @@ function calcCosts() {
     const pct = (grand / income) * 100;
     const color = pct < 35 ? 'green' : pct < 50 ? 'amber' : 'red';
     const msg = pct < 35
-      ? `Housing costs are ${pct.toFixed(0)}% of income — <strong>comfortable.</strong>`
-      : pct < 50 ? `Housing costs are ${pct.toFixed(0)}% of income — <strong>manageable but watch other spending.</strong>`
-      : `Housing costs are ${pct.toFixed(0)}% of income — <strong>high. Consider ways to reduce.</strong>`;
+      ? `Housing costs are ${pct.toFixed(0)}% of income &mdash; <strong>comfortable.</strong>`
+      : pct < 50 ? `Housing costs are ${pct.toFixed(0)}% of income &mdash; <strong>manageable but watch other spending.</strong>`
+      : `Housing costs are ${pct.toFixed(0)}% of income &mdash; <strong>high. Consider ways to reduce.</strong>`;
     affordEl.innerHTML = `<div class="mm-alert ${color}">${msg}</div>`;
   } else {
     affordEl.innerHTML = `<div style="color:var(--muted)">Fill in your income in Getting Ready and your costs here for an affordability check.</div>`;
@@ -1546,10 +1546,10 @@ function drawCostsDonut(cats, grand) {
   ctx.fillText('per month', cx, cy + 14);
 }
 
-// ── Pro modal ────────────────────────────────────────────────────────────────
+// -- Pro modal ----------------------------------------------------------------
 function showProModal() { el('pro-modal').classList.add('open'); }
 
-// ── PDF Report ───────────────────────────────────────────────────────────────
+// -- PDF Report ---------------------------------------------------------------
 function generateReport() {
   if (!IS_PRO) { showProModal(); return; }
 
@@ -1770,7 +1770,7 @@ function generateReport() {
   w.document.close();
 }
 
-// ── Pro bar: update appearance based on IS_PRO ───────────────────────────────
+// -- Pro bar: update appearance based on IS_PRO -------------------------------
 (function initProBar() {
   if (!IS_PRO) return;
   const bar = el('pro-bar');
@@ -1795,7 +1795,7 @@ document.querySelectorAll('.modal-overlay').forEach(o => {
   o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
 });
 
-// ── Init: load all saved data ─────────────────────────────────────────────────
+// -- Init: load all saved data -------------------------------------------------
 loadReady();    calcReady();
 loadMortgage(); calcMortgage();
 loadCosts();    calcCosts();
