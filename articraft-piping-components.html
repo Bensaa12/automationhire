@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-Generated 3D Piping Components — Articraft | Plant 3D, STEP & URDF | AutomationHire</title>
+  <meta name="description" content="Generate any piping component from a text prompt. Pipes, fittings, elbows, flanges, valves, and engineering items exported as STEP, URDF, and Plant 3D-ready catalogs. UK specialists powered by Articraft + CadQuery." />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://automationhire.co.uk/articraft-piping-components" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="AI-Generated 3D Piping Components — Articraft + CadQuery" />
+  <meta property="og:description" content="Generate any pipe, fitting, flange, or valve from a text prompt. STEP, URDF, and Plant 3D-ready. UK specialists, 1–2 week delivery." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://automationhire.co.uk/articraft-piping-components" />
+  <meta property="og:site_name" content="AutomationHire" />
+  <meta property="og:image" content="https://automationhire.co.uk/assets/og/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AI-Generated 3D Piping Components — AutomationHire" />
+  <meta name="twitter:description" content="Pipes, fittings, flanges, valves — generated from a prompt. STEP, URDF, Plant 3D. UK specialists." />
+
+  <style>
+    /* === Pillar base (matches plant-3d-piping-automation-uk.html) === */
+    .pillar-hero { padding: 140px 0 56px; border-bottom: 1px solid var(--border); position: relative; }
+    .pillar-hero-inner { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+    .pillar-eyebrow {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px; color: var(--green);
+      background: rgba(0,230,118,0.10); border: 1px solid rgba(0,230,118,0.25);
+      border-radius: 50px; padding: 6px 14px; margin-bottom: 22px;
+    }
+    .pillar-hero h1 {
+      font-family: var(--font-head); font-size: clamp(30px, 4.4vw, 50px);
+      font-weight: 800; line-height: 1.15; margin-bottom: 22px; color: #fff;
+    }
+    .pillar-meta {
+      display: flex; align-items: center; gap: 14px; font-size: 14px;
+      color: var(--white-60); flex-wrap: wrap; margin-bottom: 28px;
+    }
+    .pillar-meta-av {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--black);
+    }
+    .ai-answer {
+      background: linear-gradient(135deg, rgba(0,230,118,0.07), rgba(41,121,255,0.06));
+      border: 1px solid rgba(0,230,118,0.22); border-left: 3px solid var(--green);
+      border-radius: 14px; padding: 22px 26px; margin: 6px 0 0;
+    }
+    .ai-answer-label { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; display: block; }
+    .ai-answer p { font-size: 16px; line-height: 1.7; color: rgba(255,255,255,0.92); margin: 0; }
+
+    .pillar-body {
+      max-width: 780px; margin: 0 auto; padding: 56px 24px 72px;
+      font-size: 16.5px; line-height: 1.85; color: rgba(255,255,255,0.86);
+    }
+    .pillar-body h2 { font-family: var(--font-head); font-size: clamp(24px,2.6vw,30px); font-weight: 800; color: #fff; margin: 56px 0 18px; letter-spacing: -0.2px; }
+    .pillar-body h3 { font-family: var(--font-head); font-size: 20px; font-weight: 700; color: #fff; margin: 36px 0 14px; }
+    .pillar-body h4 { font-family: var(--font-head); font-size: 17px; font-weight: 700; color: #fff; margin: 28px 0 10px; }
+    .pillar-body p { margin-bottom: 20px; }
+    .pillar-body ul, .pillar-body ol { margin: 0 0 22px 24px; }
+    .pillar-body li { margin-bottom: 10px; }
+    .pillar-body strong { color: #fff; font-weight: 700; }
+    .pillar-body a { color: var(--green); text-decoration: none; border-bottom: 1px solid rgba(0,230,118,0.3); transition: border-color 0.2s; }
+    .pillar-body a:hover { border-bottom-color: var(--green); }
+    .pillar-body code { font-family: monospace; font-size: 14px; background: rgba(255,255,255,0.07); padding: 2px 7px; border-radius: 4px; color: rgba(255,255,255,0.9); }
+
+    .pull-quote {
+      margin: 36px 0; padding: 24px 28px;
+      border-left: 3px solid var(--green); background: rgba(255,255,255,0.025);
+      border-radius: 0 12px 12px 0; font-size: 17px; line-height: 1.6; color: #fff; font-style: italic;
+    }
+    .pull-quote-cite { display: block; margin-top: 12px; font-size: 13px; color: var(--white-60); font-style: normal; font-weight: 600; }
+
+    .pillar-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 16px; margin: 28px 0; }
+    .pillar-stat { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+    .pillar-stat-num { font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--green); line-height: 1; margin-bottom: 6px; }
+    .pillar-stat-label { font-size: 12px; color: var(--white-60); letter-spacing: 0.3px; }
+
+    .pillar-cta {
+      background: linear-gradient(135deg, rgba(0,230,118,0.10), rgba(41,121,255,0.10));
+      border: 1px solid rgba(0,230,118,0.25); border-radius: 16px;
+      padding: 32px; margin: 48px 0; text-align: center;
+    }
+    .pillar-cta h3 { font-family: var(--font-head); font-size: 22px; font-weight: 800; margin-bottom: 10px; color: #fff; }
+    .pillar-cta p { color: var(--white-60); margin-bottom: 22px; font-size: 15px; }
+
+    .faq-list { margin: 28px 0; }
+    .faq-item { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 14px; background: rgba(255,255,255,0.025); overflow: hidden; }
+    .faq-item summary { padding: 18px 22px; cursor: pointer; font-weight: 700; color: #fff; font-size: 16px; list-style: none; position: relative; padding-right: 48px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; position: absolute; right: 22px; top: 50%; transform: translateY(-50%); font-size: 22px; color: var(--green); font-weight: 400; transition: transform 0.2s; }
+    .faq-item[open] summary::after { content: '&#8722;'; }
+    .faq-item .faq-answer { padding: 0 22px 20px; color: rgba(255,255,255,0.82); font-size: 15.5px; line-height: 1.75; }
+
+    .breadcrumb { max-width: 860px; margin: 0 auto; padding: 110px 24px 0; font-size: 13px; color: var(--white-60); }
+    .breadcrumb a { color: var(--white-60); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--green); }
+    .breadcrumb-sep { margin: 0 8px; color: var(--white-30); }
+
+    .rate-table { width: 100%; border-collapse: collapse; margin: 24px 0 28px; font-size: 15px; }
+    .rate-table th, .rate-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    .rate-table th { background: rgba(255,255,255,0.04); font-weight: 700; color: #fff; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .rate-table td:first-child { font-weight: 700; color: #fff; }
+    .rate-table tr:last-child td { border-bottom: none; }
+
+    .standards-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 28px; }
+    .standards-chip { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; color: var(--white-60); background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 50px; padding: 6px 14px; }
+
+    /* === 3-step workflow === */
+    .steps-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 20px; margin: 28px 0; }
+    .step-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; padding: 26px 22px; text-align: center; position: relative; }
+    .step-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,var(--green),var(--blue)); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: var(--black); margin: 0 auto 16px; }
+    .step-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .step-desc { font-size: 14px; color: var(--white-60); line-height: 1.6; margin: 0; }
+
+    /* === Component category grid === */
+    .comp-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; color: var(--white-60); margin: 36px 0 16px; border-top: 1px solid var(--border); padding-top: 28px; }
+    .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 16px; margin-bottom: 8px; }
+    .comp-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .comp-card:hover { border-color: rgba(0,230,118,0.3); transform: translateY(-2px); }
+    .comp-card-render {
+      width: 100%; height: 160px;
+      background: rgba(4,10,20,0.6);
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .comp-card-body { padding: 18px 20px; }
+    .comp-card-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .comp-card-meta { font-size: 13px; color: var(--white-60); line-height: 1.5; margin-bottom: 10px; }
+    .comp-card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .comp-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; color: var(--green); background: rgba(0,230,118,0.08); border: 1px solid rgba(0,230,118,0.2); border-radius: 50px; padding: 3px 9px; }
+
+    /* SVG piping icons */
+    .comp-svg { width: 120px; height: 120px; }
+
+    /* === Export format badges === */
+    .format-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0 28px; }
+    .format-badge {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 16px;
+    }
+    .format-badge-icon { font-size: 22px; line-height: 1; }
+    .format-badge-name { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2; }
+    .format-badge-desc { font-size: 12px; color: var(--white-60); line-height: 1.3; }
+
+    /* === Prompt demo block === */
+    .prompt-demo {
+      background: rgba(4,10,20,0.7);
+      border: 1px solid rgba(0,230,118,0.22);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin: 28px 0;
+      font-family: monospace;
+    }
+    .prompt-label { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--green); margin-bottom: 10px; font-family: var(--font-body, sans-serif); }
+    .prompt-text { font-size: 15px; color: rgba(255,255,255,0.88); line-height: 1.7; }
+    .prompt-output { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.07); }
+    .prompt-output-label { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--blue, #2979ff); margin-bottom: 8px; font-family: var(--font-body, sans-serif); }
+    .prompt-output ul { margin: 0; padding-left: 18px; }
+    .prompt-output li { font-size: 13.5px; color: var(--white-60); margin-bottom: 5px; font-family: var(--font-body, sans-serif); font-family: monospace; }
+
+    @media (max-width: 640px) {
+      .pillar-hero { padding: 120px 0 40px; }
+      .pillar-body { padding: 40px 20px 56px; font-size: 16px; }
+      .comp-grid { grid-template-columns: 1fr; }
+      .steps-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">&#9889;</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="ads.html">Ad Production</a></li>
+      <li><a href="ready-to-deploy.html">Ready to Deploy</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="request-quote.html">Get Matched</a></li>
+      <li><a href="book.html">Book a Call</a></li>
+      <li><a href="login.html" style="color:var(--green);font-weight:700">Expert Login</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
+      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="index.html">Home</a>
+  <span class="breadcrumb-sep">&#8250;</span>
+  <a href="categories.html">Categories</a>
+  <span class="breadcrumb-sep">&#8250;</span>
+  <a href="plant-3d-piping-automation-uk.html">Plant 3D Piping Automation</a>
+  <span class="breadcrumb-sep">&#8250;</span>
+  <span>AI 3D Piping Component Generator</span>
+</nav>
+
+<!-- HERO -->
+<header class="pillar-hero">
+  <div class="pillar-hero-inner">
+    <span class="pillar-eyebrow">Articraft + CadQuery &#183; UK Engineering &#183; 2026</span>
+    <h1>Generate any piping component from a text prompt &#8212; STEP, Plant 3D, and URDF ready.</h1>
+
+    <div class="pillar-meta">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="pillar-meta-av">AH</div>
+        <span>AutomationHire Engineering</span>
+      </div>
+      <span>&#183;</span>
+      <span>Updated May 2026</span>
+      <span>&#183;</span>
+      <span>14 min read</span>
+    </div>
+
+    <div class="ai-answer">
+      <span class="ai-answer-label">Quick Answer</span>
+      <p>Describe any piping component &#8212; a DN80 Class 300 gate valve, a 45&#176; long-radius elbow, a weld-neck flange &#8212; and <strong>Articraft</strong> generates a fully parametric 3D solid, an articulated assembly where moving parts actually move, and simultaneous exports to <strong>STEP</strong> (for AutoCAD, SolidWorks, Inventor), <strong>URDF</strong> (for digital twins), and a <strong>Plant 3D-ready catalog entry</strong>. Components that took a CAD engineer half a day now take under 20 minutes. UK specialists available from <strong>&#163;90/hr</strong> or as fixed-price packs.</p>
+    </div>
+  </div>
+</header>
+
+<!-- BODY -->
+<article class="pillar-body">
+
+  <p>Every piping project runs on components &#8212; and every component, until very recently, had to be modelled by hand. A single Class 150 gate valve from a manufacturer data sheet: geometry, dimension table, port definitions, spec line, STEP export. Four hours of a mid-senior CAD engineer's time. Multiplied by 60 catalog items per project. Multiplied by 3 simultaneous projects.</p>
+
+  <p>That maths has changed. <strong>Articraft</strong> is an open-source agentic 3D system built on <strong>CadQuery</strong> (Python &#8594; OpenCascade geometry kernel). It takes a natural-language description and returns production-quality 3D geometry: parametric, dimensionally accurate, fully articulated where the component has moving parts, and simultaneously exported to every format downstream consumers need.</p>
+
+  <p>This page documents what UK specialists on AutomationHire can generate for you, how the workflow runs, what standards are covered, and how to brief a component generation project.</p>
+
+  <div class="pillar-stats">
+    <div class="pillar-stat">
+      <div class="pillar-stat-num">20 min</div>
+      <div class="pillar-stat-label">Avg. per component</div>
+    </div>
+    <div class="pillar-stat">
+      <div class="pillar-stat-num">10&#215;</div>
+      <div class="pillar-stat-label">Faster than hand-modelling</div>
+    </div>
+    <div class="pillar-stat">
+      <div class="pillar-stat-num">5 formats</div>
+      <div class="pillar-stat-label">STEP, URDF, .pcat, STL, OBJ</div>
+    </div>
+    <div class="pillar-stat">
+      <div class="pillar-stat-num">From &#163;1.8k</div>
+      <div class="pillar-stat-label">Fixed catalog packs</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <h2>How it works &#8212; prompt to production component</h2>
+
+  <div class="steps-row">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-title">Describe the component</div>
+      <p class="step-desc">Give a natural-language prompt with the component type, pressure class, material, connection type, and any manufacturer-specific dimensions.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-title">Articraft generates</div>
+      <p class="step-desc">Articraft writes parametric CadQuery code, builds the 3D solid and articulated assembly, adds port definitions, colours, and validates the geometry.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-title">Expert integrates</div>
+      <p class="step-desc">A UK Plant 3D specialist writes the <code>.pcat</code> spec entry and branch table, validates against your piping class, and delivers in all required formats.</p>
+    </div>
+  </div>
+
+  <!-- PROMPT EXAMPLE -->
+  <div class="prompt-demo">
+    <div class="prompt-label">Example prompt</div>
+    <div class="prompt-text">"A cast-iron flanged gate valve, DN50 Class 150, OS&amp;Y rising stem with spoked handwheel, bolted bonnet, yoke, and two horizontal flanged ports. ASME B16.5 flange pattern, face-to-face 198 mm per API 6D."</div>
+    <div class="prompt-output">
+      <div class="prompt-output-label">Output files generated</div>
+      <ul>
+        <li>gate-valve-dn50-cl150.step &#8212; 3D solid, AutoCAD/SolidWorks/Inventor-ready</li>
+        <li>gate-valve-dn50-cl150.urdf &#8212; articulated assembly, stem travel 75 mm</li>
+        <li>gate-valve-dn50-cl150.pcat &#8212; Plant 3D catalog entry, ports mapped</li>
+        <li>gate-valve-dn50-cl150.obj + .mtl &#8212; visualisation mesh</li>
+        <li>gate-valve-dn50-cl150-dims.json &#8212; machine-readable dimension table</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- COMPONENT LIBRARY -->
+  <h2>What we can generate &#8212; component library</h2>
+
+  <p>The library below lists the component families UK specialists on AutomationHire regularly author using Articraft + CadQuery. Every entry supports full parametric variation &#8212; change the nominal bore, pressure class, material, or end connection and the geometry updates accordingly.</p>
+
+  <!-- PIPES & FITTINGS -->
+  <div class="comp-section-label">Pipes &amp; Tubes</div>
+  <div class="comp-grid">
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="48" width="100" height="24" rx="4" fill="rgba(41,121,255,0.15)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <rect x="10" y="48" width="12" height="24" rx="2" fill="rgba(41,121,255,0.25)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="98" y="48" width="12" height="24" rx="2" fill="rgba(41,121,255,0.25)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <line x1="10" y1="60" x2="110" y2="60" stroke="rgba(0,230,118,0.3)" stroke-width="1" stroke-dasharray="6 4"/>
+          <text x="60" y="93" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">DN25&#8211;DN600</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Straight Pipe / Tube</div>
+        <div class="comp-card-meta">Plain-end, PE, BW, SW, screwed. Schedule 5 through XXS. Carbon steel, SS 304/316, duplex, HDPE, GRP.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">ASME B36.10</span>
+          <span class="comp-tag">ASME B36.19</span>
+          <span class="comp-tag">ISO 4200</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Jacketed pipe cross-section suggestion -->
+          <circle cx="60" cy="60" r="40" fill="rgba(41,121,255,0.08)" stroke="rgba(41,121,255,0.4)" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="26" fill="rgba(4,10,20,0.6)" stroke="rgba(0,230,118,0.5)" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="12" fill="rgba(41,121,255,0.2)" stroke="rgba(41,121,255,0.5)" stroke-width="1.2"/>
+          <text x="60" y="112" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">Jacketed</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Jacketed Pipe</div>
+        <div class="comp-card-meta">Inner carrier pipe + outer jacket with annular gap. Heating / cooling / trace-heated service. Annular ports modelled as separate bodies.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">ASME B31.3</span>
+          <span class="comp-tag">Steam / glycol</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ELBOWS & BENDS -->
+  <div class="comp-section-label">Elbows &amp; Bends</div>
+  <div class="comp-grid">
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 10 72 H 52 Q 72 72 72 52 V 10" stroke="rgba(41,121,255,0.5)" stroke-width="18" stroke-linecap="square" fill="none"/>
+          <path d="M 10 72 H 52 Q 72 72 72 52 V 10" stroke="rgba(0,230,118,0.25)" stroke-width="6" stroke-linecap="square" fill="none" stroke-dasharray="8 4"/>
+          <rect x="4" y="62" width="12" height="20" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="62" y="4" width="20" height="12" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <text x="60" y="108" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">90&#176; LR Elbow</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">90&#176; Long-Radius Elbow</div>
+        <div class="comp-card-meta">R = 1.5D standard. BW, flanged, screwed. Mitre-cut geometry available for large bore. Equal and reducing variants.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">ASME B16.9</span>
+          <span class="comp-tag">EN 10253-1</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 10 72 H 45 Q 58 72 62 60 V 10" stroke="rgba(41,121,255,0.5)" stroke-width="16" stroke-linecap="square" fill="none"/>
+          <path d="M 10 72 H 45 Q 58 72 62 60 V 10" stroke="rgba(0,230,118,0.25)" stroke-width="5" stroke-linecap="square" fill="none" stroke-dasharray="8 4"/>
+          <rect x="4" y="62" width="12" height="20" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="52" y="4" width="20" height="12" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <text x="60" y="108" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">45&#176; SR Elbow</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">45&#176; Short-Radius &amp; 3D/5D/10D Bends</div>
+        <div class="comp-card-meta">Custom bend radii for process, offshore, and piggable lines. Swept solid geometry. STEP-exportable for spooling software.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">ASME B16.9</span>
+          <span class="comp-tag">ISO 5251</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TEES & CROSSES -->
+  <div class="comp-section-label">Tees, Crosses &amp; Laterals</div>
+  <div class="comp-grid">
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="50" width="100" height="20" rx="3" fill="rgba(41,121,255,0.15)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <rect x="50" y="50" width="20" height="60" rx="3" fill="rgba(41,121,255,0.15)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <rect x="4" y="48" width="12" height="24" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="104" y="48" width="12" height="24" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="48" y="104" width="24" height="12" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <text x="60" y="38" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">Equal Tee</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Equal &amp; Reducing Tee</div>
+        <div class="comp-card-meta">Equal bore or branch reducing. BW (ASME B16.9), flanged, threaded (ASME B16.11), or socket-weld. Run and branch separately dimensioned.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">ASME B16.9</span>
+          <span class="comp-tag">ASME B16.11</span>
+          <span class="comp-tag">EN 10253</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Wye / lateral -->
+          <line x1="10" y1="60" x2="70" y2="60" stroke="rgba(41,121,255,0.5)" stroke-width="18" stroke-linecap="square"/>
+          <line x1="60" y1="60" x2="110" y2="60" stroke="rgba(41,121,255,0.5)" stroke-width="18" stroke-linecap="square"/>
+          <line x1="60" y1="60" x2="95" y2="20" stroke="rgba(41,121,255,0.4)" stroke-width="14" stroke-linecap="round"/>
+          <line x1="10" y1="60" x2="70" y2="60" stroke="rgba(0,230,118,0.2)" stroke-width="5" stroke-dasharray="8 4"/>
+          <text x="60" y="108" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">45&#176; Wye / Lateral</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Wye / Lateral &amp; Cross</div>
+        <div class="comp-card-meta">45&#176; laterals and 4-way crosses for process and utility systems. Full parametric port positioning. Equal and reducing bore.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">ASME B16.9</span>
+          <span class="comp-tag">MSS SP-75</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- REDUCERS & COUPLINGS -->
+  <div class="comp-section-label">Reducers, Couplings &amp; Unions</div>
+  <div class="comp-grid">
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 10 44 H 44 L 76 54 H 110" stroke="rgba(41,121,255,0.5)" stroke-width="2" fill="none"/>
+          <path d="M 10 76 H 44 L 76 66 H 110" stroke="rgba(41,121,255,0.5)" stroke-width="2" fill="none"/>
+          <path d="M 10 44 H 44 L 76 54 H 110 L 110 66 L 76 66 L 44 76 H 10 Z" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.4)" stroke-width="1.5"/>
+          <line x1="10" y1="60" x2="110" y2="60" stroke="rgba(0,230,118,0.25)" stroke-width="1" stroke-dasharray="6 4"/>
+          <text x="60" y="106" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">Concentric Reducer</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Concentric &amp; Eccentric Reducer</div>
+        <div class="comp-card-meta">All standard BW reducing pairs per ASME B16.9. Flat-bottom eccentric for pump suction lines. Any bore combination on request.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">ASME B16.9</span>
+          <span class="comp-tag">EN 10253-2</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="48" width="42" height="24" rx="3" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.45)" stroke-width="1.5"/>
+          <rect x="46" y="44" width="28" height="32" rx="4" fill="rgba(41,121,255,0.2)" stroke="rgba(41,121,255,0.55)" stroke-width="1.5"/>
+          <rect x="68" y="48" width="42" height="24" rx="3" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.45)" stroke-width="1.5"/>
+          <line x1="10" y1="60" x2="110" y2="60" stroke="rgba(0,230,118,0.25)" stroke-width="1" stroke-dasharray="6 4"/>
+          <text x="60" y="106" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">Coupling / Union</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Couplings, Half-Couplings &amp; Unions</div>
+        <div class="comp-card-meta">Socket-weld and threaded per ASME B16.11. Victaulic-style grooved couplings (roll-grooved, cut-groove). Union body with male/female threads.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">ASME B16.11</span>
+          <span class="comp-tag">MSS SP-83</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FLANGES -->
+  <div class="comp-section-label">Flanges</div>
+  <div class="comp-grid">
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="44" fill="rgba(41,121,255,0.08)" stroke="rgba(41,121,255,0.4)" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="28" fill="rgba(4,10,20,0.7)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="14" fill="rgba(41,121,255,0.18)" stroke="rgba(0,230,118,0.5)" stroke-width="1.2"/>
+          <!-- bolt holes -->
+          <circle cx="60" cy="18" r="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <circle cx="60" cy="102" r="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <circle cx="18" cy="60" r="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <circle cx="102" cy="60" r="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <circle cx="27" cy="27" r="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <circle cx="93" cy="93" r="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <circle cx="93" cy="27" r="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <circle cx="27" cy="93" r="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Flanges &#8212; all ASME B16.5 types</div>
+        <div class="comp-card-meta">Weld-neck, slip-on, blind, socket-weld, lap-joint, threaded. Class 150 through Class 2500. RF, FF, RTJ face. Bolt circle and hole count parametric.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">ASME B16.5</span>
+          <span class="comp-tag">EN 1092-1</span>
+          <span class="comp-tag">DIN 2527</span>
+          <span class="comp-tag">BS 4504</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Orifice flange pair -->
+          <rect x="20" y="40" width="28" height="40" rx="3" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.45)" stroke-width="1.5"/>
+          <rect x="72" y="40" width="28" height="40" rx="3" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.45)" stroke-width="1.5"/>
+          <rect x="48" y="52" width="24" height="16" rx="1" fill="rgba(4,10,20,0.8)" stroke="rgba(0,230,118,0.4)" stroke-width="1.2"/>
+          <circle cx="60" cy="60" r="5" fill="rgba(0,230,118,0.3)" stroke="rgba(0,230,118,0.6)" stroke-width="1"/>
+          <text x="60" y="106" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="10" font-family="monospace">Orifice Flange Pair</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Orifice Flange Pairs &amp; Spectacle Blinds</div>
+        <div class="comp-card-meta">Orifice flange pairs with tapped pressure tappings (flange-tapped, D &amp; D/2, corner). Spectacle blinds and spacers. Figure-8 blinds per ASME B16.48.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">ASME B16.5</span>
+          <span class="comp-tag">ASME B16.48</span>
+          <span class="comp-tag">ISO 5167</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VALVES -->
+  <div class="comp-section-label">Valves &#8212; fully articulated assemblies</div>
+
+  <p>All valves are generated as <strong>articulated multi-body assemblies</strong>: the handwheel rotates, the stem rises or rotates, the obturator (gate, disc, ball, plug) moves with it. URDF exports carry joint definitions for simulation and digital-twin use.</p>
+
+  <div class="comp-grid">
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Gate valve sketch -->
+          <!-- Body -->
+          <rect x="30" y="62" width="60" height="30" rx="4" fill="rgba(41,121,255,0.15)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <!-- Yoke stem -->
+          <rect x="52" y="20" width="16" height="50" rx="2" fill="rgba(41,121,255,0.1)" stroke="rgba(41,121,255,0.4)" stroke-width="1.2"/>
+          <!-- Handwheel -->
+          <circle cx="60" cy="16" r="14" fill="none" stroke="rgba(0,230,118,0.6)" stroke-width="2"/>
+          <line x1="60" y1="2" x2="60" y2="30" stroke="rgba(0,230,118,0.5)" stroke-width="1.5"/>
+          <line x1="46" y1="16" x2="74" y2="16" stroke="rgba(0,230,118,0.5)" stroke-width="1.5"/>
+          <!-- Flanges -->
+          <rect x="18" y="66" width="14" height="22" rx="2" fill="rgba(41,121,255,0.25)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="88" y="66" width="14" height="22" rx="2" fill="rgba(41,121,255,0.25)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <text x="60" y="110" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Gate Valve &#8212; OS&amp;Y Rising Stem</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Gate Valve (OS&amp;Y / NRS)</div>
+        <div class="comp-card-meta">OS&amp;Y rising stem with spoked handwheel, bolted bonnet, yoke. Or non-rising stem (NRS) for buried service. Solid wedge, flexible wedge, parallel gate. DN15&#8211;DN600.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">API 600</span>
+          <span class="comp-tag">API 603</span>
+          <span class="comp-tag">BS EN 1171</span>
+          <span class="comp-tag">ASME B16.10</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Globe valve -->
+          <ellipse cx="60" cy="80" rx="32" ry="22" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <rect x="52" y="22" width="16" height="52" rx="2" fill="rgba(41,121,255,0.1)" stroke="rgba(41,121,255,0.4)" stroke-width="1.2"/>
+          <circle cx="60" cy="18" r="14" fill="none" stroke="rgba(0,230,118,0.6)" stroke-width="2"/>
+          <line x1="60" y1="4" x2="60" y2="32" stroke="rgba(0,230,118,0.5)" stroke-width="1.5"/>
+          <line x1="46" y1="18" x2="74" y2="18" stroke="rgba(0,230,118,0.5)" stroke-width="1.5"/>
+          <rect x="20" y="74" width="14" height="18" rx="2" fill="rgba(41,121,255,0.25)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="86" y="74" width="14" height="18" rx="2" fill="rgba(41,121,255,0.25)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <text x="60" y="112" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Globe Valve</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Globe Valve</div>
+        <div class="comp-card-meta">T-pattern and Y-pattern bodies. Rising stem with handwheel or actuator-mounted. Bellows-sealed variant for fugitive-emission service. DN15&#8211;DN300.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">API 623</span>
+          <span class="comp-tag">BS 1873</span>
+          <span class="comp-tag">ASME B16.10</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Ball valve -->
+          <rect x="22" y="52" width="76" height="32" rx="6" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <circle cx="60" cy="68" r="18" fill="rgba(41,121,255,0.22)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <circle cx="60" cy="68" r="9" fill="rgba(4,10,20,0.8)" stroke="rgba(0,230,118,0.5)" stroke-width="1.2"/>
+          <rect x="54" y="28" width="12" height="28" rx="3" fill="rgba(41,121,255,0.15)" stroke="rgba(41,121,255,0.4)" stroke-width="1.2"/>
+          <rect x="42" y="20" width="36" height="12" rx="3" fill="rgba(0,230,118,0.15)" stroke="rgba(0,230,118,0.5)" stroke-width="1.2"/>
+          <rect x="10" y="58" width="14" height="20" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="96" y="58" width="14" height="20" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <text x="60" y="108" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Ball Valve &#8212; Floating / Trunnion</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Ball Valve (Floating &amp; Trunnion)</div>
+        <div class="comp-card-meta">2-piece and 3-piece body. Floating ball (DN15&#8211;DN100), trunnion-mounted (DN50&#8211;DN600). 3-way L-port and T-port. Lever, gearbox, or actuator operator.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">API 6D</span>
+          <span class="comp-tag">BS EN 17864</span>
+          <span class="comp-tag">ISO 17292</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Butterfly valve -->
+          <rect x="22" y="46" width="76" height="28" rx="6" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <ellipse cx="60" cy="60" rx="20" ry="12" fill="rgba(41,121,255,0.25)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5" transform="rotate(-15 60 60)"/>
+          <rect x="57" y="22" width="6" height="46" rx="2" fill="rgba(0,230,118,0.4)" stroke="rgba(0,230,118,0.6)" stroke-width="1.2"/>
+          <rect x="10" y="50" width="14" height="20" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="96" y="50" width="14" height="20" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <text x="60" y="104" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Butterfly &#8212; Lug / Wafer / Double-Offset</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Butterfly Valve</div>
+        <div class="comp-card-meta">Wafer, lug, and double-flanged. Concentric, single-offset, double-offset (high-performance). Disc rotates &#177;90&#176; with stem in articulated assembly. DN50&#8211;DN1200.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">API 609</span>
+          <span class="comp-tag">EN 593</span>
+          <span class="comp-tag">MSS SP-68</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Check valve -->
+          <rect x="20" y="50" width="80" height="30" rx="5" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <!-- Disc on hinge -->
+          <line x1="60" y1="36" x2="60" y2="80" stroke="rgba(0,230,118,0.5)" stroke-width="2"/>
+          <ellipse cx="60" cy="65" rx="8" ry="16" fill="rgba(0,230,118,0.15)" stroke="rgba(0,230,118,0.5)" stroke-width="1.5" transform="rotate(20 60 65)"/>
+          <rect x="8" y="56" width="14" height="18" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="98" y="56" width="14" height="18" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <text x="60" y="104" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Swing Check / Tilting Disc</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Check Valve (Swing, Tilting Disc, Lift)</div>
+        <div class="comp-card-meta">Swing check with hinged disc (articulated, gravity- or spring-reset). Tilting disc for low-pressure-drop. Lift check (piston or ball). Dual-plate wafer check. DN15&#8211;DN600.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">API 594</span>
+          <span class="comp-tag">BS EN 12334</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Control valve + actuator -->
+          <!-- Body -->
+          <ellipse cx="60" cy="84" rx="26" ry="18" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <!-- Stem -->
+          <rect x="54" y="42" width="12" height="44" rx="2" fill="rgba(41,121,255,0.1)" stroke="rgba(41,121,255,0.35)" stroke-width="1.2"/>
+          <!-- Actuator -->
+          <rect x="36" y="14" width="48" height="32" rx="6" fill="rgba(0,230,118,0.10)" stroke="rgba(0,230,118,0.45)" stroke-width="1.5"/>
+          <text x="60" y="30" text-anchor="middle" fill="rgba(0,230,118,0.6)" font-size="9" font-family="monospace">ACTUATOR</text>
+          <rect x="18" y="78" width="14" height="18" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="88" y="78" width="14" height="18" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <text x="60" y="112" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Control Valve + Actuator</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Control Valve &amp; Actuator Assemblies</div>
+        <div class="comp-card-meta">Globe-body, cage-guided, rotary (eccentric plug, ball segment). Pneumatic diaphragm or cylinder actuator as separate body with spring-return geometry. DN15&#8211;DN200.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">IEC 60534</span>
+          <span class="comp-tag">ANSI/FCI 70-2</span>
+          <span class="comp-tag">ISA 75.01</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ENGINEERING ITEMS -->
+  <div class="comp-section-label">Engineering Items &#8212; Strainers, Instruments &amp; Specialties</div>
+  <div class="comp-grid">
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Y-strainer -->
+          <rect x="20" y="52" width="80" height="24" rx="4" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <!-- Y-branch for strainer pot -->
+          <path d="M 58 64 L 58 104 Q 60 108 62 104 L 62 64" fill="rgba(41,121,255,0.18)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <!-- Screen lines -->
+          <line x1="59" y1="68" x2="59" y2="100" stroke="rgba(0,230,118,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="61" y1="68" x2="61" y2="100" stroke="rgba(0,230,118,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
+          <rect x="8" y="56" width="14" height="16" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <rect x="98" y="56" width="14" height="16" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <text x="60" y="118" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Y-Strainer</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Strainers &#8212; Y-type &amp; Basket</div>
+        <div class="comp-card-meta">Y-body strainer with removable screen element (perforated or wire-mesh). Basket strainer (duplex or simplex). Screen open area and mesh modelled. Blowdown valve boss included.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">MSS SP-98</span>
+          <span class="comp-tag">BS 6681</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Safety relief valve -->
+          <rect x="36" y="60" width="48" height="36" rx="5" fill="rgba(41,121,255,0.12)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <!-- Bonnet / body -->
+          <rect x="44" y="28" width="32" height="36" rx="4" fill="rgba(41,121,255,0.1)" stroke="rgba(41,121,255,0.4)" stroke-width="1.2"/>
+          <!-- Inlet flange -->
+          <rect x="46" y="88" width="28" height="10" rx="2" fill="rgba(41,121,255,0.3)" stroke="rgba(41,121,255,0.6)" stroke-width="1.5"/>
+          <!-- Outlet side -->
+          <rect x="84" y="62" width="24" height="14" rx="3" fill="rgba(41,121,255,0.15)" stroke="rgba(41,121,255,0.4)" stroke-width="1.2"/>
+          <!-- Lever on top -->
+          <rect x="56" y="16" width="8" height="16" rx="2" fill="rgba(0,230,118,0.2)" stroke="rgba(0,230,118,0.5)" stroke-width="1.2"/>
+          <rect x="44" y="12" width="32" height="8" rx="2" fill="rgba(0,230,118,0.1)" stroke="rgba(0,230,118,0.35)" stroke-width="1"/>
+          <text x="60" y="112" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Safety / Relief Valve</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Safety &amp; Relief Valves (PSV / PRV)</div>
+        <div class="comp-card-meta">Spring-loaded safety relief valve with inlet and outlet nozzle. Full-lift and low-lift variants. Lever-operated test mechanism. Rupture disc assembly. Inlet/outlet sizes independent.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">API 520 / 521</span>
+          <span class="comp-tag">API 526</span>
+          <span class="comp-tag">ASME Sec. VIII</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-render">
+        <svg class="comp-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Expansion joint / bellows -->
+          <rect x="8" y="50" width="20" height="20" rx="3" fill="rgba(41,121,255,0.15)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <rect x="92" y="50" width="20" height="20" rx="3" fill="rgba(41,121,255,0.15)" stroke="rgba(41,121,255,0.5)" stroke-width="1.5"/>
+          <!-- Bellows corrugations -->
+          <path d="M 28 60 Q 34 48 40 60 Q 46 72 52 60 Q 58 48 64 60 Q 70 72 76 60 Q 82 48 92 60" stroke="rgba(0,230,118,0.6)" stroke-width="2.5" fill="none"/>
+          <text x="60" y="96" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Bellows Expansion Joint</text>
+        </svg>
+      </div>
+      <div class="comp-card-body">
+        <div class="comp-card-name">Expansion Joints &amp; Bellows</div>
+        <div class="comp-card-meta">Single and double bellows with tie-rods. Axial, lateral, and angular movement modelled as parametric travel. Gimbal and hinged variants. Flanged or butt-weld ends.</div>
+        <div class="comp-card-tags">
+          <span class="comp-tag">EJMA standards</span>
+          <span class="comp-tag">BS EN 14917</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="pillar-cta">
+    <h3>Need a component not listed here?</h3>
+    <p>If it's a piping or engineering item, we can generate it. Describe what you need and a UK specialist will confirm scope and turnaround within 24 hours.</p>
+    <a href="request-quote.html" class="btn btn-primary btn-lg">Describe Your Component &#8594;</a>
+  </div>
+
+  <!-- EXPORT FORMATS -->
+  <h2>Export formats</h2>
+
+  <p>Every component is delivered in the formats your downstream tools actually consume. You choose which at briefing stage.</p>
+
+  <div class="format-row">
+    <div class="format-badge">
+      <div class="format-badge-icon">&#128190;</div>
+      <div>
+        <div class="format-badge-name">STEP (AP214 / AP242)</div>
+        <div class="format-badge-desc">AutoCAD, SolidWorks, Inventor, Fusion 360, CATIA, NX, Creo</div>
+      </div>
+    </div>
+    <div class="format-badge">
+      <div class="format-badge-icon">&#9881;</div>
+      <div>
+        <div class="format-badge-name">Plant 3D .pcat</div>
+        <div class="format-badge-desc">Native Plant 3D catalog entry with spec line, ports, branch table</div>
+      </div>
+    </div>
+    <div class="format-badge">
+      <div class="format-badge-icon">&#128279;</div>
+      <div>
+        <div class="format-badge-name">URDF</div>
+        <div class="format-badge-desc">Articulated assembly for ROS, Gazebo, digital twins, simulation</div>
+      </div>
+    </div>
+    <div class="format-badge">
+      <div class="format-badge-icon">&#128248;</div>
+      <div>
+        <div class="format-badge-name">OBJ + MTL / GLTF</div>
+        <div class="format-badge-desc">Mesh for BIM visualisation, Navisworks, Unity, Unreal, web 3D</div>
+      </div>
+    </div>
+    <div class="format-badge">
+      <div class="format-badge-icon">&#128260;</div>
+      <div>
+        <div class="format-badge-name">STL</div>
+        <div class="format-badge-desc">3D printing, rapid prototyping, spool fabrication mock-ups</div>
+      </div>
+    </div>
+    <div class="format-badge">
+      <div class="format-badge-icon">&#128202;</div>
+      <div>
+        <div class="format-badge-name">JSON dimension table</div>
+        <div class="format-badge-desc">Machine-readable dim data for integration with procurement tools</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STANDARDS -->
+  <h2>Standards covered</h2>
+
+  <div class="standards-row">
+    <span class="standards-chip">ASME B16.5 (Flanges)</span>
+    <span class="standards-chip">ASME B16.9 (BW Fittings)</span>
+    <span class="standards-chip">ASME B16.10 (F-F Dims)</span>
+    <span class="standards-chip">ASME B16.11 (SW / Threaded)</span>
+    <span class="standards-chip">ASME B16.20 / .21 (Gaskets)</span>
+    <span class="standards-chip">ASME B16.34 (Valves)</span>
+    <span class="standards-chip">ASME B16.48 (Spec Blinds)</span>
+    <span class="standards-chip">ASME B31.1 / B31.3</span>
+    <span class="standards-chip">ASME B36.10 / B36.19 (Pipe)</span>
+    <span class="standards-chip">API 6D (Ball / Gate)</span>
+    <span class="standards-chip">API 594 (Check)</span>
+    <span class="standards-chip">API 609 (Butterfly)</span>
+    <span class="standards-chip">API 600 / 603 (Gate)</span>
+    <span class="standards-chip">API 520 / 526 (PSV)</span>
+    <span class="standards-chip">ISO 5167 (Orifice)</span>
+    <span class="standards-chip">ISO 17292 (Ball)</span>
+    <span class="standards-chip">EN 1092-1 / -2 (Flanges)</span>
+    <span class="standards-chip">EN 10253-1 / -2 (Fittings)</span>
+    <span class="standards-chip">EN 593 (Butterfly)</span>
+    <span class="standards-chip">DIN 2527 / 2528 / 2533</span>
+    <span class="standards-chip">BS EN 13480 (Industrial Piping)</span>
+    <span class="standards-chip">EJMA (Expansion Joints)</span>
+    <span class="standards-chip">MSS SP-68 / SP-75 / SP-83 / SP-98</span>
+    <span class="standards-chip">IEC 60534 (Control Valves)</span>
+  </div>
+
+  <!-- PRICING -->
+  <h2>Pricing</h2>
+
+  <table class="rate-table">
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>UK Rate</th>
+        <th>Typical project</th>
+        <th>Turnaround</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Single component (STEP + URDF)</td>
+        <td>&#163;90&#8211;&#163;140/hr</td>
+        <td>&#163;60&#8211;&#163;180 per component</td>
+        <td>Same day &#8211; 2 days</td>
+      </tr>
+      <tr>
+        <td>Component + Plant 3D <code>.pcat</code></td>
+        <td>&#163;90&#8211;&#163;140/hr</td>
+        <td>&#163;100&#8211;&#163;280 per component</td>
+        <td>1&#8211;3 days</td>
+      </tr>
+      <tr>
+        <td>Catalog pack (20&#8211;40 components)</td>
+        <td>Fixed price</td>
+        <td>&#163;1,800&#8211;&#163;6,000</td>
+        <td>1&#8211;2 weeks</td>
+      </tr>
+      <tr>
+        <td>Multi-line catalog (60&#8211;120 components)</td>
+        <td>Fixed price</td>
+        <td>&#163;6,000&#8211;&#163;18,000</td>
+        <td>3&#8211;6 weeks</td>
+      </tr>
+      <tr>
+        <td>Valve library (articulated, multi-type)</td>
+        <td>Fixed price</td>
+        <td>&#163;4,000&#8211;&#163;12,000</td>
+        <td>2&#8211;4 weeks</td>
+      </tr>
+      <tr>
+        <td>Monthly retainer (ongoing generation)</td>
+        <td>&#8212;</td>
+        <td>&#163;1,200&#8211;&#163;3,500 / month</td>
+        <td>Rolling</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Rates are AutomationHire verified provider rates as of May 2026. Single-component orders are quoted fixed-price after you submit the data sheet and target format. We do not charge client commission.</p>
+
+  <blockquote class="pull-quote">
+    &ldquo;We had 34 cast-iron valve bodies to model for a water-treatment extension &#8212; historically a 6-week CAD job. The AI-generated pack came back in 9 days, every component STEP-ready and spec-integrated. We ran one validation pass and went straight to isometric check.&rdquo;
+    <span class="pull-quote-cite">&#8212; Senior piping designer, UK water-sector EPC (anonymised)</span>
+  </blockquote>
+
+  <!-- HOW TO BRIEF -->
+  <h2>How to brief a component generation project</h2>
+
+  <p>A good brief takes 10 minutes and saves two rounds of iteration. Include:</p>
+
+  <ul>
+    <li><strong>Component type and class</strong> &#8212; e.g. <em>DN100 Class 300 trunnion-mounted ball valve, ASME B16.10 F-F</em></li>
+    <li><strong>Material and trim</strong> &#8212; e.g. <em>A216 WCB body, A182 F316 trim, RPTFE seats</em></li>
+    <li><strong>Connection type at each port</strong> &#8212; RF flanged, BW, SW, threaded</li>
+    <li><strong>Operator / actuator</strong> &#8212; handwheel, lever, gearbox, or pneumatic actuator (supply pressure and fail position if actuated)</li>
+    <li><strong>Manufacturer data sheet</strong> &#8212; PDF or STEP from vendor if available; we model from scratch if not</li>
+    <li><strong>Required output formats</strong> &#8212; STEP only, STEP + URDF, or full pack including Plant 3D <code>.pcat</code></li>
+    <li><strong>Quantity</strong> &#8212; single component, a series (DN25 through DN200 in one class), or a full catalog pack</li>
+    <li><strong>Target CAD platform</strong> &#8212; Plant 3D version, SolidWorks year, or other</li>
+  </ul>
+
+  <div class="pillar-cta">
+    <h3>Start with a single component &#8212; delivered within 48 hours</h3>
+    <p>Paste your component description, attach a data sheet, and a UK Articraft specialist will quote the same day. No minimum order.</p>
+    <a href="request-quote.html" class="btn btn-primary btn-lg">Get a Quote &#8594;</a>
+  </div>
+
+  <!-- ARTICRAFT SECTION -->
+  <h2>About Articraft &#8212; the technology behind the generation</h2>
+
+  <p><strong>Articraft</strong> is an open-source agentic 3D asset generation system built on <strong>CadQuery</strong>, which is a Python API over the <strong>OpenCascade Technology (OCCT)</strong> geometry kernel &#8212; the same kernel used by FreeCAD, Salome, and several commercial CAD packages. It was originally developed for large-scale articulated 3D dataset generation (robotics training data), but its output characteristics &#8212; dimensionally accurate parametric solids with articulated joints &#8212; translate directly to engineering component authoring.</p>
+
+  <p>What Articraft produces for each piping component:</p>
+
+  <ul>
+    <li>A <strong>parametric solid model</strong> authored in Python (CadQuery). The code is version-controlled, reproducible, and can be parameterised to generate a full size series (DN25&#8211;DN200 in one run).</li>
+    <li>An <strong>articulated assembly</strong> where moving parts are separate bodies with defined joint axes, travel limits, and parent-child relationships. A gate valve has three bodies: body + stem + gate. The handwheel is a fourth. The URDF carries the joint definitions.</li>
+    <li><strong>STEP AP214 / AP242 export</strong> at OCCT native precision &#8212; no mesh approximation, true B-rep surface.</li>
+    <li>A <strong>URDF file</strong> with link inertials, collision geometry, and joint limits &#8212; ready for ROS, Gazebo, Isaac Sim, or a client's digital-twin platform.</li>
+    <li>Mesh exports (OBJ + MTL, GLTF, STL) from the same geometry for downstream visualisation.</li>
+  </ul>
+
+  <p>What Articraft does <strong>not</strong> produce natively: Plant 3D <code>.pcat</code> entries, OpenPlant catalog XML, or SolidWorks Routing library files. These are written by the UK specialist as the integration layer &#8212; mapping the STEP geometry into the target CAD system's spec format. That integration step typically adds 30&#8211;60 minutes per component and is included in the catalog pack rates above.</p>
+
+  <p>&#8594; Read the broader context in our <a href="plant-3d-piping-automation-uk.html">Plant 3D Piping Automation guide</a>.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently asked questions</h2>
+
+  <div class="faq-list">
+
+    <details class="faq-item">
+      <summary>Can Articraft generate components to exact manufacturer dimensions?</summary>
+      <div class="faq-answer">Yes, when a manufacturer data sheet or vendor STEP is provided. The specialist reads the published dimensional tables and builds the CadQuery model to match face-to-face, bore, flange OD, bolt-circle, and overall envelope exactly. Where a data sheet specifies a dimension as &#8220;per ASME B16.10&#8221; or similar, the standard table is used. The code is delivered alongside the STEP so you can verify every dimension.</div>
+    </details>
+
+    <details class="faq-item">
+      <summary>How does the Plant 3D .pcat integration work?</summary>
+      <div class="faq-answer">The <code>.pcat</code> (Plant 3D catalog) file maps the 3D geometry to port definitions (size, type, end condition, flow direction), dimension parameters, and spec-line entries. The UK specialist writes this by hand using the Plant 3D Content Builder, referencing the STEP geometry ports. The result drops into your project catalog alongside any existing content. It requires your Plant 3D version to be specified (2024, 2025, or 2026) because the content builder format differs between releases.</div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Can I get a full size series rather than just one bore size?</summary>
+      <div class="faq-answer">Yes &#8212; this is one of the primary advantages of parametric CadQuery generation. The code takes bore and pressure class as inputs, so running the script for DN25 through DN200 (8 sizes) in Class 300 produces 8 STEP files, 8 URDF files, and 8 <code>.pcat</code> entries in a single generation run. Pricing for series is substantially lower per-component than single-piece orders. Specify the full size range in your brief and the quote will reflect it.</div>
+    </details>
+
+    <details class="faq-item">
+      <summary>What is URDF and why would a piping team need it?</summary>
+      <div class="faq-answer">URDF (Unified Robot Description Format) is the standard format for articulated assembly definitions used in robotics simulation (ROS / Gazebo) and increasingly in industrial digital twins (Siemens Industrial Metaverse, NVIDIA Omniverse / Isaac Sim, Ansys Twin Builder). If your client or project team is building a plant digital twin, they need articulated valve assemblies in URDF so that operators can simulate open/close cycles, handwheel torque, and maintenance access in the virtual model. You can also ignore URDF entirely if you only need STEP for CAD.</div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Can you generate non-standard or proprietary components?</summary>
+      <div class="faq-answer">Yes &#8212; Articraft generates from a description, not a library lookup, so novel or proprietary geometries are feasible. We have generated bespoke instrument bodies, composite-lined fittings, jacketed spool pieces, and skid-level sub-assemblies from client data sheets. The only requirement is that the geometry can be described parametrically. Organic or free-form shapes (e.g. a cast pump volute with complex internal passages) are harder and may need a hybrid approach with mesh tools.</div>
+    </details>
+
+    <details class="faq-item">
+      <summary>How accurate are the components for stress analysis?</summary>
+      <div class="faq-answer">The STEP geometry exported by Articraft + CadQuery is a true B-rep solid (not a mesh approximation), so it imports cleanly into FEA tools (ANSYS, Abaqus, Simcenter) for stress analysis. Wall thickness, bore, and external envelope are parametric, so ASME B31.3 minimum-wall calculations can be baked into the generation script. However, internal details like weld preparations, notch radii, and casting-grade thickness variations should be confirmed against the manufacturer's DXF or STEP if fatigue or pressure-vessel certification is required.</div>
+    </details>
+
+    <details class="faq-item">
+      <summary>What's the difference between the free Articraft tool and using AutomationHire?</summary>
+      <div class="faq-answer">Articraft is open-source and free to use. AutomationHire connects you with UK specialists who have already deployed it for piping work, built the Plant 3D integration layer, set up the quality-check workflow, and can guarantee delivery and standards compliance. If you have a Python developer who wants to run Articraft in-house, that's also a valid path &#8212; our <a href="plant-3d-piping-automation-uk.html">piping automation guide</a> covers the technical setup. The service on AutomationHire is for teams who need the output, not the toolchain.</div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Do you work with OpenPlant or SmartPlant as target systems?</summary>
+      <div class="faq-answer">Yes. The STEP geometry is CAD-system-agnostic. For OpenPlant (Bentley), the integration layer writes OpenPlant Component Builder catalog XML instead of <code>.pcat</code>. For SmartPlant 3D / Smart 3D (Hexagon), it generates the material catalog entry and reference data in the Smart 3D format. These integrations take more specialist time than Plant 3D (the tooling is less scriptable) and are priced accordingly. Specify your target system when you submit the brief.</div>
+    </details>
+
+  </div>
+
+</article>
+
+<!-- NEWSLETTER -->
+<section class="section-sm" style="background:var(--black-2);border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="text-center reveal">
+      <div class="section-label">Engineering CAD Digest</div>
+      <h3 class="section-title" style="font-size:28px">Articraft, Plant 3D, and parametric piping &#8212; fortnightly</h3>
+      <p class="section-sub" style="margin-bottom:28px">New component walkthroughs, CadQuery patterns, and AI tooling updates for piping engineers. No fluff.</p>
+      <form class="newsletter-form" data-newsletter="pillar-articraft">
+        <input type="email" placeholder="Enter your email address" required />
+        <button class="btn btn-primary" type="submit">Subscribe Free</button>
+      </form>
+      <p style="font-size:12px;color:var(--white-30);margin-top:12px">No spam. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          <div class="footer-logo-icon">&#9889;</div>
+          <span class="footer-logo-text">Automation<span>Hire</span></span>
+        </a>
+        <p class="footer-desc">The UK's leading directory for AI automation agencies and workflow automation specialists. Find, compare and hire verified experts.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-link">&#120143;</a>
+          <a href="#" class="social-link">in</a>
+          <a href="#" class="social-link">&#9654;</a>
+          <a href="#" class="social-link">f</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Directory</div>
+        <ul class="footer-links">
+          <li><a href="providers.html">Browse All Experts</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="providers.html?filter=featured">Featured Providers</a></li>
+          <li><a href="request-quote.html">Get Matched</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Engineering CAD</div>
+        <ul class="footer-links">
+          <li><a href="plant-3d-piping-automation-uk.html">Plant 3D Piping Automation</a></li>
+          <li><a href="articraft-piping-components.html">3D Component Generator</a></li>
+          <li><a href="request-quote.html">Get a Component Quote</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>&#169; 2026 AutomationHire.co.uk &#8212; All rights reserved.</div>
+      <div>
+        <a href="privacy.html">Privacy</a> &nbsp;&#183;&nbsp;
+        <a href="terms.html">Terms</a> &nbsp;&#183;&nbsp;
+        <a href="privacy.html#cookies">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- STRUCTURED DATA -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "AI-Generated 3D Piping Components — Articraft + CadQuery",
+  "url": "https://automationhire.co.uk/articraft-piping-components",
+  "description": "Generate pipes, fittings, elbows, flanges, and valves as fully parametric 3D solids from a text prompt. STEP, URDF, and Plant 3D-ready. UK specialists.",
+  "provider": { "@type": "Organization", "name": "AutomationHire", "url": "https://automationhire.co.uk" },
+  "areaServed": { "@type": "Country", "name": "United Kingdom" },
+  "priceRange": "£60–£18,000"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://automationhire.co.uk" },
+    { "@type": "ListItem", "position": 2, "name": "Categories", "item": "https://automationhire.co.uk/categories" },
+    { "@type": "ListItem", "position": 3, "name": "Plant 3D Piping Automation", "item": "https://automationhire.co.uk/plant-3d-piping-automation-uk" },
+    { "@type": "ListItem", "position": 4, "name": "AI 3D Piping Component Generator" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can Articraft generate components to exact manufacturer dimensions?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes, when a manufacturer data sheet or vendor STEP is provided. The specialist reads the published dimensional tables and builds the CadQuery model to match face-to-face, bore, flange OD, bolt-circle, and overall envelope exactly." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I get a full size series rather than just one bore size?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. The code takes bore and pressure class as inputs, so running for DN25 through DN200 (8 sizes) in Class 300 produces 8 STEP files, 8 URDF files, and 8 .pcat entries in a single generation run. Pricing for series is substantially lower per-component than single-piece orders." }
+    },
+    {
+      "@type": "Question",
+      "name": "What formats does Articraft export piping components to?",
+      "acceptedAnswer": { "@type": "Answer", "text": "STEP (AP214/AP242) for AutoCAD, SolidWorks, Inventor and other CAD tools; URDF for digital twins and ROS simulation; OBJ/GLTF/STL for visualisation; Plant 3D .pcat catalog entries; and machine-readable JSON dimension tables." }
+    }
+  ]
+}
+</script>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/chat.js"></script>
+<script src="assets/js/receptionist.js"></script>
+</body>
+</html>
