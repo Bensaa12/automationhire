@@ -14,7 +14,25 @@ module.exports = async function handler(req, res) {
 
   const resend = getResend();
 
-  const { email } = req.body || {};
+  // Parse body — handle both auto-parsed object and raw string from Vercel
+  let body = req.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch { body = {}; }
+  }
+  if (!body || typeof body !== 'object') {
+    // Last resort: read raw stream
+    try {
+      const chunks = [];
+      await new Promise((resolve, reject) => {
+        req.on('data', c => chunks.push(c));
+        req.on('end', resolve);
+        req.on('error', reject);
+      });
+      body = JSON.parse(Buffer.concat(chunks).toString() || '{}');
+    } catch { body = {}; }
+  }
+
+  const { email } = body;
 
   if (!email?.trim()) return err(res, 'Email is required');
 
