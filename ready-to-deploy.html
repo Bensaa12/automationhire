@@ -3,681 +3,603 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ready to Deploy — Pre-Built Automations In Stock | AutomationHire</title>
-  <meta name="description" content="Plug-and-play automations tested and ready to deploy. Buy a blueprint or get it installed for you. CRM, email, e-commerce, onboarding and more." />
+  <title>PartForge Component Library — STEP Files, Specs & Plant 3D Catalogs | AutomationHire</title>
+  <meta name="description" content="Ready-made STEP files, interactive 3D models and technical spec sheets for pumps, valves, fittings and instrumentation. Drop straight into AutoCAD Plant 3D, SolidWorks or Inventor." />
   <link rel="canonical" href="https://automationhire.co.uk/ready-to-deploy" />
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
-
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="Ready to Deploy — Pre-Built Automations In Stock | AutomationHire" />
-  <meta property="og:description" content="Plug-and-play automations tested and ready to deploy. Buy a blueprint or get it installed for you. CRM, email, e-commerce, onboarding and more." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://automationhire.co.uk/ready-to-deploy" />
-  <meta property="og:site_name" content="AutomationHire" />
-  <meta property="og:image" content="https://automationhire.co.uk/assets/og/og-default.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Ready to Deploy — Pre-Built Automations In Stock | AutomationHire" />
-  <meta name="twitter:description" content="Plug-and-play automations tested and ready to deploy. Buy a blueprint or get it installed for you. CRM, email, e-commerce, onboarding and more." />
   <style>
-    /* ── Store-specific styles ── */
-    .store-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 22px;
-    }
-    .auto-card {
-      background: var(--black-3);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 28px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      transition: all 0.3s ease;
-      overflow: hidden;
-    }
-    .auto-card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--green), var(--blue));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
-    }
-    .auto-card:hover { border-color: rgba(0,230,118,0.3); transform: translateY(-4px); box-shadow: 0 16px 50px rgba(0,0,0,0.4); }
-    .auto-card:hover::after { transform: scaleX(1); }
-    .auto-card.hidden { display: none; }
+  /* ── Library page ───────────────────────────────────────── */
+  .lib-hero { padding: 110px 0 64px; position: relative; z-index: 1; }
+  .lib-hero::before {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 65% 55% at 20% 40%, rgba(41,121,255,.08) 0%, transparent 65%),
+      radial-gradient(ellipse 55% 45% at 85% 60%, rgba(0,230,118,.06) 0%, transparent 60%);
+  }
+  .lib-kicker {
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--green); margin-bottom:18px;
+  }
+  .lib-kicker::before {
+    content:''; width:24px; height:2px; background:var(--green);
+    box-shadow:0 0 8px var(--green);
+  }
+  .lib-hero h1 {
+    font-family:var(--font-head); font-size:clamp(30px,5vw,52px);
+    font-weight:800; line-height:1.1; margin-bottom:20px;
+  }
+  .lib-hero p.lead {
+    font-size:clamp(15px,2vw,18px); color:var(--white-60);
+    max-width:600px; line-height:1.7; margin-bottom:36px;
+  }
+  .lib-hero-actions { display:flex; gap:14px; flex-wrap:wrap; }
 
-    .status-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 11px; font-weight: 700;
-      padding: 4px 10px; border-radius: 100px;
-      position: absolute; top: 20px; right: 20px;
-    }
-    .status-live    { background: rgba(0,230,118,0.12); color: var(--green); border: 1px solid rgba(0,230,118,0.25); }
-    .status-testing { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
-    .status-soon    { background: rgba(41,121,255,0.12); color: var(--blue); border: 1px solid rgba(41,121,255,0.2); }
+  /* stats strip */
+  .lib-stats {
+    display:flex; gap:0; flex-wrap:wrap;
+    border:1px solid var(--border); border-radius:var(--radius-lg);
+    overflow:hidden; margin-top:56px;
+  }
+  .lib-stat {
+    flex:1; min-width:150px; padding:22px 28px;
+    border-right:1px solid var(--border); text-align:center;
+  }
+  .lib-stat:last-child { border-right:none; }
+  .lib-stat .sv { font-family:var(--font-head); font-size:32px; font-weight:800; }
+  .lib-stat .sv.green { color:var(--green); }
+  .lib-stat .sv.blue  { color:var(--blue); }
+  .lib-stat .sk { font-size:12px; color:var(--white-30); margin-top:4px; letter-spacing:.03em; }
 
-    .auto-icon { font-size: 36px; margin-bottom: 14px; display: block; }
-    .auto-name { font-family: var(--font-head); font-weight: 700; font-size: 17px; margin-bottom: 8px; padding-right: 90px; }
-    .auto-desc { font-size: 14px; color: var(--white-60); line-height: 1.7; margin-bottom: 16px; flex: 1; }
+  /* ── Filter bar ─────────────────────────────────────────── */
+  .filter-bar {
+    display:flex; gap:8px; flex-wrap:wrap;
+    padding:20px 0 32px;
+  }
+  .filter-btn {
+    padding:7px 18px; border-radius:100px; border:1px solid var(--border);
+    background:transparent; color:var(--white-60); font-size:13px; font-weight:600;
+    cursor:pointer; transition:all .2s; font-family:var(--font-main);
+  }
+  .filter-btn:hover { border-color:var(--white-30); color:var(--white-90); }
+  .filter-btn.active {
+    background:var(--green); border-color:var(--green);
+    color:var(--black);
+  }
 
-    .auto-tools {
-      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;
-    }
-    .tool-pill {
-      font-size: 11px; font-weight: 600;
-      padding: 3px 9px; border-radius: 100px;
-      background: var(--black-4); border: 1px solid var(--border);
-      color: var(--white-60);
-    }
+  /* ── Component grid ─────────────────────────────────────── */
+  .comp-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:24px;
+    margin-bottom:72px;
+  }
 
-    .auto-meta {
-      display: flex; align-items: center; gap: 16px;
-      font-size: 12px; color: var(--white-30);
-      margin-bottom: 18px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--border);
-    }
-    .auto-meta span { display: flex; align-items: center; gap: 4px; }
+  .comp-card {
+    background:var(--black-2); border:1px solid var(--border);
+    border-radius:var(--radius-lg); overflow:hidden;
+    display:flex; flex-direction:column;
+    transition:border-color .25s, transform .25s, box-shadow .25s;
+    position:relative;
+  }
+  .comp-card:hover {
+    border-color:rgba(0,230,118,.3);
+    transform:translateY(-4px);
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+  }
+  .comp-card.soon { opacity:.65; }
 
-    .auto-pricing {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-    }
-    .price-option {
-      background: var(--black-4);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      text-align: center;
-      transition: all 0.2s;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .price-option:hover { border-color: var(--green); background: var(--green-glow); }
-    .price-option.primary { border-color: rgba(0,230,118,0.3); background: rgba(0,230,118,0.06); }
-    .price-option.primary:hover { background: rgba(0,230,118,0.14); }
-    .price-label { font-size: 10px; color: var(--white-30); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .price-amount { font-family: var(--font-head); font-weight: 700; font-size: 20px; color: var(--white); }
-    .price-amount .currency { font-size: 13px; font-weight: 400; color: var(--white-60); }
-    .price-cta { font-size: 11px; color: var(--green); font-weight: 600; margin-top: 3px; }
-    .price-option.disabled { opacity: 0.45; pointer-events: none; }
+  /* viewer thumbnail */
+  .comp-viewer {
+    background:#09090f; height:200px; position:relative; overflow:hidden;
+    border-bottom:1px solid var(--border);
+  }
+  .comp-viewer iframe {
+    width:100%; height:100%; border:none; pointer-events:none;
+    display:block;
+  }
+  .comp-viewer .viewer-overlay {
+    position:absolute; inset:0; display:flex; align-items:center;
+    justify-content:center; background:rgba(0,0,0,.55);
+    opacity:0; transition:opacity .2s;
+    font-size:13px; font-weight:600; color:#fff; gap:6px; cursor:pointer;
+    text-decoration:none;
+  }
+  .comp-card:hover .viewer-overlay { opacity:1; }
+  .comp-viewer .soon-cover {
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:8px;
+    background:linear-gradient(135deg,#0d1117,#161b27);
+  }
+  .soon-cover .sc-icon {
+    font-size:36px; opacity:.25;
+  }
+  .soon-cover .sc-label {
+    font-size:12px; font-weight:700; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--white-30);
+  }
 
-    /* Filter chips */
-    .filter-bar {
-      display: flex; flex-wrap: wrap; gap: 10px;
-      margin-bottom: 36px;
-    }
-    .filter-chip {
-      padding: 8px 18px; border-radius: 100px;
-      font-size: 13px; font-weight: 600;
-      border: 1px solid var(--border);
-      background: var(--black-3);
-      color: var(--white-60);
-      cursor: pointer; transition: all 0.2s;
-    }
-    .filter-chip:hover, .filter-chip.active {
-      border-color: var(--green);
-      color: var(--green);
-      background: var(--green-glow);
-    }
+  /* card body */
+  .comp-body { padding:20px 22px 14px; flex:1; display:flex; flex-direction:column; gap:10px; }
+  .comp-cat {
+    font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--blue);
+  }
+  .comp-name {
+    font-family:var(--font-head); font-size:16px; font-weight:700;
+    color:var(--white-90); line-height:1.3;
+  }
+  .comp-desc { font-size:13px; color:var(--white-60); line-height:1.65; flex:1; }
 
-    /* What's included strip */
-    .included-strip {
-      display: flex; flex-wrap: wrap; gap: 12px;
-      padding: 20px 24px;
-      background: var(--black-3);
-      border: 1px solid rgba(0,230,118,0.15);
-      border-radius: var(--radius-md);
-      margin-bottom: 48px;
-    }
-    .included-item {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 13px; color: var(--white-60);
-    }
-    .included-item span { color: var(--green); font-weight: 700; }
+  /* format pills */
+  .comp-formats { display:flex; gap:6px; flex-wrap:wrap; }
+  .fmt-pill {
+    font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    padding:3px 9px; border-radius:4px; border:1px solid;
+  }
+  .fmt-pill.step  { border-color:rgba(0,230,118,.4); color:var(--green); background:rgba(0,230,118,.06); }
+  .fmt-pill.stl   { border-color:rgba(41,121,255,.4); color:var(--blue);  background:rgba(41,121,255,.06); }
+  .fmt-pill.html  { border-color:rgba(255,255,255,.15); color:var(--white-60); }
+  .fmt-pill.spec  { border-color:rgba(255,165,0,.4);  color:#ffa500; background:rgba(255,165,0,.06); }
+  .fmt-pill.plant { border-color:rgba(0,230,118,.4); color:var(--green); background:rgba(0,230,118,.06); }
 
-    [data-theme="light"] .auto-card { background: #ffffff; border-color: rgba(0,0,0,0.09); }
-    [data-theme="light"] .price-option { background: #f0f3fc; border-color: rgba(0,0,0,0.10); }
-    [data-theme="light"] .price-option.primary { background: rgba(0,200,90,0.07); }
-    [data-theme="light"] .tool-pill { background: #eaecf8; border-color: rgba(0,0,0,0.10); }
-    [data-theme="light"] .filter-chip { background: #eaecf8; }
-    [data-theme="light"] .included-strip { background: #ffffff; }
-    [data-theme="light"] .price-amount { color: #0d1117; }
+  /* card footer */
+  .comp-footer {
+    padding:12px 22px 18px;
+    display:flex; gap:8px; align-items:center;
+    border-top:1px solid var(--border);
+  }
+  .comp-btn {
+    flex:1; padding:8px 0; border-radius:var(--radius-sm);
+    font-size:12.5px; font-weight:600; text-align:center;
+    text-decoration:none; border:1px solid transparent;
+    transition:all .2s; display:block;
+  }
+  .comp-btn.primary { background:var(--green); color:var(--black); }
+  .comp-btn.primary:hover { background:var(--green-dim); }
+  .comp-btn.outline { border-color:var(--border); color:var(--white-60); }
+  .comp-btn.outline:hover { border-color:var(--white-30); color:var(--white-90); }
+  .comp-btn.dim { color:var(--white-30); border-color:var(--border); cursor:default; text-align:center; padding:8px 0; font-size:12px; }
+
+  /* ── Capability strips ──────────────────────────────────── */
+  .cap-strip {
+    background:var(--black-2); border:1px solid var(--border);
+    border-radius:var(--radius-xl); padding:48px 48px;
+    margin-bottom:40px; position:relative; overflow:hidden;
+  }
+  .cap-strip::before {
+    content:''; position:absolute; top:-60px; right:-60px;
+    width:300px; height:300px; border-radius:50%;
+    background:radial-gradient(circle, rgba(41,121,255,.08) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .cap-strip-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;
+  }
+  @media(max-width:720px){ .cap-strip-grid{ grid-template-columns:1fr; gap:28px; } }
+  .cap-strip h2 {
+    font-family:var(--font-head); font-size:clamp(20px,3vw,28px);
+    font-weight:700; line-height:1.25; margin-bottom:14px;
+  }
+  .cap-strip p { font-size:14px; color:var(--white-60); line-height:1.75; margin-bottom:18px; }
+  .cap-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .cap-list li {
+    display:flex; align-items:flex-start; gap:10px;
+    font-size:13.5px; color:var(--white-60); line-height:1.5;
+  }
+  .cap-list li::before {
+    content:'→'; color:var(--green); font-weight:700;
+    flex-shrink:0; margin-top:1px;
+  }
+
+  .target-grid {
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:10px;
+  }
+  .target-card {
+    background:var(--black-3); border:1px solid var(--border);
+    border-radius:var(--radius-md); padding:16px 16px 14px;
+    text-align:center; transition:border-color .2s;
+  }
+  .target-card:hover { border-color:rgba(41,121,255,.3); }
+  .target-card .tc-icon { font-size:22px; margin-bottom:8px; }
+  .target-card .tc-name { font-size:12.5px; font-weight:700; color:var(--white-90); margin-bottom:3px; }
+  .target-card .tc-sub  { font-size:11px; color:var(--white-30); }
+
+  /* ── Upload CTA ─────────────────────────────────────────── */
+  .upload-cta {
+    text-align:center; padding:72px 0 80px;
+    position:relative; z-index:1;
+  }
+  .upload-cta::before {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,230,118,.06) 0%, transparent 70%);
+  }
+  .upload-cta h2 {
+    font-family:var(--font-head); font-size:clamp(24px,4vw,40px);
+    font-weight:800; margin-bottom:14px;
+  }
+  .upload-cta p { font-size:16px; color:var(--white-60); max-width:500px; margin:0 auto 32px; line-height:1.7; }
+
+  /* hidden filter */
+  .comp-card.filtered { display:none; }
   </style>
 </head>
 <body>
-<canvas id="particle-canvas"></canvas>
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
-      <div class="nav-logo-icon">⚡</div>
-      <span class="nav-logo-text">Automation<span>Hire</span></span>
-    </a>
+<!-- ── NAV ──────────────────────────────────────────────────────────────────── -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">AutomationHire</a>
     <ul class="nav-links">
-      <li><a href="providers.html">Browse Experts</a></li>
-      <li><a href="categories.html">Categories</a></li>
-      <li><a href="ads.html">Ad Production</a></li>
-      <li><a href="ready-to-deploy.html" style="color:var(--green)">Ready to Deploy</a></li>
-      <li><a href="pricing.html">Pricing</a></li>
-      <li><a href="blog.html">Blog</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="forge.html">PartForge <span style="background:var(--green);color:var(--black);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:4px;vertical-align:middle">NEW</span></a></li>
+      <li><a href="ready-to-deploy.html" class="active">Library</a></li>
+      <li><a href="hire-ai-automation-expert-uk.html">Hire</a></li>
+      <li><a href="free.html">Free Tools</a></li>
     </ul>
-    <div class="nav-cta">
-      
-      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
-      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
-    </div>
-    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+    <a href="forge.html#upload" class="btn btn-primary btn-sm">Upload a Component</a>
+    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
   </div>
 </nav>
 
-<!-- ===== HERO ===== -->
-<section class="page-hero">
+<!-- ── HERO ─────────────────────────────────────────────────────────────────── -->
+<section class="lib-hero section">
   <div class="container">
-    <div class="section-label">Automation Store</div>
-    <h1 class="page-hero-title">Ready to Deploy — <span class="grad-green">In Stock Automations</span></h1>
-    <p class="page-hero-sub">Pre-built, tested automations you can plug into your business today. Buy the blueprint and set it up yourself, or have our experts install it for you.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px">
-      <div style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--white-60)">
-        <span style="color:var(--green);font-size:18px">✅</span> Tested & live
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--white-60)">
-        <span style="color:#fbbf24;font-size:18px">⚡</span> Deploy in hours, not weeks
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--white-60)">
-        <span style="color:var(--blue);font-size:18px">🔧</span> Full setup guide included
-      </div>
+    <div class="lib-kicker">PartForge · Component Library</div>
+    <h1>
+      <span class="grad-green">STEP Files, Specs &amp; Catalogs</span><br>
+      Ready for Plant&nbsp;3D
+    </h1>
+    <p class="lead">
+      Every component below was generated from a product photo and datasheet — no manual CAD.
+      Download the STEP, open the spec sheet, or drop the model straight into
+      AutoCAD Plant 3D, SolidWorks, Inventor or FreeCAD.
+    </p>
+    <div class="lib-hero-actions">
+      <a href="forge.html#upload" class="btn btn-primary">Generate Your Component</a>
+      <a href="#library" class="btn btn-outline">Browse Library</a>
+    </div>
+
+    <div class="lib-stats">
+      <div class="lib-stat"><div class="sv green">3</div><div class="sk">Components built</div></div>
+      <div class="lib-stat"><div class="sv blue">STEP</div><div class="sk">ISO 10303 B-rep solids</div></div>
+      <div class="lib-stat"><div class="sv green">0</div><div class="sk">Manual CAD hours</div></div>
+      <div class="lib-stat"><div class="sv blue">4</div><div class="sk">CAD platforms supported</div></div>
     </div>
   </div>
 </section>
 
-<!-- ===== STORE ===== -->
-<section class="section" style="padding-top:40px">
+<!-- ── LIBRARY ───────────────────────────────────────────────────────────────── -->
+<section class="section-sm" id="library">
   <div class="container">
 
-    <!-- What's included -->
-    <div class="included-strip reveal">
-      <div class="included-item"><span>✓</span> Automation blueprint (step-by-step JSON/scenario file)</div>
-      <div class="included-item"><span>✓</span> Setup guide (video + written walkthrough)</div>
-      <div class="included-item"><span>✓</span> 14-day email support</div>
-      <div class="included-item"><span>✓</span> Free update if core tool changes</div>
-      <div class="included-item"><span>✓</span> Done-for-you option available on every automation</div>
+    <!-- filter bar -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="valve">Valves</button>
+      <button class="filter-btn" data-filter="pump">Pumps</button>
+      <button class="filter-btn" data-filter="fitting">Fittings</button>
+      <button class="filter-btn" data-filter="instrument">Instrumentation</button>
+      <button class="filter-btn" data-filter="structural">Structural</button>
     </div>
 
-    <!-- Filters -->
-    <div class="filter-bar reveal">
-      <button class="filter-chip active" data-filter="all">All Automations</button>
-      <button class="filter-chip" data-filter="crm">CRM & Leads</button>
-      <button class="filter-chip" data-filter="email">Email & Follow-up</button>
-      <button class="filter-chip" data-filter="client">Client Operations</button>
-      <button class="filter-chip" data-filter="ecommerce">E-commerce</button>
-      <button class="filter-chip" data-filter="content">Content & Social</button>
-      <button class="filter-chip" data-filter="internal">Internal Ops</button>
-    </div>
+    <div class="comp-grid" id="comp-grid">
 
-    <!-- Automation Cards -->
-    <div class="store-grid" id="store-grid">
-
-      <!-- 1. Lead Capture to CRM -->
-      <div class="auto-card reveal" data-category="crm">
-        <span class="status-badge status-live">✅ Live & Tested</span>
-        <span class="auto-icon">🎯</span>
-        <div class="auto-name">Lead Capture → CRM Pipeline</div>
-        <div class="auto-desc">Every new lead from your website form automatically lands in your CRM, triggers a Slack alert, and starts a personalised 5-step email sequence. Zero manual entry.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">Make.com</span>
-          <span class="tool-pill">HubSpot</span>
-          <span class="tool-pill">Slack</span>
-          <span class="tool-pill">Gmail</span>
-        </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 2–3 hours</span>
-          <span>⚙️ 4 tools connected</span>
-          <span>🔄 Real-time</span>
-        </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=lead-capture-crm&type=template" class="price-option primary">
-            <div class="price-label">DIY Blueprint</div>
-            <div class="price-amount"><span class="currency">£</span>147</div>
-            <div class="price-cta">Get files + guide →</div>
+      <!-- ── Ball Valve G 1¼" ─────────────────────────────────────────────── -->
+      <div class="comp-card" data-cat="valve">
+        <div class="comp-viewer">
+          <iframe src="assets/models/ball_valve_g1_25.html" loading="lazy" sandbox="allow-scripts" title="Ball valve 3D"></iframe>
+          <a href="assets/models/ball_valve_g1_25.html" target="_blank" class="viewer-overlay">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            Open full 3D
           </a>
-          <a href="request-quote.html?automation=lead-capture-crm&type=setup" class="price-option">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount"><span class="currency">£</span>397</div>
-            <div class="price-cta">We install it →</div>
-          </a>
+        </div>
+        <div class="comp-body">
+          <div class="comp-cat">Valve</div>
+          <div class="comp-name">Ball Valve G 1-1/4" — 32 mm Full Bore</div>
+          <div class="comp-desc">2-way compact ball valve. Nickel-plated brass body, chrome ball, PTFE seals. 30 bar rated. Red lever handle. 9 solid parts.</div>
+          <div class="comp-formats">
+            <span class="fmt-pill step">STEP</span>
+            <span class="fmt-pill stl">STL</span>
+            <span class="fmt-pill html">3D Preview</span>
+            <span class="fmt-pill plant">Plant 3D</span>
+          </div>
+        </div>
+        <div class="comp-footer">
+          <a href="assets/models/ball_valve_g1_25.html" target="_blank" class="comp-btn primary">View 3D</a>
+          <a href="forge.html" class="comp-btn outline">Get STEP</a>
         </div>
       </div>
 
-      <!-- 2. Invoice Generator -->
-      <div class="auto-card reveal reveal-delay-1" data-category="client">
-        <span class="status-badge status-live">✅ Live & Tested</span>
-        <span class="auto-icon">🧾</span>
-        <div class="auto-name">Invoice Generator & Payment Chaser</div>
-        <div class="auto-desc">Client fills a form → PDF invoice auto-generated → sent to client → stored in Google Drive. Overdue by 7 days? Automatic polite chase email fires. No more chasing manually.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">Make.com</span>
-          <span class="tool-pill">Google Drive</span>
-          <span class="tool-pill">Gmail</span>
-          <span class="tool-pill">PDF.co</span>
-        </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 2–4 hours</span>
-          <span>⚙️ 4 tools connected</span>
-          <span>🔄 Trigger-based</span>
-        </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=invoice-generator&type=template" class="price-option primary">
-            <div class="price-label">DIY Blueprint</div>
-            <div class="price-amount"><span class="currency">£</span>197</div>
-            <div class="price-cta">Get files + guide →</div>
+      <!-- ── Speroni GAM100 ────────────────────────────────────────────────── -->
+      <div class="comp-card" data-cat="pump">
+        <div class="comp-viewer">
+          <iframe src="assets/models/speroni_gam100.html" loading="lazy" sandbox="allow-scripts" title="Speroni GAM100 3D"></iframe>
+          <a href="assets/models/speroni_gam100.html" target="_blank" class="viewer-overlay">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            Open full 3D
           </a>
-          <a href="request-quote.html?automation=invoice-generator&type=setup" class="price-option">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount"><span class="currency">£</span>447</div>
-            <div class="price-cta">We install it →</div>
-          </a>
+        </div>
+        <div class="comp-body">
+          <div class="comp-cat">Pump</div>
+          <div class="comp-name">Speroni GAM100 — Centrifugal Pump</div>
+          <div class="comp-desc">1 HP / 0.75 kW, 230 V/50 Hz. DN 1½" suction &amp; discharge. Hmax 40 m, Qmax 120 l/min. Full spec sheet included.</div>
+          <div class="comp-formats">
+            <span class="fmt-pill step">STEP</span>
+            <span class="fmt-pill stl">STL</span>
+            <span class="fmt-pill html">3D Preview</span>
+            <span class="fmt-pill spec">Spec Sheet</span>
+          </div>
+        </div>
+        <div class="comp-footer">
+          <a href="pump-spec-gam100.html" class="comp-btn primary">Spec Sheet</a>
+          <a href="assets/models/speroni_gam100.html" target="_blank" class="comp-btn outline">View 3D</a>
         </div>
       </div>
 
-      <!-- 3. Client Onboarding -->
-      <div class="auto-card reveal reveal-delay-2" data-category="client">
-        <span class="status-badge status-live">✅ Live & Tested</span>
-        <span class="auto-icon">🚀</span>
-        <div class="auto-name">Client Onboarding System</div>
-        <div class="auto-desc">New client signs contract → welcome email fires → Notion project workspace created → Slack channel opened → task list generated → first meeting booked. All in under 60 seconds.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">n8n</span>
-          <span class="tool-pill">Notion</span>
-          <span class="tool-pill">Slack</span>
-          <span class="tool-pill">Gmail</span>
-          <span class="tool-pill">Calendly</span>
-        </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 4–6 hours</span>
-          <span>⚙️ 5 tools connected</span>
-          <span>🔄 Trigger-based</span>
-        </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=client-onboarding&type=template" class="price-option primary">
-            <div class="price-label">DIY Blueprint</div>
-            <div class="price-amount"><span class="currency">£</span>297</div>
-            <div class="price-cta">Get files + guide →</div>
+      <!-- ── Speroni SXS 2000 TV ───────────────────────────────────────────── -->
+      <div class="comp-card" data-cat="pump">
+        <div class="comp-viewer">
+          <iframe src="assets/models/speroni_sxs2000.html" loading="lazy" sandbox="allow-scripts" title="Speroni SXS 2000 3D"></iframe>
+          <a href="assets/models/speroni_sxs2000.html" target="_blank" class="viewer-overlay">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            Open full 3D
           </a>
-          <a href="request-quote.html?automation=client-onboarding&type=setup" class="price-option">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount"><span class="currency">£</span>597</div>
-            <div class="price-cta">We install it →</div>
-          </a>
+        </div>
+        <div class="comp-body">
+          <div class="comp-cat">Pump · Submersible</div>
+          <div class="comp-name">Speroni SXS 2000 TV — Submersible Pump</div>
+          <div class="comp-desc">2 HP / 1.5 kW, 415 V 3-phase. AISI 304 stainless steel. DN 2" discharge. Hmax 12.5 m, Qmax 33 m³/h. IP68.</div>
+          <div class="comp-formats">
+            <span class="fmt-pill step">STEP</span>
+            <span class="fmt-pill stl">STL</span>
+            <span class="fmt-pill html">3D Preview</span>
+            <span class="fmt-pill spec">Spec Sheet</span>
+          </div>
+        </div>
+        <div class="comp-footer">
+          <a href="pump-spec-sxs2000.html" class="comp-btn primary">Spec Sheet</a>
+          <a href="assets/models/speroni_sxs2000.html" target="_blank" class="comp-btn outline">View 3D</a>
         </div>
       </div>
 
-      <!-- 4. Appointment Reminder -->
-      <div class="auto-card reveal" data-category="client">
-        <span class="status-badge status-live">✅ Live & Tested</span>
-        <span class="auto-icon">📅</span>
-        <div class="auto-name">Appointment Reminder (Email + SMS)</div>
-        <div class="auto-desc">Booking made → confirmation email sent immediately → reminder email 24 hours before → SMS reminder 1 hour before. No-show rate drops by an average of 40%.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">Make.com</span>
-          <span class="tool-pill">Calendly</span>
-          <span class="tool-pill">Twilio</span>
-          <span class="tool-pill">Gmail</span>
+      <!-- ── Coming soon cards ─────────────────────────────────────────────── -->
+      <div class="comp-card soon" data-cat="valve">
+        <div class="comp-viewer">
+          <div class="soon-cover"><div class="sc-icon">🔧</div><div class="sc-label">Coming soon</div></div>
         </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 1–2 hours</span>
-          <span>⚙️ 4 tools connected</span>
-          <span>🔄 Scheduled</span>
+        <div class="comp-body">
+          <div class="comp-cat">Valve</div>
+          <div class="comp-name">Gate Valve DN50 PN16</div>
+          <div class="comp-desc">Flanged gate valve, cast iron body, bronze trim. Full-bore, rising stem. ISO 5996.</div>
+          <div class="comp-formats"><span class="fmt-pill step">STEP</span><span class="fmt-pill spec">Spec Sheet</span><span class="fmt-pill plant">Plant 3D</span></div>
         </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=appointment-reminder&type=template" class="price-option primary">
-            <div class="price-label">DIY Blueprint</div>
-            <div class="price-amount"><span class="currency">£</span>147</div>
-            <div class="price-cta">Get files + guide →</div>
-          </a>
-          <a href="request-quote.html?automation=appointment-reminder&type=setup" class="price-option">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount"><span class="currency">£</span>347</div>
-            <div class="price-cta">We install it →</div>
-          </a>
-        </div>
+        <div class="comp-footer"><span class="comp-btn dim">In production</span></div>
       </div>
 
-      <!-- 5. Email Follow-up Drip -->
-      <div class="auto-card reveal reveal-delay-1" data-category="email">
-        <span class="status-badge status-live">✅ Live & Tested</span>
-        <span class="auto-icon">📧</span>
-        <div class="auto-name">5-Step Lead Nurture Drip</div>
-        <div class="auto-desc">New subscriber or enquiry triggers a 5-email sequence over 14 days. Each email personalised with their name and interest. Stops automatically when they reply or book. Works with any email platform.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">Make.com</span>
-          <span class="tool-pill">ActiveCampaign</span>
-          <span class="tool-pill">Gmail</span>
+      <div class="comp-card soon" data-cat="fitting">
+        <div class="comp-viewer">
+          <div class="soon-cover"><div class="sc-icon">⚙️</div><div class="sc-label">Coming soon</div></div>
         </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 2–3 hours</span>
-          <span>⚙️ 3 tools connected</span>
-          <span>🔄 Scheduled</span>
+        <div class="comp-body">
+          <div class="comp-cat">Pipe Fitting</div>
+          <div class="comp-name">Weld-Neck Flange DN80 PN40</div>
+          <div class="comp-desc">Carbon steel weld-neck flange. ASME B16.5 / EN 1092-1. 8-bolt pattern. Raised face.</div>
+          <div class="comp-formats"><span class="fmt-pill step">STEP</span><span class="fmt-pill plant">Plant 3D</span></div>
         </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=email-drip&type=template" class="price-option primary">
-            <div class="price-label">DIY Blueprint</div>
-            <div class="price-amount"><span class="currency">£</span>127</div>
-            <div class="price-cta">Get files + guide →</div>
-          </a>
-          <a href="request-quote.html?automation=email-drip&type=setup" class="price-option">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount"><span class="currency">£</span>297</div>
-            <div class="price-cta">We install it →</div>
-          </a>
-        </div>
+        <div class="comp-footer"><span class="comp-btn dim">In production</span></div>
       </div>
 
-      <!-- 6. Review Request -->
-      <div class="auto-card reveal reveal-delay-2" data-category="email">
-        <span class="status-badge status-live">✅ Live & Tested</span>
-        <span class="auto-icon">⭐</span>
-        <div class="auto-name">Review Request Automation</div>
-        <div class="auto-desc">3 days after a purchase or completed service → auto-send a personalised review request email → link directly to your Google/Trustpilot profile. Happy customers leave reviews. Unhappy ones get a private resolution email instead.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">Zapier</span>
-          <span class="tool-pill">Gmail</span>
-          <span class="tool-pill">Shopify</span>
+      <div class="comp-card soon" data-cat="instrument">
+        <div class="comp-viewer">
+          <div class="soon-cover"><div class="sc-icon">📊</div><div class="sc-label">Coming soon</div></div>
         </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 1–2 hours</span>
-          <span>⚙️ 3 tools connected</span>
-          <span>🔄 Trigger-based</span>
+        <div class="comp-body">
+          <div class="comp-cat">Instrumentation</div>
+          <div class="comp-name">Pressure Transmitter 0–16 bar</div>
+          <div class="comp-desc">4–20 mA output, G½" process connection, stainless wetted parts. ATEX II 2G optional.</div>
+          <div class="comp-formats"><span class="fmt-pill step">STEP</span><span class="fmt-pill spec">Spec Sheet</span></div>
         </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=review-request&type=template" class="price-option primary">
-            <div class="price-label">DIY Blueprint</div>
-            <div class="price-amount"><span class="currency">£</span>97</div>
-            <div class="price-cta">Get files + guide →</div>
-          </a>
-          <a href="request-quote.html?automation=review-request&type=setup" class="price-option">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount"><span class="currency">£</span>247</div>
-            <div class="price-cta">We install it →</div>
-          </a>
-        </div>
+        <div class="comp-footer"><span class="comp-btn dim">In production</span></div>
       </div>
 
-      <!-- 7. Abandoned Cart -->
-      <div class="auto-card reveal" data-category="ecommerce">
-        <span class="status-badge status-live">✅ Live & Tested</span>
-        <span class="auto-icon">🛒</span>
-        <div class="auto-name">Abandoned Cart Recovery (3-Email)</div>
-        <div class="auto-desc">Customer abandons cart → email 1 fires at 1 hour (gentle reminder) → email 2 at 24 hours (show what they're missing) → email 3 at 72 hours (10% discount offer). Recovers 15–25% of lost revenue on average.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">Make.com</span>
-          <span class="tool-pill">Shopify</span>
-          <span class="tool-pill">Klaviyo</span>
+      <div class="comp-card soon" data-cat="structural">
+        <div class="comp-viewer">
+          <div class="soon-cover"><div class="sc-icon">🏗️</div><div class="sc-label">Coming soon</div></div>
         </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 2–3 hours</span>
-          <span>⚙️ 3 tools connected</span>
-          <span>🔄 Trigger-based</span>
+        <div class="comp-body">
+          <div class="comp-cat">Structural</div>
+          <div class="comp-name">Unistrut Pipe Support — Single Clamp</div>
+          <div class="comp-desc">Adjustable cantilever pipe support. Hot-dip galvanised. DN15–DN150 range. Seismic rated.</div>
+          <div class="comp-formats"><span class="fmt-pill step">STEP</span><span class="fmt-pill plant">Plant 3D</span></div>
         </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=abandoned-cart&type=template" class="price-option primary">
-            <div class="price-label">DIY Blueprint</div>
-            <div class="price-amount"><span class="currency">£</span>197</div>
-            <div class="price-cta">Get files + guide →</div>
-          </a>
-          <a href="request-quote.html?automation=abandoned-cart&type=setup" class="price-option">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount"><span class="currency">£</span>447</div>
-            <div class="price-cta">We install it →</div>
-          </a>
-        </div>
+        <div class="comp-footer"><span class="comp-btn dim">In production</span></div>
       </div>
 
-      <!-- 8. Social Media Auto-Poster -->
-      <div class="auto-card reveal reveal-delay-1" data-category="content">
-        <span class="status-badge status-live">✅ Live & Tested</span>
-        <span class="auto-icon">📱</span>
-        <div class="auto-name">Social Media Auto-Poster</div>
-        <div class="auto-desc">Write your content once in a Google Sheet or Notion → automation posts to Facebook, Instagram, LinkedIn, and X at your scheduled times. Queue a full month of content in one sitting.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">Make.com</span>
-          <span class="tool-pill">Google Sheets</span>
-          <span class="tool-pill">Buffer</span>
-          <span class="tool-pill">Meta API</span>
+      <div class="comp-card soon" data-cat="valve">
+        <div class="comp-viewer">
+          <div class="soon-cover"><div class="sc-icon">🔩</div><div class="sc-label">Coming soon</div></div>
         </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 2–4 hours</span>
-          <span>⚙️ 4 tools connected</span>
-          <span>🔄 Scheduled</span>
+        <div class="comp-body">
+          <div class="comp-cat">Valve</div>
+          <div class="comp-name">Butterfly Valve DN100 — Wafer</div>
+          <div class="comp-desc">Wafer-type butterfly valve, ductile iron body, EPDM seat, stainless disc. EN 593.</div>
+          <div class="comp-formats"><span class="fmt-pill step">STEP</span><span class="fmt-pill spec">Spec Sheet</span><span class="fmt-pill plant">Plant 3D</span></div>
         </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=social-autoposter&type=template" class="price-option primary">
-            <div class="price-label">DIY Blueprint</div>
-            <div class="price-amount"><span class="currency">£</span>177</div>
-            <div class="price-cta">Get files + guide →</div>
-          </a>
-          <a href="request-quote.html?automation=social-autoposter&type=setup" class="price-option">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount"><span class="currency">£</span>397</div>
-            <div class="price-cta">We install it →</div>
-          </a>
-        </div>
+        <div class="comp-footer"><span class="comp-btn dim">In production</span></div>
       </div>
 
-      <!-- 9. AI Blog → Social Repurposer -->
-      <div class="auto-card reveal reveal-delay-2" data-category="content">
-        <span class="status-badge status-testing">🔧 In Testing</span>
-        <span class="auto-icon">✍️</span>
-        <div class="auto-name">AI Blog → Social Repurposer</div>
-        <div class="auto-desc">Publish a blog post → AI reads it → auto-generates 5 platform-specific social posts (LinkedIn article, Twitter thread, Instagram caption, Facebook post, TikTok hook) → queues them for posting. One blog, 5 channels covered.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">n8n</span>
-          <span class="tool-pill">Claude AI</span>
-          <span class="tool-pill">WordPress</span>
-          <span class="tool-pill">Buffer</span>
+      <div class="comp-card soon" data-cat="fitting">
+        <div class="comp-viewer">
+          <div class="soon-cover"><div class="sc-icon">🔄</div><div class="sc-label">Coming soon</div></div>
         </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 3–5 hours</span>
-          <span>⚙️ 4 tools connected</span>
-          <span>🔄 Trigger-based</span>
+        <div class="comp-body">
+          <div class="comp-cat">Pipe Fitting</div>
+          <div class="comp-name">Flexible Connector DN50 — Braided</div>
+          <div class="comp-desc">SS 316 braided flexible connector with flange ends. PN16, ±25 mm axial movement, 15° angular.</div>
+          <div class="comp-formats"><span class="fmt-pill step">STEP</span><span class="fmt-pill spec">Spec Sheet</span></div>
         </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=blog-repurposer&type=waitlist" class="price-option primary">
-            <div class="price-label">Early Access</div>
-            <div class="price-amount"><span class="currency">£</span>247</div>
-            <div class="price-cta">Join waitlist →</div>
-          </a>
-          <a href="request-quote.html?automation=blog-repurposer&type=setup" class="price-option disabled">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount" style="font-size:14px;color:var(--white-30)">Coming soon</div>
-            <div class="price-cta" style="color:var(--white-30)">Notify me</div>
-          </a>
-        </div>
+        <div class="comp-footer"><span class="comp-btn dim">In production</span></div>
       </div>
 
-      <!-- 10. Lead Qualifier Bot -->
-      <div class="auto-card reveal" data-category="crm">
-        <span class="status-badge status-testing">🔧 In Testing</span>
-        <span class="auto-icon">🤖</span>
-        <div class="auto-name">AI Lead Qualifier Bot</div>
-        <div class="auto-desc">Website visitor chats with an AI bot → bot qualifies the lead with 5 smart questions → scores them hot/warm/cold → routes hot leads straight to your CRM and fires a Slack alert → cold leads go to a nurture sequence.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">n8n</span>
-          <span class="tool-pill">Claude AI</span>
-          <span class="tool-pill">HubSpot</span>
-          <span class="tool-pill">Slack</span>
-        </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 4–6 hours</span>
-          <span>⚙️ 4 tools connected</span>
-          <span>🔄 Real-time</span>
-        </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=lead-qualifier&type=waitlist" class="price-option primary">
-            <div class="price-label">Early Access</div>
-            <div class="price-amount"><span class="currency">£</span>347</div>
-            <div class="price-cta">Join waitlist →</div>
-          </a>
-          <a href="request-quote.html?automation=lead-qualifier&type=setup" class="price-option disabled">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount" style="font-size:14px;color:var(--white-30)">Coming soon</div>
-            <div class="price-cta" style="color:var(--white-30)">Notify me</div>
-          </a>
-        </div>
-      </div>
-
-      <!-- 11. Monthly Report Generator -->
-      <div class="auto-card reveal reveal-delay-1" data-category="internal">
-        <span class="status-badge status-soon">🔜 Coming Soon</span>
-        <span class="auto-icon">📊</span>
-        <div class="auto-name">Monthly Report Generator</div>
-        <div class="auto-desc">On the 1st of every month → pulls data from Google Analytics, your CRM, and ad platforms → compiles into a branded PDF report → emails to your client or team automatically. Professional reports, zero effort.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">n8n</span>
-          <span class="tool-pill">Google Analytics</span>
-          <span class="tool-pill">Google Sheets</span>
-          <span class="tool-pill">PDF.co</span>
-        </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 5–8 hours</span>
-          <span>⚙️ 4 tools connected</span>
-          <span>🔄 Monthly schedule</span>
-        </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=report-generator&type=notify" class="price-option primary">
-            <div class="price-label">Notify Me</div>
-            <div class="price-amount" style="font-size:16px">From <span class="currency">£</span>297</div>
-            <div class="price-cta">Get notified →</div>
-          </a>
-          <a href="request-quote.html?automation=report-generator&type=setup-notify" class="price-option">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount" style="font-size:16px">From <span class="currency">£</span>597</div>
-            <div class="price-cta">Get notified →</div>
-          </a>
-        </div>
-      </div>
-
-      <!-- 12. Inventory Alert -->
-      <div class="auto-card reveal reveal-delay-2" data-category="ecommerce">
-        <span class="status-badge status-soon">🔜 Coming Soon</span>
-        <span class="auto-icon">📦</span>
-        <div class="auto-name">Low Stock Alert & Reorder System</div>
-        <div class="auto-desc">Product stock drops below your threshold → Slack alert fires → reorder email sent to your supplier with the exact quantities needed → spreadsheet updated. Never run out of stock again without knowing.</div>
-        <div class="auto-tools">
-          <span class="tool-pill">Make.com</span>
-          <span class="tool-pill">Shopify</span>
-          <span class="tool-pill">Slack</span>
-          <span class="tool-pill">Gmail</span>
-        </div>
-        <div class="auto-meta">
-          <span>⏱ Setup: 2–3 hours</span>
-          <span>⚙️ 4 tools connected</span>
-          <span>🔄 Real-time</span>
-        </div>
-        <div class="auto-pricing">
-          <a href="request-quote.html?automation=inventory-alert&type=notify" class="price-option primary">
-            <div class="price-label">Notify Me</div>
-            <div class="price-amount" style="font-size:16px">From <span class="currency">£</span>197</div>
-            <div class="price-cta">Get notified →</div>
-          </a>
-          <a href="request-quote.html?automation=inventory-alert&type=setup-notify" class="price-option">
-            <div class="price-label">Done for You</div>
-            <div class="price-amount" style="font-size:16px">From <span class="currency">£</span>447</div>
-            <div class="price-cta">Get notified →</div>
-          </a>
-        </div>
-      </div>
-
-    </div><!-- /store-grid -->
+    </div><!-- /comp-grid -->
   </div>
 </section>
 
-<!-- ===== HOW IT WORKS ===== -->
-<section class="section-sm" style="background:var(--black-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-label">How It Works</div>
-      <h2 class="section-title">From Purchase to <span class="grad-green">Running in Hours</span></h2>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-top:40px">
-      <div class="feature-card reveal" style="text-align:center;padding:28px">
-        <div style="font-size:40px;margin-bottom:14px">🛒</div>
-        <h3 style="font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:8px">1. Pick Your Automation</h3>
-        <p style="font-size:13px;color:var(--white-60);line-height:1.7">Browse the store, choose the automation that matches your business problem. DIY or done-for-you.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-1" style="text-align:center;padding:28px">
-        <div style="font-size:40px;margin-bottom:14px">📥</div>
-        <h3 style="font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:8px">2. Get the Blueprint</h3>
-        <p style="font-size:13px;color:var(--white-60);line-height:1.7">Receive the automation file (Make.com scenario / n8n workflow), setup guide, and email support within 2 hours.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-2" style="text-align:center;padding:28px">
-        <div style="font-size:40px;margin-bottom:14px">🔌</div>
-        <h3 style="font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:8px">3. Plug It In</h3>
-        <p style="font-size:13px;color:var(--white-60);line-height:1.7">Import the file, connect your accounts, follow the guide. Most automations are live within 2–4 hours. Or let us do it.</p>
-      </div>
-      <div class="feature-card reveal reveal-delay-3" style="text-align:center;padding:28px">
-        <div style="font-size:40px;margin-bottom:14px">✅</div>
-        <h3 style="font-family:var(--font-head);font-size:16px;font-weight:700;margin-bottom:8px">4. It Runs Itself</h3>
-        <p style="font-size:13px;color:var(--white-60);line-height:1.7">Sit back. The automation handles the work 24/7. You get the results without lifting a finger.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== WANT SOMETHING CUSTOM ===== -->
+<!-- ── CATALOG AUTOMATION STRIP ─────────────────────────────────────────────── -->
 <section class="section-sm">
   <div class="container">
-    <div class="cta-banner reveal">
-      <div class="cta-banner-title">Don't see what you need? <span class="grad-green">We'll build it.</span></div>
-      <p class="cta-banner-sub">Describe your process and we'll scope a custom automation — usually delivered within 5–10 business days.</p>
-      <div class="cta-banner-actions">
-        <a href="request-quote.html" class="btn btn-primary btn-lg">Request a Custom Automation →</a>
-        <a href="book.html" class="btn btn-ghost btn-lg">Book a Free Scoping Call</a>
+
+    <div class="cap-strip">
+      <div class="cap-strip-grid">
+        <div>
+          <h2><span class="grad-blue">Catalog Automation</span><br>for Equipment Suppliers</h2>
+          <p>
+            Send us your product datasheet and a photo. We return a STEP file,
+            an interactive 3D HTML preview, and a ready-to-publish spec sheet —
+            for every SKU in your range, at scale.
+          </p>
+          <ul class="cap-list">
+            <li>Photo + datasheet in → STEP + spec sheet out, same day</li>
+            <li>Publish 3D models on your product listings to win engineer orders</li>
+            <li>Full range batching — 10 components or 1,000</li>
+            <li>White-label: your branding on every spec sheet</li>
+            <li>API available for direct ERP / PIM integration</li>
+          </ul>
+        </div>
+        <div>
+          <div class="target-grid">
+            <div class="target-card">
+              <div class="tc-icon">🏭</div>
+              <div class="tc-name">AutoCAD Plant 3D</div>
+              <div class="tc-sub">Catalog ready</div>
+            </div>
+            <div class="target-card">
+              <div class="tc-icon">⚙️</div>
+              <div class="tc-name">SolidWorks</div>
+              <div class="tc-sub">STEP import</div>
+            </div>
+            <div class="target-card">
+              <div class="tc-icon">🔧</div>
+              <div class="tc-name">Inventor</div>
+              <div class="tc-sub">STEP import</div>
+            </div>
+            <div class="target-card">
+              <div class="tc-icon">📐</div>
+              <div class="tc-name">FreeCAD</div>
+              <div class="tc-sub">STEP import</div>
+            </div>
+            <div class="target-card">
+              <div class="tc-icon">🗂️</div>
+              <div class="tc-name">AVEVA E3D</div>
+              <div class="tc-sub">Spec-driven</div>
+            </div>
+            <div class="target-card">
+              <div class="tc-icon">📋</div>
+              <div class="tc-name">SmartPlant 3D</div>
+              <div class="tc-sub">Catalog XML</div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <!-- specification strip -->
+    <div class="cap-strip" style="margin-bottom:0">
+      <div class="cap-strip-grid">
+        <div>
+          <div class="target-grid" style="grid-template-columns:repeat(2,1fr)">
+            <div class="target-card" style="text-align:left;padding:18px">
+              <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-bottom:8px">Included</div>
+              <div style="font-size:13px;color:var(--white-90);font-weight:600;line-height:2">
+                STEP file<br>STL mesh<br>3D HTML preview<br>Spec sheet PDF<br>Dim drawing<br>Perf curve
+              </div>
+            </div>
+            <div class="target-card" style="text-align:left;padding:18px">
+              <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-bottom:8px">Sources</div>
+              <div style="font-size:13px;color:var(--white-90);font-weight:600;line-height:2">
+                Product photo<br>Datasheet PDF<br>Manufacturer DXF<br>Existing STEP<br>Spec table<br>Your description
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2><span class="grad-green">Technical Spec Sheets</span><br>Auto-generated, print-ready</h2>
+          <p>
+            Every component gets a full technical specification page — dimensions table,
+            performance curve, material call-out, CAD downloads and a live interactive
+            3D viewer. Ready to send to customers, procurement teams or project engineers.
+          </p>
+          <ul class="cap-list">
+            <li>Dark-branded spec sheets matching your identity</li>
+            <li>Interactive 3D model embedded in every sheet</li>
+            <li>Performance data tables and H-vs-Q curves built automatically</li>
+            <li>Print-to-PDF in one click — no InDesign, no design agency</li>
+          </ul>
+          <a href="pump-spec-sxs2000.html" class="btn btn-outline" style="margin-top:8px;display:inline-block">See example spec sheet →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── UPLOAD CTA ─────────────────────────────────────────────────────────────── -->
+<section class="upload-cta section">
+  <div class="container">
+    <p style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:14px">PartForge</p>
+    <h2>Have a component that needs a STEP file?</h2>
+    <p>Upload a photo and datasheet. Get back a B-rep solid, an interactive 3D preview and a spec sheet — usually within minutes.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="forge.html#upload" class="btn btn-primary">Upload Your Component</a>
+      <a href="hire-ai-automation-expert-uk.html" class="btn btn-outline">Talk to an Engineer</a>
     </div>
   </div>
 </section>
 
+<!-- ── FOOTER ────────────────────────────────────────────────────────────────── -->
 <footer class="footer">
-  <div class="container">
-    <div class="footer-bottom">
-      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
-      <div><a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a> &nbsp;·&nbsp; <a href="privacy.html#cookies">Cookies</a></div>
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">AutomationHire</div>
+      <p class="footer-tagline">Photo → STEP → Plant 3D.<br>Engineering automation for the real world.</p>
     </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="footer-col-title">PartForge</div>
+        <a href="forge.html">Upload a Component</a>
+        <a href="ready-to-deploy.html">Component Library</a>
+        <a href="pump-spec-gam100.html">GAM100 Spec</a>
+        <a href="pump-spec-sxs2000.html">SXS 2000 Spec</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Services</div>
+        <a href="hire-ai-automation-expert-uk.html">Hire an Expert</a>
+        <a href="plant-3d-piping-automation-uk.html">Plant 3D Piping</a>
+        <a href="free.html">Free Tools</a>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="border-top:1px solid var(--border);padding-top:24px;margin-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--white-30)">
+    <span>© 2025 AutomationHire.co.uk — All rights reserved</span>
+    <span><a href="privacy.html" style="color:var(--white-30)">Privacy</a> · <a href="terms.html" style="color:var(--white-30)">Terms</a></span>
   </div>
 </footer>
 
 <script src="assets/js/main.js"></script>
-<script src="assets/js/api.js"></script>
-<script src="assets/js/chat.js"></script>
-<script src="assets/js/receptionist.js"></script>
 <script>
-  /* Category filter */
-  (function() {
-    const chips = document.querySelectorAll('.filter-chip');
-    const cards = document.querySelectorAll('.auto-card');
-    chips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        chips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        const filter = chip.dataset.filter;
-        cards.forEach(card => {
-          if (filter === 'all' || card.dataset.category === filter) {
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
-          }
-        });
-      });
+// Filter
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.comp-card').forEach(card => {
+      card.classList.toggle('filtered', f !== 'all' && card.dataset.cat !== f);
     });
-  })();
+  });
+});
 </script>
 </body>
 </html>

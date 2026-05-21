@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Speroni GAM100 — Technical Specification | PartForge</title>
+<link rel="stylesheet" href="assets/css/style.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+
+<style>
+/* ── Spec sheet page styles ─────────────────────────────────────────────── */
+.spec-hero {
+  padding: 100px 0 60px;
+  position: relative; z-index: 1;
+}
+.spec-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 30% 40%, rgba(41,121,255,0.07) 0%, transparent 65%),
+              radial-gradient(ellipse 50% 40% at 80% 60%, rgba(0,230,118,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* breadcrumb */
+.spec-breadcrumb {
+  font-size: 12px;
+  color: var(--white-30);
+  margin-bottom: 32px;
+  letter-spacing: 0.04em;
+}
+.spec-breadcrumb a { color: var(--green); text-decoration: none; }
+.spec-breadcrumb a:hover { text-decoration: underline; }
+.spec-breadcrumb span { margin: 0 6px; }
+
+/* header band */
+.spec-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.spec-title-block h1 {
+  font-family: var(--font-head);
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.spec-title-block .spec-subtitle {
+  color: var(--white-60);
+  font-size: 15px;
+  max-width: 520px;
+  line-height: 1.6;
+}
+.spec-badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+.spec-badge {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+.spec-badge.green { border-color: var(--green); color: var(--green); }
+.spec-badge.blue  { border-color: var(--blue);  color: var(--blue);  }
+.spec-badge.grey  { border-color: var(--white-30); color: var(--white-60); }
+
+/* ── Main 2-col layout ─────────────────────────────────────────────────── */
+.spec-main {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+@media (max-width: 860px) {
+  .spec-main { grid-template-columns: 1fr; }
+}
+
+/* 3D viewer panel */
+.spec-viewer-panel {
+  background: var(--black-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: sticky;
+  top: 90px;
+}
+.spec-viewer-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--white-30);
+}
+.spec-viewer-label .live-dot {
+  display: flex; align-items: center; gap: 6px; color: var(--green);
+}
+.spec-viewer-label .live-dot::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; } 50% { opacity: 0.35; }
+}
+.spec-viewer-frame {
+  display: block;
+  width: 100%;
+  height: 440px;
+  border: none;
+  background: #09090f;
+}
+.spec-viewer-hint {
+  padding: 10px 18px;
+  font-size: 11px;
+  color: var(--white-30);
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+
+/* right-side spec panel */
+.spec-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.spec-card {
+  background: var(--black-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.spec-card-header {
+  padding: 13px 20px;
+  background: var(--black-3);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--white-60);
+}
+.spec-card-header.accent { color: var(--green); }
+
+/* key-value rows */
+.spec-kv { display: flex; flex-direction: column; }
+.spec-row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+  transition: background 0.15s;
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-row:hover { background: var(--white-10); }
+.spec-key {
+  color: var(--white-60);
+  font-size: 12px;
+  font-weight: 500;
+}
+.spec-val {
+  color: var(--white-90);
+  font-weight: 500;
+}
+.spec-val strong { color: var(--green); }
+.spec-val .unit { color: var(--white-30); font-size: 12px; margin-left: 3px; }
+
+/* ── Dimensions table ──────────────────────────────────────────────────── */
+.dim-section { margin-bottom: 48px; }
+.dim-section-title {
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--white-90);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.dim-cell {
+  background: var(--black-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.dim-cell:hover {
+  border-color: rgba(41,121,255,0.35);
+  background: var(--black-3);
+}
+.dim-cell .dim-letter {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.dim-cell .dim-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white-90);
+  margin-bottom: 2px;
+}
+.dim-cell .dim-desc {
+  font-size: 11px;
+  color: var(--white-30);
+  line-height: 1.4;
+}
+
+/* ── Performance table ─────────────────────────────────────────────────── */
+.perf-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+table.perf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.perf-table thead tr {
+  background: var(--black-3);
+}
+.perf-table th {
+  padding: 11px 16px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.perf-table th:first-child { text-align: left; }
+.perf-table td {
+  padding: 10px 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  color: var(--white-90);
+  background: var(--black-2);
+}
+.perf-table td:first-child { text-align: left; color: var(--white-60); }
+.perf-table tbody tr:last-child td { border-bottom: none; }
+.perf-table tbody tr:hover td { background: var(--black-3); }
+.perf-table td.hi { color: var(--green); font-weight: 600; }
+
+/* ── Performance bar chart ─────────────────────────────────────────────── */
+.perf-chart {
+  background: var(--black-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px 24px 16px;
+  margin-top: 20px;
+}
+.perf-chart-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--white-30);
+  margin-bottom: 20px;
+}
+.curve-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.curve-label {
+  font-size: 11px;
+  color: var(--white-30);
+  width: 54px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.curve-bar-wrap {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border-radius: 4px;
+  height: 18px;
+  overflow: hidden;
+}
+.curve-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.curve-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--white-60);
+  width: 44px;
+  flex-shrink: 0;
+}
+
+/* ── Download bar ──────────────────────────────────────────────────────── */
+.spec-dl-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  background: var(--black-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  margin-bottom: 60px;
+}
+.spec-dl-bar .dl-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--white-30);
+  margin-right: 4px;
+}
+.spec-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.spec-dl-btn.green {
+  background: var(--green);
+  color: var(--black);
+}
+.spec-dl-btn.green:hover { background: var(--green-dim); }
+.spec-dl-btn.outline {
+  border-color: var(--border);
+  color: var(--white-60);
+  background: transparent;
+}
+.spec-dl-btn.outline:hover { border-color: var(--white-30); color: var(--white-90); }
+.spec-dl-btn svg { flex-shrink: 0; }
+
+/* ── Generated-by footer strip ─────────────────────────────────────────── */
+.spec-footer-strip {
+  border-top: 1px solid var(--border);
+  padding: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--white-30);
+}
+.spec-footer-strip a { color: var(--green); text-decoration: none; }
+.spec-footer-strip a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<!-- ── NAV (shared) ──────────────────────────────────────────────────────── -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">AutomationHire</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="forge.html">PartForge <span style="background:var(--green);color:var(--black);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:4px;vertical-align:middle">NEW</span></a></li>
+      <li><a href="hire.html">Hire</a></li>
+      <li><a href="free.html">Free Tools</a></li>
+    </ul>
+    <a href="forge.html#upload" class="btn btn-primary btn-sm">Try PartForge</a>
+    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
+  </div>
+</nav>
+
+<!-- ── SPEC HERO ────────────────────────────────────────────────────────── -->
+<div class="spec-hero">
+<div class="container">
+
+  <div class="spec-breadcrumb">
+    <a href="forge.html">PartForge</a>
+    <span>/</span>
+    <a href="#">Component Library</a>
+    <span>/</span>
+    Speroni GAM100
+  </div>
+
+  <div class="spec-header">
+    <div class="spec-title-block">
+      <h1><span class="grad-blue">Speroni GAM100</span><br>Centrifugal Pump</h1>
+      <p class="spec-subtitle">
+        Single-stage close-coupled centrifugal pump. 1&nbsp;HP&nbsp;/&nbsp;0.75&nbsp;kW,
+        DN&nbsp;1½" suction &amp; discharge, suitable for clean water circulation,
+        building services, and light industrial transfer.
+      </p>
+    </div>
+    <div class="spec-badges">
+      <span class="spec-badge green">STEP Available</span>
+      <span class="spec-badge blue">B-Rep Solid</span>
+      <span class="spec-badge grey">50 Hz · 230 V</span>
+      <span class="spec-badge grey">14.5 kg</span>
+    </div>
+  </div>
+
+  <!-- ── Main 2-col ─────────────────────────────────────────────────────── -->
+  <div class="spec-main">
+
+    <!-- LEFT: 3D model viewer -->
+    <div class="spec-viewer-panel">
+      <div class="spec-viewer-label">
+        <span>3D Model — OCCT B-rep</span>
+        <span class="live-dot">Interactive</span>
+      </div>
+      <iframe
+        src="assets/models/speroni_gam100.html"
+        class="spec-viewer-frame"
+        title="Speroni GAM100 — interactive 3D model"
+        loading="lazy"
+        sandbox="allow-scripts"
+        aria-label="Rotate and zoom the 3D pump model">
+      </iframe>
+      <div class="spec-viewer-hint">Drag to rotate &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Right-drag to pan</div>
+    </div>
+
+    <!-- RIGHT: specification panels -->
+    <div class="spec-panel">
+
+      <!-- Electrical & Motor -->
+      <div class="spec-card">
+        <div class="spec-card-header accent">Motor &amp; Electrical</div>
+        <div class="spec-kv">
+          <div class="spec-row"><span class="spec-key">Power</span><span class="spec-val"><strong>0.75 kW</strong><span class="unit">(1 HP)</span></span></div>
+          <div class="spec-row"><span class="spec-key">Voltage</span><span class="spec-val">230 V<span class="unit">AC</span></span></div>
+          <div class="spec-row"><span class="spec-key">Frequency</span><span class="spec-val">50 Hz</span></div>
+          <div class="spec-row"><span class="spec-key">Shaft speed</span><span class="spec-val"><strong>2850</strong><span class="unit">RPM</span></span></div>
+          <div class="spec-row"><span class="spec-key">Motor type</span><span class="spec-val">Induction, 2-pole, TEFC</span></div>
+          <div class="spec-row"><span class="spec-key">Protection</span><span class="spec-val">IP 44</span></div>
+          <div class="spec-row"><span class="spec-key">Insulation class</span><span class="spec-val">Class F</span></div>
+        </div>
+      </div>
+
+      <!-- Hydraulic -->
+      <div class="spec-card">
+        <div class="spec-card-header accent">Hydraulic Performance</div>
+        <div class="spec-kv">
+          <div class="spec-row"><span class="spec-key">Max head</span><span class="spec-val"><strong>40</strong><span class="unit">m</span></span></div>
+          <div class="spec-row"><span class="spec-key">Max flow</span><span class="spec-val"><strong>120</strong><span class="unit">l/min (7.2 m³/h)</span></span></div>
+          <div class="spec-row"><span class="spec-key">BEP flow</span><span class="spec-val">~60<span class="unit">l/min</span></span></div>
+          <div class="spec-row"><span class="spec-key">BEP head</span><span class="spec-val">~30<span class="unit">m</span></span></div>
+          <div class="spec-row"><span class="spec-key">Suction port</span><span class="spec-val">DN 1½"<span class="unit">(G 1½" BSP / Ø38 mm)</span></span></div>
+          <div class="spec-row"><span class="spec-key">Discharge port</span><span class="spec-val">DN 1½"<span class="unit">(G 1½" BSP / Ø38 mm)</span></span></div>
+          <div class="spec-row"><span class="spec-key">Liquid temp.</span><span class="spec-val">0 … +40<span class="unit">°C</span></span></div>
+          <div class="spec-row"><span class="spec-key">Max pressure</span><span class="spec-val">8<span class="unit">bar</span></span></div>
+        </div>
+      </div>
+
+      <!-- Materials & Build -->
+      <div class="spec-card">
+        <div class="spec-card-header">Materials &amp; Build</div>
+        <div class="spec-kv">
+          <div class="spec-row"><span class="spec-key">Pump casing</span><span class="spec-val">Cast iron (GG-25)</span></div>
+          <div class="spec-row"><span class="spec-key">Impeller</span><span class="spec-val">Bronze / brass alloy</span></div>
+          <div class="spec-row"><span class="spec-key">Shaft</span><span class="spec-val">Stainless steel (AISI 304)</span></div>
+          <div class="spec-row"><span class="spec-key">Mechanical seal</span><span class="spec-val">Carbon / ceramic / NBR</span></div>
+          <div class="spec-row"><span class="spec-key">Motor housing</span><span class="spec-val">Cast aluminium — RAL 5015 blue</span></div>
+          <div class="spec-row"><span class="spec-key">Weight</span><span class="spec-val"><strong>14.5</strong><span class="unit">kg</span></span></div>
+        </div>
+      </div>
+
+    </div><!-- /spec-panel -->
+  </div><!-- /spec-main -->
+
+  <!-- ── Dimensions ─────────────────────────────────────────────────────── -->
+  <div class="dim-section">
+    <div class="dim-section-title">Envelope &amp; Mounting Dimensions</div>
+
+    <div class="dim-grid">
+      <div class="dim-cell"><div class="dim-letter">A</div><div class="dim-value">128 mm</div><div class="dim-desc">Foot base length (fore/aft)</div></div>
+      <div class="dim-cell"><div class="dim-letter">B</div><div class="dim-value">44 mm</div><div class="dim-desc">Bolt hole pitch (fore/aft)</div></div>
+      <div class="dim-cell"><div class="dim-letter">C</div><div class="dim-value">311 mm</div><div class="dim-desc">Total pump length</div></div>
+      <div class="dim-cell"><div class="dim-letter">D</div><div class="dim-value">182 mm</div><div class="dim-desc">Base plate depth (Y)</div></div>
+      <div class="dim-cell"><div class="dim-letter">E</div><div class="dim-value">144 mm</div><div class="dim-desc">Bolt hole span (left/right)</div></div>
+      <div class="dim-cell"><div class="dim-letter">F</div><div class="dim-value">Ø10 mm</div><div class="dim-desc">Mounting bolt diameter</div></div>
+      <div class="dim-cell"><div class="dim-letter">G</div><div class="dim-value">182 mm</div><div class="dim-desc">Motor body diameter</div></div>
+      <div class="dim-cell"><div class="dim-letter">H</div><div class="dim-value">232 mm</div><div class="dim-desc">Overall height</div></div>
+      <div class="dim-cell"><div class="dim-letter">H1</div><div class="dim-value">94 mm</div><div class="dim-desc">Shaft centreline height</div></div>
+      <div class="dim-cell"><div class="dim-letter">DNA</div><div class="dim-value">1½"</div><div class="dim-desc">Suction port (BSP)</div></div>
+      <div class="dim-cell"><div class="dim-letter">DNM</div><div class="dim-value">1½"</div><div class="dim-desc">Discharge port (BSP)</div></div>
+      <div class="dim-cell"><div class="dim-letter">L</div><div class="dim-value">348 mm</div><div class="dim-desc">Bounding box length</div></div>
+      <div class="dim-cell"><div class="dim-letter">P</div><div class="dim-value">206 mm</div><div class="dim-desc">Bounding box depth</div></div>
+    </div>
+  </div>
+
+  <!-- ── Performance data ───────────────────────────────────────────────── -->
+  <div class="dim-section">
+    <div class="dim-section-title">Performance Curve — 50 Hz, 2850 RPM</div>
+
+    <div class="perf-wrap">
+      <table class="perf-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>0 l/min</th>
+            <th>20 l/min</th>
+            <th>40 l/min</th>
+            <th>60 l/min</th>
+            <th>80 l/min</th>
+            <th>100 l/min</th>
+            <th>120 l/min</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Head H (m)</td>
+            <td>40.0</td>
+            <td>38.2</td>
+            <td>34.5</td>
+            <td class="hi">30.0</td>
+            <td>23.5</td>
+            <td>15.0</td>
+            <td>4.5</td>
+          </tr>
+          <tr>
+            <td>Power P (kW)</td>
+            <td>0.32</td>
+            <td>0.44</td>
+            <td>0.57</td>
+            <td class="hi">0.66</td>
+            <td>0.71</td>
+            <td>0.74</td>
+            <td>0.75</td>
+          </tr>
+          <tr>
+            <td>Efficiency η (%)</td>
+            <td>0</td>
+            <td>31</td>
+            <td>49</td>
+            <td class="hi">56</td>
+            <td>54</td>
+            <td>42</td>
+            <td>19</td>
+          </tr>
+          <tr>
+            <td>NPSHr (m)</td>
+            <td>1.8</td>
+            <td>1.9</td>
+            <td>2.0</td>
+            <td>2.2</td>
+            <td>2.5</td>
+            <td>3.0</td>
+            <td>3.8</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Inline head curve as bar chart -->
+    <div class="perf-chart">
+      <div class="perf-chart-title">Head curve — H vs Q</div>
+      <div class="curve-row"><span class="curve-label">0 l/min</span><div class="curve-bar-wrap"><div class="curve-bar" style="width:100%"></div></div><span class="curve-val">40.0 m</span></div>
+      <div class="curve-row"><span class="curve-label">20 l/min</span><div class="curve-bar-wrap"><div class="curve-bar" style="width:95.5%"></div></div><span class="curve-val">38.2 m</span></div>
+      <div class="curve-row"><span class="curve-label">40 l/min</span><div class="curve-bar-wrap"><div class="curve-bar" style="width:86.3%"></div></div><span class="curve-val">34.5 m</span></div>
+      <div class="curve-row"><span class="curve-label">60 l/min</span><div class="curve-bar-wrap"><div class="curve-bar" style="width:75.0%"></div></div><span class="curve-val">30.0 m</span></div>
+      <div class="curve-row"><span class="curve-label">80 l/min</span><div class="curve-bar-wrap"><div class="curve-bar" style="width:58.8%"></div></div><span class="curve-val">23.5 m</span></div>
+      <div class="curve-row"><span class="curve-label">100 l/min</span><div class="curve-bar-wrap"><div class="curve-bar" style="width:37.5%"></div></div><span class="curve-val">15.0 m</span></div>
+      <div class="curve-row"><span class="curve-label">120 l/min</span><div class="curve-bar-wrap"><div class="curve-bar" style="width:11.3%"></div></div><span class="curve-val">4.5 m</span></div>
+    </div>
+  </div>
+
+  <!-- ── Download bar ───────────────────────────────────────────────────── -->
+  <div class="spec-dl-bar">
+    <span class="dl-label">Downloads</span>
+    <a href="assets/models/speroni_gam100.html" download="speroni_gam100_3d.html" class="spec-dl-btn outline">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2v13M7 11l5 5 5-5M3 19h18"/></svg>
+      3D Preview (.html)
+    </a>
+    <a href="#" class="spec-dl-btn green" onclick="alert('STEP download via PartForge — upload your own photo at PartForge to generate STEP files.');return false;">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2v13M7 11l5 5 5-5M3 19h18"/></svg>
+      STEP File (.step)
+    </a>
+    <span style="font-size:12px;color:var(--white-30);margin-left:auto">
+      Generated by <a href="forge.html">PartForge</a> · Articraft pipeline · CadQuery OCCT B-rep
+    </span>
+  </div>
+
+  <!-- ── Footer strip ───────────────────────────────────────────────────── -->
+  <div class="spec-footer-strip">
+    <span>Specification ref: GAM100-50Hz-v1 &nbsp;·&nbsp; Data is indicative — verify against current Speroni datasheet</span>
+    <span><a href="forge.html">PartForge</a> &nbsp;·&nbsp; <a href="index.html">AutomationHire.co.uk</a></span>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /spec-hero -->
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

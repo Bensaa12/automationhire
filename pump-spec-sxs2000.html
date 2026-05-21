@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Speroni SXS 2000 TV — Technical Specification | PartForge</title>
+<link rel="stylesheet" href="assets/css/style.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+<style>
+/* ── Spec sheet ─────────────────────────────────────────────────────────── */
+.spec-page { padding: 100px 0 60px; position: relative; z-index: 1; }
+.spec-page::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background: radial-gradient(ellipse 60% 50% at 25% 35%, rgba(41,121,255,.07) 0%, transparent 65%),
+              radial-gradient(ellipse 50% 40% at 80% 65%, rgba(0,230,118,.05) 0%, transparent 60%);
+}
+
+/* breadcrumb */
+.bc { font-size:12px; color:var(--white-30); margin-bottom:30px; letter-spacing:.04em; }
+.bc a { color:var(--green); text-decoration:none; }
+.bc a:hover { text-decoration:underline; }
+.bc span { margin:0 6px; }
+
+/* page header */
+.spec-hdr {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:20px; flex-wrap:wrap; margin-bottom:40px;
+}
+.spec-hdr h1 {
+  font-family:var(--font-head); font-size:clamp(24px,4vw,38px);
+  font-weight:700; line-height:1.2; margin-bottom:10px;
+}
+.spec-hdr .sub { color:var(--white-60); font-size:14px; max-width:500px; line-height:1.65; }
+.badges { display:flex; gap:9px; flex-wrap:wrap; padding-top:4px; }
+.badge {
+  font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  padding:4px 11px; border-radius:20px; border:1px solid;
+}
+.badge.ss    { border-color:#9ab0c0; color:#9ab0c0; }
+.badge.green { border-color:var(--green); color:var(--green); }
+.badge.blue  { border-color:var(--blue);  color:var(--blue); }
+.badge.grey  { border-color:var(--white-30); color:var(--white-60); }
+
+/* ── Hero image + spec split ──────────────────────────────────────────── */
+.hero-split {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:28px;
+  align-items:start;
+  margin-bottom:40px;
+}
+@media(max-width:860px){ .hero-split{ grid-template-columns:1fr; } }
+
+/* product photo panel */
+.photo-panel {
+  background:var(--black-2); border:1px solid var(--border);
+  border-radius:var(--radius-lg); overflow:hidden;
+  position:sticky; top:88px;
+}
+.photo-label {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:11px 18px; border-bottom:1px solid var(--border);
+  font-size:11px; font-weight:700; letter-spacing:.07em;
+  text-transform:uppercase; color:var(--white-30);
+}
+.photo-label .live {
+  display:flex; align-items:center; gap:6px; color:var(--green);
+}
+.photo-label .live::before {
+  content:''; width:6px; height:6px; background:var(--green);
+  border-radius:50%; box-shadow:0 0 6px var(--green);
+  animation:dot 2s ease-in-out infinite;
+}
+@keyframes dot { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* Tab switcher: Photo | 3D model */
+.view-tabs {
+  display:flex; border-bottom:1px solid var(--border); background:var(--black-3);
+}
+.view-tab {
+  flex:1; padding:10px 0; text-align:center; font-size:12px; font-weight:600;
+  letter-spacing:.05em; text-transform:uppercase; cursor:pointer;
+  color:var(--white-30); border:none; background:none;
+  transition:color .2s, border-bottom .2s; border-bottom:2px solid transparent;
+}
+.view-tab.active { color:var(--green); border-bottom-color:var(--green); }
+
+.view-pane { display:none; }
+.view-pane.active { display:block; }
+
+/* Product photo inside the panel */
+.product-photo-wrap {
+  padding:24px; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, #0d1117 0%, #0a0f1a 100%);
+  min-height:360px;
+}
+.product-photo-wrap img {
+  max-width:100%; max-height:380px; object-fit:contain;
+  filter:drop-shadow(0 12px 40px rgba(0,0,0,.7));
+  border-radius:4px;
+}
+
+/* 3D model iframe */
+.model-frame {
+  display:block; width:100%; height:400px; border:none; background:#09090f;
+}
+.model-hint {
+  padding:9px 18px; font-size:11px; color:var(--white-30);
+  text-align:center; border-top:1px solid var(--border);
+}
+
+/* ── Spec cards (right column) ────────────────────────────────────────── */
+.spec-col { display:flex; flex-direction:column; gap:18px; }
+
+.spec-card {
+  background:var(--black-2); border:1px solid var(--border);
+  border-radius:var(--radius-md); overflow:hidden;
+}
+.card-hdr {
+  padding:12px 20px; background:var(--black-3); border-bottom:1px solid var(--border);
+  font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+}
+.card-hdr.green { color:var(--green); }
+.card-hdr.blue  { color:var(--blue); }
+.card-hdr.grey  { color:var(--white-60); }
+
+.kv-row {
+  display:grid; grid-template-columns:152px 1fr; gap:10px; align-items:baseline;
+  padding:9px 20px; border-bottom:1px solid var(--border); font-size:13px;
+  transition:background .15s;
+}
+.kv-row:last-child { border-bottom:none; }
+.kv-row:hover { background:var(--white-10); }
+.kv-k { color:var(--white-60); font-size:12px; font-weight:500; }
+.kv-v { color:var(--white-90); font-weight:500; }
+.kv-v strong { color:var(--green); }
+.kv-v .u { color:var(--white-30); font-size:11px; margin-left:3px; }
+
+/* ── Dimensions grid ──────────────────────────────────────────────────── */
+.sec-title {
+  font-family:var(--font-head); font-size:15px; font-weight:600;
+  color:var(--white-90); margin-bottom:14px; padding-bottom:9px;
+  border-bottom:1px solid var(--border);
+}
+.dim-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(148px,1fr)); gap:9px;
+  margin-bottom:28px;
+}
+.dim-cell {
+  background:var(--black-2); border:1px solid var(--border);
+  border-radius:var(--radius-sm); padding:13px 15px;
+  transition:border-color .2s, background .2s;
+}
+.dim-cell:hover { border-color:rgba(41,121,255,.4); background:var(--black-3); }
+.dim-cell .dl { font-family:var(--font-head); font-size:18px; font-weight:700; color:var(--blue); line-height:1; margin-bottom:3px; }
+.dim-cell .dv { font-size:14px; font-weight:600; color:var(--white-90); margin-bottom:2px; }
+.dim-cell .dd { font-size:11px; color:var(--white-30); line-height:1.4; }
+
+/* ── Performance table ────────────────────────────────────────────────── */
+.table-wrap { overflow-x:auto; border-radius:var(--radius-md); border:1px solid var(--border); margin-bottom:20px; }
+table.pt {
+  width:100%; border-collapse:collapse; font-size:12.5px; white-space:nowrap;
+}
+.pt thead tr { background:var(--black-3); }
+.pt th {
+  padding:10px 13px; text-align:center; font-size:10.5px; font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase; color:var(--white-60);
+  border-bottom:1px solid var(--border);
+}
+.pt th:first-child { text-align:left; min-width:120px; }
+.pt td {
+  padding:9px 13px; text-align:center;
+  border-bottom:1px solid var(--border);
+  background:var(--black-2); color:var(--white-90);
+}
+.pt td:first-child { text-align:left; color:var(--white-60); }
+.pt tbody tr:last-child td { border-bottom:none; }
+.pt tbody tr:hover td { background:var(--black-3); }
+.pt td.hi { color:var(--green); font-weight:600; }
+
+/* ── Head-curve bar chart ─────────────────────────────────────────────── */
+.hchart {
+  background:var(--black-2); border:1px solid var(--border);
+  border-radius:var(--radius-md); padding:22px 22px 14px;
+  margin-bottom:28px;
+}
+.hchart-title { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--white-30); margin-bottom:18px; }
+.hbar-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+.hbar-lbl { font-size:11px; color:var(--white-30); width:60px; text-align:right; flex-shrink:0; }
+.hbar-wrap { flex:1; background:rgba(255,255,255,.04); border-radius:3px; height:16px; overflow:hidden; }
+.hbar { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--blue),var(--green)); }
+.hbar-val { font-size:11px; font-weight:600; color:var(--white-60); width:42px; flex-shrink:0; }
+
+/* ── All-models comparison table ─────────────────────────────────────── */
+.models-card {
+  background:var(--black-2); border:1px solid var(--border);
+  border-radius:var(--radius-md); overflow:hidden; margin-bottom:28px;
+}
+table.mt {
+  width:100%; border-collapse:collapse; font-size:12.5px;
+}
+.mt thead tr { background:var(--black-3); }
+.mt th {
+  padding:10px 14px; font-size:10.5px; font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase; color:var(--white-60);
+  border-bottom:1px solid var(--border); text-align:center;
+}
+.mt th:first-child { text-align:left; }
+.mt td {
+  padding:9px 14px; border-bottom:1px solid var(--border);
+  color:var(--white-90); text-align:center; background:var(--black-2);
+  font-size:12.5px;
+}
+.mt td:first-child { text-align:left; color:var(--white-60); }
+.mt tbody tr:last-child td { border-bottom:none; }
+.mt tbody tr:hover td { background:var(--black-3); }
+.mt td.focus { color:var(--green); font-weight:700; background:rgba(0,230,118,.04); }
+.mt th.focus { color:var(--green); }
+
+/* ── Download bar ─────────────────────────────────────────────────────── */
+.dl-bar {
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  background:var(--black-3); border:1px solid var(--border);
+  border-radius:var(--radius-md); padding:16px 22px; margin-bottom:50px;
+}
+.dl-label { font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--white-30); margin-right:4px; }
+.dl-btn {
+  display:inline-flex; align-items:center; gap:6px; padding:7px 16px;
+  border-radius:var(--radius-sm); font-size:12.5px; font-weight:600;
+  text-decoration:none; border:1px solid transparent; cursor:pointer; transition:all .2s;
+}
+.dl-btn.green { background:var(--green); color:var(--black); }
+.dl-btn.green:hover { background:var(--green-dim); }
+.dl-btn.out { border-color:var(--border); color:var(--white-60); background:transparent; }
+.dl-btn.out:hover { border-color:var(--white-30); color:var(--white-90); }
+
+/* ── Footer strip ─────────────────────────────────────────────────────── */
+.spec-foot {
+  border-top:1px solid var(--border); padding:22px 0;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:10px; font-size:11.5px; color:var(--white-30);
+}
+.spec-foot a { color:var(--green); text-decoration:none; }
+.spec-foot a:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────────────────── -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">AutomationHire</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="forge.html">PartForge <span style="background:var(--green);color:var(--black);font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:4px;vertical-align:middle">NEW</span></a></li>
+      <li><a href="hire.html">Hire</a></li>
+      <li><a href="free.html">Free Tools</a></li>
+    </ul>
+    <a href="forge.html#upload" class="btn btn-primary btn-sm">Try PartForge</a>
+    <button class="nav-toggle" aria-label="Menu">&#9776;</button>
+  </div>
+</nav>
+
+<!-- ── PAGE ─────────────────────────────────────────────────────────────────── -->
+<div class="spec-page">
+<div class="container">
+
+  <div class="bc">
+    <a href="forge.html">PartForge</a><span>/</span>
+    <a href="#">Component Library</a><span>/</span>
+    Speroni SXS 2000 TV
+  </div>
+
+  <div class="spec-hdr">
+    <div>
+      <h1><span class="grad-blue">Speroni SXS 2000 TV</span><br>Submersible Pump</h1>
+      <p class="sub">
+        Single-stage submersible drainage pump. Stainless steel AISI 304 construction,
+        three-phase 415 V / 50 Hz, DN&nbsp;2" discharge. Suitable for drainage, sewage
+        transfer, construction dewatering and industrial effluent.
+      </p>
+    </div>
+    <div class="badges">
+      <span class="badge ss">AISI 304</span>
+      <span class="badge green">STEP Available</span>
+      <span class="badge blue">B-Rep Solid</span>
+      <span class="badge grey">415 V · 3~ · 50 Hz</span>
+      <span class="badge grey">14.6 kg</span>
+    </div>
+  </div>
+
+  <!-- ── Hero: image panel + spec cards ─────────────────────────────────────── -->
+  <div class="hero-split">
+
+    <!-- LEFT: photo / 3D tab panel -->
+    <div class="photo-panel">
+      <div class="photo-label">
+        <span>Speroni SXS 2000 TV · 415 V</span>
+        <span class="live">Interactive 3D</span>
+      </div>
+
+      <!-- Tab bar -->
+      <div class="view-tabs">
+        <button class="view-tab active" onclick="switchTab(this,'tab-photo')">Product Photo</button>
+        <button class="view-tab" onclick="switchTab(this,'tab-3d')">3D Model</button>
+      </div>
+
+      <!-- Photo pane -->
+      <div id="tab-photo" class="view-pane active">
+        <div class="product-photo-wrap">
+          <!-- Inline product photo (stainless submersible pump) reproduced as CSS illustration
+               Replace src with actual image path if you have the file saved locally -->
+          <svg viewBox="0 0 220 520" xmlns="http://www.w3.org/2000/svg"
+               style="width:180px;height:auto;filter:drop-shadow(0 8px 32px rgba(0,0,0,.8))">
+            <defs>
+              <linearGradient id="ss" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0%"  stop-color="#6a7a8a"/>
+                <stop offset="40%" stop-color="#c8d4dc"/>
+                <stop offset="70%" stop-color="#a0b0bc"/>
+                <stop offset="100%" stop-color="#7a8a96"/>
+              </linearGradient>
+              <linearGradient id="ssbr" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0%"  stop-color="#505a62"/>
+                <stop offset="50%" stop-color="#dce6ee"/>
+                <stop offset="100%" stop-color="#606a74"/>
+              </linearGradient>
+              <linearGradient id="base" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%"  stop-color="#9ab0bc"/>
+                <stop offset="100%" stop-color="#485460"/>
+              </linearGradient>
+            </defs>
+
+            <!-- mounting feet -->
+            <rect x="18" y="462" width="42" height="8" rx="2" fill="url(#base)" opacity=".9"/>
+            <rect x="160" y="462" width="42" height="8" rx="2" fill="url(#base)" opacity=".9"/>
+            <rect x="18" y="448" width="10" height="22" rx="2" fill="url(#base)" opacity=".85"/>
+            <rect x="192" y="448" width="10" height="22" rx="2" fill="url(#base)" opacity=".85"/>
+
+            <!-- pump casing (lower wider cylinder) -->
+            <rect x="48" y="350" width="124" height="118" rx="4" fill="url(#ss)"/>
+            <!-- suction guard ring at base -->
+            <rect x="48" y="448" width="124" height="14" rx="3" fill="url(#ssbr)" opacity=".8"/>
+            <!-- band detail lines on casing -->
+            <line x1="48" y1="370" x2="172" y2="370" stroke="#788898" stroke-width="1" opacity=".6"/>
+            <line x1="48" y1="390" x2="172" y2="390" stroke="#788898" stroke-width="1" opacity=".4"/>
+
+            <!-- discharge port (left side) -->
+            <rect x="2" y="392" width="50" height="36" rx="3" fill="url(#ss)"/>
+            <!-- flange face -->
+            <ellipse cx="4" cy="410" rx="3" ry="18" fill="#405060" opacity=".9"/>
+
+            <!-- clamp band -->
+            <rect x="44" y="340" width="132" height="18" rx="3" fill="url(#ssbr)" opacity=".85"/>
+            <!-- stud bumps -->
+            <circle cx="60"  cy="349" r="4" fill="#788898"/>
+            <circle cx="110" cy="345" r="4" fill="#788898"/>
+            <circle cx="160" cy="349" r="4" fill="#788898"/>
+
+            <!-- motor body (taller, narrower cylinder) -->
+            <rect x="55" y="100" width="110" height="240" rx="5" fill="url(#ss)"/>
+            <!-- cooling bands / surface detail -->
+            <line x1="55" y1="140" x2="165" y2="140" stroke="#9ab0bc" stroke-width="1.5" opacity=".5"/>
+            <line x1="55" y1="180" x2="165" y2="180" stroke="#9ab0bc" stroke-width="1.5" opacity=".5"/>
+            <line x1="55" y1="220" x2="165" y2="220" stroke="#9ab0bc" stroke-width="1.5" opacity=".4"/>
+            <line x1="55" y1="260" x2="165" y2="260" stroke="#9ab0bc" stroke-width="1.5" opacity=".4"/>
+            <line x1="55" y1="300" x2="165" y2="300" stroke="#9ab0bc" stroke-width="1.5" opacity=".4"/>
+
+            <!-- top cap -->
+            <rect x="52" y="76" width="116" height="28" rx="6" fill="url(#ssbr)"/>
+            <!-- cable gland -->
+            <rect x="97" y="54" width="26" height="24" rx="4" fill="url(#ssbr)"/>
+            <!-- cable exit -->
+            <rect x="106" y="24" width="8" height="32" rx="4" fill="#181e24"/>
+            <!-- cable droop to right -->
+            <path d="M 110 24 C 110 0, 180 0, 200 40" stroke="#181e24" stroke-width="8" fill="none" stroke-linecap="round"/>
+            <!-- power plug -->
+            <ellipse cx="200" cy="44" rx="12" ry="16" fill="#222a32"/>
+            <circle  cx="200" cy="44" r="6" fill="#181e24"/>
+
+            <!-- float switch cable (left) -->
+            <path d="M 55 240 C 20 240, 10 290, 20 330" stroke="#181e24" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <!-- float body (orange oval) -->
+            <ellipse cx="20" cy="345" rx="18" ry="28" fill="#e87810"/>
+            <ellipse cx="20" cy="345" rx="12" ry="20" fill="#f09030" opacity=".6"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 3D model pane -->
+      <div id="tab-3d" class="view-pane">
+        <iframe
+          src="assets/models/speroni_sxs2000.html"
+          class="model-frame"
+          title="Speroni SXS 2000 TV — interactive 3D model"
+          loading="lazy"
+          sandbox="allow-scripts"
+          aria-label="Interactive 3D submersible pump model">
+        </iframe>
+        <div class="model-hint">Drag · Scroll · Right-drag to pan</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: spec cards -->
+    <div class="spec-col">
+
+      <div class="spec-card">
+        <div class="card-hdr green">Electrical &amp; Motor</div>
+        <div class="kv-row"><span class="kv-k">Nominal power P2</span><span class="kv-v"><strong>1.5 kW</strong><span class="u">(2 HP)</span></span></div>
+        <div class="kv-row"><span class="kv-k">Input power P1</span><span class="kv-v">1.75 kW</span></div>
+        <div class="kv-row"><span class="kv-k">Supply voltage</span><span class="kv-v"><strong>415 V</strong><span class="u">3-phase / 50 Hz</span></span></div>
+        <div class="kv-row"><span class="kv-k">Full-load current</span><span class="kv-v">3.2<span class="u">A</span></span></div>
+        <div class="kv-row"><span class="kv-k">Speed</span><span class="kv-v">~2850<span class="u">RPM</span></span></div>
+        <div class="kv-row"><span class="kv-k">Cable</span><span class="kv-v">10 m HO7RNF</span></div>
+        <div class="kv-row"><span class="kv-k">Float switch</span><span class="kv-v">Auto model: included (T-VA)</span></div>
+      </div>
+
+      <div class="spec-card">
+        <div class="card-hdr green">Hydraulic Performance</div>
+        <div class="kv-row"><span class="kv-k">Max head H<sub>max</sub></span><span class="kv-v"><strong>12.5</strong><span class="u">m w.c.</span></span></div>
+        <div class="kv-row"><span class="kv-k">Max flow Q<sub>max</sub></span><span class="kv-v"><strong>33</strong><span class="u">m³/h (550 l/min)</span></span></div>
+        <div class="kv-row"><span class="kv-k">BEP (best eff. point)</span><span class="kv-v">~12 m³/h at ~11 m</span></div>
+        <div class="kv-row"><span class="kv-k">Discharge port DNM</span><span class="kv-v">DN 2"<span class="u">(Ø50 mm BSP)</span></span></div>
+        <div class="kv-row"><span class="kv-k">Max solids passage</span><span class="kv-v">~10<span class="u">mm particle dia.</span></span></div>
+        <div class="kv-row"><span class="kv-k">Liquid temperature</span><span class="kv-v">0 … +40<span class="u">°C</span></span></div>
+      </div>
+
+      <div class="spec-card">
+        <div class="card-hdr grey">Materials &amp; Construction</div>
+        <div class="kv-row"><span class="kv-k">Pump casing</span><span class="kv-v">AISI 304 stainless steel</span></div>
+        <div class="kv-row"><span class="kv-k">Impeller</span><span class="kv-v">AISI 304 stainless steel</span></div>
+        <div class="kv-row"><span class="kv-k">Motor shaft</span><span class="kv-v">AISI 316 stainless steel</span></div>
+        <div class="kv-row"><span class="kv-k">Mechanical seal</span><span class="kv-v">Silicon carbide / graphite</span></div>
+        <div class="kv-row"><span class="kv-k">Motor protection</span><span class="kv-v">IP 68 (3 m submersion)</span></div>
+        <div class="kv-row"><span class="kv-k">Weight</span><span class="kv-v"><strong>14.6</strong><span class="u">kg</span></span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Dimensions ─────────────────────────────────────────────────────────── -->
+  <div class="sec-title">Envelope &amp; Mounting Dimensions — SXS 2000 T-V</div>
+  <div class="dim-grid">
+    <div class="dim-cell"><div class="dl">H</div><div class="dv">486 mm</div><div class="dd">Total body height</div></div>
+    <div class="dim-cell"><div class="dl">H1</div><div class="dv">111.5 mm</div><div class="dd">Pump casing height</div></div>
+    <div class="dim-cell"><div class="dl">C</div><div class="dv">198 mm</div><div class="dd">Pump casing OD</div></div>
+    <div class="dim-cell"><div class="dl">DNM</div><div class="dv">2"</div><div class="dd">Discharge port (BSP)</div></div>
+    <div class="dim-cell"><div class="dl">P</div><div class="dv">205 mm</div><div class="dd">Bounding box depth</div></div>
+    <div class="dim-cell"><div class="dl">L</div><div class="dv">228 mm</div><div class="dd">Bounding box width</div></div>
+    <div class="dim-cell"><div class="dl">H<sub style="font-size:11px">box</sub></div><div class="dv">534 mm</div><div class="dd">Bounding box height</div></div>
+    <div class="dim-cell"><div class="dl">Kg</div><div class="dv">14.6 kg</div><div class="dd">Net weight</div></div>
+  </div>
+
+  <!-- ── Full range comparison ──────────────────────────────────────────────── -->
+  <div class="sec-title">Full SXS Range Comparison</div>
+  <div class="models-card">
+    <table class="mt">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>P2 (HP)</th>
+          <th>P2 (kW)</th>
+          <th>P1 (kW)</th>
+          <th>Supply</th>
+          <th>Current (A)</th>
+          <th>H (mm)</th>
+          <th>H1 (mm)</th>
+          <th>C (mm)</th>
+          <th>DNM</th>
+          <th>Weight (kg)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SXS 750-VA</td>
+          <td>0.75</td><td>0.55</td><td>0.9</td>
+          <td>1~ 230V</td><td>4.0</td>
+          <td>403</td><td>88</td><td>193</td><td>1"½</td><td>10.8</td>
+        </tr>
+        <tr>
+          <td>SXS 1000-VA</td>
+          <td>1</td><td>0.75</td><td>1.1</td>
+          <td>1~ 230V</td><td>4.8</td>
+          <td>486</td><td>111.5</td><td>198</td><td>2"</td><td>12.9</td>
+        </tr>
+        <tr>
+          <td>SXS 1500-VA</td>
+          <td>1.5</td><td>1.1</td><td>1.4</td>
+          <td>1~ 230V</td><td>6.1</td>
+          <td>486</td><td>111.5</td><td>198</td><td>2"</td><td>14.3</td>
+        </tr>
+        <tr>
+          <td class="focus">SXS 2000 T-V</td>
+          <td class="focus">2</td><td class="focus">1.5</td><td class="focus">1.75</td>
+          <td class="focus">3~ 415V</td><td class="focus">3.2</td>
+          <td class="focus">486</td><td class="focus">111.5</td><td class="focus">198</td>
+          <td class="focus">2"</td><td class="focus">14.6</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Performance data ───────────────────────────────────────────────────── -->
+  <div class="sec-title">Performance Curve — All models at 50 Hz</div>
+  <div class="table-wrap">
+    <table class="pt">
+      <thead>
+        <tr>
+          <th>Type / Q →</th>
+          <th>0 m³/h</th><th>3.6</th><th>5.4</th><th>7.2</th><th>9</th>
+          <th>12</th><th>15</th><th>21</th><th>27</th><th>33</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SXS 750-VA — H (m)</td>
+          <td>9</td><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>—</td><td>—</td><td>—</td>
+        </tr>
+        <tr>
+          <td>SXS 1000-VA — H (m)</td>
+          <td>9</td><td>8.3</td><td>8</td><td>7.8</td><td>7.5</td><td>7</td><td>6</td><td>4</td><td>—</td><td>—</td>
+        </tr>
+        <tr>
+          <td>SXS 1500-VA — H (m)</td>
+          <td>10</td><td>9.7</td><td>9.5</td><td>9.3</td><td>9</td><td>8.5</td><td>8</td><td>6</td><td>4</td><td>—</td>
+        </tr>
+        <tr>
+          <td class="focus">SXS 2000 T-V — H (m)</td>
+          <td class="hi">12.5</td><td class="hi">12</td><td class="hi">11.7</td>
+          <td class="hi">11.3</td><td class="hi">11</td><td class="hi">10.5</td>
+          <td class="hi">9.8</td><td class="hi">8.3</td><td class="hi">6.5</td>
+          <td class="hi">5</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SXS 2000 head-curve bar chart -->
+  <div class="hchart">
+    <div class="hchart-title">Head curve — SXS 2000 T-V · H vs Q</div>
+    <div class="hbar-row"><span class="hbar-lbl">0 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:100%"></div></div><span class="hbar-val">12.5 m</span></div>
+    <div class="hbar-row"><span class="hbar-lbl">3.6 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:96%"></div></div><span class="hbar-val">12.0 m</span></div>
+    <div class="hbar-row"><span class="hbar-lbl">5.4 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:93.6%"></div></div><span class="hbar-val">11.7 m</span></div>
+    <div class="hbar-row"><span class="hbar-lbl">7.2 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:90.4%"></div></div><span class="hbar-val">11.3 m</span></div>
+    <div class="hbar-row"><span class="hbar-lbl">9 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:88%"></div></div><span class="hbar-val">11.0 m</span></div>
+    <div class="hbar-row"><span class="hbar-lbl">12 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:84%"></div></div><span class="hbar-val">10.5 m</span></div>
+    <div class="hbar-row"><span class="hbar-lbl">15 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:78.4%"></div></div><span class="hbar-val">9.8 m</span></div>
+    <div class="hbar-row"><span class="hbar-lbl">21 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:66.4%"></div></div><span class="hbar-val">8.3 m</span></div>
+    <div class="hbar-row"><span class="hbar-lbl">27 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:52%"></div></div><span class="hbar-val">6.5 m</span></div>
+    <div class="hbar-row"><span class="hbar-lbl">33 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:40%"></div></div><span class="hbar-val">5.0 m</span></div>
+  </div>
+
+  <!-- ── Download bar ───────────────────────────────────────────────────────── -->
+  <div class="dl-bar">
+    <span class="dl-label">Downloads</span>
+    <a href="assets/models/speroni_sxs2000.html" download="speroni_sxs2000_3d.html" class="dl-btn out">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2v13M7 11l5 5 5-5M3 19h18"/></svg>
+      3D Preview (.html)
+    </a>
+    <a href="#" class="dl-btn green" onclick="alert('STEP file available via PartForge — upload a photo of your component to generate.');return false;">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2v13M7 11l5 5 5-5M3 19h18"/></svg>
+      STEP File (.step)
+    </a>
+    <span style="font-size:11px;color:var(--white-30);margin-left:auto">
+      Generated by <a href="forge.html">PartForge</a> · Articraft pipeline · CadQuery OCCT B-rep
+    </span>
+  </div>
+
+  <!-- ── Footer strip ───────────────────────────────────────────────────────── -->
+  <div class="spec-foot">
+    <span>Ref: SXS2000-TV-415V-v1 &nbsp;·&nbsp; All data indicative — verify against current Speroni datasheet</span>
+    <span><a href="forge.html">PartForge</a> &nbsp;·&nbsp; <a href="index.html">AutomationHire.co.uk</a></span>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /spec-page -->
+
+<script src="assets/js/main.js"></script>
+<script>
+function switchTab(btn, paneId) {
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(paneId).classList.add('active');
+}
+</script>
+</body>
+</html>

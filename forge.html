@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PartForge — Upload a Photo. Get a STEP File. | AutomationHire</title>
+  <meta name="description" content="PartForge turns photos of real components and assemblies into production-ready STEP, URDF, OBJ and STL files using AI. Import directly into Plant 3D, SolidWorks, Inventor and FreeCAD." />
+  <link rel="canonical" href="https://automationhire.co.uk/forge" />
+  <meta name="robots" content="index, follow" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+
+  <meta property="og:title" content="PartForge — Upload a Photo. Get a STEP File." />
+  <meta property="og:description" content="AI-powered photo-to-CAD. Upload a photo of any component or system and get production-ready STEP files in minutes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://automationhire.co.uk/forge" />
+  <meta property="og:site_name" content="AutomationHire" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PartForge",
+    "applicationCategory": "CAD Software",
+    "description": "AI-powered tool that converts photos of real components into STEP, URDF, OBJ and STL CAD files using Articraft and CadQuery.",
+    "url": "https://automationhire.co.uk/forge",
+    "operatingSystem": "Web",
+    "offers": [
+      {"@type":"Offer","name":"Free","price":"0","priceCurrency":"GBP"},
+      {"@type":"Offer","name":"Premium","price":"12","priceCurrency":"GBP"},
+      {"@type":"Offer","name":"Pro","price":"39","priceCurrency":"GBP"}
+    ]
+  }
+  </script>
+
+<style>
+/* ── PartForge page-scoped styles ── */
+.forge-hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 120px 0 80px;
+  position: relative; z-index: 1;
+  overflow: hidden;
+}
+.forge-hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(0,230,118,0.07) 0%, transparent 65%),
+              radial-gradient(ellipse 50% 40% at 20% 70%, rgba(41,121,255,0.06) 0%, transparent 60%);
+  pointer-events:none;
+}
+.forge-hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+@media(max-width:900px){ .forge-hero-inner{ grid-template-columns:1fr; gap:40px; } }
+
+.forge-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,230,118,0.10);
+  border: 1px solid rgba(0,230,118,0.25);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 20px;
+}
+.forge-badge-dot {
+  width:7px; height:7px; border-radius:50%; background:var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100%{ box-shadow:0 0 0 0 rgba(0,230,118,.4); }
+  50%{ box-shadow:0 0 0 6px rgba(0,230,118,0); }
+}
+
+.forge-h1 {
+  font-family: var(--font-head);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  margin-bottom: 20px;
+}
+.forge-h1 .arrow-word {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--green), #00b4d8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.forge-sub {
+  font-size: 1.1rem; line-height: 1.7;
+  color: var(--white-60);
+  max-width: 480px;
+  margin-bottom: 32px;
+}
+
+.forge-cta-row {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.forge-btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green); color: #000;
+  font-weight: 700; font-size: .95rem;
+  padding: 14px 28px; border-radius: 12px;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 0 0 0 rgba(0,230,118,.4);
+}
+.forge-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,230,118,.35);
+}
+.forge-btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--white-90);
+  font-weight: 600; font-size: .95rem;
+  padding: 14px 28px; border-radius: 12px;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: border-color .2s, background .2s;
+  cursor: pointer;
+}
+.forge-btn-outline:hover {
+  border-color: rgba(255,255,255,.4);
+  background: rgba(255,255,255,.05);
+}
+
+.forge-trust-row {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.forge-trust-chip {
+  display: flex; align-items: center; gap: 6px;
+  font-size: .8rem; color: var(--white-60); font-weight: 500;
+}
+.forge-trust-chip svg { flex-shrink: 0; }
+
+/* ── Upload Zone ── */
+.forge-upload-card {
+  background: var(--black-3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0,0,0,.5);
+  position: relative;
+}
+.forge-upload-zone {
+  margin: 20px;
+  border: 2px dashed rgba(0,230,118,0.30);
+  border-radius: 14px;
+  padding: 32px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: rgba(0,230,118,0.03);
+}
+.forge-upload-zone:hover, .forge-upload-zone.dragover {
+  border-color: var(--green);
+  background: rgba(0,230,118,0.06);
+}
+.forge-upload-icon {
+  width: 52px; height: 52px;
+  background: rgba(0,230,118,0.12);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+}
+.forge-upload-label { font-weight: 600; font-size: .95rem; margin-bottom: 4px; }
+.forge-upload-sub { font-size: .8rem; color: var(--white-30); }
+.forge-type-chips {
+  display: flex; justify-content: center; gap: 6px; margin-top: 12px; flex-wrap: wrap;
+}
+.forge-type-chip {
+  background: rgba(255,255,255,.06); border-radius: 6px;
+  padding: 2px 8px; font-size: .72rem; color: var(--white-60); font-weight: 500;
+}
+
+.forge-prompt-area {
+  padding: 0 20px 4px;
+}
+.forge-prompt-area label {
+  font-size: .8rem; color: var(--white-60); font-weight: 500; display: block; margin-bottom: 6px;
+}
+.forge-textarea {
+  width: 100%; background: var(--black-2);
+  border: 1px solid var(--border); border-radius: 10px;
+  color: var(--white-90); font-family: var(--font-main); font-size: .875rem;
+  padding: 10px 12px; resize: none; outline: none; line-height: 1.5;
+  transition: border-color .2s;
+}
+.forge-textarea::placeholder { color: var(--white-30); }
+.forge-textarea:focus { border-color: rgba(0,230,118,.4); }
+
+.forge-card-footer {
+  padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  border-top: 1px solid var(--border);
+  background: var(--black-2);
+}
+.forge-tier-pill {
+  display: flex; align-items: center; gap: 6px;
+  font-size: .78rem; color: var(--white-30);
+}
+.forge-tier-icon {
+  width: 20px; height: 20px; border-radius: 6px;
+  background: rgba(0,230,118,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+.forge-generate-btn {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--green); color: #000;
+  font-weight: 700; font-size: .875rem;
+  padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+}
+.forge-generate-btn:hover {
+  transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,230,118,.35);
+}
+
+.forge-output-strip {
+  padding: 10px 20px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+.forge-format-badge {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,.06); border-radius: 7px;
+  padding: 4px 10px; font-size: .75rem; font-weight: 600; color: var(--white-60);
+}
+.fmt-step { color: #00e676; }
+.fmt-urdf { color: #2979ff; }
+.fmt-obj  { color: #f59e0b; }
+.fmt-stl  { color: #a78bfa; }
+.fmt-p3d  { color: #f97316; }
+
+/* ── Result preview card (mock) ── */
+.forge-result-peek {
+  margin: 0 20px 20px;
+  background: var(--black-2);
+  border: 1px solid rgba(0,230,118,.15);
+  border-radius: 12px; overflow: hidden;
+}
+.forge-result-header {
+  padding: 10px 14px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid var(--border);
+  font-size: .8rem;
+}
+.forge-result-dot { width:8px; height:8px; border-radius:50%; background:var(--green); }
+.forge-result-title { font-weight:600; flex:1; }
+.forge-result-time { color:var(--white-30); font-size:.75rem; }
+.forge-3d-viewport {
+  height: 160px;
+  background: radial-gradient(ellipse at center, rgba(0,230,118,.05) 0%, transparent 70%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.forge-3d-grid {
+  position:absolute; inset:0; opacity:.12;
+  background-image: linear-gradient(rgba(0,230,118,.4) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0,230,118,.4) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ── Stats bar ── */
+.forge-stats-bar {
+  background: var(--black-2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 0;
+  position: relative; z-index: 1;
+}
+.forge-stats-inner {
+  max-width: 1240px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+}
+.forge-stat { text-align: center; }
+.forge-stat-num {
+  font-family: var(--font-head); font-size: 1.6rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--green), #00b4d8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.forge-stat-label { font-size: .75rem; color: var(--white-30); font-weight: 500; }
+
+/* ── How it works ── */
+.forge-steps {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+@media(max-width:768px){ .forge-steps{ grid-template-columns: 1fr; } }
+.forge-step-card {
+  background: var(--black-3);
+  border: 1px solid var(--border);
+  border-radius: 18px; padding: 28px;
+  position: relative;
+  transition: border-color .25s, transform .25s;
+}
+.forge-step-card:hover {
+  border-color: rgba(0,230,118,.25);
+  transform: translateY(-4px);
+}
+.forge-step-num {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(0,230,118,.12);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-head); font-weight: 800; font-size: .9rem;
+  color: var(--green); margin-bottom: 16px;
+}
+.forge-step-icon { font-size: 2rem; margin-bottom: 12px; }
+.forge-step-title {
+  font-family: var(--font-head); font-size: 1.05rem; font-weight: 700; margin-bottom: 8px;
+}
+.forge-step-desc { font-size: .875rem; color: var(--white-60); line-height: 1.6; }
+.forge-step-connector {
+  display: none;
+}
+@media(min-width:769px){
+  .forge-steps { position: relative; }
+  .forge-steps::before, .forge-steps::after { display: none; }
+}
+
+/* ── Example output ── */
+.forge-example {
+  background: var(--black-2);
+  border: 1px solid var(--border);
+  border-radius: 20px; overflow: hidden;
+  margin-top: 48px;
+}
+.forge-example-header {
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.forge-example-label {
+  font-size: .78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--green); background: rgba(0,230,118,.1); border-radius: 6px; padding: 3px 10px;
+}
+.forge-example-title { font-weight: 700; flex: 1; }
+.forge-example-meta { font-size: .8rem; color: var(--white-30); }
+.forge-example-body {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+@media(max-width:768px){ .forge-example-body{ grid-template-columns: 1fr; } }
+.forge-example-viewport {
+  height: 400px; position: relative; overflow: hidden;
+  background: #09090f;
+  display: flex; align-items: center; justify-content: center;
+}
+.forge-viewer-iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  border: none; border-radius: 0;
+  display: block;
+}
+.forge-viewer-badge {
+  position: absolute; bottom: 12px; right: 14px;
+  font-size: .7rem; font-weight: 600; letter-spacing: .05em;
+  color: rgba(0,230,118,.55); pointer-events: none; z-index: 2;
+  text-transform: uppercase;
+}
+.forge-example-grid {
+  position: absolute; inset: 0; opacity: .08;
+  background-image: linear-gradient(rgba(0,230,118,.6) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0,230,118,.6) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.forge-example-info {
+  padding: 28px;
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.forge-example-parts { display: flex; flex-wrap: wrap; gap: 7px; }
+.forge-part-chip {
+  background: rgba(255,255,255,.06); border-radius: 7px;
+  padding: 4px 10px; font-size: .78rem; color: var(--white-60);
+}
+.forge-dl-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.forge-dl-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 8px; font-size: .8rem; font-weight: 600;
+  border: 1px solid var(--border); background: var(--black-3);
+  color: var(--white-60); cursor: pointer; text-decoration: none;
+  transition: border-color .2s, color .2s;
+}
+.forge-dl-btn:hover { border-color: var(--green); color: var(--green); }
+.forge-example-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+.forge-ex-stat { font-size: .8rem; }
+.forge-ex-stat span { color: var(--white-30); }
+
+/* ── Formats section ── */
+.forge-formats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); gap: 12px;
+}
+@media(max-width:900px){ .forge-formats{ grid-template-columns: repeat(3,1fr); } }
+@media(max-width:480px){ .forge-formats{ grid-template-columns: repeat(2,1fr); } }
+.forge-fmt-card {
+  background: var(--black-3); border: 1px solid var(--border); border-radius: 14px;
+  padding: 20px 16px; text-align: center;
+  transition: border-color .2s, transform .2s;
+}
+.forge-fmt-card:hover { transform: translateY(-3px); }
+.forge-fmt-card:nth-child(1):hover { border-color: rgba(0,230,118,.4); }
+.forge-fmt-card:nth-child(2):hover { border-color: rgba(41,121,255,.4); }
+.forge-fmt-card:nth-child(3):hover { border-color: rgba(245,158,11,.4); }
+.forge-fmt-card:nth-child(4):hover { border-color: rgba(167,139,250,.4); }
+.forge-fmt-card:nth-child(5):hover { border-color: rgba(249,115,22,.4); }
+.forge-fmt-ext {
+  font-family: var(--font-head); font-size: 1.2rem; font-weight: 800; margin-bottom: 6px;
+}
+.forge-fmt-name { font-size: .75rem; color: var(--white-60); font-weight: 500; margin-bottom: 8px; }
+.forge-fmt-desc { font-size: .72rem; color: var(--white-30); line-height: 1.5; }
+.forge-fmt-tier {
+  margin-top: 10px; font-size: .7rem; font-weight: 600;
+  padding: 2px 8px; border-radius: 5px; display: inline-block;
+}
+.tier-free { background: rgba(255,255,255,.08); color: var(--white-60); }
+.tier-premium { background: rgba(41,121,255,.15); color: #60a5fa; }
+.tier-pro { background: rgba(0,230,118,.12); color: var(--green); }
+
+/* ── Pricing ── */
+.forge-pricing-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  max-width: 960px; margin: 0 auto;
+}
+@media(max-width:768px){ .forge-pricing-grid{ grid-template-columns: 1fr; } }
+
+.forge-plan-card {
+  background: var(--black-3); border: 1px solid var(--border);
+  border-radius: 20px; padding: 32px; position: relative;
+  transition: transform .25s, box-shadow .25s;
+}
+.forge-plan-card:hover { transform: translateY(-6px); }
+.forge-plan-card.featured {
+  border-color: rgba(41,121,255,.4);
+  box-shadow: 0 0 40px rgba(41,121,255,.12);
+}
+.forge-plan-card.pro {
+  border-color: rgba(0,230,118,.35);
+  box-shadow: 0 0 40px rgba(0,230,118,.10);
+}
+.forge-plan-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--blue); color: #fff;
+  font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  padding: 4px 14px; border-radius: 20px;
+  white-space: nowrap;
+}
+.forge-plan-badge.pro-badge { background: var(--green); color: #000; }
+.forge-plan-name {
+  font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 4px;
+  color: var(--white-60);
+}
+.forge-plan-price {
+  font-family: var(--font-head); font-size: 2.5rem; font-weight: 800;
+  line-height: 1; margin-bottom: 4px;
+}
+.forge-plan-period { font-size: .8rem; color: var(--white-30); margin-bottom: 6px; }
+.forge-plan-yearly { font-size: .78rem; color: var(--green); margin-bottom: 20px; font-weight: 500; }
+.forge-plan-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+.forge-plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.forge-plan-features li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: .875rem; color: var(--white-60);
+}
+.forge-plan-features li .fi { flex-shrink: 0; margin-top: 1px; }
+.fi-yes { color: var(--green); }
+.fi-no  { color: rgba(255,255,255,.2); }
+.forge-plan-cta {
+  display: block; text-align: center;
+  padding: 13px; border-radius: 11px; font-weight: 700; font-size: .9rem;
+  text-decoration: none; border: none; cursor: pointer; width: 100%;
+  transition: transform .2s, box-shadow .2s;
+}
+.cta-free { background: rgba(255,255,255,.08); color: var(--white-90); }
+.cta-free:hover { background: rgba(255,255,255,.14); }
+.cta-premium { background: var(--blue); color: #fff; }
+.cta-premium:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(41,121,255,.35); }
+.cta-pro { background: var(--green); color: #000; }
+.cta-pro:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,230,118,.35); }
+
+/* ── What you can generate ── */
+.forge-use-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+}
+@media(max-width:900px){ .forge-use-grid{ grid-template-columns: repeat(2,1fr); } }
+@media(max-width:480px){ .forge-use-grid{ grid-template-columns: 1fr; } }
+.forge-use-card {
+  background: var(--black-3); border: 1px solid var(--border); border-radius: 14px;
+  padding: 20px; transition: border-color .2s, transform .2s;
+}
+.forge-use-card:hover { border-color: rgba(0,230,118,.25); transform: translateY(-3px); }
+.forge-use-icon { font-size: 1.8rem; margin-bottom: 10px; }
+.forge-use-title { font-weight: 700; font-size: .9rem; margin-bottom: 6px; }
+.forge-use-desc { font-size: .8rem; color: var(--white-30); line-height: 1.5; }
+
+/* ── FAQ ── */
+.forge-faq { max-width: 780px; margin: 0 auto; }
+.forge-faq-item {
+  border-bottom: 1px solid var(--border);
+}
+.forge-faq-q {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 20px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  font-family: var(--font-main); font-size: .95rem; font-weight: 600; color: var(--white-90);
+}
+.forge-faq-icon {
+  flex-shrink: 0; width: 24px; height: 24px; border-radius: 7px;
+  background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: transform .2s, background .2s;
+}
+.forge-faq-item.open .forge-faq-icon { transform: rotate(45deg); background: rgba(0,230,118,.15); color: var(--green); }
+.forge-faq-a {
+  max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s ease;
+  font-size: .875rem; color: var(--white-60); line-height: 1.7;
+}
+.forge-faq-item.open .forge-faq-a { max-height: 400px; padding-bottom: 18px; }
+
+/* ── Waitlist banner ── */
+.forge-waitlist {
+  background: linear-gradient(135deg, rgba(0,230,118,.08) 0%, rgba(41,121,255,.08) 100%);
+  border: 1px solid rgba(0,230,118,.2);
+  border-radius: 24px; padding: 56px 40px;
+  text-align: center; max-width: 640px; margin: 0 auto;
+}
+.forge-waitlist-title {
+  font-family: var(--font-head); font-size: 1.8rem; font-weight: 800; margin-bottom: 10px;
+}
+.forge-waitlist-sub { color: var(--white-60); font-size: .95rem; margin-bottom: 28px; line-height: 1.6; }
+.forge-email-form {
+  display: flex; gap: 10px; max-width: 420px; margin: 0 auto;
+}
+@media(max-width:480px){ .forge-email-form{ flex-direction: column; } }
+.forge-email-input {
+  flex: 1; background: var(--black-3); border: 1px solid var(--border);
+  border-radius: 10px; color: var(--white-90); font-family: var(--font-main);
+  font-size: .9rem; padding: 12px 16px; outline: none;
+  transition: border-color .2s;
+}
+.forge-email-input::placeholder { color: var(--white-30); }
+.forge-email-input:focus { border-color: rgba(0,230,118,.4); }
+.forge-email-submit {
+  background: var(--green); color: #000; font-weight: 700; font-size: .9rem;
+  padding: 12px 22px; border-radius: 10px; border: none; cursor: pointer;
+  transition: transform .2s, box-shadow .2s; white-space: nowrap;
+}
+.forge-email-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,230,118,.35); }
+.forge-waitlist-note { margin-top: 14px; font-size: .78rem; color: var(--white-30); }
+
+/* ── Section headers ── */
+.forge-section-kicker {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--green); margin-bottom: 10px;
+}
+.forge-section-h2 {
+  font-family: var(--font-head); font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800;
+  line-height: 1.15; margin-bottom: 14px;
+}
+.forge-section-sub { font-size: 1rem; color: var(--white-60); max-width: 540px; line-height: 1.7; }
+
+/* ── Isometric SVG model ── */
+.iso-skid { filter: drop-shadow(0 0 16px rgba(0,230,118,.25)); }
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li class="nav-sep" aria-hidden="true"></li>
+      <li><a href="ads.html">Ad Production</a></li>
+      <li><a href="ready-to-deploy.html">Ready to Deploy<span class="nav-live-badge">LIVE</span></a></li>
+      <li><a href="forge.html" style="color:var(--green);font-weight:700">PartForge<span class="nav-live-badge" style="background:var(--green);color:#000">NEW</span></a></li>
+      <li class="nav-sep" aria-hidden="true"></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="login.html" class="nav-expert-link">Sign In</a>
+      <a href="#waitlist" class="nav-pill nav-pill-primary">Early Access</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="forge-hero">
+  <div class="forge-hero-inner">
+
+    <!-- LEFT: copy -->
+    <div class="reveal">
+      <div class="forge-badge">
+        <span class="forge-badge-dot"></span>
+        Powered by Articraft + CadQuery
+      </div>
+      <h1 class="forge-h1">
+        Upload a photo.<br>
+        Get a <span class="arrow-word">STEP file.</span>
+      </h1>
+      <p class="forge-sub">
+        PartForge uses AI to turn photos of real components and assemblies into
+        production-ready 3D CAD files — importable into Plant 3D, SolidWorks,
+        Inventor, and FreeCAD. No modelling skills required.
+      </p>
+      <div class="forge-cta-row">
+        <a href="#waitlist" class="forge-btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Try for Free
+        </a>
+        <a href="#how-it-works" class="forge-btn-outline">See how it works ↓</a>
+      </div>
+      <div class="forge-trust-row">
+        <div class="forge-trust-chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          B-Rep solid geometry
+        </div>
+        <div class="forge-trust-chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          OpenCascade OCCT kernel
+        </div>
+        <div class="forge-trust-chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          No credit card for free tier
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: upload card -->
+    <div class="reveal reveal-delay-1">
+      <div class="forge-upload-card">
+
+        <!-- format strip -->
+        <div class="forge-output-strip">
+          <span style="font-size:.75rem;color:var(--white-30);font-weight:600;margin-right:4px">Outputs:</span>
+          <span class="forge-format-badge"><span class="fmt-step">◆</span> STEP</span>
+          <span class="forge-format-badge"><span class="fmt-urdf">◆</span> URDF</span>
+          <span class="forge-format-badge"><span class="fmt-obj">◆</span> OBJ</span>
+          <span class="forge-format-badge"><span class="fmt-stl">◆</span> STL</span>
+          <span class="forge-format-badge"><span class="fmt-p3d">◆</span> Plant 3D</span>
+        </div>
+
+        <!-- drag zone -->
+        <div class="forge-upload-zone" id="dropZone">
+          <div class="forge-upload-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="forge-upload-label">Drag a photo here or click to upload</div>
+          <div class="forge-upload-sub">Photo of any component, assembly or system</div>
+          <div class="forge-type-chips">
+            <span class="forge-type-chip">JPG</span>
+            <span class="forge-type-chip">PNG</span>
+            <span class="forge-type-chip">HEIC</span>
+            <span class="forge-type-chip">WEBP</span>
+          </div>
+          <input type="file" id="photoInput" accept="image/*" style="display:none" aria-label="Upload photo" />
+        </div>
+
+        <!-- prompt -->
+        <div class="forge-prompt-area">
+          <label for="promptText">Describe the component (optional — adds detail)</label>
+          <textarea id="promptText" class="forge-textarea" rows="2"
+            placeholder="e.g. Hydraulic ball valve DN50, stainless steel body, red lever handle…"></textarea>
+        </div>
+
+        <!-- result peek (mock) -->
+        <div class="forge-result-peek" id="resultPeek" style="display:none">
+          <div class="forge-result-header">
+            <div class="forge-result-dot"></div>
+            <div class="forge-result-title">hydraulic_filtration_skid</div>
+            <div class="forge-result-time">Generated in 22 min · 14 parts</div>
+          </div>
+          <div class="forge-3d-viewport">
+            <div class="forge-3d-grid"></div>
+            <!-- Isometric SVG preview -->
+            <svg width="220" height="140" viewBox="0 0 220 140" class="iso-skid" aria-label="3D model preview">
+              <!-- Panel -->
+              <polygon points="30,100 110,60 190,100 110,140" fill="rgba(230,100,10,.85)" stroke="rgba(0,230,118,.5)" stroke-width=".8"/>
+              <polygon points="30,40 110,0 190,40 110,80" fill="rgba(230,100,10,.7)" stroke="rgba(0,230,118,.5)" stroke-width=".8"/>
+              <polygon points="30,40 30,100 110,140 110,80" fill="rgba(180,70,5,.9)" stroke="rgba(0,230,118,.4)" stroke-width=".8"/>
+              <polygon points="190,40 190,100 110,140 110,80" fill="rgba(200,80,8,.75)" stroke="rgba(0,230,118,.4)" stroke-width=".8"/>
+              <!-- Motor -->
+              <ellipse cx="72" cy="85" rx="22" ry="10" fill="rgba(18,18,19,.9)" stroke="rgba(0,230,118,.4)" stroke-width=".8"/>
+              <rect x="50" y="72" width="44" height="26" rx="4" fill="rgba(18,18,19,.85)" stroke="rgba(0,230,118,.4)" stroke-width=".8"/>
+              <!-- Pump -->
+              <rect x="90" y="74" width="18" height="18" rx="3" fill="rgba(15,50,130,.9)" stroke="rgba(0,230,118,.4)" stroke-width=".8"/>
+              <!-- Manifold -->
+              <rect x="95" y="50" width="34" height="12" rx="2" fill="rgba(90,95,100,.9)" stroke="rgba(0,230,118,.5)" stroke-width=".8"/>
+              <!-- Filters -->
+              <ellipse cx="100" cy="70" rx="6" ry="14" fill="rgba(18,18,19,.95)" stroke="rgba(0,230,118,.4)" stroke-width=".8"/>
+              <ellipse cx="120" cy="70" rx="6" ry="14" fill="rgba(18,18,19,.95)" stroke="rgba(0,230,118,.4)" stroke-width=".8"/>
+              <!-- Gauge -->
+              <circle cx="132" cy="50" r="7" fill="rgba(55,58,65,.9)" stroke="rgba(0,230,118,.5)" stroke-width=".8"/>
+              <!-- Enclosure -->
+              <rect x="148" y="58" width="20" height="28" rx="3" fill="rgba(240,240,242,.2)" stroke="rgba(0,230,118,.4)" stroke-width=".8"/>
+              <!-- Valve -->
+              <rect x="105" y="80" width="8" height="10" rx="1" fill="rgba(180,180,185,.6)" stroke="rgba(0,230,118,.3)" stroke-width=".8"/>
+              <rect x="100" y="78" width="18" height="4" rx="1" fill="rgba(210,30,30,.8)"/>
+              <!-- Glow overlay -->
+              <ellipse cx="110" cy="80" rx="50" ry="30" fill="none" stroke="rgba(0,230,118,.08)" stroke-width="30"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- footer -->
+        <div class="forge-card-footer">
+          <div class="forge-tier-pill">
+            <div class="forge-tier-icon">🆓</div>
+            <span>Free tier · 1 generation/month</span>
+          </div>
+          <button class="forge-generate-btn" id="generateBtn" onclick="handleGenerate()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Generate
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS BAR ===== -->
+<div class="forge-stats-bar">
+  <div class="forge-stats-inner">
+    <div class="forge-stat">
+      <div class="forge-stat-num">5</div>
+      <div class="forge-stat-label">Export Formats</div>
+    </div>
+    <div class="forge-stat">
+      <div class="forge-stat-num">20–45<span style="font-size:1rem">min</span></div>
+      <div class="forge-stat-label">Per Generation</div>
+    </div>
+    <div class="forge-stat">
+      <div class="forge-stat-num">B-Rep</div>
+      <div class="forge-stat-label">Solid Geometry</div>
+    </div>
+    <div class="forge-stat">
+      <div class="forge-stat-num">OCCT 7.8</div>
+      <div class="forge-stat-label">Geometry Kernel</div>
+    </div>
+    <div class="forge-stat">
+      <div class="forge-stat-num">URDF</div>
+      <div class="forge-stat-label">Articulated Assembly</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="section" id="how-it-works">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:48px">
+      <div class="forge-section-kicker">How It Works</div>
+      <h2 class="forge-section-h2">From photo to CAD file<br>in three steps</h2>
+      <p class="forge-section-sub">No modelling skills, no software install. Upload, describe, download.</p>
+    </div>
+    <div class="forge-steps">
+      <div class="forge-step-card reveal">
+        <div class="forge-step-num">01</div>
+        <div class="forge-step-icon">📸</div>
+        <div class="forge-step-title">Upload a photo or describe your component</div>
+        <div class="forge-step-desc">Drag in a photo of any real component — a valve, pump, skid, fitting, enclosure — or simply describe it in words. The more detail you give, the better the geometry.</div>
+      </div>
+      <div class="forge-step-card reveal reveal-delay-1">
+        <div class="forge-step-num">02</div>
+        <div class="forge-step-icon">⚙️</div>
+        <div class="forge-step-title">AI generates parametric 3D geometry</div>
+        <div class="forge-step-desc">PartForge uses Claude vision AI to extract dimensions and geometry from your photo, then Articraft generates a parametric CadQuery model compiled against OpenCascade OCCT — producing true B-Rep solids, not just meshes.</div>
+      </div>
+      <div class="forge-step-card reveal reveal-delay-2">
+        <div class="forge-step-num">03</div>
+        <div class="forge-step-icon">📦</div>
+        <div class="forge-step-title">Preview interactively, download your files</div>
+        <div class="forge-step-desc">Review the articulated 3D model in your browser with joint controls. Then download STEP for Plant 3D / SolidWorks / Inventor, URDF for digital twins, or OBJ/STL for visualisation and 3D printing.</div>
+      </div>
+    </div>
+
+    <!-- Example output -->
+    <div class="forge-example reveal">
+      <div class="forge-example-header">
+        <span class="forge-example-label">Live Example</span>
+        <span class="forge-example-title">Ball Valve G 1-1/4" — 32 mm Full Bore</span>
+        <span class="forge-example-meta">Generated from spec · drag to rotate · scroll to zoom</span>
+      </div>
+      <div class="forge-example-body">
+        <div class="forge-example-viewport" id="forge-viewport">
+          <iframe
+            src="assets/models/ball_valve_g1_25.html"
+            class="forge-viewer-iframe"
+            title="Ball valve G 1-1/4 — interactive 3D preview"
+            loading="lazy"
+            sandbox="allow-scripts"
+            aria-label="Rotate and zoom the 3D ball valve model"
+          ></iframe>
+          <div class="forge-viewer-badge">Live 3D · OCCT B-rep</div>
+        </div>
+        <div class="forge-example-info">
+          <div>
+            <div style="font-size:.78rem;color:var(--white-30);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">9 Solid Parts</div>
+            <div class="forge-example-parts">
+              <span class="forge-part-chip">Body — nickel brass</span>
+              <span class="forge-part-chip">Port × 2 — brass</span>
+              <span class="forge-part-chip">Ball — chrome brass</span>
+              <span class="forge-part-chip">Stem + bonnet</span>
+              <span class="forge-part-chip">Lever handle — red</span>
+              <span class="forge-part-chip">Lock screw</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:.78rem;color:var(--white-30);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Download Formats</div>
+            <div class="forge-dl-buttons">
+              <a href="#waitlist" class="forge-dl-btn"><span class="fmt-step">◆</span> STEP</a>
+              <a href="#waitlist" class="forge-dl-btn"><span class="fmt-urdf">◆</span> URDF</a>
+              <a href="#waitlist" class="forge-dl-btn"><span class="fmt-obj">◆</span> OBJ</a>
+              <a href="#waitlist" class="forge-dl-btn"><span class="fmt-stl">◆</span> STL</a>
+              <a href="#waitlist" class="forge-dl-btn"><span class="fmt-p3d">◆</span> .pcat</a>
+            </div>
+          </div>
+          <div class="forge-example-stats">
+            <div class="forge-ex-stat"><span>Bore: </span><strong>Ø 32 mm full bore</strong></div>
+            <div class="forge-ex-stat"><span>Thread: </span><strong>G 1-1/4" BSP</strong></div>
+            <div class="forge-ex-stat"><span>Pressure: </span><strong>30 bar / 435 psi</strong></div>
+            <div class="forge-ex-stat"><span>File: </span><strong>266 KB STEP</strong></div>
+          </div>
+          <a href="#waitlist" class="forge-generate-btn" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:#000">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Generate yours →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FORMATS ===== -->
+<section class="section-sm" style="background:var(--black-2);position:relative;z-index:1">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:36px">
+      <div class="forge-section-kicker">Export Formats</div>
+      <h2 class="forge-section-h2">Every format your workflow needs</h2>
+    </div>
+    <div class="forge-formats reveal">
+      <div class="forge-fmt-card">
+        <div class="forge-fmt-ext" style="color:#00e676">.STEP</div>
+        <div class="forge-fmt-name">ISO-10303-21</div>
+        <div class="forge-fmt-desc">True B-Rep solid geometry. Import directly into Plant 3D, SolidWorks, Inventor, Catia, FreeCAD.</div>
+        <div class="forge-fmt-tier tier-free">All plans</div>
+      </div>
+      <div class="forge-fmt-card">
+        <div class="forge-fmt-ext" style="color:#2979ff">URDF</div>
+        <div class="forge-fmt-name">Robot Description</div>
+        <div class="forge-fmt-desc">Articulated assembly with joint definitions. Use in ROS, Gazebo, digital twins and simulation.</div>
+        <div class="forge-fmt-tier tier-premium">Premium+</div>
+      </div>
+      <div class="forge-fmt-card">
+        <div class="forge-fmt-ext" style="color:#f59e0b">.OBJ</div>
+        <div class="forge-fmt-name">Wavefront OBJ</div>
+        <div class="forge-fmt-desc">Mesh with materials. Use in Blender, Unity, Unreal, web viewers, and rendering pipelines.</div>
+        <div class="forge-fmt-tier tier-free">All plans</div>
+      </div>
+      <div class="forge-fmt-card">
+        <div class="forge-fmt-ext" style="color:#a78bfa">.STL</div>
+        <div class="forge-fmt-name">Stereolithography</div>
+        <div class="forge-fmt-desc">Universal mesh format for 3D printing, FEA, and slicing software. Binary or ASCII output.</div>
+        <div class="forge-fmt-tier tier-free">All plans</div>
+      </div>
+      <div class="forge-fmt-card">
+        <div class="forge-fmt-ext" style="color:#f97316">.pcat</div>
+        <div class="forge-fmt-name">Plant 3D Catalog</div>
+        <div class="forge-fmt-desc">AutoCAD Plant 3D native catalog entry. Drop directly into your piping catalog library.</div>
+        <div class="forge-fmt-tier tier-pro">Pro only</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHAT YOU CAN GENERATE ===== -->
+<section class="section">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:40px">
+      <div class="forge-section-kicker">Use Cases</div>
+      <h2 class="forge-section-h2">What can PartForge generate?</h2>
+      <p class="forge-section-sub">Upload a photo of almost any industrial or mechanical component and get a usable CAD file back.</p>
+    </div>
+    <div class="forge-use-grid">
+      <div class="forge-use-card reveal">
+        <div class="forge-use-icon">🔩</div>
+        <div class="forge-use-title">Pipes & Fittings</div>
+        <div class="forge-use-desc">Elbows, tees, reducers, flanges, unions — with correct bore sizes and wall thicknesses.</div>
+      </div>
+      <div class="forge-use-card reveal reveal-delay-1">
+        <div class="forge-use-icon">🔧</div>
+        <div class="forge-use-title">Valves & Actuators</div>
+        <div class="forge-use-desc">Ball valves, gate valves, butterfly valves — with revolute handle articulation.</div>
+      </div>
+      <div class="forge-use-card reveal reveal-delay-2">
+        <div class="forge-use-icon">⚙️</div>
+        <div class="forge-use-title">Pumps & Motors</div>
+        <div class="forge-use-desc">Gear pumps, centrifugal pumps, IEC motors — body, inlet/outlet nipples, mounting feet.</div>
+      </div>
+      <div class="forge-use-card reveal reveal-delay-3">
+        <div class="forge-use-icon">🛢️</div>
+        <div class="forge-use-title">Skids & Assemblies</div>
+        <div class="forge-use-desc">Full skid systems — manifolds, filter banks, control enclosures, piping runs.</div>
+      </div>
+      <div class="forge-use-card reveal">
+        <div class="forge-use-icon">📦</div>
+        <div class="forge-use-title">Enclosures & Panels</div>
+        <div class="forge-use-desc">IP65 control panels, terminal boxes, DIN rail enclosures with cutouts and mounting.</div>
+      </div>
+      <div class="forge-use-card reveal reveal-delay-1">
+        <div class="forge-use-icon">🔄</div>
+        <div class="forge-use-title">Gears & Transmission</div>
+        <div class="forge-use-desc">Spur gears, bevel gears, pulley systems — parametric tooth profiles.</div>
+      </div>
+      <div class="forge-use-card reveal reveal-delay-2">
+        <div class="forge-use-icon">🏗️</div>
+        <div class="forge-use-title">Structural Brackets</div>
+        <div class="forge-use-desc">Steel brackets, gussets, support frames — with bolt holes and weld pads.</div>
+      </div>
+      <div class="forge-use-card reveal reveal-delay-3">
+        <div class="forge-use-icon">🎛️</div>
+        <div class="forge-use-title">Instrumentation</div>
+        <div class="forge-use-desc">Pressure gauges, flow meters, transmitters — with accurate dial faces and connections.</div>
+      </div>
+      <div class="forge-use-card reveal">
+        <div class="forge-use-icon">🔩</div>
+        <div class="forge-use-title">Pipe Supports</div>
+        <div class="forge-use-desc">U-bolt clamps, clevis hangers, riser clamps and trapeze supports — with correct bore sizes, rod diameters and load ratings for standard pipe schedules.</div>
+      </div>
+      <div class="forge-use-card reveal reveal-delay-1">
+        <div class="forge-use-icon">📐</div>
+        <div class="forge-use-title">Cable Trays</div>
+        <div class="forge-use-desc">Ladder tray, perforated tray and solid-bottom sections — with splice plates, tee pieces and reducers. Correct rail height, rung pitch and fitting geometry for OCCT export.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section class="section" id="pricing" style="background:var(--black-2);position:relative;z-index:1">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:48px">
+      <div class="forge-section-kicker">Pricing</div>
+      <h2 class="forge-section-h2">Simple, honest pricing</h2>
+      <p class="forge-section-sub" style="margin:0 auto">Pay for what you use. All plans include interactive 3D preview and lifetime access to your generated files.</p>
+    </div>
+
+    <div class="forge-pricing-grid reveal">
+
+      <!-- FREE -->
+      <div class="forge-plan-card">
+        <div class="forge-plan-name">Free</div>
+        <div class="forge-plan-price">£0</div>
+        <div class="forge-plan-period">forever</div>
+        <div class="forge-plan-yearly">&nbsp;</div>
+        <hr class="forge-plan-divider" />
+        <ul class="forge-plan-features">
+          <li><span class="fi fi-yes">✓</span> 1 generation per month</li>
+          <li><span class="fi fi-yes">✓</span> Text prompt only</li>
+          <li><span class="fi fi-yes">✓</span> Simple components (single part)</li>
+          <li><span class="fi fi-yes">✓</span> OBJ + STL download</li>
+          <li><span class="fi fi-yes">✓</span> Static 3D preview</li>
+          <li><span class="fi fi-no">✗</span> <span style="color:var(--white-30)">Photo upload</span></li>
+          <li><span class="fi fi-no">✗</span> <span style="color:var(--white-30)">STEP / URDF download</span></li>
+          <li><span class="fi fi-no">✗</span> <span style="color:var(--white-30)">Assemblies</span></li>
+        </ul>
+        <a href="#waitlist" class="forge-plan-cta cta-free">Get Started Free</a>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="forge-plan-card featured">
+        <div class="forge-plan-badge">Most Popular</div>
+        <div class="forge-plan-name">Premium</div>
+        <div class="forge-plan-price">£12</div>
+        <div class="forge-plan-period">per month</div>
+        <div class="forge-plan-yearly">or £99/year — save £45</div>
+        <hr class="forge-plan-divider" />
+        <ul class="forge-plan-features">
+          <li><span class="fi fi-yes">✓</span> 15 generations per month</li>
+          <li><span class="fi fi-yes">✓</span> <strong>Photo + text input</strong></li>
+          <li><span class="fi fi-yes">✓</span> Assemblies up to 8 parts</li>
+          <li><span class="fi fi-yes">✓</span> OBJ + STL + <strong>STEP + URDF</strong></li>
+          <li><span class="fi fi-yes">✓</span> Interactive 3D (joint sliders)</li>
+          <li><span class="fi fi-yes">✓</span> Fast queue (≈ 5 min)</li>
+          <li><span class="fi fi-yes">✓</span> 30-day file storage</li>
+          <li><span class="fi fi-yes">✓</span> Email support</li>
+        </ul>
+        <a href="#waitlist" class="forge-plan-cta cta-premium">Start Premium Trial</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="forge-plan-card pro">
+        <div class="forge-plan-badge pro-badge">For Professionals</div>
+        <div class="forge-plan-name">Pro</div>
+        <div class="forge-plan-price">£39</div>
+        <div class="forge-plan-period">per month</div>
+        <div class="forge-plan-yearly">or £299/year — save £169</div>
+        <hr class="forge-plan-divider" />
+        <ul class="forge-plan-features">
+          <li><span class="fi fi-yes">✓</span> 100 generations/month</li>
+          <li><span class="fi fi-yes">✓</span> Photo + text + dimensions</li>
+          <li><span class="fi fi-yes">✓</span> <strong>Unlimited complexity</strong></li>
+          <li><span class="fi fi-yes">✓</span> All formats <strong>+ Plant 3D .pcat</strong></li>
+          <li><span class="fi fi-yes">✓</span> Priority queue (immediate)</li>
+          <li><span class="fi fi-yes">✓</span> 1-year file storage</li>
+          <li><span class="fi fi-yes">✓</span> <strong>REST API access</strong></li>
+          <li><span class="fi fi-yes">✓</span> Priority support + Discord</li>
+        </ul>
+        <a href="#waitlist" class="forge-plan-cta cta-pro">Start Pro Trial</a>
+      </div>
+    </div>
+
+    <!-- Enterprise note -->
+    <div class="reveal" style="text-align:center;margin-top:32px">
+      <p style="font-size:.875rem;color:var(--white-30)">
+        Need bulk generation, on-premise deployment, or custom catalog formats?
+        <a href="book.html" style="color:var(--green);font-weight:600;text-decoration:none">Talk to us →</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:40px">
+      <div class="forge-section-kicker">FAQ</div>
+      <h2 class="forge-section-h2">Common questions</h2>
+    </div>
+    <div class="forge-faq reveal">
+
+      <div class="forge-faq-item">
+        <button class="forge-faq-q" aria-expanded="false">
+          What file formats does PartForge output?
+          <span class="forge-faq-icon">+</span>
+        </button>
+        <div class="forge-faq-a">PartForge generates STEP (ISO-10303-21), URDF, OBJ, and STL. Pro users also receive an AutoCAD Plant 3D <code>.pcat</code> catalog entry. STEP files use true B-Rep solid geometry via the OpenCascade OCCT 7.8 kernel — not tessellated meshes — so they import cleanly into Plant 3D, SolidWorks, Inventor, Catia, and FreeCAD.</div>
+      </div>
+
+      <div class="forge-faq-item">
+        <button class="forge-faq-q" aria-expanded="false">
+          How accurate are the dimensions?
+          <span class="forge-faq-icon">+</span>
+        </button>
+        <div class="forge-faq-a">Accuracy depends on the quality of your input. With a clear photo and a description that includes key dimensions (e.g. "DN50 bore, 200 mm face-to-face"), the model will match within 2–5%. For free-tier text-only generation, proportions are realistic but not to exact engineering tolerances. For critical engineering use, always verify against manufacturer datasheets before use in production design.</div>
+      </div>
+
+      <div class="forge-faq-item">
+        <button class="forge-faq-q" aria-expanded="false">
+          How long does generation take?
+          <span class="forge-faq-icon">+</span>
+        </button>
+        <div class="forge-faq-a">Simple single-part components take 5–10 minutes. Complex multi-part assemblies (like a full hydraulic skid) take 20–45 minutes. Pro tier uses high-quality multi-turn AI reasoning for best results. Premium uses medium thinking. Free uses fast mode. You'll receive an email notification and can also poll the live progress bar in the browser.</div>
+      </div>
+
+      <div class="forge-faq-item">
+        <button class="forge-faq-q" aria-expanded="false">
+          What technology powers PartForge?
+          <span class="forge-faq-icon">+</span>
+        </button>
+        <div class="forge-faq-a">PartForge is built on <strong>Articraft</strong>, an open-source agentic 3D generation system, combined with <strong>CadQuery</strong> (a Python CAD API over OpenCascade) and <strong>Claude AI</strong> (Anthropic) for geometry reasoning. The pipeline: Claude vision extracts geometry from your photo → Articraft generates a parametric Python model → CadQuery compiles it to B-Rep solids → exported as STEP/URDF/OBJ/STL.</div>
+      </div>
+
+      <div class="forge-faq-item">
+        <button class="forge-faq-q" aria-expanded="false">
+          Can I generate full piping assemblies, not just single components?
+          <span class="forge-faq-icon">+</span>
+        </button>
+        <div class="forge-faq-a">Yes. Premium and Pro tiers support assemblies. The AI generates each part as a separate body with correct relative positioning, and the URDF output includes full articulation definitions (e.g. a valve handle that rotates, filter canisters that unscrew). You can load the URDF in Gazebo, ROS, or any robotics simulation environment, or use the STEP assembly in your CAD package.</div>
+      </div>
+
+      <div class="forge-faq-item">
+        <button class="forge-faq-q" aria-expanded="false">
+          Who owns the generated files?
+          <span class="forge-faq-icon">+</span>
+        </button>
+        <div class="forge-faq-a">You do. All generated files are yours to use commercially without restriction. We do not claim any IP in the output geometry. Your uploaded photos and prompts are used solely to generate your model and are not used to train AI models.</div>
+      </div>
+
+      <div class="forge-faq-item">
+        <button class="forge-faq-q" aria-expanded="false">
+          Is there an API for batch generation?
+          <span class="forge-faq-icon">+</span>
+        </button>
+        <div class="forge-faq-a">Yes — Pro tier includes REST API access. You can POST a job with an image URL or base64 image and a text prompt, then poll for completion and download the output files programmatically. API documentation will be available at launch. Interested in higher batch limits? Contact us to discuss an enterprise plan.</div>
+      </div>
+
+      <div class="forge-faq-item">
+        <button class="forge-faq-q" aria-expanded="false">
+          What happens to my unused generations each month?
+          <span class="forge-faq-icon">+</span>
+        </button>
+        <div class="forge-faq-a">Unused generations do not roll over to the next month. We keep it simple: your allowance resets on your billing date each month. If you need more in a given month, you can upgrade your plan at any time — prorated to the day.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== WAITLIST / CTA ===== -->
+<section class="section" id="waitlist">
+  <div class="container">
+    <div class="forge-waitlist reveal">
+      <div style="font-size:2.5rem;margin-bottom:12px">⚡</div>
+      <div class="forge-waitlist-title">Get early access to PartForge</div>
+      <div class="forge-waitlist-sub">Be first in line when we launch. Free tier users get 3 bonus generations on launch day. Premium and Pro subscribers get 30 days free.</div>
+      <form class="forge-email-form" id="waitlistForm" onsubmit="handleWaitlist(event)">
+        <input type="email" class="forge-email-input" placeholder="your@email.com" required aria-label="Email address" id="waitlistEmail" />
+        <button type="submit" class="forge-email-submit">Join Waitlist →</button>
+      </form>
+      <div class="forge-waitlist-note" id="waitlistMsg">No spam. Just a launch notification and your early-access link.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">⚡ AutomationHire</a>
+        <p class="footer-desc">The UK's trusted automation marketplace. PartForge is our AI-powered photo-to-CAD tool for engineers and designers.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">PartForge</div>
+        <ul>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="plant-3d-piping-automation-uk.html">Plant 3D Components</a></li>
+          <li><a href="#waitlist">Early Access</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">AutomationHire</div>
+        <ul>
+          <li><a href="providers.html">Browse Experts</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="pricing.html">Marketplace Pricing</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="book.html">Book a Call</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AutomationHire Ltd. All rights reserved.</span>
+      <span style="color:var(--white-30)">PartForge — Photo to STEP File</span>
+    </div>
+  </div>
+</footer>
+
+<script src="scripts/particles.js"></script>
+<script src="scripts/reveal.js"></script>
+<script src="scripts/nav.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+// ── Upload zone drag & drop ──────────────────────────────────
+const dropZone = document.getElementById('dropZone');
+const photoInput = document.getElementById('photoInput');
+const resultPeek = document.getElementById('resultPeek');
+
+dropZone.addEventListener('click', () => photoInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  handleFile(e.dataTransfer.files[0]);
+});
+photoInput.addEventListener('change', e => handleFile(e.target.files[0]));
+
+function handleFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    dropZone.innerHTML = `
+      <img src="${ev.target.result}" alt="Uploaded" style="max-height:90px;border-radius:8px;object-fit:contain" />
+      <div class="forge-upload-label" style="margin-top:10px">${file.name}</div>
+      <div class="forge-upload-sub">${(file.size/1024).toFixed(0)} KB — ready to generate</div>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Generate button ──────────────────────────────────────────
+function handleGenerate() {
+  document.getElementById('waitlist').scrollIntoView({behavior:'smooth'});
+}
+
+// ── FAQ accordion ────────────────────────────────────────────
+document.querySelectorAll('.forge-faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.forge-faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.forge-faq-item.open').forEach(el => {
+      el.classList.remove('open');
+      el.querySelector('.forge-faq-q').setAttribute('aria-expanded','false');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded','true');
+    }
+  });
+});
+
+// ── Waitlist form ────────────────────────────────────────────
+async function handleWaitlist(e) {
+  e.preventDefault();
+  const email = document.getElementById('waitlistEmail').value.trim();
+  const btn   = e.target.querySelector('button');
+  const msg   = document.getElementById('waitlistMsg');
+
+  btn.textContent = 'Joining…';
+  btn.disabled = true;
+
+  try {
+    const res  = await fetch('/api/waitlist', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || 'Something went wrong');
+
+    btn.textContent = 'Joined ✓';
+    btn.style.background = 'rgba(0,230,118,.2)';
+    btn.style.color = 'var(--green)';
+    msg.textContent = `✓ You're on the list! Check ${email} for confirmation.`;
+    msg.style.color = 'var(--green)';
+    document.getElementById('waitlistEmail').value = '';
+  } catch (err) {
+    btn.textContent = 'Join Waitlist →';
+    btn.disabled = false;
+    msg.textContent = `⚠ ${err.message} — please try again.`;
+    msg.style.color = '#ff6b6b';
+  }
+}
+</script>
+</body>
+</html>
