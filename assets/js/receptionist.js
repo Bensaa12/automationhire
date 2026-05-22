@@ -1,57 +1,27 @@
 /* ============================================================
    AutomationHire — Sharon AI Voice Receptionist
-   Powered by LiveKit + Google Gemini Realtime
+   Web Speech API (free) + Claude Haiku via /api/sharon
+   No LiveKit, no Gemini, no cost for TTS/STT
    ============================================================ */
 
 (function () {
   'use strict';
 
-  const TOKEN_URL = 'https://automationhire-receptionist.fly.dev/token';
-  const SDK_URL   = 'https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js';
+  const GREETING = "Welcome to AutomationHire! I'm Sharon, your AI guide. Whether you're looking to automate your business or find the perfect specialist, I'm here to help. What brings you in today?";
 
-  /* ── Language options ── */
-  const VOICE_OPTIONS = [
-    { code: 'en-GB', label: 'British English',    flag: '🇬🇧', abbr: 'GB', default: true },
-    { code: 'en-US', label: 'American English',   flag: '🇺🇸', abbr: 'US' },
-    { code: 'en-AU', label: 'Australian English', flag: '🇦🇺', abbr: 'AU' },
-    { code: 'en-IN', label: 'Indian English',     flag: '🇮🇳', abbr: 'IN' },
-    { code: 'en-NG', label: 'Nigerian English',   flag: '🇳🇬', abbr: 'NG' },
-    { code: 'fr-FR', label: 'French',             flag: '🇫🇷', abbr: 'FR' },
-    { code: 'es-ES', label: 'Spanish',            flag: '🇪🇸', abbr: 'ES' },
-    { code: 'pt-BR', label: 'Portuguese',         flag: '🇧🇷', abbr: 'BR' },
-    { code: 'ar-SA', label: 'Arabic',             flag: '🇸🇦', abbr: 'SA' },
-    { code: 'hi-IN', label: 'Hindi',              flag: '🇮🇳', abbr: 'IN' },
-    { code: 'zh-CN', label: 'Mandarin Chinese',   flag: '🇨🇳', abbr: 'CN' },
-    { code: 'sw-KE', label: 'Swahili',            flag: '🇰🇪', abbr: 'KE' },
-    { code: 'yo-NG', label: 'Yoruba',             flag: '🇳🇬', abbr: 'NG' },
-    { code: 'ja-JP', label: 'Japanese',           flag: '🇯🇵', abbr: 'JP' },
-    { code: 'de-DE', label: 'German',             flag: '🇩🇪', abbr: 'DE' },
-  ];
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const sttSupported = !!SpeechRecognition;
 
   /* ── State ── */
-  let room         = null;
-  let isOpen       = false;
-  let isMuted      = false;
-  let isConnected  = false;
-  let isConnecting = false;
-  let sdkPromise   = null;
-
-  /* ── Lazy-load LiveKit SDK ── */
-  function ensureSDK() {
-    if (sdkPromise) return sdkPromise;
-    sdkPromise = new Promise((resolve, reject) => {
-      if (window.LivekitClient) { resolve(); return; }
-      const s = document.createElement('script');
-      s.src = SDK_URL;
-      s.onload = resolve;
-      s.onerror = () => reject(new Error('Failed to load LiveKit SDK'));
-      document.head.appendChild(s);
-    });
-    return sdkPromise;
-  }
+  let isOpen        = false;
+  let isMuted       = false;
+  let isSpeaking    = false;
+  let isListening   = false;
+  let recognition   = null;
+  let messages      = [];     // [{role, content}] conversation history
 
   /* ────────────────────────────────────────────────────────── */
-  /*  Styles                                                   */
+  /*  Styles (identical look to previous version)             */
   /* ────────────────────────────────────────────────────────── */
   function injectStyles() {
     const s = document.createElement('style');
@@ -102,14 +72,14 @@
       #aria-close { background: none; border: none; cursor: pointer; font-size: 20px; color: rgba(255,255,255,0.6); padding: 2px; line-height: 1; transition: color .15s; }
       #aria-close:hover { color: #fff; }
 
-      #aria-lang-section { padding: 16px 18px 0; flex-shrink: 0; }
-      #aria-lang-section label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); display: block; margin-bottom: 10px; }
-      #aria-lang-grid { display: flex; flex-wrap: wrap; gap: 6px; }
-      .aria-lang-chip { display: flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.6); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-      .aria-lang-chip:hover { border-color: rgba(124,58,237,0.5); color: #fff; background: rgba(124,58,237,0.1); }
-      .aria-lang-chip.active { background: rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.6); color: #fff; font-weight: 700; }
+      #aria-compat-notice {
+        padding: 10px 18px; font-size: 12px; text-align: center; flex-shrink: 0;
+        color: rgba(255,180,0,0.85); background: rgba(255,180,0,0.07);
+        border-bottom: 1px solid rgba(255,180,0,0.15); display: none;
+      }
+      #aria-compat-notice.show { display: block; }
 
-      #aria-transcript { flex: 1; overflow-y: auto; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; min-height: 140px; max-height: 220px; scroll-behavior: smooth; }
+      #aria-transcript { flex: 1; overflow-y: auto; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; min-height: 140px; max-height: 240px; scroll-behavior: smooth; }
       #aria-transcript::-webkit-scrollbar { width: 3px; }
       #aria-transcript::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.3); border-radius: 3px; }
       .aria-bubble { max-width: 85%; padding: 9px 14px; border-radius: 14px; font-size: 13px; line-height: 1.55; animation: ariaMsgIn 0.18s ease; word-break: break-word; }
@@ -146,26 +116,26 @@
         transition: transform 0.2s, box-shadow 0.2s;
       }
       #aria-mic-btn:hover { transform: scale(1.05); }
-      #aria-mic-btn.connected {
+      #aria-mic-btn.listening {
         background: linear-gradient(135deg, #00e676, #00b4d8);
         box-shadow: 0 0 0 12px rgba(0,230,118,0.15), 0 4px 24px rgba(0,230,118,0.4);
         animation: ariaMicPulse 2s infinite;
       }
-      #aria-mic-btn.connecting {
-        background: linear-gradient(135deg, #2979ff, #7c3aed);
+      #aria-mic-btn.speaking {
+        background: linear-gradient(135deg, #7c3aed, #2979ff);
         animation: ariaThinkSpin 2s linear infinite;
       }
       @keyframes ariaMicPulse { 0%,100% { box-shadow: 0 0 0 6px rgba(0,230,118,0.15), 0 4px 24px rgba(0,230,118,0.4); } 50% { box-shadow: 0 0 0 18px rgba(0,230,118,0.08), 0 4px 32px rgba(0,230,118,0.5); } }
       @keyframes ariaThinkSpin { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
 
-      #aria-stop-btn {
+      #aria-mute-btn {
         width: 40px; height: 40px; border-radius: 50%;
         background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
         cursor: pointer; display: flex; align-items: center; justify-content: center;
         font-size: 16px; color: rgba(255,255,255,0.5); transition: all 0.15s;
       }
-      #aria-stop-btn:hover { background: rgba(255,152,0,0.1); border-color: rgba(255,152,0,0.3); color: #ff9800; }
-      #aria-stop-btn.muted { background: rgba(255,152,0,0.15); border-color: rgba(255,152,0,0.4); color: #ff9800; }
+      #aria-mute-btn:hover { background: rgba(255,152,0,0.1); border-color: rgba(255,152,0,0.3); color: #ff9800; }
+      #aria-mute-btn.muted { background: rgba(255,152,0,0.15); border-color: rgba(255,152,0,0.4); color: #ff9800; }
 
       #aria-footer { text-align: center; font-size: 10.5px; color: rgba(255,255,255,0.18); padding: 0 18px 12px; flex-shrink: 0; }
       #aria-footer span { color: rgba(124,58,237,0.6); font-weight: 600; }
@@ -173,7 +143,7 @@
       @media (max-width:480px) {
         #aria-launcher { bottom: 84px; right: 16px; }
         #aria-modal { max-height: 95vh; border-radius: 18px; }
-        #aria-transcript { max-height: 160px; }
+        #aria-transcript { max-height: 180px; }
       }
     `;
     document.head.appendChild(s);
@@ -200,7 +170,6 @@
     overlay.setAttribute('aria-label', 'Sharon AI Voice Receptionist');
     overlay.innerHTML = `
       <div id="aria-modal">
-
         <div id="aria-header">
           <div id="aria-avatar">📞</div>
           <div id="aria-header-info">
@@ -210,20 +179,13 @@
           <button id="aria-close" aria-label="Close">✕</button>
         </div>
 
-        <div id="aria-lang-section">
-          <label>Choose your language / accent</label>
-          <div id="aria-lang-grid">
-            ${VOICE_OPTIONS.map(v => `
-              <button class="aria-lang-chip${v.default ? ' active' : ''}" data-code="${v.code}" data-label="${v.label}">
-                ${v.flag} ${v.label}
-              </button>
-            `).join('')}
-          </div>
+        <div id="aria-compat-notice">
+          🎤 Voice input works best in Chrome or Edge. You can still listen to Sharon speak.
         </div>
 
         <div id="aria-transcript" role="log" aria-live="polite"></div>
 
-        <div id="aria-status">Tap the mic to connect</div>
+        <div id="aria-status">Tap the mic to start</div>
 
         <div id="aria-wave">
           <div class="aria-bar"></div><div class="aria-bar"></div>
@@ -233,12 +195,12 @@
         </div>
 
         <div id="aria-controls">
-          <button id="aria-stop-btn" title="Mute">🎤</button>
-          <button id="aria-mic-btn" aria-label="Connect to Sharon">📞</button>
+          <button id="aria-mute-btn" title="Mute microphone">🎤</button>
+          <button id="aria-mic-btn" aria-label="Start conversation">📞</button>
           <div style="width:40px"></div>
         </div>
 
-        <div id="aria-footer">Powered by <span>LiveKit</span> · <span>AutomationHire</span></div>
+        <div id="aria-footer">Powered by <span>Web Speech API</span> · <span>AutomationHire</span></div>
       </div>
     `;
     document.body.appendChild(overlay);
@@ -269,140 +231,244 @@
     if (w) w.classList.toggle('active', active);
   }
 
-  /* ────────────────────────────────────────────────────────── */
-  /*  Connect                                                  */
-  /* ────────────────────────────────────────────────────────── */
-  async function connect() {
-    if (isConnected || isConnecting) return;
-    isConnecting = true;
+  function setMicBtn(state) {
+    const btn = document.getElementById('aria-mic-btn');
+    if (!btn) return;
+    btn.className = state; // 'listening' | 'speaking' | ''
+    if (state === 'listening') btn.textContent = '🎙️';
+    else if (state === 'speaking') btn.textContent = '🔊';
+    else btn.textContent = '📞';
+  }
 
-    const micBtn  = document.getElementById('aria-mic-btn');
-    const stopBtn = document.getElementById('aria-stop-btn');
-    if (micBtn) micBtn.className = 'connecting';
-    setStatus('thinking', '⏳ Connecting…');
+  /* ────────────────────────────────────────────────────────── */
+  /*  Voice selection — prefer UK English neural voices        */
+  /* ────────────────────────────────────────────────────────── */
+  function getBestVoice() {
+    const voices = window.speechSynthesis.getVoices();
+    const checks = [
+      v => /Sonia|Libby|Abbi|Bella|Hollie|Mia|Olivia/.test(v.name),     // Microsoft UK female neural
+      v => v.lang === 'en-GB' && v.name.includes('Microsoft'),
+      v => v.lang === 'en-GB' && v.localService,
+      v => v.lang === 'en-GB',
+      v => v.lang.startsWith('en-') && v.name.includes('Microsoft'),
+      v => /Samantha|Victoria|Karen|Moira/.test(v.name),                  // Apple English
+      v => v.lang.startsWith('en-'),
+    ];
+    for (const check of checks) {
+      const found = voices.find(check);
+      if (found) return found;
+    }
+    return voices[0] || null;
+  }
+
+  /* ────────────────────────────────────────────────────────── */
+  /*  TTS — speak text, call onDone when finished              */
+  /* ────────────────────────────────────────────────────────── */
+  function speak(text, onDone) {
+    if (!('speechSynthesis' in window)) { if (onDone) onDone(); return; }
+
+    window.speechSynthesis.cancel();
+    isSpeaking = true;
+    setMicBtn('speaking');
+    setWave(true);
+    setStatus('speaking', '🔊 Sharon is speaking…');
+
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.voice = getBestVoice();
+    utt.rate  = 1.05;
+    utt.pitch = 1.0;
+    utt.lang  = 'en-GB';
+
+    utt.onend = utt.onerror = () => {
+      isSpeaking = false;
+      setWave(false);
+      if (onDone) onDone();
+    };
+
+    // Chrome bug: speechSynthesis can stall on long text — chunk if needed
+    window.speechSynthesis.speak(utt);
+  }
+
+  /* ────────────────────────────────────────────────────────── */
+  /*  STT — Web Speech API                                     */
+  /* ────────────────────────────────────────────────────────── */
+  function startListening() {
+    if (!sttSupported || isMuted || isSpeaking || isListening) return;
+
+    recognition = new SpeechRecognition();
+    recognition.continuous    = false;
+    recognition.interimResults = true;
+    recognition.lang          = 'en-GB';
+    recognition.maxAlternatives = 1;
+
+    let finalText = '';
+
+    recognition.onstart = () => {
+      isListening = true;
+      setMicBtn('listening');
+      setStatus('listening', '🎤 Listening…');
+    };
+
+    recognition.onresult = (e) => {
+      let interim = '';
+      finalText = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) finalText += e.results[i][0].transcript;
+        else interim += e.results[i][0].transcript;
+      }
+      if (interim) setStatus('listening', `🎤 "${interim}"`);
+    };
+
+    recognition.onend = () => {
+      isListening = false;
+      const text = finalText.trim();
+      if (text) {
+        addBubble('user', text);
+        sendToSharon(text);
+      } else if (isOpen && !isMuted) {
+        // Nothing heard — restart listening after short pause
+        setMicBtn('');
+        setStatus('', 'Tap the mic or speak again');
+      }
+    };
+
+    recognition.onerror = (e) => {
+      isListening = false;
+      if (e.error === 'no-speech') {
+        setStatus('', 'No speech detected — tap to try again');
+        setMicBtn('');
+      } else if (e.error === 'not-allowed') {
+        setStatus('error', '⚠ Microphone access denied');
+        setMicBtn('');
+      } else {
+        setStatus('error', `⚠ ${e.error}`);
+        setMicBtn('');
+      }
+    };
+
+    recognition.start();
+  }
+
+  function stopListening() {
+    if (recognition) { try { recognition.stop(); } catch {} recognition = null; }
+    isListening = false;
+  }
+
+  /* ────────────────────────────────────────────────────────── */
+  /*  Send to /api/sharon, speak reply                         */
+  /* ────────────────────────────────────────────────────────── */
+  async function sendToSharon(text) {
+    setStatus('thinking', '⏳ Sharon is thinking…');
+    setMicBtn('speaking');
+    setWave(false);
+
+    messages.push({ role: 'user', content: text });
 
     try {
-      await ensureSDK();
-
-      const res = await fetch(TOKEN_URL);
-      if (!res.ok) throw new Error('Token fetch failed: ' + res.status);
-      const { token, url } = await res.json();
-
-      room = new LivekitClient.Room({ adaptiveStream: true, dynacast: true });
-
-      // Play Sharon's audio
-      room.on(LivekitClient.RoomEvent.TrackSubscribed, (track) => {
-        if (track.kind !== 'audio') return;
-        const el = track.attach();
-        el.className = 'aria-remote-audio';
-        el.style.display = 'none';
-        document.body.appendChild(el);
+      const res  = await fetch('/api/sharon', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ messages }),
       });
+      const data = await res.json();
+      const reply = data.reply || "I'm sorry, could you say that again?";
 
-      room.on(LivekitClient.RoomEvent.TrackUnsubscribed, (track) => {
-        track.detach().forEach(el => el.remove());
+      messages.push({ role: 'assistant', content: reply });
+      addBubble('aria', reply);
+
+      speak(reply, () => {
+        if (isOpen && !isMuted) {
+          setMicBtn('');
+          setStatus('', 'Tap the mic to reply');
+        }
       });
-
-      // Populate transcript from speech-to-text
-      room.on(LivekitClient.RoomEvent.TranscriptionReceived, (segments, participant) => {
-        const isAgent = participant && !participant.isLocal;
-        segments.forEach(seg => {
-          if (seg.final && seg.text.trim()) {
-            addBubble(isAgent ? 'aria' : 'user', seg.text.trim());
-          }
-        });
-      });
-
-      // Wave + status driven by who's speaking
-      room.on(LivekitClient.RoomEvent.ActiveSpeakersChanged, (speakers) => {
-        const agentSpeaking = speakers.some(p => !p.isLocal);
-        const userSpeaking  = speakers.some(p => p.isLocal);
-        setWave(speakers.length > 0);
-        if (agentSpeaking)     setStatus('speaking', '🔊 Sharon is speaking…');
-        else if (userSpeaking) setStatus('listening', '🎤 Listening…');
-        else                   setStatus('listening', '🎤 Sharon is listening…');
-      });
-
-      room.on(LivekitClient.RoomEvent.Disconnected, () => {
-        resetToIdle('Call ended. Tap to talk again.');
-      });
-
-      await room.connect(url, token);
-      await room.localParticipant.setMicrophoneEnabled(true);
-
-      isConnected  = true;
-      isConnecting = false;
-
-      if (micBtn)  { micBtn.textContent = '📵'; micBtn.className = 'connected'; }
-      if (stopBtn) { stopBtn.textContent = '🎤'; stopBtn.title = 'Mute'; }
-      setStatus('listening', '🎤 Sharon is listening…');
-      setWave(true);
-
-    } catch (e) {
-      console.error('[Sharon]', e);
-      isConnecting = false;
-      if (micBtn) { micBtn.textContent = '📞'; micBtn.className = ''; }
-      setStatus('error', '⚠️ Connection failed — try again.');
+    } catch {
+      setStatus('error', '⚠ Connection error — tap to retry');
+      setMicBtn('');
       setWave(false);
     }
   }
 
   /* ────────────────────────────────────────────────────────── */
-  /*  Disconnect                                               */
+  /*  Open / Close                                             */
   /* ────────────────────────────────────────────────────────── */
-  async function disconnect() {
-    if (room) { await room.disconnect(); room = null; }
-    resetToIdle();
+  function open() {
+    if (isOpen) return;
+    isOpen = true;
+    messages = [];
+    document.getElementById('aria-overlay').classList.add('open');
+    document.getElementById('aria-transcript').innerHTML = '';
+
+    if (!sttSupported) {
+      document.getElementById('aria-compat-notice').classList.add('show');
+    }
+
+    // Sharon greets first — voices may not be loaded yet, wait briefly
+    setTimeout(() => {
+      addBubble('aria', GREETING);
+      messages.push({ role: 'assistant', content: GREETING });
+      speak(GREETING, () => {
+        if (isOpen && !isMuted && sttSupported) {
+          setStatus('', 'Tap the mic to reply');
+          setMicBtn('');
+        }
+      });
+    }, 150);
+  }
+
+  function close() {
+    isOpen = false;
+    stopListening();
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    isSpeaking  = false;
+    isListening = false;
+    messages    = [];
+    document.getElementById('aria-overlay').classList.remove('open');
+    setMicBtn('');
+    setWave(false);
+    setStatus('', 'Tap the mic to start');
+  }
+
+  /* ────────────────────────────────────────────────────────── */
+  /*  Mic button — tap to listen, tap again to stop            */
+  /* ────────────────────────────────────────────────────────── */
+  function handleMicClick() {
+    if (isSpeaking) {
+      // Interrupt Sharon
+      window.speechSynthesis.cancel();
+      isSpeaking = false;
+      setWave(false);
+    }
+    if (isListening) {
+      stopListening();
+      setMicBtn('');
+      setStatus('', 'Tap the mic to reply');
+    } else {
+      if (sttSupported) {
+        startListening();
+      } else {
+        setStatus('error', '⚠ Voice input needs Chrome or Edge');
+      }
+    }
   }
 
   /* ────────────────────────────────────────────────────────── */
   /*  Mute toggle                                              */
   /* ────────────────────────────────────────────────────────── */
-  async function toggleMute() {
-    if (!room || !isConnected) return;
+  function toggleMute() {
     isMuted = !isMuted;
-    await room.localParticipant.setMicrophoneEnabled(!isMuted);
-    const stopBtn = document.getElementById('aria-stop-btn');
-    if (stopBtn) {
-      stopBtn.textContent = isMuted ? '🔇' : '🎤';
-      stopBtn.title       = isMuted ? 'Unmute' : 'Mute';
-      stopBtn.classList.toggle('muted', isMuted);
+    const btn = document.getElementById('aria-mute-btn');
+    if (btn) {
+      btn.textContent = isMuted ? '🔇' : '🎤';
+      btn.title = isMuted ? 'Unmute microphone' : 'Mute microphone';
+      btn.classList.toggle('muted', isMuted);
     }
-    setStatus(isMuted ? '' : 'listening', isMuted ? '🔇 Muted' : '🎤 Sharon is listening…');
-  }
-
-  /* ────────────────────────────────────────────────────────── */
-  /*  Reset UI to idle                                         */
-  /* ────────────────────────────────────────────────────────── */
-  function resetToIdle(msg) {
-    isConnected  = false;
-    isConnecting = false;
-    isMuted      = false;
-    room         = null;
-    document.querySelectorAll('.aria-remote-audio').forEach(el => el.remove());
-    const micBtn  = document.getElementById('aria-mic-btn');
-    const stopBtn = document.getElementById('aria-stop-btn');
-    if (micBtn)  { micBtn.textContent = '📞'; micBtn.className = ''; }
-    if (stopBtn) { stopBtn.textContent = '🎤'; stopBtn.title = 'Mute'; stopBtn.classList.remove('muted'); }
-    setWave(false);
-    setStatus('', msg || 'Tap the mic to connect');
-  }
-
-  /* ────────────────────────────────────────────────────────── */
-  /*  Open / Close                                             */
-  /* ────────────────────────────────────────────────────────── */
-  function openReceptionist() {
-    if (isOpen) return;
-    isOpen = true;
-    const overlay = document.getElementById('aria-overlay');
-    if (overlay) overlay.classList.add('open');
-  }
-
-  function closeReceptionist() {
-    isOpen = false;
-    if (isConnected || isConnecting) disconnect();
-    const overlay = document.getElementById('aria-overlay');
-    if (overlay) overlay.classList.remove('open');
+    if (isMuted) {
+      stopListening();
+      setStatus('', '🔇 Muted');
+    } else {
+      setStatus('', 'Tap the mic to reply');
+    }
   }
 
   /* ────────────────────────────────────────────────────────── */
@@ -412,41 +478,24 @@
     injectStyles();
     buildDOM();
 
-    const ariaBtn  = document.getElementById('aria-btn');
-    const closeBtn = document.getElementById('aria-close');
-    const micBtn   = document.getElementById('aria-mic-btn');
-    const stopBtn  = document.getElementById('aria-stop-btn');
-    const overlay  = document.getElementById('aria-overlay');
-    const langGrid = document.getElementById('aria-lang-grid');
+    document.getElementById('aria-btn').addEventListener('click', open);
+    document.getElementById('aria-close').addEventListener('click', close);
+    document.getElementById('aria-mic-btn').addEventListener('click', handleMicClick);
+    document.getElementById('aria-mute-btn').addEventListener('click', toggleMute);
 
-    ariaBtn.addEventListener('click', openReceptionist);
-    closeBtn.addEventListener('click', closeReceptionist);
-
-    overlay.addEventListener('click', function (e) {
-      if (e.target === overlay) closeReceptionist();
+    document.getElementById('aria-overlay').addEventListener('click', function (e) {
+      if (e.target === this) close();
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && isOpen) closeReceptionist();
+      if (e.key === 'Escape' && isOpen) close();
     });
 
-    // Main button: connect when idle, disconnect when connected
-    micBtn.addEventListener('click', function () {
-      if (isConnected) disconnect();
-      else connect();
-    });
-
-    // Side button: mute/unmute during a call
-    stopBtn.addEventListener('click', toggleMute);
-
-    // Language chips — Gemini Realtime auto-detects language from speech,
-    // but we track the selection to show user preference visually
-    langGrid.addEventListener('click', function (e) {
-      const chip = e.target.closest('.aria-lang-chip');
-      if (!chip) return;
-      document.querySelectorAll('.aria-lang-chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-    });
+    // Pre-load voices (Chrome loads them async)
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.addEventListener('voiceschanged', () => {});
+    }
   });
 
 })();
