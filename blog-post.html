@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <base href="/" />
-  <title id="page-title">Loading… | AutomationHire Blog</title>
+  <title id="page-title">Loadingâ€¦ | AutomationHire Blog</title>
   <meta name="description" id="page-desc" content="" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>âš¡</text></svg>" />
 
   <!-- OG tags injected by JS after post loads -->
   <style>
@@ -86,7 +86,7 @@
         <div class="post-av">AH</div>
         <div>
           <span>AutomationHire Team</span>
-          <span style="margin:0 6px">·</span>
+          <span style="margin:0 6px">Â·</span>
           <span id="post-date"></span>
           <span id="post-read"></span>
         </div>
@@ -99,14 +99,14 @@
 <!-- Loading state -->
 <div class="post-loading" id="post-loading">
   <div class="spinner"></div>
-  <div>Loading article…</div>
+  <div>Loading articleâ€¦</div>
 </div>
 
 <!-- Error state -->
 <div class="post-error" id="post-error" style="display:none">
   <h2>Post not found</h2>
   <p>This article may have been moved or removed.</p>
-  <a href="blog.html" class="btn btn-primary">← Back to Blog</a>
+  <a href="blog.html" class="btn btn-primary">â† Back to Blog</a>
 </div>
 
 <!-- Post content (populated by JS) -->
@@ -119,12 +119,12 @@
       <div class="sidebar-card">
         <h4>Find an Automation Expert</h4>
         <p>Looking for help implementing what you've read? Browse verified UK automation specialists on AutomationHire.</p>
-        <a href="providers.html" class="btn btn-primary" style="width:100%;text-align:center;display:block">Browse Experts →</a>
+        <a href="providers.html" class="btn btn-primary" style="width:100%;text-align:center;display:block">Browse Experts â†’</a>
       </div>
       <div class="sidebar-card">
         <h4>List Your Business</h4>
         <p>Are you an automation expert or agency? Get found by UK businesses actively looking for your skills.</p>
-        <a href="submit-listing.html" class="btn btn-secondary" style="width:100%;text-align:center;display:block">List Free →</a>
+        <a href="submit-listing.html" class="btn btn-secondary" style="width:100%;text-align:center;display:block">List Free â†’</a>
       </div>
     </aside>
   </div>
@@ -136,8 +136,8 @@
         <div class="cta-banner-title">Ready to Automate Your Business?</div>
         <p class="cta-banner-sub">Connect with verified UK automation experts who specialise in exactly this.</p>
         <div class="cta-banner-actions">
-          <a href="providers.html" class="btn btn-primary btn-lg">Find an Expert →</a>
-          <a href="blog.html" class="btn btn-ghost btn-lg" style="margin-left:8px">← More Articles</a>
+          <a href="providers.html" class="btn btn-primary btn-lg">Find an Expert â†’</a>
+          <a href="blog.html" class="btn btn-ghost btn-lg" style="margin-left:8px">â† More Articles</a>
         </div>
       </div>
     </div>
@@ -147,8 +147,8 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-bottom">
-      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
-      <div><a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a> &nbsp;·&nbsp; <a href="privacy.html#cookies">Cookies</a></div>
+      <div>Â© 2025 AutomationHire.co.uk â€” All rights reserved.</div>
+      <div><a href="privacy.html">Privacy</a> &nbsp;Â·&nbsp; <a href="terms.html">Terms</a> &nbsp;Â·&nbsp; <a href="privacy.html#cookies">Cookies</a></div>
     </div>
   </div>
 </footer>
@@ -186,7 +186,7 @@
     document.getElementById('post-date').textContent    = p.published_at
       ? new Date(p.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
       : '';
-    document.getElementById('post-read').textContent    = p.reading_time ? ` · ${p.reading_time} min read` : '';
+    document.getElementById('post-read').textContent    = p.reading_time ? ` Â· ${p.reading_time} min read` : '';
     document.getElementById('post-kws').innerHTML       = (p.keywords || [])
       .map(k => `<span class="post-kw">${esc(k)}</span>`).join('');
 
@@ -210,5 +210,8 @@ function esc(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+<script src="assets/js/livekit-widget.js"></script>
 </body>
 </html>
+

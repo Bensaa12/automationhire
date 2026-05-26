@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Provider Profile — AutomationHire</title>
+  <title>Provider Profile â€” AutomationHire</title>
   <meta name="description" content="View provider profile on AutomationHire." />
   <meta name="robots" content="noindex, nofollow" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>âš¡</text></svg>" />
   <style>
     .profile-loading {
       min-height: 60vh;
@@ -66,8 +66,8 @@
 <!-- DYNAMIC CONTENT -->
 <div id="profile-root">
   <div class="profile-loading">
-    <span class="spinner">⟳</span>
-    <span>Loading provider…</span>
+    <span class="spinner">âŸ³</span>
+    <span>Loading providerâ€¦</span>
   </div>
 </div>
 
@@ -107,8 +107,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
-      <div><a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a></div>
+      <div>Â© 2025 AutomationHire.co.uk â€” All rights reserved.</div>
+      <div><a href="privacy.html">Privacy</a> &nbsp;Â·&nbsp; <a href="terms.html">Terms</a></div>
     </div>
   </div>
 </footer>
@@ -119,7 +119,7 @@
   <script src="assets/js/receptionist.js"></script>
 <script>
 /* ============================================================
-   Dynamic Provider Profile — loads from Supabase by slug
+   Dynamic Provider Profile â€” loads from Supabase by slug
    ============================================================ */
 
 const SUPABASE_URL  = 'https://lywcjlhfpucohuaxthem.supabase.co';
@@ -161,63 +161,63 @@ async function loadProfile() {
 function showError(title, msg) {
   document.getElementById('profile-root').innerHTML = `
     <div class="profile-error">
-      <div style="font-size:48px;margin-bottom:16px">😕</div>
+      <div style="font-size:48px;margin-bottom:16px">ðŸ˜•</div>
       <h2>${esc(title)}</h2>
       <p>${esc(msg)}</p>
-      <a href="providers.html" class="btn btn-primary">← Back to Directory</a>
+      <a href="providers.html" class="btn btn-primary">â† Back to Directory</a>
     </div>`;
 }
 
 function render(p) {
-  /* ── derived values ── */
+  /* â”€â”€ derived values â”€â”€ */
   const name      = esc(p.business_name || 'Unnamed Provider');
-  const avatar    = esc(p.avatar_emoji  || '🚀');
+  const avatar    = esc(p.avatar_emoji  || 'ðŸš€');
   const type      = cap(p.provider_type || 'Provider');
   const city      = esc(p.location_city    || '');
   const country   = esc(p.location_country || '');
   const location  = [city, country === 'United Kingdom' ? 'UK' : country].filter(Boolean).join(', ') || 'Remote';
   const rating    = parseFloat(p.rating_avg  || 0).toFixed(1);
   const reviews   = parseInt(p.review_count  || 0);
-  const stars     = '★'.repeat(Math.round(p.rating_avg || 0)) + '☆'.repeat(5 - Math.round(p.rating_avg || 0));
-  const rateMin   = p.hourly_rate_min ? `£${p.hourly_rate_min}` : null;
-  const rateMax   = p.hourly_rate_max ? `£${p.hourly_rate_max}` : null;
-  const rateStr   = rateMin ? (rateMax ? `${rateMin}–${rateMax}/hr` : `From ${rateMin}/hr`) : 'Rate on request';
+  const stars     = 'â˜…'.repeat(Math.round(p.rating_avg || 0)) + 'â˜†'.repeat(5 - Math.round(p.rating_avg || 0));
+  const rateMin   = p.hourly_rate_min ? `Â£${p.hourly_rate_min}` : null;
+  const rateMax   = p.hourly_rate_max ? `Â£${p.hourly_rate_max}` : null;
+  const rateStr   = rateMin ? (rateMax ? `${rateMin}â€“${rateMax}/hr` : `From ${rateMin}/hr`) : 'Rate on request';
   const tools     = Array.isArray(p.tools)      ? p.tools      : [];
   const cats      = Array.isArray(p.categories) ? p.categories : [];
   const industries= Array.isArray(p.industries) ? p.industries : [];
   const joinDate  = new Date(p.created_at).toLocaleDateString('en-GB', { month:'short', year:'numeric' });
   const response  = p.response_time_hrs ? `~${p.response_time_hrs}hrs` : '~4hrs';
-  const exp       = p.years_experience  ? `${p.years_experience}yrs` : '—';
-  const teamSize  = p.team_size || '—';
+  const exp       = p.years_experience  ? `${p.years_experience}yrs` : 'â€”';
+  const teamSize  = p.team_size || 'â€”';
   const desc      = esc(p.description || 'No description provided.');
 
   /* Update page title */
-  document.title = `${p.business_name} — AutomationHire`;
+  document.title = `${p.business_name} â€” AutomationHire`;
 
-  /* ── build tool chips ── */
+  /* â”€â”€ build tool chips â”€â”€ */
   const toolChips = tools.length
-    ? tools.map(t => `<div class="tool-chip"><span>⚙️</span> ${esc(t)}</div>`).join('')
+    ? tools.map(t => `<div class="tool-chip"><span>âš™ï¸</span> ${esc(t)}</div>`).join('')
     : '<p style="color:var(--white-60);font-size:14px">No tools listed.</p>';
 
-  /* ── build industry tags ── */
+  /* â”€â”€ build industry tags â”€â”€ */
   const industryTags = industries.length
     ? industries.map(i => `<span class="tag tag-white" style="padding:8px 16px;font-size:13px">${esc(i)}</span>`).join('')
     : '<span style="color:var(--white-60);font-size:14px">Not specified</span>';
 
-  /* ── category tags ── */
+  /* â”€â”€ category tags â”€â”€ */
   const catTags = cats.length
     ? cats.map(c => `<span class="tag tag-blue" style="padding:8px 16px;font-size:13px">${esc(c)}</span>`).join('')
     : '';
 
-  /* ── links ── */
+  /* â”€â”€ links â”€â”€ */
   const websiteBtn  = p.website_url
-    ? `<a href="${esc(p.website_url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">🌐 Visit Website</a>`
+    ? `<a href="${esc(p.website_url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">ðŸŒ Visit Website</a>`
     : '';
   const linkedinBtn = p.linkedin_url
     ? `<a href="${esc(p.linkedin_url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">in LinkedIn Profile</a>`
     : '';
 
-  /* ── inject HTML ── */
+  /* â”€â”€ inject HTML â”€â”€ */
   document.getElementById('profile-root').innerHTML = `
 
     <!-- PROFILE HEADER -->
@@ -232,16 +232,16 @@ function render(p) {
           <div class="profile-avatar-lg">${avatar}</div>
           <div class="profile-meta">
             <h1 class="profile-name">${name}</h1>
-            <p class="profile-subtitle">${type} · ${location}</p>
+            <p class="profile-subtitle">${type} Â· ${location}</p>
             <div class="profile-badges">
-              ${p.is_verified ? '<span class="verified-badge" style="padding:5px 14px;font-size:13px">✓ Verified Provider</span>' : ''}
-              ${p.is_featured ? '<span class="tag tag-green" style="padding:5px 14px;font-size:13px">⭐ Featured</span>' : ''}
+              ${p.is_verified ? '<span class="verified-badge" style="padding:5px 14px;font-size:13px">âœ“ Verified Provider</span>' : ''}
+              ${p.is_featured ? '<span class="tag tag-green" style="padding:5px 14px;font-size:13px">â­ Featured</span>' : ''}
               ${cats.slice(0,2).map(c => `<span class="tag tag-blue" style="padding:5px 14px;font-size:13px">${esc(c)}</span>`).join('')}
-              ${country ? `<span class="tag tag-white" style="padding:5px 14px;font-size:13px">🇬🇧 ${esc(country === 'United Kingdom' ? 'UK' : country)}</span>` : ''}
+              ${country ? `<span class="tag tag-white" style="padding:5px 14px;font-size:13px">ðŸ‡¬ðŸ‡§ ${esc(country === 'United Kingdom' ? 'UK' : country)}</span>` : ''}
             </div>
             <div class="profile-stats-row">
               <div class="profile-stat">
-                <div class="profile-stat-num" style="color:var(--green)">★ ${rating}</div>
+                <div class="profile-stat-num" style="color:var(--green)">â˜… ${rating}</div>
                 <div class="profile-stat-label">${reviews} Review${reviews !== 1 ? 's' : ''}</div>
               </div>
               <div class="profile-stat">
@@ -253,7 +253,7 @@ function render(p) {
                 <div class="profile-stat-label">Experience</div>
               </div>
               <div class="profile-stat">
-                <div class="profile-stat-num">${rateMin || '—'}</div>
+                <div class="profile-stat-num">${rateMin || 'â€”'}</div>
                 <div class="profile-stat-label">Starting Rate</div>
               </div>
               <div class="profile-stat">
@@ -315,8 +315,8 @@ function render(p) {
               </div>
               ${reviews === 0 ? `
               <div style="text-align:center;padding:40px;color:var(--white-60)">
-                <div style="font-size:40px;margin-bottom:12px">📝</div>
-                <p>No reviews yet — be the first to work with ${name}!</p>
+                <div style="font-size:40px;margin-bottom:12px">ðŸ“</div>
+                <p>No reviews yet â€” be the first to work with ${name}!</p>
               </div>` : `<p style="color:var(--white-60);font-size:14px;text-align:center;padding:20px">Reviews are displayed after verified project completion.</p>`}
             </div>
 
@@ -324,11 +324,11 @@ function render(p) {
             <div id="tab-pricing" class="tab-panel" style="display:none">
               <h3 class="profile-section-title">Pricing</h3>
               <div style="background:var(--black-4);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px;text-align:center">
-                <div style="font-size:40px;margin-bottom:12px">💷</div>
+                <div style="font-size:40px;margin-bottom:12px">ðŸ’·</div>
                 <div style="font-family:var(--font-head);font-size:32px;font-weight:800;margin-bottom:8px">${rateStr}</div>
                 ${p.min_project_budget ? `<p style="color:var(--white-60);font-size:14px">Minimum project budget: <strong style="color:#fff">${esc(p.min_project_budget)}</strong></p>` : ''}
                 <p style="color:var(--white-60);font-size:14px;margin-top:12px">Send a quote request for a custom estimate based on your project.</p>
-                <button onclick="document.querySelector('[name=client_name]').focus()" class="btn btn-primary" style="margin-top:20px">Request a Free Quote →</button>
+                <button onclick="document.querySelector('[name=client_name]').focus()" class="btn btn-primary" style="margin-top:20px">Request a Free Quote â†’</button>
               </div>
             </div>
           </div>
@@ -343,45 +343,45 @@ function render(p) {
                 <input type="text"  name="client_company" placeholder="Company name" />
                 <select name="budget">
                   <option value="">Project budget</option>
-                  <option>Under £500</option>
-                  <option>£500 – £2,000</option>
-                  <option>£2,000 – £5,000</option>
-                  <option>£5,000 – £15,000</option>
-                  <option>£15,000+</option>
+                  <option>Under Â£500</option>
+                  <option>Â£500 â€“ Â£2,000</option>
+                  <option>Â£2,000 â€“ Â£5,000</option>
+                  <option>Â£5,000 â€“ Â£15,000</option>
+                  <option>Â£15,000+</option>
                 </select>
                 <textarea name="description" placeholder="Describe what you need automated..." required></textarea>
                 <button type="submit" class="btn btn-primary w-full" style="justify-content:center;font-size:15px">
-                  ⚡ Send Quote Request
+                  âš¡ Send Quote Request
                 </button>
               </form>
-              <p style="font-size:12px;color:var(--white-60);margin-top:10px;text-align:center">Free consultation · Responds in ${response}</p>
+              <p style="font-size:12px;color:var(--white-60);margin-top:10px;text-align:center">Free consultation Â· Responds in ${response}</p>
             </div>
 
             <div class="sidebar-card">
               <h4 class="sidebar-title">Quick Info</h4>
               <ul class="sidebar-meta-list">
                 <li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">📍 Location</span>
+                  <span class="sidebar-meta-key">ðŸ“ Location</span>
                   <span class="sidebar-meta-val">${location}</span>
                 </li>
                 <li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">🌐 Remote</span>
+                  <span class="sidebar-meta-key">ðŸŒ Remote</span>
                   <span class="sidebar-meta-val text-green">${p.remote_work !== false ? 'Yes, worldwide' : 'On-site only'}</span>
                 </li>
                 <li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">🕐 Response</span>
+                  <span class="sidebar-meta-key">ðŸ• Response</span>
                   <span class="sidebar-meta-val">${response}</span>
                 </li>
                 <li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">👥 Team Size</span>
+                  <span class="sidebar-meta-key">ðŸ‘¥ Team Size</span>
                   <span class="sidebar-meta-val">${esc(String(teamSize))}</span>
                 </li>
                 <li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">📅 Member Since</span>
+                  <span class="sidebar-meta-key">ðŸ“… Member Since</span>
                   <span class="sidebar-meta-val">${joinDate}</span>
                 </li>
                 ${p.profile_views ? `<li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">👁️ Profile Views</span>
+                  <span class="sidebar-meta-key">ðŸ‘ï¸ Profile Views</span>
                   <span class="sidebar-meta-val">${parseInt(p.profile_views).toLocaleString()}</span>
                 </li>` : ''}
               </ul>
@@ -398,7 +398,7 @@ function render(p) {
 
             <div class="sidebar-card" style="background:linear-gradient(135deg,rgba(41,121,255,0.08),rgba(0,230,118,0.04));border-color:rgba(41,121,255,0.2)">
               <div style="text-align:center">
-                <div style="font-size:28px;margin-bottom:8px">🔒</div>
+                <div style="font-size:28px;margin-bottom:8px">ðŸ”’</div>
                 <h4 style="font-family:var(--font-head);font-weight:700;font-size:15px;margin-bottom:8px">Safe Hiring via AutomationHire</h4>
                 <p style="font-size:13px;color:var(--white-60);line-height:1.6">All providers are manually verified. Secure payments, review guarantee, and dispute resolution.</p>
               </div>
@@ -426,5 +426,8 @@ function render(p) {
 
 loadProfile();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+<script src="assets/js/livekit-widget.js"></script>
 </body>
 </html>
+

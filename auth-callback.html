@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Signing in… | AutomationHire</title>
+  <title>Signing inâ€¦ | AutomationHire</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>âš¡</text></svg>" />
   <style>
     body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--black); }
     .cb-card {
@@ -46,7 +46,7 @@
 <body>
 <div class="cb-card">
   <div class="cb-spinner" id="cb-spinner"></div>
-  <div class="cb-title" id="cb-title">Signing you in…</div>
+  <div class="cb-title" id="cb-title">Signing you inâ€¦</div>
   <div class="cb-sub" id="cb-sub">Please wait while we verify your account.</div>
   <div class="cb-error" id="cb-error"></div>
 </div>
@@ -116,7 +116,7 @@
     const next = sessionStorage.getItem('oauth_next') || '';
     sessionStorage.removeItem('oauth_next');
 
-    // New Google user with no provider → onboard them
+    // New Google user with no provider â†’ onboard them
     if (!provider) {
       window.location.replace('submit-listing.html?google=1');
       return;
@@ -127,5 +127,8 @@
 
   handleCallback().catch(e => showError(e.message || 'Unexpected error.'));
 </script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+<script src="assets/js/livekit-widget.js"></script>
 </body>
 </html>
+

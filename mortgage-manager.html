@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -1825,6 +1825,8 @@ function generateReport() {
   </div>
 </div>
 <script>window.onload = () => { window.focus(); window.print(); }<\/script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+<script src="assets/js/livekit-widget.js"></script>
 </body>
 </html>`;
 
@@ -1884,5 +1886,8 @@ renderItems();
 // Sync mortgage payment to costs field on mortgage tab changes (don't override user edits)
 el('c-mortgage').addEventListener('focus', () => el('c-mortgage')._userEdited = true);
 </script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+<script src="assets/js/livekit-widget.js"></script>
 </body>
 </html>
+

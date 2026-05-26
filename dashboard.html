@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
@@ -6,7 +6,7 @@
   <title>Provider Dashboard | AutomationHire</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>âš¡</text></svg>" />
   <style>
     .dash-layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; padding-top: 70px; }
     .dash-sidebar { background: var(--black-2); border-right: 1px solid var(--border); padding: 28px 16px; position: sticky; top: 70px; height: calc(100vh - 70px); overflow-y: auto; }
@@ -57,12 +57,12 @@
       <img src="assets/logo.png" alt="AutomationHire" class="nav-logo-img" />
     </a>
     <ul class="nav-links">
-      <li><a id="dash-profile-link" href="provider-profile.html">My Profile →</a></li>
+      <li><a id="dash-profile-link" href="provider-profile.html">My Profile â†’</a></li>
     </ul>
     <div class="nav-cta">
       <div style="display:flex;align-items:center;gap:12px">
-        <div id="dash-nav-avatar" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--blue));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">…</div>
-        <span id="dash-nav-name" style="font-size:14px;font-weight:600">Loading…</span>
+        <div id="dash-nav-avatar" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--blue));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">â€¦</div>
+        <span id="dash-nav-name" style="font-size:14px;font-weight:600">Loadingâ€¦</span>
         <button onclick="Auth.logout()" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--white-60);font-size:12px;padding:5px 10px;cursor:pointer;font-family:var(--font-body)">Log out</button>
       </div>
     </div>
@@ -74,24 +74,24 @@
   <aside class="dash-sidebar">
     <div class="dash-nav-section">
       <span class="dash-nav-label">Main</span>
-      <a class="dash-nav-item active"><span class="dash-nav-icon">📊</span> Dashboard</a>
-      <a class="dash-nav-item" href="provider-profile.html"><span class="dash-nav-icon">👤</span> My Profile</a>
-      <a class="dash-nav-item"><span class="dash-nav-icon">✉️</span> Leads <span class="dash-nav-badge">5</span></a>
-      <a class="dash-nav-item"><span class="dash-nav-icon">⭐</span> Reviews</a>
-      <a class="dash-nav-item"><span class="dash-nav-icon">💼</span> Portfolio</a>
+      <a class="dash-nav-item active"><span class="dash-nav-icon">ðŸ“Š</span> Dashboard</a>
+      <a class="dash-nav-item" href="provider-profile.html"><span class="dash-nav-icon">ðŸ‘¤</span> My Profile</a>
+      <a class="dash-nav-item"><span class="dash-nav-icon">âœ‰ï¸</span> Leads <span class="dash-nav-badge">5</span></a>
+      <a class="dash-nav-item"><span class="dash-nav-icon">â­</span> Reviews</a>
+      <a class="dash-nav-item"><span class="dash-nav-icon">ðŸ’¼</span> Portfolio</a>
     </div>
     <div class="dash-nav-section">
       <span class="dash-nav-label">Analytics</span>
-      <a class="dash-nav-item"><span class="dash-nav-icon">📈</span> Analytics</a>
-      <a class="dash-nav-item"><span class="dash-nav-icon">👁️</span> Profile Views</a>
-      <a class="dash-nav-item"><span class="dash-nav-icon">🎯</span> Lead Tracking</a>
+      <a class="dash-nav-item"><span class="dash-nav-icon">ðŸ“ˆ</span> Analytics</a>
+      <a class="dash-nav-item"><span class="dash-nav-icon">ðŸ‘ï¸</span> Profile Views</a>
+      <a class="dash-nav-item"><span class="dash-nav-icon">ðŸŽ¯</span> Lead Tracking</a>
     </div>
     <div class="dash-nav-section">
       <span class="dash-nav-label">Account</span>
-      <a class="dash-nav-item" href="pricing.html"><span class="dash-nav-icon">💳</span> Billing <span id="dash-plan-badge" class="tag tag-green" style="font-size:10px;padding:2px 7px;margin-left:auto">Free</span></a>
-      <a class="dash-nav-item"><span class="dash-nav-icon">⚙️</span> Settings</a>
-      <a class="dash-nav-item"><span class="dash-nav-icon">🔒</span> Security</a>
-      <a class="dash-nav-item" href="index.html"><span class="dash-nav-icon">→</span> Back to Site</a>
+      <a class="dash-nav-item" href="pricing.html"><span class="dash-nav-icon">ðŸ’³</span> Billing <span id="dash-plan-badge" class="tag tag-green" style="font-size:10px;padding:2px 7px;margin-left:auto">Free</span></a>
+      <a class="dash-nav-item"><span class="dash-nav-icon">âš™ï¸</span> Settings</a>
+      <a class="dash-nav-item"><span class="dash-nav-icon">ðŸ”’</span> Security</a>
+      <a class="dash-nav-item" href="index.html"><span class="dash-nav-icon">â†’</span> Back to Site</a>
     </div>
   </aside>
 
@@ -101,15 +101,15 @@
     <div class="plan-bar">
       <div class="plan-bar-info">
         <span id="dash-plan-name" class="plan-badge-large">Free Plan</span>
-        <span id="dash-leads-usage" style="font-size:14px;color:var(--white-60)">Loading…</span>
+        <span id="dash-leads-usage" style="font-size:14px;color:var(--white-60)">Loadingâ€¦</span>
         <div class="progress-bar" style="width:160px"><div id="dash-leads-bar" class="progress-fill" data-width="0%" style="width:0"></div></div>
       </div>
-      <a href="pricing.html" class="btn btn-primary btn-sm">Upgrade Plan →</a>
+      <a href="pricing.html" class="btn btn-primary btn-sm">Upgrade Plan â†’</a>
     </div>
 
     <div class="dash-header">
       <div>
-        <h1 id="dash-welcome" class="dash-title">Welcome back 👋</h1>
+        <h1 id="dash-welcome" class="dash-title">Welcome back ðŸ‘‹</h1>
         <p class="dash-subtitle">Here's what's happening with your listing today.</p>
       </div>
       <div style="display:flex;gap:10px">
@@ -122,22 +122,22 @@
     <div class="metrics-grid">
       <div class="metric-card reveal">
         <div class="metric-label">Profile Views</div>
-        <div id="dash-views" class="metric-val" style="color:var(--green)">—</div>
+        <div id="dash-views" class="metric-val" style="color:var(--green)">â€”</div>
         <div class="metric-change metric-up">Total all time</div>
       </div>
       <div class="metric-card reveal reveal-delay-1">
         <div class="metric-label">Leads Received</div>
-        <div id="dash-leads" class="metric-val" style="color:var(--blue)">—</div>
+        <div id="dash-leads" class="metric-val" style="color:var(--blue)">â€”</div>
         <div class="metric-change metric-up">Total all time</div>
       </div>
       <div class="metric-card reveal reveal-delay-2">
         <div class="metric-label">Avg Rating</div>
-        <div id="dash-rating" class="metric-val">—</div>
-        <div id="dash-reviews" class="metric-change">— reviews</div>
+        <div id="dash-rating" class="metric-val">â€”</div>
+        <div id="dash-reviews" class="metric-change">â€” reviews</div>
       </div>
       <div class="metric-card reveal reveal-delay-3">
         <div class="metric-label">This Month</div>
-        <div id="dash-month-leads" class="metric-val">—</div>
+        <div id="dash-month-leads" class="metric-val">â€”</div>
         <div class="metric-change">leads this month</div>
       </div>
     </div>
@@ -149,7 +149,7 @@
           Recent Lead Requests
         </div>
         <div id="dash-leads-list">
-          <div style="text-align:center;padding:32px;color:var(--white-30);font-size:14px">Loading leads…</div>
+          <div style="text-align:center;padding:32px;color:var(--white-30);font-size:14px">Loading leadsâ€¦</div>
         </div>
       </div>
 
@@ -157,20 +157,20 @@
       <div>
         <div class="dash-card reveal reveal-delay-1" style="margin-bottom:20px">
           <div class="dash-card-title">Recent Activity</div>
-          <div class="activity-item"><span class="activity-icon">⭐</span><div><strong style="color:var(--white)">New 5-star review</strong> from Sarah J. — "Exceptional work, saved us 25hrs/week"<br/><span style="font-size:12px;color:var(--white-30)">Today, 10:24am</span></div></div>
-          <div class="activity-item"><span class="activity-icon">👁️</span><div>Your profile was viewed <strong style="color:var(--white)">84 times</strong> today<br/><span style="font-size:12px;color:var(--white-30)">Today, updated hourly</span></div></div>
-          <div class="activity-item"><span class="activity-icon">⚡</span><div>Featured in <strong style="color:var(--white)">Make.com Experts</strong> category page<br/><span style="font-size:12px;color:var(--white-30)">Yesterday</span></div></div>
-          <div class="activity-item"><span class="activity-icon">✓</span><div>Verification badge <strong style="color:var(--green)">renewed</strong> successfully<br/><span style="font-size:12px;color:var(--white-30)">3 days ago</span></div></div>
+          <div class="activity-item"><span class="activity-icon">â­</span><div><strong style="color:var(--white)">New 5-star review</strong> from Sarah J. â€” "Exceptional work, saved us 25hrs/week"<br/><span style="font-size:12px;color:var(--white-30)">Today, 10:24am</span></div></div>
+          <div class="activity-item"><span class="activity-icon">ðŸ‘ï¸</span><div>Your profile was viewed <strong style="color:var(--white)">84 times</strong> today<br/><span style="font-size:12px;color:var(--white-30)">Today, updated hourly</span></div></div>
+          <div class="activity-item"><span class="activity-icon">âš¡</span><div>Featured in <strong style="color:var(--white)">Make.com Experts</strong> category page<br/><span style="font-size:12px;color:var(--white-30)">Yesterday</span></div></div>
+          <div class="activity-item"><span class="activity-icon">âœ“</span><div>Verification badge <strong style="color:var(--green)">renewed</strong> successfully<br/><span style="font-size:12px;color:var(--white-30)">3 days ago</span></div></div>
         </div>
 
         <div class="dash-card reveal reveal-delay-2">
           <div class="dash-card-title">Quick Actions</div>
           <div style="display:flex;flex-direction:column;gap:10px">
-            <a href="#" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">✏️ Update Profile Info</a>
-            <a href="#" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">📸 Add Portfolio Case Study</a>
-            <a href="#" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">💳 Manage Billing</a>
-            <a href="provider-profile.html" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">👁️ Preview My Profile</a>
-            <a href="#" class="btn btn-primary btn-sm" style="justify-content:flex-start;gap:10px">🚀 Upgrade to Pro</a>
+            <a href="#" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">âœï¸ Update Profile Info</a>
+            <a href="#" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">ðŸ“¸ Add Portfolio Case Study</a>
+            <a href="#" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">ðŸ’³ Manage Billing</a>
+            <a href="provider-profile.html" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">ðŸ‘ï¸ Preview My Profile</a>
+            <a href="#" class="btn btn-primary btn-sm" style="justify-content:flex-start;gap:10px">ðŸš€ Upgrade to Pro</a>
           </div>
         </div>
       </div>
@@ -181,7 +181,7 @@
       <div class="dash-card-title">Profile Completeness</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px">
         <div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--white-60)">Basic Info</span><span style="color:var(--green)">Complete ✓</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--white-60)">Basic Info</span><span style="color:var(--green)">Complete âœ“</span></div>
           <div class="progress-bar"><div class="progress-fill" data-width="100%"></div></div>
         </div>
         <div>
@@ -234,7 +234,7 @@
 
   // Welcome
   const firstName = (p.business_name || '').split(' ')[0];
-  document.getElementById('dash-welcome').textContent = `Welcome back, ${firstName} 👋`;
+  document.getElementById('dash-welcome').textContent = `Welcome back, ${firstName} ðŸ‘‹`;
 
   // Plan bar
   const planLabel = p.plan.charAt(0).toUpperCase() + p.plan.slice(1);
@@ -247,13 +247,13 @@
     bar.dataset.width = pct + '%';
     setTimeout(() => { bar.style.width = pct + '%'; }, 300);
   } else {
-    document.getElementById('dash-leads-usage').textContent = `${data.leads_this_month} leads this month · Unlimited`;
+    document.getElementById('dash-leads-usage').textContent = `${data.leads_this_month} leads this month Â· Unlimited`;
   }
 
   // Metrics
   document.getElementById('dash-views').textContent       = (p.profile_views || 0).toLocaleString();
   document.getElementById('dash-leads').textContent       = (p.lead_count    || 0).toLocaleString();
-  document.getElementById('dash-rating').textContent      = p.rating_avg ? p.rating_avg.toFixed(1) : '—';
+  document.getElementById('dash-rating').textContent      = p.rating_avg ? p.rating_avg.toFixed(1) : 'â€”';
   document.getElementById('dash-reviews').textContent     = `${p.review_count || 0} reviews`;
   document.getElementById('dash-month-leads').textContent = data.leads_this_month;
 
@@ -262,20 +262,20 @@
   if (!data.leads.length) {
     leadsList.innerHTML = `
       <div style="text-align:center;padding:32px 16px;color:var(--white-30)">
-        <div style="font-size:36px;margin-bottom:12px">📭</div>
+        <div style="font-size:36px;margin-bottom:12px">ðŸ“­</div>
         <p style="font-size:14px">No leads yet. Upgrade your plan to start receiving enquiries.</p>
-        <a href="pricing.html" class="btn btn-primary btn-sm" style="margin-top:14px;display:inline-flex">View Plans →</a>
+        <a href="pricing.html" class="btn btn-primary btn-sm" style="margin-top:14px;display:inline-flex">View Plans â†’</a>
       </div>`;
   } else {
     leadsList.innerHTML = data.leads.map(lead => {
       const name    = escHtml(lead.client_name || 'Anonymous');
-      const company = lead.client_company ? ` · ${escHtml(lead.client_company)}` : '';
+      const company = lead.client_company ? ` Â· ${escHtml(lead.client_company)}` : '';
       const preview = escHtml((lead.description || '').slice(0, 120));
-      const budget  = lead.budget ? ` · Budget: ${escHtml(lead.budget)}` : '';
+      const budget  = lead.budget ? ` Â· Budget: ${escHtml(lead.budget)}` : '';
       const ago     = timeAgo(lead.created_at);
       const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
       const statusColors = { new:'tag-green', viewed:'tag-blue', contacted:'tag-blue', quoted:'tag-white', won:'tag-green', lost:'tag-white', spam:'tag-white' };
-      const statusLabel  = { new:'New', viewed:'Viewed', contacted:'Replied', quoted:'Quoted', won:'Won ✓', lost:'Lost', spam:'Spam' };
+      const statusLabel  = { new:'New', viewed:'Viewed', contacted:'Replied', quoted:'Quoted', won:'Won âœ“', lost:'Lost', spam:'Spam' };
       const tag = statusColors[lead.status] || 'tag-white';
       return `
         <div class="lead-item">
@@ -294,10 +294,10 @@
   const params = new URLSearchParams(window.location.search);
   if (params.get('upgraded') === 'true') {
     const plan = params.get('plan') || '';
-    toast(`You're now on the ${plan.charAt(0).toUpperCase()+plan.slice(1)} plan!`, '🎉');
+    toast(`You're now on the ${plan.charAt(0).toUpperCase()+plan.slice(1)} plan!`, 'ðŸŽ‰');
   }
   if (params.get('new') === 'true') {
-    toast('Listing submitted! We\'ll review it within 24 hours.', '🎉');
+    toast('Listing submitted! We\'ll review it within 24 hours.', 'ðŸŽ‰');
   }
 
   function timeAgo(iso) {
@@ -310,5 +310,8 @@
   }
 })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+<script src="assets/js/livekit-widget.js"></script>
 </body>
 </html>
+

@@ -1,19 +1,19 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Batch Image Resizer & Renamer — Free Tool | AutomationHire</title>
+  <title>Batch Image Resizer & Renamer â€” Free Tool | AutomationHire</title>
   <meta name="description" content="Free browser-based batch image resizer and renamer. Resize, convert and auto-rename images in bulk. No upload, no account, runs in your browser." />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ–¼ï¸</text></svg>" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
   <style>
-    /* ── Layout ── */
+    /* â”€â”€ Layout â”€â”€ */
     .tool-page { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
 
-    /* ── Drop Zone ── */
+    /* â”€â”€ Drop Zone â”€â”€ */
     .drop-zone {
       border: 2px dashed rgba(0,230,118,0.3);
       border-radius: 16px;
@@ -37,7 +37,7 @@
     .drop-formats { margin-top: 16px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
     .drop-fmt-tag { font-size: 11px; padding: 3px 8px; border-radius: 4px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--white-60); }
 
-    /* ── Settings panel ── */
+    /* â”€â”€ Settings panel â”€â”€ */
     .settings-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -142,7 +142,7 @@
     }
     .name-preview-label { font-size: 10px; color: var(--muted); font-family: var(--font-main); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* ── File preview grid ── */
+    /* â”€â”€ File preview grid â”€â”€ */
     .files-section { margin-top: 28px; }
     .files-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .files-count { font-size: 14px; font-weight: 700; }
@@ -168,7 +168,7 @@
     }
     .file-card:hover .file-remove { opacity: 1; }
 
-    /* ── Process bar ── */
+    /* â”€â”€ Process bar â”€â”€ */
     .process-bar {
       position: sticky; bottom: 0; left: 0; right: 0;
       background: var(--black); border-top: 1px solid var(--border);
@@ -189,7 +189,7 @@
     .process-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
     .process-btn svg { flex-shrink: 0; }
 
-    /* ── Progress overlay ── */
+    /* â”€â”€ Progress overlay â”€â”€ */
     .progress-overlay {
       display: none; position: fixed; inset: 0; background: rgba(6,8,16,0.85);
       z-index: 200; align-items: center; justify-content: center; flex-direction: column; gap: 20px;
@@ -202,7 +202,7 @@
     .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--green), #00c4b4); border-radius: 3px; transition: width 0.3s ease; }
     .progress-count { font-size: 13px; color: var(--muted); margin-top: 12px; }
 
-    /* ── Done state ── */
+    /* â”€â”€ Done state â”€â”€ */
     .done-overlay {
       display: none; position: fixed; inset: 0; background: rgba(6,8,16,0.85);
       z-index: 200; align-items: center; justify-content: center;
@@ -244,7 +244,7 @@
   </div>
 </nav>
 
-<!-- ══ HERO ══ -->
+<!-- â•â• HERO â•â• -->
 <section class="page-hero" style="padding-bottom:32px">
   <div class="container">
     <a href="free.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:20px;transition:color .2s" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'">
@@ -254,7 +254,7 @@
     <div class="section-label">Free Browser Tool</div>
     <h1 class="page-hero-title" style="font-size:clamp(28px,5vw,48px)">Batch Image Resizer &amp; Renamer</h1>
     <p class="page-hero-sub" style="max-width:560px;margin:0 auto">
-      Drop your images, set your size, format and naming convention — download them all as a ZIP. Runs entirely in your browser. Nothing is uploaded anywhere.
+      Drop your images, set your size, format and naming convention â€” download them all as a ZIP. Runs entirely in your browser. Nothing is uploaded anywhere.
     </p>
     <div style="display:flex;gap:16px;justify-content:center;margin-top:20px;flex-wrap:wrap">
       <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--white-60)">
@@ -273,14 +273,14 @@
   </div>
 </section>
 
-<!-- ══ MAIN TOOL ══ -->
+<!-- â•â• MAIN TOOL â•â• -->
 <div class="tool-page">
 
   <!-- Drop zone -->
   <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
-    <div class="drop-icon">📂</div>
+    <div class="drop-icon">ðŸ“‚</div>
     <div class="drop-title">Drop your images here</div>
-    <p class="drop-sub">or <span>click to browse files</span> — select as many as you like</p>
+    <p class="drop-sub">or <span>click to browse files</span> â€” select as many as you like</p>
     <div class="drop-formats">
       <span class="drop-fmt-tag">JPG</span>
       <span class="drop-fmt-tag">PNG</span>
@@ -290,30 +290,30 @@
       <span class="drop-fmt-tag">BMP</span>
       <span class="drop-fmt-tag">TIFF</span>
     </div>
-    <div style="margin-top:8px;font-size:11px;color:rgba(0,230,118,.7)">iPhone HEIC photos supported — auto-converted</div>
+    <div style="margin-top:8px;font-size:11px;color:rgba(0,230,118,.7)">iPhone HEIC photos supported â€” auto-converted</div>
     <input type="file" id="file-input" accept="image/*,.heic,.heif" multiple />
   </div>
 
   <!-- Settings -->
   <div class="settings-grid">
 
-    <!-- ── RESIZE ── -->
+    <!-- â”€â”€ RESIZE â”€â”€ -->
     <div class="setting-card">
       <div class="setting-title">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
         Resize
       </div>
       <div class="preset-grid">
-        <button class="preset-btn" data-w="600"  data-h="400"  onclick="applyPreset(this)">Newsletter<br><small>600 × 400</small></button>
-        <button class="preset-btn" data-w="1080" data-h="1080" onclick="applyPreset(this)">Social Square<br><small>1080 × 1080</small></button>
-        <button class="preset-btn" data-w="1200" data-h="630"  onclick="applyPreset(this)">Hero / OG<br><small>1200 × 630</small></button>
-        <button class="preset-btn" data-w="1500" data-h="500"  onclick="applyPreset(this)">Twitter Banner<br><small>1500 × 500</small></button>
-        <button class="preset-btn" data-w="320"  data-h="200"  onclick="applyPreset(this)">Thumbnail<br><small>320 × 200</small></button>
-        <button class="preset-btn" data-w="1920" data-h="1080" onclick="applyPreset(this)">Full HD<br><small>1920 × 1080</small></button>
+        <button class="preset-btn" data-w="600"  data-h="400"  onclick="applyPreset(this)">Newsletter<br><small>600 Ã— 400</small></button>
+        <button class="preset-btn" data-w="1080" data-h="1080" onclick="applyPreset(this)">Social Square<br><small>1080 Ã— 1080</small></button>
+        <button class="preset-btn" data-w="1200" data-h="630"  onclick="applyPreset(this)">Hero / OG<br><small>1200 Ã— 630</small></button>
+        <button class="preset-btn" data-w="1500" data-h="500"  onclick="applyPreset(this)">Twitter Banner<br><small>1500 Ã— 500</small></button>
+        <button class="preset-btn" data-w="320"  data-h="200"  onclick="applyPreset(this)">Thumbnail<br><small>320 Ã— 200</small></button>
+        <button class="preset-btn" data-w="1920" data-h="1080" onclick="applyPreset(this)">Full HD<br><small>1920 Ã— 1080</small></button>
       </div>
       <div class="dim-row">
         <input type="number" class="dim-input" id="dim-w" value="600" min="1" max="8000" placeholder="W" oninput="onDimChange('w')" />
-        <div class="dim-x">×</div>
+        <div class="dim-x">Ã—</div>
         <input type="number" class="dim-input" id="dim-h" value="400" min="1" max="8000" placeholder="H" oninput="onDimChange('h')" />
         <button class="dim-lock locked" id="lock-btn" onclick="toggleLock()" title="Lock aspect ratio">
           <svg id="lock-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -330,7 +330,7 @@
       </div>
     </div>
 
-    <!-- ── FORMAT ── -->
+    <!-- â”€â”€ FORMAT â”€â”€ -->
     <div class="setting-card">
       <div class="setting-title">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -350,7 +350,7 @@
       <div style="margin-top:20px">
         <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:600">Format notes</div>
         <div id="fmt-note" style="font-size:12px;color:var(--white-60);line-height:1.7">
-          JPG — best for photos. Transparent areas filled white. Smaller file size.
+          JPG â€” best for photos. Transparent areas filled white. Smaller file size.
         </div>
       </div>
 
@@ -366,7 +366,7 @@
       </div>
     </div>
 
-    <!-- ── NAMING ── -->
+    <!-- â”€â”€ NAMING â”€â”€ -->
     <div class="setting-card">
       <div class="setting-title">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -397,7 +397,7 @@
       <div class="name-input-wrap">
         <div class="name-label">Separator before number</div>
         <select class="name-select" id="name-sep" onchange="updatePreview()" style="width:100%">
-          <option value="-">Hyphen  —</option>
+          <option value="-">Hyphen  â€”</option>
           <option value="_">Underscore  _</option>
           <option value="">None</option>
         </select>
@@ -406,9 +406,9 @@
       <div class="name-input-wrap">
         <div class="name-label">Number format</div>
         <select class="name-select" id="num-fmt" onchange="updatePreview()" style="width:100%">
-          <option value="3">3 digits (001, 002 …)</option>
-          <option value="2">2 digits (01, 02 …)</option>
-          <option value="1">No padding (1, 2 …)</option>
+          <option value="3">3 digits (001, 002 â€¦)</option>
+          <option value="2">2 digits (01, 02 â€¦)</option>
+          <option value="1">No padding (1, 2 â€¦)</option>
         </select>
       </div>
 
@@ -429,7 +429,7 @@
   <div class="files-section" id="files-section" style="display:none">
     <div class="files-header">
       <div class="files-count"><span id="files-count-num">0</span> images ready to process</div>
-      <button class="clear-btn" onclick="clearAll()">✕ Clear all</button>
+      <button class="clear-btn" onclick="clearAll()">âœ• Clear all</button>
     </div>
     <div class="files-grid" id="files-grid"></div>
   </div>
@@ -437,7 +437,7 @@
   <!-- Sticky process bar -->
   <div class="process-bar" id="process-bar" style="display:none">
     <div class="process-summary">
-      <strong id="pb-count">0 images</strong> · <span id="pb-size">0 × 0</span> · <span id="pb-fmt">JPG</span> · <span id="pb-name">newsletter-…</span>
+      <strong id="pb-count">0 images</strong> Â· <span id="pb-size">0 Ã— 0</span> Â· <span id="pb-fmt">JPG</span> Â· <span id="pb-name">newsletter-â€¦</span>
     </div>
     <button class="process-btn" id="process-btn" onclick="processAll()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -446,10 +446,10 @@
   </div>
 </div>
 
-<!-- ══ Progress overlay ══ -->
+<!-- â•â• Progress overlay â•â• -->
 <div class="progress-overlay" id="progress-overlay">
   <div class="progress-box">
-    <div class="progress-title">Processing images…</div>
+    <div class="progress-title">Processing imagesâ€¦</div>
     <div class="progress-sub" id="prog-sub">Resizing and converting</div>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="prog-bar" style="width:0%"></div>
@@ -458,15 +458,15 @@
   </div>
 </div>
 
-<!-- ══ Done overlay ══ -->
+<!-- â•â• Done overlay â•â• -->
 <div class="done-overlay" id="done-overlay">
   <div class="done-box">
-    <div class="done-icon">✅</div>
+    <div class="done-icon">âœ…</div>
     <div class="done-title">All done!</div>
     <div class="done-sub" id="done-sub">Your ZIP is downloading now.</div>
     <div class="done-actions">
       <button class="btn btn-primary" onclick="closeDone()">Process more images</button>
-      <a href="free.html" class="btn btn-ghost btn-sm" style="justify-content:center">← Back to Free Tools</a>
+      <a href="free.html" class="btn btn-ghost btn-sm" style="justify-content:center">â† Back to Free Tools</a>
     </div>
   </div>
 </div>
@@ -474,8 +474,8 @@
 <footer class="footer" style="margin-top:0">
   <div class="container">
     <div class="footer-bottom">
-      <div>© 2025 AutomationHire.co.uk — All rights reserved.</div>
-      <div><a href="free.html">← Free Tools</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy</a></div>
+      <div>Â© 2025 AutomationHire.co.uk â€” All rights reserved.</div>
+      <div><a href="free.html">â† Free Tools</a> &nbsp;Â·&nbsp; <a href="privacy.html">Privacy</a></div>
     </div>
   </div>
 </footer>
@@ -483,9 +483,9 @@
 <script src="assets/js/main.js"></script>
 
 <script>
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // STATE
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const state = {
   files:      [],
   width:      600,
@@ -506,9 +506,9 @@ const state = {
   suffix:     '',
 };
 
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // DROP ZONE
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const dz = document.getElementById('drop-zone');
 dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('drag-over'); });
 dz.addEventListener('dragleave', ()  => dz.classList.remove('drag-over'));
@@ -573,7 +573,7 @@ function renderGrid() {
           <div class="file-name" title="${esc(f.name)}">${esc(f.name)}</div>
           <div class="file-size">${fmtBytes(f.size)}</div>
         </div>
-        <button class="file-remove" onclick="removeFile(${i})" title="Remove">✕</button>
+        <button class="file-remove" onclick="removeFile(${i})" title="Remove">âœ•</button>
       </div>`;
   }).join('');
 
@@ -581,14 +581,14 @@ function renderGrid() {
 }
 
 function updateBar() {
-  document.getElementById('pb-size').textContent = `${state.width} × ${state.height}`;
+  document.getElementById('pb-size').textContent = `${state.width} Ã— ${state.height}`;
   document.getElementById('pb-fmt').textContent  = state.ext.toUpperCase();
   document.getElementById('pb-name').textContent = buildName(0);
 }
 
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // RESIZE SETTINGS
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function applyPreset(btn) {
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -651,13 +651,13 @@ function setMode(btn) {
   document.getElementById('mode-desc').textContent = descs[state.mode];
 }
 
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // FORMAT SETTINGS
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const fmtNotes = {
-  'image/jpeg': 'JPG — best for photos. Transparent areas filled white. Smaller file size.',
-  'image/png':  'PNG — lossless. Preserves transparency. Larger files.',
-  'image/webp': 'WebP — modern format, best size/quality ratio. Supports transparency.',
+  'image/jpeg': 'JPG â€” best for photos. Transparent areas filled white. Smaller file size.',
+  'image/png':  'PNG â€” lossless. Preserves transparency. Larger files.',
+  'image/webp': 'WebP â€” modern format, best size/quality ratio. Supports transparency.',
 };
 
 function setFmt(btn) {
@@ -686,9 +686,9 @@ document.getElementById('bg-color').addEventListener('input', function () {
   state.bgColor = this.value;
 });
 
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // NAMING
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 let dateOn = true;
 function toggleDate() {
   dateOn = !dateOn;
@@ -731,9 +731,9 @@ function buildName(index) {
   return `${prefix}${date}${num}${suffix}.${state.ext}`;
 }
 
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // IMAGE PROCESSING
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 async function processAll() {
   if (!state.files.length) return;
 
@@ -767,7 +767,7 @@ async function processAll() {
   }
 
   bar.style.width   = '100%';
-  sub.textContent   = 'Building ZIP…';
+  sub.textContent   = 'Building ZIPâ€¦';
   count.textContent = `${total} / ${total}`;
 
   const zipBlob = await zip.generateAsync({ type: 'blob' }, meta => {
@@ -791,7 +791,7 @@ async function processAll() {
 }
 
 async function processImage(file) {
-  // HEIC/HEIF from iPhone — convert to JPEG blob first, then process normally
+  // HEIC/HEIF from iPhone â€” convert to JPEG blob first, then process normally
   let srcBlob = file;
   if (isHeic(file)) {
     try {
@@ -858,9 +858,9 @@ function closeDone() {
   document.getElementById('done-overlay').classList.remove('show');
 }
 
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // HELPERS
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function fmtBytes(b) {
   if (b < 1024)    return b + ' B';
   if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
@@ -874,5 +874,8 @@ function esc(s) {
 // Init
 updatePreview();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+<script src="assets/js/livekit-widget.js"></script>
 </body>
 </html>
+
