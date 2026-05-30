@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin â€” AutomationHire</title>
+  <title>Admin &mdash; AutomationHire</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>âš¡</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9889;</text></svg>" />
   <style>
     .admin-wrap { max-width: 1100px; margin: 100px auto 60px; padding: 0 24px; }
     .admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; flex-wrap:wrap; gap:16px; }
@@ -82,7 +82,7 @@
 
   <div class="admin-header">
     <div>
-      <div style="font-size:13px;color:var(--green);font-weight:600;margin-bottom:4px">âš¡ Admin Panel</div>
+      <div style="font-size:13px;color:var(--green);font-weight:600;margin-bottom:4px">&#9889; Admin Panel</div>
       <h1>Provider Listings</h1>
     </div>
     <button onclick="loadAll()" class="btn btn-secondary btn-sm">â†» Refresh</button>
@@ -91,19 +91,19 @@
   <!-- Stats -->
   <div class="stats-row">
     <div class="stat-card">
-      <div class="stat-num grad-green" id="stat-pending">â€”</div>
+      <div class="stat-num grad-green" id="stat-pending">&mdash;</div>
       <div class="stat-label">Pending Review</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num" id="stat-approved">â€”</div>
+      <div class="stat-num" id="stat-approved">&mdash;</div>
       <div class="stat-label">Approved & Live</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num" id="stat-total">â€”</div>
+      <div class="stat-num" id="stat-total">&mdash;</div>
       <div class="stat-label">Total Listings</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num" id="stat-today">â€”</div>
+      <div class="stat-num" id="stat-today">&mdash;</div>
       <div class="stat-label">New Today</div>
     </div>
   </div>
@@ -192,7 +192,7 @@ async function loadAll() {
     renderTab(currentTab);
   } catch (e) {
     document.getElementById('providers-list').innerHTML =
-      `<div class="empty-state"><div class="icon">âš ï¸</div><p>Error loading data:<br><code style="color:#ef4444;font-size:12px">${e.message}</code></p></div>`;
+      `<div class="empty-state"><div class="icon">âš </div><p>Error loading data:<br><code style="color:#ef4444;font-size:12px">${e.message}</code></p></div>`;
   }
 }
 
@@ -229,7 +229,7 @@ function renderTab(tab) {
   if (list.length === 0) {
     el.innerHTML = `<div class="empty-state">
       <div class="icon">${tab === 'pending' ? 'âœ…' : 'ðŸ“­'}</div>
-      <p>${tab === 'pending' ? 'No pending listings â€” all caught up!' : 'No listings found.'}</p>
+      <p>${tab === 'pending' ? 'No pending listings &mdash; all caught up!' : 'No listings found.'}</p>
     </div>`;
     return;
   }
@@ -261,11 +261,11 @@ function buildRow(p) {
           ${statusLabel}
         </div>
         <div class="row-meta">
-          <span>ðŸ“§ ${escHtml(p.email || 'â€”')}</span>
-          <span>ðŸ¢ ${capitalize(p.provider_type || 'â€”')}</span>
+          <span>ðŸ“§ ${escHtml(p.email || '&mdash;')}</span>
+          <span>ðŸ¢ ${capitalize(p.provider_type || '&mdash;')}</span>
           <span>ðŸ“ ${escHtml([p.location_city, p.location_country].filter(Boolean).join(', ') || 'Remote')}</span>
           <span>ðŸ• ${date}</span>
-          ${p.hourly_rate_min ? `<span>ðŸ’· From Â£${p.hourly_rate_min}/hr</span>` : ''}
+          ${p.hourly_rate_min ? `<span>ðŸ’· From &pound;${p.hourly_rate_min}/hr</span>` : ''}
         </div>
         <div class="row-desc">${escHtml((p.description||'').substring(0,180))}${(p.description||'').length > 180 ? 'â€¦' : ''}</div>
         <div class="row-tags">${tags}</div>

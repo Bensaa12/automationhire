@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Automation ROI Calculator â€” AutomationHire</title>
-  <meta name="description" content="Free automation ROI calculator. Enter your hourly rate, task frequency and tool cost â€” instantly see your payback period and annual return on investment." />
+  <title>Automation ROI Calculator &mdash; AutomationHire</title>
+  <meta name="description" content="Free automation ROI calculator. Enter your hourly rate, task frequency and tool cost &mdash; instantly see your payback period and annual return on investment." />
   <link rel="canonical" href="https://automationhire.co.uk/roi-calculator" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ“Š</text></svg>" />
@@ -222,7 +222,7 @@
     <div class="section-label">Free Calculator</div>
     <h1 class="page-hero-title" style="font-size:clamp(26px,5vw,46px)">Automation ROI Calculator</h1>
     <p class="page-hero-sub" style="max-width:520px;margin:0 auto">
-      Plug in your hourly rate, task frequency and tool cost â€” instantly see your automation payback period and annual return.
+      Plug in your hourly rate, task frequency and tool cost &mdash; instantly see your automation payback period and annual return.
     </p>
   </div>
 </section>
@@ -232,7 +232,7 @@
 
   <!-- Download strip -->
   <div class="download-strip">
-    <div class="download-strip-text"><strong>Take it with you</strong> â€” download this calculator as a standalone HTML file, no internet required.</div>
+    <div class="download-strip-text"><strong>Take it with you</strong> &mdash; download this calculator as a standalone HTML file, no internet required.</div>
     <button class="btn btn-outline btn-sm" onclick="downloadSelf()" style="white-space:nowrap;flex-shrink:0">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Download HTML
@@ -253,10 +253,10 @@
         <div class="inp-row">
           <div class="inp-label">
             Hourly rate (fully loaded)
-            <span class="inp-label-val" id="lbl-rate">Â£75/hr</span>
+            <span class="inp-label-val" id="lbl-rate">&pound;75/hr</span>
           </div>
           <input type="range" class="roi-slider" id="sl-rate" min="10" max="500" step="5" value="75"
-            oninput="syncSlider('rate',+this.value,'Â£','/hr'); recalc()" />
+            oninput="syncSlider('rate',+this.value,'&pound;','/hr'); recalc()" />
           <div class="inp-hint">Include salary, NI contributions, pension &amp; overheads</div>
         </div>
 
@@ -273,11 +273,11 @@
         <div class="inp-row">
           <div class="inp-label" style="margin-bottom:9px">Task frequency</div>
           <select class="freq-select" id="sl-freq" onchange="recalc()">
-            <option value="21.67">Every working day  (â‰ˆ22Ã—/month)</option>
-            <option value="13">3Ã— per week  (â‰ˆ13Ã—/month)</option>
-            <option value="8.67">2Ã— per week  (â‰ˆ9Ã—/month)</option>
-            <option value="4.33" selected>Weekly  (â‰ˆ4Ã—/month)</option>
-            <option value="2.17">Bi-weekly  (â‰ˆ2Ã—/month)</option>
+            <option value="21.67">Every working day  (&asymp;22Ã—/month)</option>
+            <option value="13">3Ã— per week  (&asymp;13Ã—/month)</option>
+            <option value="8.67">2Ã— per week  (&asymp;9Ã—/month)</option>
+            <option value="4.33" selected>Weekly  (&asymp;4Ã—/month)</option>
+            <option value="2.17">Bi-weekly  (&asymp;2Ã—/month)</option>
             <option value="1">Monthly  (1Ã—/month)</option>
           </select>
         </div>
@@ -302,7 +302,7 @@
         <div class="inp-row">
           <div class="inp-label" style="margin-bottom:8px">One-time setup / build cost</div>
           <div class="cost-wrap">
-            <div class="cost-prefix">Â£</div>
+            <div class="cost-prefix">&pound;</div>
             <input type="number" class="cost-input" id="inp-setup" min="0" step="100" value="2500"
               oninput="recalc()" />
           </div>
@@ -315,7 +315,7 @@
             <span style="font-size:11px;font-weight:500;color:var(--muted)">/month</span>
           </div>
           <div class="cost-wrap">
-            <div class="cost-prefix">Â£</div>
+            <div class="cost-prefix">&pound;</div>
             <input type="number" class="cost-input" id="inp-monthly" min="0" step="10" value="150"
               oninput="recalc()" />
           </div>
@@ -332,22 +332,22 @@
       <div class="metric-grid">
         <div class="metric-card">
           <div class="metric-lbl">Hours saved / month</div>
-          <div class="metric-val" id="m-hours">â€”</div>
+          <div class="metric-val" id="m-hours">&mdash;</div>
           <div class="metric-note" id="m-hours-note"></div>
         </div>
         <div class="metric-card">
           <div class="metric-lbl">Labour value saved / month</div>
-          <div class="metric-val" id="m-labour">â€”</div>
+          <div class="metric-val" id="m-labour">&mdash;</div>
           <div class="metric-note" id="m-labour-note">at your hourly rate</div>
         </div>
         <div class="metric-card">
           <div class="metric-lbl">Net saving / month</div>
-          <div class="metric-val" id="m-net">â€”</div>
+          <div class="metric-val" id="m-net">&mdash;</div>
           <div class="metric-note">after tool subscription cost</div>
         </div>
         <div class="metric-card hero">
           <div class="metric-lbl">Payback period</div>
-          <div class="metric-val" id="m-payback">â€”</div>
+          <div class="metric-val" id="m-payback">&mdash;</div>
           <div class="metric-note" id="m-payback-note">to break even on setup cost</div>
         </div>
       </div>
@@ -358,7 +358,7 @@
           <div class="roi-block-lbl">Annual ROI</div>
           <div class="roi-badge badge-none" id="roi-badge">Calculatingâ€¦</div>
         </div>
-        <div class="roi-pct col-grey" id="roi-pct">â€”</div>
+        <div class="roi-pct col-grey" id="roi-pct">&mdash;</div>
         <div class="roi-bar-track">
           <div class="roi-bar-fill" id="roi-bar" style="width:0%"></div>
         </div>
@@ -397,15 +397,15 @@
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
           <div>
             <div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px">Labour saved</div>
-            <div style="font-size:16px;font-weight:800;color:var(--white)" id="y1-labour">â€”</div>
+            <div style="font-size:16px;font-weight:800;color:var(--white)" id="y1-labour">&mdash;</div>
           </div>
           <div>
             <div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px">Total costs</div>
-            <div style="font-size:16px;font-weight:800;color:#f87171" id="y1-costs">â€”</div>
+            <div style="font-size:16px;font-weight:800;color:#f87171" id="y1-costs">&mdash;</div>
           </div>
           <div>
             <div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px">Net Year 1</div>
-            <div style="font-size:16px;font-weight:800" id="y1-net">â€”</div>
+            <div style="font-size:16px;font-weight:800" id="y1-net">&mdash;</div>
           </div>
         </div>
       </div>
@@ -415,7 +415,7 @@
         <h3>Ready to build your automation?</h3>
         <p>Our vetted UK experts can deliver it faster and cheaper than you think. Free, no-obligation match in 24 hours.</p>
         <div class="roi-cta-btns">
-          <a href="request-quote.html" class="btn btn-primary" style="text-decoration:none">Get Matched â€” Free</a>
+          <a href="request-quote.html" class="btn btn-primary" style="text-decoration:none">Get Matched &mdash; Free</a>
           <a href="book.html" class="btn btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px">
             <span class="nav-live-dot" style="width:6px;height:6px"></span>Book a Strategy Call
           </a>
@@ -434,13 +434,13 @@ function fmtGbp(n) {
   if (!isFinite(n)) return n > 0 ? 'âˆž' : '-âˆž';
   const abs = Math.abs(n);
   const sign = n < 0 ? '-' : '';
-  if (abs >= 1000000) return sign + 'Â£' + (abs/1e6).toFixed(1) + 'M';
-  if (abs >= 10000)   return sign + 'Â£' + (abs/1000).toFixed(1) + 'k';
-  if (abs >= 1000)    return sign + 'Â£' + (abs/1000).toFixed(2) + 'k';
-  return sign + 'Â£' + Math.round(abs).toLocaleString('en-GB');
+  if (abs >= 1000000) return sign + '&pound;' + (abs/1e6).toFixed(1) + 'M';
+  if (abs >= 10000)   return sign + '&pound;' + (abs/1000).toFixed(1) + 'k';
+  if (abs >= 1000)    return sign + '&pound;' + (abs/1000).toFixed(2) + 'k';
+  return sign + '&pound;' + Math.round(abs).toLocaleString('en-GB');
 }
 function fmtNum(n, dec = 0) {
-  if (!isFinite(n)) return 'â€”';
+  if (!isFinite(n)) return '&mdash;';
   return n.toLocaleString('en-GB', { minimumFractionDigits: dec, maximumFractionDigits: dec });
 }
 
@@ -475,7 +475,7 @@ function recalc() {
   const mH = document.getElementById('m-hours');
   mH.textContent = fmtNum(hoursPerMonth, 1) + 'h';
   document.getElementById('m-hours-note').textContent =
-    fmtNum(hoursPerMonth * 12, 0) + ' hrs/year Â· ' + fmtNum(hoursPerMonth * 60, 0) + ' min/month';
+    fmtNum(hoursPerMonth * 12, 0) + ' hrs/year &middot; ' + fmtNum(hoursPerMonth * 60, 0) + ' min/month';
 
   document.getElementById('m-labour').textContent = fmtGbp(labourPerMonth);
   document.getElementById('m-labour-note').textContent = fmtGbp(labourPerMonth * 12) + '/year at your rate';
@@ -488,9 +488,9 @@ function recalc() {
   const pbNote = document.getElementById('m-payback-note');
   if (setup === 0) {
     pbEl.textContent = 'Instant';
-    pbNote.textContent = 'No setup cost â€” ROI starts day 1';
+    pbNote.textContent = 'No setup cost &mdash; ROI starts day 1';
   } else if (paybackMonths === null) {
-    pbEl.textContent = 'â€”';
+    pbEl.textContent = '&mdash;';
     pbNote.textContent = 'Net saving must exceed tool cost';
   } else if (paybackMonths < 1) {
     pbEl.textContent = Math.round(paybackMonths * 30) + ' days';
@@ -507,7 +507,7 @@ function recalc() {
   const roiExpl  = document.getElementById('roi-explain');
 
   if (annualROI === null) {
-    roiPct.textContent  = 'â€”';
+    roiPct.textContent  = '&mdash;';
     roiPct.className    = 'roi-pct col-grey';
     roiBadge.textContent = netPerMonth <= 0 ? 'Loss' : 'No Setup Cost';
     roiBadge.className  = 'roi-badge ' + (netPerMonth <= 0 ? 'badge-loss' : 'badge-none');
@@ -515,7 +515,7 @@ function recalc() {
     roiBar.style.background = 'var(--muted)';
     roiExpl.textContent = netPerMonth <= 0
       ? 'Labour saving is less than your monthly tool cost. Increase task frequency or reduce costs.'
-      : 'No setup cost â€” you\'re profitable from month 1. Annual net: ' + fmtGbp(annualNet);
+      : 'No setup cost &mdash; you\'re profitable from month 1. Annual net: ' + fmtGbp(annualNet);
   } else {
     const display = annualROI > 9999 ? '9,999%+' : fmtNum(annualROI, 0) + '%';
     roiPct.textContent = display;
@@ -548,7 +548,7 @@ function recalc() {
       roiBar.style.background = 'linear-gradient(90deg,#f87171,#ef4444)';
     }
 
-    roiExpl.textContent = 'Year 1 net: ' + fmtGbp(annualNet) + ' Â· Labour saved: ' + fmtGbp(annualLabour) + ' Â· Total costs: ' + fmtGbp(annualCosts);
+    roiExpl.textContent = 'Year 1 net: ' + fmtGbp(annualNet) + ' &middot; Labour saved: ' + fmtGbp(annualLabour) + ' &middot; Total costs: ' + fmtGbp(annualCosts);
   }
 
   // â”€â”€ Callout
@@ -575,34 +575,34 @@ function updateCallout(payback, net, setup) {
 
   if (net <= 0) {
     box.classList.add('danger');
-    icon.textContent  = 'âš ï¸';
+    icon.textContent  = 'âš ';
     strong.textContent = 'Not yet viable with these numbers';
     sub.textContent    = 'Your monthly tool cost (' + fmtGbp(+document.getElementById('inp-monthly').value) + ') exceeds the labour saving. Try daily tasks, higher rate, or a cheaper tool.';
     return;
   }
   if (setup === 0) {
     icon.textContent  = 'âœ…';
-    strong.textContent = 'Zero setup cost â€” immediate profit';
+    strong.textContent = 'Zero setup cost &mdash; immediate profit';
     sub.textContent    = 'You save ' + fmtGbp(net) + ' every month from day one. That\'s ' + fmtGbp(net * 12) + ' in year one.';
     return;
   }
   if (payback <= 2) {
     icon.textContent  = 'ðŸš€';
-    strong.textContent = 'Pays back in ' + (payback < 1 ? Math.round(payback*30) + ' days' : payback.toFixed(1) + ' months') + ' â€” compelling case';
+    strong.textContent = 'Pays back in ' + (payback < 1 ? Math.round(payback*30) + ' days' : payback.toFixed(1) + ' months') + ' &mdash; compelling case';
     sub.textContent    = 'After that you pocket ' + fmtGbp(net) + ' every month, net of tool costs.';
   } else if (payback <= 6) {
     icon.textContent  = 'ðŸ“ˆ';
-    strong.textContent = 'Payback in ' + payback.toFixed(1) + ' months â€” solid investment';
+    strong.textContent = 'Payback in ' + payback.toFixed(1) + ' months &mdash; solid investment';
     sub.textContent    = 'Then ' + fmtGbp(net) + '/month in clear profit. Most businesses consider < 6 months excellent.';
   } else if (payback <= 12) {
     box.classList.add('warn');
     icon.textContent  = 'ðŸ“Š';
-    strong.textContent = 'Payback in ' + payback.toFixed(0) + ' months â€” reasonable, but check assumptions';
+    strong.textContent = 'Payback in ' + payback.toFixed(0) + ' months &mdash; reasonable, but check assumptions';
     sub.textContent    = 'Consider whether task frequency or time estimates could be higher. Even modest increases drastically shorten payback.';
   } else {
     box.classList.add('warn');
     icon.textContent  = 'ðŸ•';
-    strong.textContent = payback.toFixed(0) + '-month payback â€” negotiate a lower build cost';
+    strong.textContent = payback.toFixed(0) + '-month payback &mdash; negotiate a lower build cost';
     sub.textContent    = 'Long payback usually means setup cost is too high relative to the saving. Ask for a phased build or simpler MVP.';
   }
 }

@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Provider Profile â€” AutomationHire</title>
+  <title>Provider Profile &mdash; AutomationHire</title>
   <meta name="description" content="View provider profile on AutomationHire." />
   <meta name="robots" content="noindex, nofollow" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>âš¡</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9889;</text></svg>" />
   <style>
     .profile-loading {
       min-height: 60vh;
@@ -105,8 +105,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <div>Â© 2025 AutomationHire.co.uk â€” All rights reserved.</div>
-      <div><a href="privacy.html">Privacy</a> &nbsp;Â·&nbsp; <a href="terms.html">Terms</a></div>
+      <div>&copy; 2025 AutomationHire.co.uk &mdash; All rights reserved.</div>
+      <div><a href="privacy.html">Privacy</a> &nbsp;&middot;&nbsp; <a href="terms.html">Terms</a></div>
     </div>
   </div>
 </footer>
@@ -117,7 +117,7 @@
   <script src="assets/js/receptionist.js"></script>
 <script>
 /* ============================================================
-   Dynamic Provider Profile â€” loads from Supabase by slug
+   Dynamic Provider Profile &mdash; loads from Supabase by slug
    ============================================================ */
 
 const SUPABASE_URL  = 'https://lywcjlhfpucohuaxthem.supabase.co';
@@ -177,24 +177,24 @@ function render(p) {
   const rating    = parseFloat(p.rating_avg  || 0).toFixed(1);
   const reviews   = parseInt(p.review_count  || 0);
   const stars     = 'â˜…'.repeat(Math.round(p.rating_avg || 0)) + 'â˜†'.repeat(5 - Math.round(p.rating_avg || 0));
-  const rateMin   = p.hourly_rate_min ? `Â£${p.hourly_rate_min}` : null;
-  const rateMax   = p.hourly_rate_max ? `Â£${p.hourly_rate_max}` : null;
-  const rateStr   = rateMin ? (rateMax ? `${rateMin}â€“${rateMax}/hr` : `From ${rateMin}/hr`) : 'Rate on request';
+  const rateMin   = p.hourly_rate_min ? `&pound;${p.hourly_rate_min}` : null;
+  const rateMax   = p.hourly_rate_max ? `&pound;${p.hourly_rate_max}` : null;
+  const rateStr   = rateMin ? (rateMax ? `${rateMin}&ldquo;${rateMax}/hr` : `From ${rateMin}/hr`) : 'Rate on request';
   const tools     = Array.isArray(p.tools)      ? p.tools      : [];
   const cats      = Array.isArray(p.categories) ? p.categories : [];
   const industries= Array.isArray(p.industries) ? p.industries : [];
   const joinDate  = new Date(p.created_at).toLocaleDateString('en-GB', { month:'short', year:'numeric' });
   const response  = p.response_time_hrs ? `~${p.response_time_hrs}hrs` : '~4hrs';
-  const exp       = p.years_experience  ? `${p.years_experience}yrs` : 'â€”';
-  const teamSize  = p.team_size || 'â€”';
+  const exp       = p.years_experience  ? `${p.years_experience}yrs` : '&mdash;';
+  const teamSize  = p.team_size || '&mdash;';
   const desc      = esc(p.description || 'No description provided.');
 
   /* Update page title */
-  document.title = `${p.business_name} â€” AutomationHire`;
+  document.title = `${p.business_name} &mdash; AutomationHire`;
 
   /* â”€â”€ build tool chips â”€â”€ */
   const toolChips = tools.length
-    ? tools.map(t => `<div class="tool-chip"><span>âš™ï¸</span> ${esc(t)}</div>`).join('')
+    ? tools.map(t => `<div class="tool-chip"><span>&#9881;</span> ${esc(t)}</div>`).join('')
     : '<p style="color:var(--white-60);font-size:14px">No tools listed.</p>';
 
   /* â”€â”€ build industry tags â”€â”€ */
@@ -230,7 +230,7 @@ function render(p) {
           <div class="profile-avatar-lg">${avatar}</div>
           <div class="profile-meta">
             <h1 class="profile-name">${name}</h1>
-            <p class="profile-subtitle">${type} Â· ${location}</p>
+            <p class="profile-subtitle">${type} &middot; ${location}</p>
             <div class="profile-badges">
               ${p.is_verified ? '<span class="verified-badge" style="padding:5px 14px;font-size:13px">âœ“ Verified Provider</span>' : ''}
               ${p.is_featured ? '<span class="tag tag-green" style="padding:5px 14px;font-size:13px">â­ Featured</span>' : ''}
@@ -251,7 +251,7 @@ function render(p) {
                 <div class="profile-stat-label">Experience</div>
               </div>
               <div class="profile-stat">
-                <div class="profile-stat-num">${rateMin || 'â€”'}</div>
+                <div class="profile-stat-num">${rateMin || '&mdash;'}</div>
                 <div class="profile-stat-label">Starting Rate</div>
               </div>
               <div class="profile-stat">
@@ -314,7 +314,7 @@ function render(p) {
               ${reviews === 0 ? `
               <div style="text-align:center;padding:40px;color:var(--white-60)">
                 <div style="font-size:40px;margin-bottom:12px">ðŸ“</div>
-                <p>No reviews yet â€” be the first to work with ${name}!</p>
+                <p>No reviews yet &mdash; be the first to work with ${name}!</p>
               </div>` : `<p style="color:var(--white-60);font-size:14px;text-align:center;padding:20px">Reviews are displayed after verified project completion.</p>`}
             </div>
 
@@ -341,18 +341,18 @@ function render(p) {
                 <input type="text"  name="client_company" placeholder="Company name" />
                 <select name="budget">
                   <option value="">Project budget</option>
-                  <option>Under Â£500</option>
-                  <option>Â£500 â€“ Â£2,000</option>
-                  <option>Â£2,000 â€“ Â£5,000</option>
-                  <option>Â£5,000 â€“ Â£15,000</option>
-                  <option>Â£15,000+</option>
+                  <option>Under &pound;500</option>
+                  <option>&pound;500 &ldquo; &pound;2,000</option>
+                  <option>&pound;2,000 &ldquo; &pound;5,000</option>
+                  <option>&pound;5,000 &ldquo; &pound;15,000</option>
+                  <option>&pound;15,000+</option>
                 </select>
                 <textarea name="description" placeholder="Describe what you need automated..." required></textarea>
                 <button type="submit" class="btn btn-primary w-full" style="justify-content:center;font-size:15px">
-                  âš¡ Send Quote Request
+                  &#9889; Send Quote Request
                 </button>
               </form>
-              <p style="font-size:12px;color:var(--white-60);margin-top:10px;text-align:center">Free consultation Â· Responds in ${response}</p>
+              <p style="font-size:12px;color:var(--white-60);margin-top:10px;text-align:center">Free consultation &middot; Responds in ${response}</p>
             </div>
 
             <div class="sidebar-card">
@@ -379,7 +379,7 @@ function render(p) {
                   <span class="sidebar-meta-val">${joinDate}</span>
                 </li>
                 ${p.profile_views ? `<li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">ðŸ‘ï¸ Profile Views</span>
+                  <span class="sidebar-meta-key">ðŸ‘ Profile Views</span>
                   <span class="sidebar-meta-val">${parseInt(p.profile_views).toLocaleString()}</span>
                 </li>` : ''}
               </ul>

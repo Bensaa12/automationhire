@@ -7,7 +7,7 @@
   <title id="page-title">Loadingâ€¦ | AutomationHire Blog</title>
   <meta name="description" id="page-desc" content="" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>âš¡</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9889;</text></svg>" />
 
   <!-- OG tags injected by JS after post loads -->
   <style>
@@ -85,7 +85,7 @@
         <div class="post-av">AH</div>
         <div>
           <span>AutomationHire Team</span>
-          <span style="margin:0 6px">Â·</span>
+          <span style="margin:0 6px">&middot;</span>
           <span id="post-date"></span>
           <span id="post-read"></span>
         </div>
@@ -146,8 +146,8 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-bottom">
-      <div>Â© 2025 AutomationHire.co.uk â€” All rights reserved.</div>
-      <div><a href="privacy.html">Privacy</a> &nbsp;Â·&nbsp; <a href="terms.html">Terms</a> &nbsp;Â·&nbsp; <a href="privacy.html#cookies">Cookies</a></div>
+      <div>&copy; 2025 AutomationHire.co.uk &mdash; All rights reserved.</div>
+      <div><a href="privacy.html">Privacy</a> &nbsp;&middot;&nbsp; <a href="terms.html">Terms</a> &nbsp;&middot;&nbsp; <a href="privacy.html#cookies">Cookies</a></div>
     </div>
   </div>
 </footer>
@@ -185,7 +185,7 @@
     document.getElementById('post-date').textContent    = p.published_at
       ? new Date(p.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
       : '';
-    document.getElementById('post-read').textContent    = p.reading_time ? ` Â· ${p.reading_time} min read` : '';
+    document.getElementById('post-read').textContent    = p.reading_time ? ` &middot; ${p.reading_time} min read` : '';
     document.getElementById('post-kws').innerHTML       = (p.keywords || [])
       .map(k => `<span class="post-kw">${esc(k)}</span>`).join('');
 
