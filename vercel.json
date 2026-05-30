@@ -30,7 +30,9 @@
     }
   ],
   "redirects": [
-    { "source": "/ready-to-deploy", "destination": "/forge", "permanent": true }
+    { "source": "/ready-to-deploy", "destination": "/forge", "permanent": true },
+    { "source": "/ads",             "destination": "/forge", "permanent": true },
+    { "source": "/categories",      "destination": "/forge", "permanent": true }
   ],
   "rewrites": [
     { "source": "/api/auth/login",   "destination": "/api/auth?action=login"   },
