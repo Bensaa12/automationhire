@@ -69,7 +69,7 @@
 
 <!-- LOGIN GATE -->
 <div id="login-gate" class="login-gate" style="display:none">
-  <div style="font-size:40px;margin-bottom:16px">ðŸ”</div>
+  <div style="font-size:40px;margin-bottom:16px">🔐</div>
   <h2>Admin Access</h2>
   <p>Enter your Supabase service role key to continue</p>
   <input id="admin-key-input" type="password" placeholder="Service role key (eyJ...)" class="form-input" style="width:100%;margin-bottom:12px" />
@@ -242,7 +242,7 @@ function buildRow(p) {
   const pending  = !p.is_approved;
   const approved =  p.is_approved && p.is_active;
 
-  const statusLabel = pending  ? '<span class="status-badge status-pending">â³ Pending</span>'
+  const statusLabel = pending  ? '<span class="status-badge status-pending">⏳ Pending</span>'
                     : approved ? '<span class="status-badge status-approved">✅ Live</span>'
                     :            '<span class="status-badge status-rejected">✗ Rejected</span>';
 
@@ -262,9 +262,9 @@ function buildRow(p) {
         </div>
         <div class="row-meta">
           <span>📧 ${escHtml(p.email || '&mdash;')}</span>
-          <span>ðŸ¢ ${capitalize(p.provider_type || '&mdash;')}</span>
-          <span>ðŸ“ ${escHtml([p.location_city, p.location_country].filter(Boolean).join(', ') || 'Remote')}</span>
-          <span>ðŸ• ${date}</span>
+          <span>🏢 ${capitalize(p.provider_type || '&mdash;')}</span>
+          <span>📍 ${escHtml([p.location_city, p.location_country].filter(Boolean).join(', ') || 'Remote')}</span>
+          <span>🕐 ${date}</span>
           ${p.hourly_rate_min ? `<span>💷 From &pound;${p.hourly_rate_min}/hr</span>` : ''}
         </div>
         <div class="row-desc">${escHtml((p.description||'').substring(0,180))}${(p.description||'').length > 180 ? '…' : ''}</div>

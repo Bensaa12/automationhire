@@ -209,7 +209,7 @@ function render(p) {
 
   /* ── links ── */
   const websiteBtn  = p.website_url
-    ? `<a href="${esc(p.website_url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">ðŸŒ Visit Website</a>`
+    ? `<a href="${esc(p.website_url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">🌐 Visit Website</a>`
     : '';
   const linkedinBtn = p.linkedin_url
     ? `<a href="${esc(p.linkedin_url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">in LinkedIn Profile</a>`
@@ -233,7 +233,7 @@ function render(p) {
             <p class="profile-subtitle">${type} &middot; ${location}</p>
             <div class="profile-badges">
               ${p.is_verified ? '<span class="verified-badge" style="padding:5px 14px;font-size:13px">✓ Verified Provider</span>' : ''}
-              ${p.is_featured ? '<span class="tag tag-green" style="padding:5px 14px;font-size:13px">â­ Featured</span>' : ''}
+              ${p.is_featured ? '<span class="tag tag-green" style="padding:5px 14px;font-size:13px">⭐ Featured</span>' : ''}
               ${cats.slice(0,2).map(c => `<span class="tag tag-blue" style="padding:5px 14px;font-size:13px">${esc(c)}</span>`).join('')}
               ${country ? `<span class="tag tag-white" style="padding:5px 14px;font-size:13px">🇬🇧 ${esc(country === 'United Kingdom' ? 'UK' : country)}</span>` : ''}
             </div>
@@ -313,7 +313,7 @@ function render(p) {
               </div>
               ${reviews === 0 ? `
               <div style="text-align:center;padding:40px;color:var(--white-60)">
-                <div style="font-size:40px;margin-bottom:12px">ðŸ“</div>
+                <div style="font-size:40px;margin-bottom:12px">📝</div>
                 <p>No reviews yet &mdash; be the first to work with ${name}!</p>
               </div>` : `<p style="color:var(--white-60);font-size:14px;text-align:center;padding:20px">Reviews are displayed after verified project completion.</p>`}
             </div>
@@ -359,15 +359,15 @@ function render(p) {
               <h4 class="sidebar-title">Quick Info</h4>
               <ul class="sidebar-meta-list">
                 <li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">ðŸ“ Location</span>
+                  <span class="sidebar-meta-key">📍 Location</span>
                   <span class="sidebar-meta-val">${location}</span>
                 </li>
                 <li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">ðŸŒ Remote</span>
+                  <span class="sidebar-meta-key">🌐 Remote</span>
                   <span class="sidebar-meta-val text-green">${p.remote_work !== false ? 'Yes, worldwide' : 'On-site only'}</span>
                 </li>
                 <li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">ðŸ• Response</span>
+                  <span class="sidebar-meta-key">🕐 Response</span>
                   <span class="sidebar-meta-val">${response}</span>
                 </li>
                 <li class="sidebar-meta-item">
@@ -379,7 +379,7 @@ function render(p) {
                   <span class="sidebar-meta-val">${joinDate}</span>
                 </li>
                 ${p.profile_views ? `<li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">ðŸ‘ Profile Views</span>
+                  <span class="sidebar-meta-key">👁 Profile Views</span>
                   <span class="sidebar-meta-val">${parseInt(p.profile_views).toLocaleString()}</span>
                 </li>` : ''}
               </ul>

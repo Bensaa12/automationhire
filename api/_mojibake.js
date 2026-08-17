@@ -21,6 +21,11 @@ function charToByte(ch) {
   if (cp < 0x80) return null;
   if (cp >= 0xA0 && cp <= 0xFF) return cp;
   if (CP1252_REVERSE[cp] !== undefined) return CP1252_REVERSE[cp];
+  // Undefined CP1252 slots (0x81, 0x8D, 0x8F, 0x90, 0x9D) fall back to a
+  // direct Latin-1 (invisible C1 control) codepoint in real-world mis-decodes
+  // rather than failing outright — without this, a run like "⏱" (E2 8F B1)
+  // breaks mid-sequence at the undefined 0x8F byte and is never reassembled.
+  if (cp >= 0x80 && cp <= 0x9F) return cp;
   return null;
 }
 
