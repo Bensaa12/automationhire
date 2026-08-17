@@ -348,12 +348,12 @@
       <div class="option-list" id="option-list">
         <div class="option-row">
           <div class="option-letter">A</div>
-          <input class="option-input" type="text" placeholder="First optionâ€¦" />
+          <input class="option-input" type="text" placeholder="First option…" />
           <button class="remove-btn" onclick="removeOption(this)" title="Remove" style="visibility:hidden">âœ•</button>
         </div>
         <div class="option-row">
           <div class="option-letter">B</div>
-          <input class="option-input" type="text" placeholder="Second optionâ€¦" />
+          <input class="option-input" type="text" placeholder="Second option…" />
           <button class="remove-btn" onclick="removeOption(this)" title="Remove" style="visibility:hidden">âœ•</button>
         </div>
       </div>
@@ -373,12 +373,12 @@
         <div class="criteria-wrap" id="crit-list">
           <div class="criteria-row">
             <div class="criteria-num">1</div>
-            <input class="criteria-input" type="text" placeholder="e.g. Costâ€¦" />
+            <input class="criteria-input" type="text" placeholder="e.g. Cost…" />
             <button class="remove-btn" onclick="removeCrit(this)" title="Remove">âœ•</button>
           </div>
           <div class="criteria-row">
             <div class="criteria-num">2</div>
-            <input class="criteria-input" type="text" placeholder="e.g. Speedâ€¦" />
+            <input class="criteria-input" type="text" placeholder="e.g. Speed…" />
             <button class="remove-btn" onclick="removeCrit(this)" title="Remove">âœ•</button>
           </div>
         </div>
@@ -437,7 +437,7 @@
     <!-- Loading state -->
     <div id="state-loading" class="state-panel" style="display:none">
       <div class="loading-icon">ðŸ§ </div>
-      <p class="loading-msg" id="loading-msg">Analysing your optionsâ€¦</p>
+      <p class="loading-msg" id="loading-msg">Analysing your options…</p>
       <div class="dot-pulse"><span></span><span></span><span></span></div>
     </div>
 
@@ -573,7 +573,7 @@ function addOption() {
   row.className = 'option-row';
   row.innerHTML = `
     <div class="option-letter">${LETTERS[count]}</div>
-    <input class="option-input" type="text" placeholder="Option ${LETTERS[count]}â€¦" />
+    <input class="option-input" type="text" placeholder="Option ${LETTERS[count]}…" />
     <button class="remove-btn" onclick="removeOption(this)" title="Remove">âœ•</button>`;
   list.appendChild(row);
   row.querySelector('input').focus();
@@ -604,7 +604,7 @@ function addCrit() {
   row.className = 'criteria-row';
   row.innerHTML = `
     <div class="criteria-num">${num}</div>
-    <input class="criteria-input" type="text" placeholder="e.g. Qualityâ€¦" />
+    <input class="criteria-input" type="text" placeholder="e.g. Quality…" />
     <button class="remove-btn" onclick="removeCrit(this)" title="Remove">âœ•</button>`;
   list.appendChild(row);
   row.querySelector('input').focus();
@@ -655,7 +655,7 @@ async function analyse() {
   showState('loading');
   const meta = STYLE_META[appState.style];
   document.getElementById('loading-msg').textContent =
-    `${meta.icon} Applying ${meta.label} analysisâ€¦`;
+    `${meta.icon} Applying ${meta.label} analysis…`;
 
   const btn = document.getElementById('analyse-btn');
   btn.disabled = true;

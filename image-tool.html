@@ -303,16 +303,16 @@
         Resize
       </div>
       <div class="preset-grid">
-        <button class="preset-btn" data-w="600"  data-h="400"  onclick="applyPreset(this)">Newsletter<br><small>600 Ã— 400</small></button>
-        <button class="preset-btn" data-w="1080" data-h="1080" onclick="applyPreset(this)">Social Square<br><small>1080 Ã— 1080</small></button>
-        <button class="preset-btn" data-w="1200" data-h="630"  onclick="applyPreset(this)">Hero / OG<br><small>1200 Ã— 630</small></button>
-        <button class="preset-btn" data-w="1500" data-h="500"  onclick="applyPreset(this)">Twitter Banner<br><small>1500 Ã— 500</small></button>
-        <button class="preset-btn" data-w="320"  data-h="200"  onclick="applyPreset(this)">Thumbnail<br><small>320 Ã— 200</small></button>
-        <button class="preset-btn" data-w="1920" data-h="1080" onclick="applyPreset(this)">Full HD<br><small>1920 Ã— 1080</small></button>
+        <button class="preset-btn" data-w="600"  data-h="400"  onclick="applyPreset(this)">Newsletter<br><small>600 × 400</small></button>
+        <button class="preset-btn" data-w="1080" data-h="1080" onclick="applyPreset(this)">Social Square<br><small>1080 × 1080</small></button>
+        <button class="preset-btn" data-w="1200" data-h="630"  onclick="applyPreset(this)">Hero / OG<br><small>1200 × 630</small></button>
+        <button class="preset-btn" data-w="1500" data-h="500"  onclick="applyPreset(this)">Twitter Banner<br><small>1500 × 500</small></button>
+        <button class="preset-btn" data-w="320"  data-h="200"  onclick="applyPreset(this)">Thumbnail<br><small>320 × 200</small></button>
+        <button class="preset-btn" data-w="1920" data-h="1080" onclick="applyPreset(this)">Full HD<br><small>1920 × 1080</small></button>
       </div>
       <div class="dim-row">
         <input type="number" class="dim-input" id="dim-w" value="600" min="1" max="8000" placeholder="W" oninput="onDimChange('w')" />
-        <div class="dim-x">Ã—</div>
+        <div class="dim-x">×</div>
         <input type="number" class="dim-input" id="dim-h" value="400" min="1" max="8000" placeholder="H" oninput="onDimChange('h')" />
         <button class="dim-lock locked" id="lock-btn" onclick="toggleLock()" title="Lock aspect ratio">
           <svg id="lock-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -405,9 +405,9 @@
       <div class="name-input-wrap">
         <div class="name-label">Number format</div>
         <select class="name-select" id="num-fmt" onchange="updatePreview()" style="width:100%">
-          <option value="3">3 digits (001, 002 â€¦)</option>
-          <option value="2">2 digits (01, 02 â€¦)</option>
-          <option value="1">No padding (1, 2 â€¦)</option>
+          <option value="3">3 digits (001, 002 …)</option>
+          <option value="2">2 digits (01, 02 …)</option>
+          <option value="1">No padding (1, 2 …)</option>
         </select>
       </div>
 
@@ -436,7 +436,7 @@
   <!-- Sticky process bar -->
   <div class="process-bar" id="process-bar" style="display:none">
     <div class="process-summary">
-      <strong id="pb-count">0 images</strong> &middot; <span id="pb-size">0 Ã— 0</span> &middot; <span id="pb-fmt">JPG</span> &middot; <span id="pb-name">newsletter-â€¦</span>
+      <strong id="pb-count">0 images</strong> &middot; <span id="pb-size">0 × 0</span> &middot; <span id="pb-fmt">JPG</span> &middot; <span id="pb-name">newsletter-…</span>
     </div>
     <button class="process-btn" id="process-btn" onclick="processAll()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -448,7 +448,7 @@
 <!-- â•â• Progress overlay â•â• -->
 <div class="progress-overlay" id="progress-overlay">
   <div class="progress-box">
-    <div class="progress-title">Processing imagesâ€¦</div>
+    <div class="progress-title">Processing images…</div>
     <div class="progress-sub" id="prog-sub">Resizing and converting</div>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="prog-bar" style="width:0%"></div>
@@ -580,7 +580,7 @@ function renderGrid() {
 }
 
 function updateBar() {
-  document.getElementById('pb-size').textContent = `${state.width} Ã— ${state.height}`;
+  document.getElementById('pb-size').textContent = `${state.width} × ${state.height}`;
   document.getElementById('pb-fmt').textContent  = state.ext.toUpperCase();
   document.getElementById('pb-name').textContent = buildName(0);
 }
@@ -766,7 +766,7 @@ async function processAll() {
   }
 
   bar.style.width   = '100%';
-  sub.textContent   = 'Building ZIPâ€¦';
+  sub.textContent   = 'Building ZIP…';
   count.textContent = `${total} / ${total}`;
 
   const zipBlob = await zip.generateAsync({ type: 'blob' }, meta => {

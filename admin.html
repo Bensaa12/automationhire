@@ -181,7 +181,7 @@ async function sbFetch(path, opts = {}) {
 /* â”€â”€ Load providers â”€â”€ */
 async function loadAll() {
   document.getElementById('providers-list').innerHTML =
-    '<div class="loading"><span class="spinner">âŸ³</span><br><br>Loading listingsâ€¦</div>';
+    '<div class="loading"><span class="spinner">âŸ³</span><br><br>Loading listings…</div>';
 
   try {
     allProviders = await sbFetch(
@@ -267,7 +267,7 @@ function buildRow(p) {
           <span>ðŸ• ${date}</span>
           ${p.hourly_rate_min ? `<span>ðŸ’· From &pound;${p.hourly_rate_min}/hr</span>` : ''}
         </div>
-        <div class="row-desc">${escHtml((p.description||'').substring(0,180))}${(p.description||'').length > 180 ? 'â€¦' : ''}</div>
+        <div class="row-desc">${escHtml((p.description||'').substring(0,180))}${(p.description||'').length > 180 ? '…' : ''}</div>
         <div class="row-tags">${tags}</div>
       </div>
       <div class="row-actions">
@@ -288,7 +288,7 @@ function buildRow(p) {
 /* â”€â”€ Actions â”€â”€ */
 async function approve(id) {
   const btn = document.querySelector(`#row-${id} .btn-approve`);
-  if (btn) { btn.textContent = 'âŸ³ Savingâ€¦'; btn.disabled = true; }
+  if (btn) { btn.textContent = 'âŸ³ Saving…'; btn.disabled = true; }
 
   try {
     await sbFetch(`/providers?id=eq.${id}`, {

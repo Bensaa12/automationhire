@@ -265,15 +265,15 @@
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
           <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center">
             <div style="font-size:11px;font-weight:700;color:var(--white)">Newsletter</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">600 Ã— 400</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">600 × 400</div>
           </div>
           <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center">
             <div style="font-size:11px;font-weight:700;color:var(--white)">Social Square</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">1080 Ã— 1080</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">1080 × 1080</div>
           </div>
           <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center">
             <div style="font-size:11px;font-weight:700;color:var(--white)">Hero / OG</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">1200 Ã— 630</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">1200 × 630</div>
           </div>
         </div>
 
@@ -300,7 +300,7 @@
 
         <!-- Transcript box -->
         <div class="dict-transcript" id="dict-transcript">
-          <span class="dict-placeholder" id="dict-placeholder">Press "Start Dictating" &mdash; speak naturally and your words will appear hereâ€¦</span>
+          <span class="dict-placeholder" id="dict-placeholder">Press "Start Dictating" &mdash; speak naturally and your words will appear here…</span>
         </div>
 
         <!-- Controls -->
@@ -617,7 +617,7 @@ function setRecState(on) {
     btn.className = 'rec-btn rec-btn-stop';
     btn.innerHTML = `<span class="rec-dot"></span> Stop`;
     box.classList.add('active');
-    status.textContent = 'Listeningâ€¦';
+    status.textContent = 'Listening…';
   } else {
     btn.className = 'rec-btn rec-btn-start';
     btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 1a4 4 0 0 1 4 4v7a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg> Start Dictating`;
