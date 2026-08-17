@@ -18,11 +18,6 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://automationhire.co.uk/categories</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://automationhire.co.uk/submit-listing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -36,11 +31,6 @@
     <loc>https://automationhire.co.uk/forge</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://automationhire.co.uk/ads</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://automationhire.co.uk/book</loc>
@@ -94,7 +84,7 @@
   <!-- ===== PartForge ===== -->
   <url>
     <loc>https://automationhire.co.uk/forge</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-08-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -103,6 +93,51 @@
     <lastmod>2026-05-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://automationhire.co.uk/pump-spec-gam100</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://automationhire.co.uk/pump-spec-sxs2000</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://automationhire.co.uk/plant-3d-piping-automation-uk</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ===== Free tools ===== -->
+  <url>
+    <loc>https://automationhire.co.uk/free</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://automationhire.co.uk/roi-calculator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://automationhire.co.uk/decision-maker</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://automationhire.co.uk/image-tool</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://automationhire.co.uk/mortgage-manager</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 
   <!-- ===== Blog ===== -->

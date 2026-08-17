@@ -162,7 +162,7 @@ function showError(title, msg) {
       <div style="font-size:48px;margin-bottom:16px">😕</div>
       <h2>${esc(title)}</h2>
       <p>${esc(msg)}</p>
-      <a href="providers.html" class="btn btn-primary">â† Back to Directory</a>
+      <a href="providers.html" class="btn btn-primary">← Back to Directory</a>
     </div>`;
 }
 
@@ -179,7 +179,7 @@ function render(p) {
   const stars     = '★'.repeat(Math.round(p.rating_avg || 0)) + '☆'.repeat(5 - Math.round(p.rating_avg || 0));
   const rateMin   = p.hourly_rate_min ? `&pound;${p.hourly_rate_min}` : null;
   const rateMax   = p.hourly_rate_max ? `&pound;${p.hourly_rate_max}` : null;
-  const rateStr   = rateMin ? (rateMax ? `${rateMin}&ldquo;${rateMax}/hr` : `From ${rateMin}/hr`) : 'Rate on request';
+  const rateStr   = rateMin ? (rateMax ? `${rateMin}&ndash;${rateMax}/hr` : `From ${rateMin}/hr`) : 'Rate on request';
   const tools     = Array.isArray(p.tools)      ? p.tools      : [];
   const cats      = Array.isArray(p.categories) ? p.categories : [];
   const industries= Array.isArray(p.industries) ? p.industries : [];
@@ -342,9 +342,9 @@ function render(p) {
                 <select name="budget">
                   <option value="">Project budget</option>
                   <option>Under &pound;500</option>
-                  <option>&pound;500 &ldquo; &pound;2,000</option>
-                  <option>&pound;2,000 &ldquo; &pound;5,000</option>
-                  <option>&pound;5,000 &ldquo; &pound;15,000</option>
+                  <option>&pound;500 &ndash; &pound;2,000</option>
+                  <option>&pound;2,000 &ndash; &pound;5,000</option>
+                  <option>&pound;5,000 &ndash; &pound;15,000</option>
                   <option>&pound;15,000+</option>
                 </select>
                 <textarea name="description" placeholder="Describe what you need automated..." required></textarea>
