@@ -6,9 +6,85 @@
 
 const Anthropic = require('@anthropic-ai/sdk');
 const crypto    = require('crypto');
+const fs        = require('fs');
+const path      = require('path');
 const { getSupabase, handleCors, ok, err, toSlug } = require('./_lib');
 
 const MODEL = 'claude-sonnet-4-6';
+const SITE  = process.env.NEXT_PUBLIC_SITE_URL || 'https://automationhire.co.uk';
+const BLOG_TEMPLATE_PATH = path.join(process.cwd(), 'blog-post.html');
+
+// --- Server-render blog-post.html for a given slug (SEO: real <title>/
+// description/canonical/JSON-LD instead of client-JS-only injection) ---
+function escBlog(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function formatBlogDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+function renderBlogNotFound(template) {
+  return template
+    .replace(/<title id="page-title">[^<]*<\/title>/, '<title>Post Not Found | AutomationHire Blog</title>')
+    .replace(/<meta name="description" id="page-desc" content="" \/>/, '<meta name="description" content="This article may have been moved or removed." />\n  <meta name="robots" content="noindex, follow" />')
+    .replace('id="post-loading"', 'id="post-loading" style="display:none"')
+    .replace('id="post-error" style="display:none"', 'id="post-error"');
+}
+function renderBlogPost(template, p) {
+  const canonical = `${SITE}/blog/${p.slug}`;
+  const title = `${p.title} | AutomationHire Blog`;
+  const description = p.meta_description || p.excerpt || '';
+  const dateISO = p.published_at || p.created_at || new Date().toISOString();
+  const keywords = Array.isArray(p.keywords) ? p.keywords : [];
+  const primaryKw = keywords[0] || 'AI Automation';
+  const ogImage = `${SITE}/assets/og/og-default.png`;
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: p.title,
+    description,
+    url: canonical,
+    datePublished: dateISO,
+    dateModified: dateISO,
+    keywords: keywords.join(', '),
+    wordCount: p.word_count || undefined,
+    author: { '@type': 'Organization', name: 'AutomationHire', url: SITE },
+    publisher: { '@type': 'Organization', name: 'AutomationHire', logo: { '@type': 'ImageObject', url: `${SITE}/assets/og/logo.png` } },
+    image: ogImage,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  };
+
+  const headInjection = `
+  <link rel="canonical" href="${canonical}" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta property="og:title" content="${escBlog(title)}" />
+  <meta property="og:description" content="${escBlog(description)}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="${canonical}" />
+  <meta property="og:site_name" content="AutomationHire" />
+  <meta property="og:image" content="${ogImage}" />
+  <meta property="article:published_time" content="${dateISO}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escBlog(title)}" />
+  <meta name="twitter:description" content="${escBlog(description)}" />
+  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+
+  return template
+    .replace(/<title id="page-title">[^<]*<\/title>/, `<title>${escBlog(title)}</title>`)
+    .replace(/<meta name="description" id="page-desc" content="" \/>/, `<meta name="description" content="${escBlog(description)}" />${headInjection}`)
+    .replace('id="post-hero" style="display:none"', 'id="post-hero"')
+    .replace('<div class="post-cat" id="post-cat"></div>', `<div class="post-cat" id="post-cat">${escBlog(primaryKw)}</div>`)
+    .replace('<h1 class="post-h1" id="post-h1"></h1>', `<h1 class="post-h1" id="post-h1">${escBlog(p.title)}</h1>`)
+    .replace('<p class="post-deck" id="post-deck"></p>', `<p class="post-deck" id="post-deck">${escBlog(p.excerpt)}</p>`)
+    .replace('<span id="post-date"></span>', `<span id="post-date">${escBlog(formatBlogDate(dateISO))}</span>`)
+    .replace('<span id="post-read"></span>', `<span id="post-read">${p.reading_time ? ` &middot; ${escBlog(p.reading_time)} min read` : ''}</span>`)
+    .replace('<div class="post-kws" id="post-kws"></div>', `<div class="post-kws" id="post-kws">${keywords.map(k => `<span class="post-kw">${escBlog(k)}</span>`).join('')}</div>`)
+    .replace('id="post-loading"', 'id="post-loading" style="display:none"')
+    .replace('id="post-main" style="display:none"', 'id="post-main"')
+    .replace('<div class="post-content" id="post-content"></div>', `<div class="post-content" id="post-content">${p.content || ''}</div>`)
+    .replace(/<script>\r?\n\(async function \(\) \{/, `<script>\nwindow.__SSR_POST__ = true;\n(async function () {\n  if (window.__SSR_POST__) return;`);
+}
 
 // --- Admin password token (HMAC of ADMIN_PASSWORD) ---
 function makeToken(pass) {
@@ -100,6 +176,25 @@ module.exports = async function handler(req, res) {
       .single();
     if (error || !data) return err(res, 'Post not found', 404);
     return ok(res, { post: data });
+  }
+
+  // ── Public: server-rendered blog post page (SEO — real <head> tags) ────
+  if (action === 'render' && req.method === 'GET') {
+    const slug = req.query.slug;
+    const template = fs.readFileSync(BLOG_TEMPLATE_PATH, 'utf8');
+    if (!slug) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      return res.status(404).send(renderBlogNotFound(template));
+    }
+    const { data: p, error: renderErr } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .single();
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    if (renderErr || !p) return res.status(404).send(renderBlogNotFound(template));
+    return res.status(200).send(renderBlogPost(template, p));
   }
 
   // ── Password login (public — no auth required) ───────────────────────
