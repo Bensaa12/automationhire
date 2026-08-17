@@ -92,7 +92,7 @@ module.exports = async function handler(req, res) {
 
   if (error) {
     console.error('Providers query error:', error);
-    return err(res, 'Failed to fetch providers', 500, { message: error.message, code: error.code, hint: error.hint, details: error.details });
+    return err(res, 'Failed to fetch providers', 500);
   }
 
   return ok(res, {
