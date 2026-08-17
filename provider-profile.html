@@ -65,7 +65,7 @@
 <!-- DYNAMIC CONTENT -->
 <div id="profile-root">
   <div class="profile-loading">
-    <span class="spinner">âŸ³</span>
+    <span class="spinner">⟳</span>
     <span>Loading provider…</span>
   </div>
 </div>
@@ -159,7 +159,7 @@ async function loadProfile() {
 function showError(title, msg) {
   document.getElementById('profile-root').innerHTML = `
     <div class="profile-error">
-      <div style="font-size:48px;margin-bottom:16px">ðŸ˜•</div>
+      <div style="font-size:48px;margin-bottom:16px">😕</div>
       <h2>${esc(title)}</h2>
       <p>${esc(msg)}</p>
       <a href="providers.html" class="btn btn-primary">â† Back to Directory</a>
@@ -167,16 +167,16 @@ function showError(title, msg) {
 }
 
 function render(p) {
-  /* â”€â”€ derived values â”€â”€ */
+  /* ── derived values ── */
   const name      = esc(p.business_name || 'Unnamed Provider');
-  const avatar    = esc(p.avatar_emoji  || 'ðŸš€');
+  const avatar    = esc(p.avatar_emoji  || '🚀');
   const type      = cap(p.provider_type || 'Provider');
   const city      = esc(p.location_city    || '');
   const country   = esc(p.location_country || '');
   const location  = [city, country === 'United Kingdom' ? 'UK' : country].filter(Boolean).join(', ') || 'Remote';
   const rating    = parseFloat(p.rating_avg  || 0).toFixed(1);
   const reviews   = parseInt(p.review_count  || 0);
-  const stars     = 'â˜…'.repeat(Math.round(p.rating_avg || 0)) + 'â˜†'.repeat(5 - Math.round(p.rating_avg || 0));
+  const stars     = '★'.repeat(Math.round(p.rating_avg || 0)) + '☆'.repeat(5 - Math.round(p.rating_avg || 0));
   const rateMin   = p.hourly_rate_min ? `&pound;${p.hourly_rate_min}` : null;
   const rateMax   = p.hourly_rate_max ? `&pound;${p.hourly_rate_max}` : null;
   const rateStr   = rateMin ? (rateMax ? `${rateMin}&ldquo;${rateMax}/hr` : `From ${rateMin}/hr`) : 'Rate on request';
@@ -192,22 +192,22 @@ function render(p) {
   /* Update page title */
   document.title = `${p.business_name} &mdash; AutomationHire`;
 
-  /* â”€â”€ build tool chips â”€â”€ */
+  /* ── build tool chips ── */
   const toolChips = tools.length
     ? tools.map(t => `<div class="tool-chip"><span>&#9881;</span> ${esc(t)}</div>`).join('')
     : '<p style="color:var(--white-60);font-size:14px">No tools listed.</p>';
 
-  /* â”€â”€ build industry tags â”€â”€ */
+  /* ── build industry tags ── */
   const industryTags = industries.length
     ? industries.map(i => `<span class="tag tag-white" style="padding:8px 16px;font-size:13px">${esc(i)}</span>`).join('')
     : '<span style="color:var(--white-60);font-size:14px">Not specified</span>';
 
-  /* â”€â”€ category tags â”€â”€ */
+  /* ── category tags ── */
   const catTags = cats.length
     ? cats.map(c => `<span class="tag tag-blue" style="padding:8px 16px;font-size:13px">${esc(c)}</span>`).join('')
     : '';
 
-  /* â”€â”€ links â”€â”€ */
+  /* ── links ── */
   const websiteBtn  = p.website_url
     ? `<a href="${esc(p.website_url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">ðŸŒ Visit Website</a>`
     : '';
@@ -215,7 +215,7 @@ function render(p) {
     ? `<a href="${esc(p.linkedin_url)}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="justify-content:flex-start;gap:10px">in LinkedIn Profile</a>`
     : '';
 
-  /* â”€â”€ inject HTML â”€â”€ */
+  /* ── inject HTML ── */
   document.getElementById('profile-root').innerHTML = `
 
     <!-- PROFILE HEADER -->
@@ -232,14 +232,14 @@ function render(p) {
             <h1 class="profile-name">${name}</h1>
             <p class="profile-subtitle">${type} &middot; ${location}</p>
             <div class="profile-badges">
-              ${p.is_verified ? '<span class="verified-badge" style="padding:5px 14px;font-size:13px">âœ“ Verified Provider</span>' : ''}
+              ${p.is_verified ? '<span class="verified-badge" style="padding:5px 14px;font-size:13px">✓ Verified Provider</span>' : ''}
               ${p.is_featured ? '<span class="tag tag-green" style="padding:5px 14px;font-size:13px">â­ Featured</span>' : ''}
               ${cats.slice(0,2).map(c => `<span class="tag tag-blue" style="padding:5px 14px;font-size:13px">${esc(c)}</span>`).join('')}
-              ${country ? `<span class="tag tag-white" style="padding:5px 14px;font-size:13px">ðŸ‡¬ðŸ‡§ ${esc(country === 'United Kingdom' ? 'UK' : country)}</span>` : ''}
+              ${country ? `<span class="tag tag-white" style="padding:5px 14px;font-size:13px">🇬🇧 ${esc(country === 'United Kingdom' ? 'UK' : country)}</span>` : ''}
             </div>
             <div class="profile-stats-row">
               <div class="profile-stat">
-                <div class="profile-stat-num" style="color:var(--green)">â˜… ${rating}</div>
+                <div class="profile-stat-num" style="color:var(--green)">★ ${rating}</div>
                 <div class="profile-stat-label">${reviews} Review${reviews !== 1 ? 's' : ''}</div>
               </div>
               <div class="profile-stat">
@@ -322,11 +322,11 @@ function render(p) {
             <div id="tab-pricing" class="tab-panel" style="display:none">
               <h3 class="profile-section-title">Pricing</h3>
               <div style="background:var(--black-4);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px;text-align:center">
-                <div style="font-size:40px;margin-bottom:12px">ðŸ’·</div>
+                <div style="font-size:40px;margin-bottom:12px">💷</div>
                 <div style="font-family:var(--font-head);font-size:32px;font-weight:800;margin-bottom:8px">${rateStr}</div>
                 ${p.min_project_budget ? `<p style="color:var(--white-60);font-size:14px">Minimum project budget: <strong style="color:#fff">${esc(p.min_project_budget)}</strong></p>` : ''}
                 <p style="color:var(--white-60);font-size:14px;margin-top:12px">Send a quote request for a custom estimate based on your project.</p>
-                <button onclick="document.querySelector('[name=client_name]').focus()" class="btn btn-primary" style="margin-top:20px">Request a Free Quote â†’</button>
+                <button onclick="document.querySelector('[name=client_name]').focus()" class="btn btn-primary" style="margin-top:20px">Request a Free Quote →</button>
               </div>
             </div>
           </div>
@@ -371,11 +371,11 @@ function render(p) {
                   <span class="sidebar-meta-val">${response}</span>
                 </li>
                 <li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">ðŸ‘¥ Team Size</span>
+                  <span class="sidebar-meta-key">👥 Team Size</span>
                   <span class="sidebar-meta-val">${esc(String(teamSize))}</span>
                 </li>
                 <li class="sidebar-meta-item">
-                  <span class="sidebar-meta-key">ðŸ“… Member Since</span>
+                  <span class="sidebar-meta-key">📅 Member Since</span>
                   <span class="sidebar-meta-val">${joinDate}</span>
                 </li>
                 ${p.profile_views ? `<li class="sidebar-meta-item">
@@ -396,7 +396,7 @@ function render(p) {
 
             <div class="sidebar-card" style="background:linear-gradient(135deg,rgba(41,121,255,0.08),rgba(0,230,118,0.04));border-color:rgba(41,121,255,0.2)">
               <div style="text-align:center">
-                <div style="font-size:28px;margin-bottom:8px">ðŸ”’</div>
+                <div style="font-size:28px;margin-bottom:8px">🔒</div>
                 <h4 style="font-family:var(--font-head);font-weight:700;font-size:15px;margin-bottom:8px">Safe Hiring via AutomationHire</h4>
                 <p style="font-size:13px;color:var(--white-60);line-height:1.6">All providers are manually verified. Secure payments, review guarantee, and dispute resolution.</p>
               </div>

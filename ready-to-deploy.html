@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9889;</text></svg>" />
   <style>
-  /* â”€â”€ Library page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* ── Library page ───────────────────────────────────────── */
   .lib-hero { padding: 110px 0 64px; position: relative; z-index: 1; }
   .lib-hero::before {
     content:''; position:absolute; inset:0; pointer-events:none;
@@ -54,7 +54,7 @@
   .lib-stat .sv.blue  { color:var(--blue); }
   .lib-stat .sk { font-size:12px; color:var(--white-30); margin-top:4px; letter-spacing:.03em; }
 
-  /* â”€â”€ Filter bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* ── Filter bar ─────────────────────────────────────────── */
   .filter-bar {
     display:flex; gap:8px; flex-wrap:wrap;
     padding:20px 0 32px;
@@ -70,7 +70,7 @@
     color:var(--black);
   }
 
-  /* â”€â”€ Component grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* ── Component grid ─────────────────────────────────────── */
   .comp-grid {
     display:grid;
     grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
@@ -164,7 +164,7 @@
   .comp-btn.outline:hover { border-color:var(--white-30); color:var(--white-90); }
   .comp-btn.dim { color:var(--white-30); border-color:var(--border); cursor:default; text-align:center; padding:8px 0; font-size:12px; }
 
-  /* â”€â”€ Capability strips â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* ── Capability strips ──────────────────────────────────── */
   .cap-strip {
     background:var(--black-2); border:1px solid var(--border);
     border-radius:var(--radius-xl); padding:48px 48px;
@@ -191,7 +191,7 @@
     font-size:13.5px; color:var(--white-60); line-height:1.5;
   }
   .cap-list li::before {
-    content:'â†’'; color:var(--green); font-weight:700;
+    content:'→'; color:var(--green); font-weight:700;
     flex-shrink:0; margin-top:1px;
   }
 
@@ -208,7 +208,7 @@
   .target-card .tc-name { font-size:12.5px; font-weight:700; color:var(--white-90); margin-bottom:3px; }
   .target-card .tc-sub  { font-size:11px; color:var(--white-30); }
 
-  /* â”€â”€ Upload CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* ── Upload CTA ─────────────────────────────────────────── */
   .upload-cta {
     text-align:center; padding:72px 0 80px;
     position:relative; z-index:1;
@@ -229,7 +229,7 @@
 </head>
 <body>
 
-<!-- â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ── NAV ──────────────────────────────────────────────────────────────────── -->
 <nav class="nav" id="nav">
   <div class="container nav-inner">
     <a href="index.html" class="nav-logo">AutomationHire</a>
@@ -245,7 +245,7 @@
   </div>
 </nav>
 
-<!-- â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ── HERO ─────────────────────────────────────────────────────────────────── -->
 <section class="lib-hero section">
   <div class="container">
     <div class="lib-kicker">PartForge &middot; Component Library</div>
@@ -272,7 +272,7 @@
   </div>
 </section>
 
-<!-- â”€â”€ LIBRARY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ── LIBRARY ───────────────────────────────────────────────────────────────── -->
 <section class="section-sm" id="library">
   <div class="container">
 
@@ -288,7 +288,7 @@
 
     <div class="comp-grid" id="comp-grid">
 
-      <!-- â”€â”€ Ball Valve G 1&frac14;" â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <!-- ── Ball Valve G 1&frac14;" ─────────────────────────────────────────────── -->
       <div class="comp-card" data-cat="valve">
         <div class="comp-viewer">
           <iframe src="assets/models/ball_valve_g1_25.html" loading="lazy" sandbox="allow-scripts" title="Ball valve 3D"></iframe>
@@ -314,7 +314,7 @@
         </div>
       </div>
 
-      <!-- â”€â”€ Speroni GAM100 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <!-- ── Speroni GAM100 ────────────────────────────────────────────────── -->
       <div class="comp-card" data-cat="pump">
         <div class="comp-viewer">
           <iframe src="assets/models/speroni_gam100.html" loading="lazy" sandbox="allow-scripts" title="Speroni GAM100 3D"></iframe>
@@ -340,7 +340,7 @@
         </div>
       </div>
 
-      <!-- â”€â”€ Speroni SXS 2000 TV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <!-- ── Speroni SXS 2000 TV ───────────────────────────────────────────── -->
       <div class="comp-card" data-cat="pump">
         <div class="comp-viewer">
           <iframe src="assets/models/speroni_sxs2000.html" loading="lazy" sandbox="allow-scripts" title="Speroni SXS 2000 3D"></iframe>
@@ -366,7 +366,7 @@
         </div>
       </div>
 
-      <!-- â”€â”€ PSG4703 Gate Valve DN100 PN16 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <!-- ── PSG4703 Gate Valve DN100 PN16 ───────────────────────────────── -->
       <div class=”comp-card” data-cat=”valve”>
         <div class=”comp-viewer”>
           <iframe src=”assets/models/gate_valve_psg4703_dn100.html” loading=”lazy” sandbox=”allow-scripts” title=”PSG4703 Gate Valve DN100 3D”></iframe>
@@ -392,7 +392,7 @@
         </div>
       </div>
 
-      <!-- â”€â”€ Coming soon cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <!-- ── Coming soon cards ─────────────────────────────────────────────── -->
 
       <div class="comp-card soon" data-cat="fitting">
         <div class="comp-viewer">
@@ -409,7 +409,7 @@
 
       <div class="comp-card soon" data-cat="instrument">
         <div class="comp-viewer">
-          <div class="soon-cover"><div class="sc-icon">ðŸ“Š</div><div class="sc-label">Coming soon</div></div>
+          <div class="soon-cover"><div class="sc-icon">📊</div><div class="sc-label">Coming soon</div></div>
         </div>
         <div class="comp-body">
           <div class="comp-cat">Instrumentation</div>
@@ -463,7 +463,7 @@
   </div>
 </section>
 
-<!-- â”€â”€ CATALOG AUTOMATION STRIP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ── CATALOG AUTOMATION STRIP ─────────────────────────────────────────────── -->
 <section class="section-sm">
   <div class="container">
 
@@ -477,7 +477,7 @@
             for every SKU in your range, at scale.
           </p>
           <ul class="cap-list">
-            <li>Photo + datasheet in â†’ STEP + spec sheet out, same day</li>
+            <li>Photo + datasheet in → STEP + spec sheet out, same day</li>
             <li>Publish 3D models on your product listings to win engineer orders</li>
             <li>Full range batching &mdash; 10 components or 1,000</li>
             <li>White-label: your branding on every spec sheet</li>
@@ -507,7 +507,7 @@
               <div class="tc-sub">STEP import</div>
             </div>
             <div class="target-card">
-              <div class="tc-icon">ðŸ—‚</div>
+              <div class="tc-icon">🗂</div>
               <div class="tc-name">AVEVA E3D</div>
               <div class="tc-sub">Spec-driven</div>
             </div>
@@ -553,7 +553,7 @@
             <li>Performance data tables and H-vs-Q curves built automatically</li>
             <li>Print-to-PDF in one click &mdash; no InDesign, no design agency</li>
           </ul>
-          <a href="pump-spec-sxs2000.html" class="btn btn-outline" style="margin-top:8px;display:inline-block">See example spec sheet â†’</a>
+          <a href="pump-spec-sxs2000.html" class="btn btn-outline" style="margin-top:8px;display:inline-block">See example spec sheet →</a>
         </div>
       </div>
     </div>
@@ -561,7 +561,7 @@
   </div>
 </section>
 
-<!-- â”€â”€ UPLOAD CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ── UPLOAD CTA ─────────────────────────────────────────────────────────────── -->
 <section class="upload-cta section">
   <div class="container">
     <p style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:14px">PartForge</p>
@@ -574,12 +574,12 @@
   </div>
 </section>
 
-<!-- â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ── FOOTER ────────────────────────────────────────────────────────────────── -->
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-brand">
       <div class="footer-logo">AutomationHire</div>
-      <p class="footer-tagline">Photo â†’ STEP â†’ Plant 3D.<br>Engineering automation for the real world.</p>
+      <p class="footer-tagline">Photo → STEP → Plant 3D.<br>Engineering automation for the real world.</p>
     </div>
     <div class="footer-links">
       <div class="footer-col">

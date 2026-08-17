@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9889;</text></svg>" />
 
 <style>
-/* â”€â”€ Spec sheet page styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Spec sheet page styles ─────────────────────────────────────────────── */
 .spec-hero {
   padding: 100px 0 60px;
   position: relative; z-index: 1;
@@ -73,7 +73,7 @@
 .spec-badge.blue  { border-color: var(--blue);  color: var(--blue);  }
 .spec-badge.grey  { border-color: var(--white-30); color: var(--white-60); }
 
-/* â”€â”€ Main 2-col layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Main 2-col layout ─────────────────────────────────────────────────── */
 .spec-main {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
@@ -186,7 +186,7 @@
 .spec-val strong { color: var(--green); }
 .spec-val .unit { color: var(--white-30); font-size: 12px; margin-left: 3px; }
 
-/* â”€â”€ Dimensions table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Dimensions table ──────────────────────────────────────────────────── */
 .dim-section { margin-bottom: 48px; }
 .dim-section-title {
   font-family: var(--font-head);
@@ -235,7 +235,7 @@
   line-height: 1.4;
 }
 
-/* â”€â”€ Performance table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Performance table ─────────────────────────────────────────────────── */
 .perf-wrap {
   overflow-x: auto;
   border-radius: var(--radius-md);
@@ -273,7 +273,7 @@ table.perf-table {
 .perf-table tbody tr:hover td { background: var(--black-3); }
 .perf-table td.hi { color: var(--green); font-weight: 600; }
 
-/* â”€â”€ Performance bar chart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Performance bar chart ─────────────────────────────────────────────── */
 .perf-chart {
   background: var(--black-2);
   border: 1px solid var(--border);
@@ -323,7 +323,7 @@ table.perf-table {
   flex-shrink: 0;
 }
 
-/* â”€â”€ Download bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Download bar ──────────────────────────────────────────────────────── */
 .spec-dl-bar {
   display: flex;
   gap: 12px;
@@ -369,7 +369,7 @@ table.perf-table {
 .spec-dl-btn.outline:hover { border-color: var(--white-30); color: var(--white-90); }
 .spec-dl-btn svg { flex-shrink: 0; }
 
-/* â”€â”€ Generated-by footer strip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Generated-by footer strip ─────────────────────────────────────────── */
 .spec-footer-strip {
   border-top: 1px solid var(--border);
   padding: 24px 0;
@@ -387,7 +387,7 @@ table.perf-table {
 </head>
 <body>
 
-<!-- â”€â”€ NAV (shared) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ── NAV (shared) ──────────────────────────────────────────────────────── -->
 <nav class="nav" id="nav">
   <div class="container nav-inner">
     <a href="index.html" class="nav-logo">AutomationHire</a>
@@ -402,7 +402,7 @@ table.perf-table {
   </div>
 </nav>
 
-<!-- â”€â”€ SPEC HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ── SPEC HERO ────────────────────────────────────────────────────────── -->
 <div class="spec-hero">
 <div class="container">
 
@@ -431,7 +431,7 @@ table.perf-table {
     </div>
   </div>
 
-  <!-- â”€â”€ Main 2-col â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Main 2-col ─────────────────────────────────────────────────────── -->
   <div class="spec-main">
 
     <!-- LEFT: 3D model viewer -->
@@ -499,7 +499,7 @@ table.perf-table {
     </div><!-- /spec-panel -->
   </div><!-- /spec-main -->
 
-  <!-- â”€â”€ Dimensions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Dimensions ─────────────────────────────────────────────────────── -->
   <div class="dim-section">
     <div class="dim-section-title">Envelope &amp; Mounting Dimensions</div>
 
@@ -520,7 +520,7 @@ table.perf-table {
     </div>
   </div>
 
-  <!-- â”€â”€ Performance data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Performance data ───────────────────────────────────────────────── -->
   <div class="dim-section">
     <div class="dim-section-title">Performance Curve &mdash; 50 Hz, 2850 RPM</div>
 
@@ -560,7 +560,7 @@ table.perf-table {
             <td>0.75</td>
           </tr>
           <tr>
-            <td>Efficiency Î· (%)</td>
+            <td>Efficiency η (%)</td>
             <td>0</td>
             <td>31</td>
             <td>49</td>
@@ -596,7 +596,7 @@ table.perf-table {
     </div>
   </div>
 
-  <!-- â”€â”€ Download bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Download bar ───────────────────────────────────────────────────── -->
   <div class="spec-dl-bar">
     <span class="dl-label">Downloads</span>
     <a href="assets/models/speroni_gam100.html" download="speroni_gam100_3d.html" class="spec-dl-btn outline">
@@ -612,7 +612,7 @@ table.perf-table {
     </span>
   </div>
 
-  <!-- â”€â”€ Footer strip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Footer strip ───────────────────────────────────────────────────── -->
   <div class="spec-footer-strip">
     <span>Specification ref: GAM100-50Hz-v1 &nbsp;&middot;&nbsp; Data is indicative &mdash; verify against current Speroni datasheet</span>
     <span><a href="forge.html">PartForge</a> &nbsp;&middot;&nbsp; <a href="index.html">AutomationHire.co.uk</a></span>

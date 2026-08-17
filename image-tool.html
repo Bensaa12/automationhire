@@ -6,14 +6,14 @@
   <title>Batch Image Resizer & Renamer &mdash; Free Tool | AutomationHire</title>
   <meta name="description" content="Free browser-based batch image resizer and renamer. Resize, convert and auto-rename images in bulk. No upload, no account, runs in your browser." />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ–¼</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼</text></svg>" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
   <style>
-    /* â”€â”€ Layout â”€â”€ */
+    /* ── Layout ── */
     .tool-page { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
 
-    /* â”€â”€ Drop Zone â”€â”€ */
+    /* ── Drop Zone ── */
     .drop-zone {
       border: 2px dashed rgba(0,230,118,0.3);
       border-radius: 16px;
@@ -37,7 +37,7 @@
     .drop-formats { margin-top: 16px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
     .drop-fmt-tag { font-size: 11px; padding: 3px 8px; border-radius: 4px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--white-60); }
 
-    /* â”€â”€ Settings panel â”€â”€ */
+    /* ── Settings panel ── */
     .settings-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -142,7 +142,7 @@
     }
     .name-preview-label { font-size: 10px; color: var(--muted); font-family: var(--font-main); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* â”€â”€ File preview grid â”€â”€ */
+    /* ── File preview grid ── */
     .files-section { margin-top: 28px; }
     .files-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .files-count { font-size: 14px; font-weight: 700; }
@@ -168,7 +168,7 @@
     }
     .file-card:hover .file-remove { opacity: 1; }
 
-    /* â”€â”€ Process bar â”€â”€ */
+    /* ── Process bar ── */
     .process-bar {
       position: sticky; bottom: 0; left: 0; right: 0;
       background: var(--black); border-top: 1px solid var(--border);
@@ -189,7 +189,7 @@
     .process-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
     .process-btn svg { flex-shrink: 0; }
 
-    /* â”€â”€ Progress overlay â”€â”€ */
+    /* ── Progress overlay ── */
     .progress-overlay {
       display: none; position: fixed; inset: 0; background: rgba(6,8,16,0.85);
       z-index: 200; align-items: center; justify-content: center; flex-direction: column; gap: 20px;
@@ -202,7 +202,7 @@
     .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--green), #00c4b4); border-radius: 3px; transition: width 0.3s ease; }
     .progress-count { font-size: 13px; color: var(--muted); margin-top: 12px; }
 
-    /* â”€â”€ Done state â”€â”€ */
+    /* ── Done state ── */
     .done-overlay {
       display: none; position: fixed; inset: 0; background: rgba(6,8,16,0.85);
       z-index: 200; align-items: center; justify-content: center;
@@ -277,7 +277,7 @@
 
   <!-- Drop zone -->
   <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
-    <div class="drop-icon">ðŸ“‚</div>
+    <div class="drop-icon">📂</div>
     <div class="drop-title">Drop your images here</div>
     <p class="drop-sub">or <span>click to browse files</span> &mdash; select as many as you like</p>
     <div class="drop-formats">
@@ -296,7 +296,7 @@
   <!-- Settings -->
   <div class="settings-grid">
 
-    <!-- â”€â”€ RESIZE â”€â”€ -->
+    <!-- ── RESIZE ── -->
     <div class="setting-card">
       <div class="setting-title">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
@@ -329,7 +329,7 @@
       </div>
     </div>
 
-    <!-- â”€â”€ FORMAT â”€â”€ -->
+    <!-- ── FORMAT ── -->
     <div class="setting-card">
       <div class="setting-title">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -365,7 +365,7 @@
       </div>
     </div>
 
-    <!-- â”€â”€ NAMING â”€â”€ -->
+    <!-- ── NAMING ── -->
     <div class="setting-card">
       <div class="setting-title">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -428,7 +428,7 @@
   <div class="files-section" id="files-section" style="display:none">
     <div class="files-header">
       <div class="files-count"><span id="files-count-num">0</span> images ready to process</div>
-      <button class="clear-btn" onclick="clearAll()">âœ• Clear all</button>
+      <button class="clear-btn" onclick="clearAll()">✕ Clear all</button>
     </div>
     <div class="files-grid" id="files-grid"></div>
   </div>
@@ -460,7 +460,7 @@
 <!-- â•â• Done overlay â•â• -->
 <div class="done-overlay" id="done-overlay">
   <div class="done-box">
-    <div class="done-icon">âœ…</div>
+    <div class="done-icon">✅</div>
     <div class="done-title">All done!</div>
     <div class="done-sub" id="done-sub">Your ZIP is downloading now.</div>
     <div class="done-actions">
@@ -572,7 +572,7 @@ function renderGrid() {
           <div class="file-name" title="${esc(f.name)}">${esc(f.name)}</div>
           <div class="file-size">${fmtBytes(f.size)}</div>
         </div>
-        <button class="file-remove" onclick="removeFile(${i})" title="Remove">âœ•</button>
+        <button class="file-remove" onclick="removeFile(${i})" title="Remove">✕</button>
       </div>`;
   }).join('');
 

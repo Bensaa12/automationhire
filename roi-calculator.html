@@ -7,7 +7,7 @@
   <meta name="description" content="Free automation ROI calculator. Enter your hourly rate, task frequency and tool cost &mdash; instantly see your payback period and annual return on investment." />
   <link rel="canonical" href="https://automationhire.co.uk/roi-calculator" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ðŸ“Š</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
   <style>
     .roi-page { max-width: 1100px; margin: 0 auto; padding: 0 20px 80px; }
 
@@ -20,7 +20,7 @@
     }
     @media(max-width: 900px) { .roi-grid { grid-template-columns: 1fr; } }
 
-    /* â”€â”€ Input Panel â”€â”€ */
+    /* ── Input Panel ── */
     .input-panel {
       background: var(--black-2);
       border: 1px solid var(--border);
@@ -90,7 +90,7 @@
     }
     .cost-input:focus { border-color: rgba(0,230,118,.4); }
 
-    /* â”€â”€ Results Panel â”€â”€ */
+    /* ── Results Panel ── */
     .results-panel { display: flex; flex-direction: column; gap: 18px; }
 
     .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -241,7 +241,7 @@
 
   <div class="roi-grid">
 
-    <!-- â”€â”€ LEFT: INPUTS â”€â”€ -->
+    <!-- ── LEFT: INPUTS ── -->
     <div class="input-panel">
 
       <div class="input-section">
@@ -325,7 +325,7 @@
 
     </div>
 
-    <!-- â”€â”€ RIGHT: RESULTS â”€â”€ -->
+    <!-- ── RIGHT: RESULTS ── -->
     <div class="results-panel">
 
       <!-- Metric cards -->
@@ -367,7 +367,7 @@
 
       <!-- Payback callout -->
       <div class="callout" id="callout">
-        <div class="callout-icon" id="callout-icon">ðŸ“Š</div>
+        <div class="callout-icon" id="callout-icon">📊</div>
         <div>
           <div class="callout-strong" id="callout-strong">Adjust the inputs to see your result</div>
           <div class="callout-sub" id="callout-sub">Results update live as you move the sliders.</div>
@@ -428,10 +428,10 @@
 
 <script src="assets/js/main.js"></script>
 <script>
-// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Helpers ─────────────────────────────────────────────────────────────────
 
 function fmtGbp(n) {
-  if (!isFinite(n)) return n > 0 ? 'âˆž' : '-âˆž';
+  if (!isFinite(n)) return n > 0 ? '∞' : '-∞';
   const abs = Math.abs(n);
   const sign = n < 0 ? '-' : '';
   if (abs >= 1000000) return sign + '&pound;' + (abs/1e6).toFixed(1) + 'M';
@@ -450,7 +450,7 @@ function syncSlider(key, val, pre, post) {
   el.textContent = pre + (Number.isInteger(val) ? val : val.toFixed(0)) + post;
 }
 
-// â”€â”€ Main calc â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Main calc ────────────────────────────────────────────────────────────────
 
 function recalc() {
   const rate    = +document.getElementById('sl-rate').value    || 0;
@@ -471,7 +471,7 @@ function recalc() {
   const annualNet    = annualLabour - annualCosts;
   const annualROI    = (setup > 0 && netPerMonth > 0) ? (annualNet / setup) * 100 : null;
 
-  // â”€â”€ Metric cards
+  // ── Metric cards
   const mH = document.getElementById('m-hours');
   mH.textContent = fmtNum(hoursPerMonth, 1) + 'h';
   document.getElementById('m-hours-note').textContent =
@@ -500,7 +500,7 @@ function recalc() {
     pbNote.textContent = 'to break even on setup cost';
   }
 
-  // â”€â”€ Annual ROI block
+  // ── Annual ROI block
   const roiPct   = document.getElementById('roi-pct');
   const roiBadge = document.getElementById('roi-badge');
   const roiBar   = document.getElementById('roi-bar');
@@ -551,17 +551,17 @@ function recalc() {
     roiExpl.textContent = 'Year 1 net: ' + fmtGbp(annualNet) + ' &middot; Labour saved: ' + fmtGbp(annualLabour) + ' &middot; Total costs: ' + fmtGbp(annualCosts);
   }
 
-  // â”€â”€ Callout
+  // ── Callout
   updateCallout(paybackMonths, netPerMonth, setup);
 
-  // â”€â”€ Year 1 summary
+  // ── Year 1 summary
   document.getElementById('y1-labour').textContent = fmtGbp(annualLabour);
   document.getElementById('y1-costs').textContent  = fmtGbp(annualCosts);
   const y1Net = document.getElementById('y1-net');
   y1Net.textContent = fmtGbp(annualNet);
   y1Net.style.color = annualNet >= 0 ? 'var(--green)' : '#f87171';
 
-  // â”€â”€ Chart
+  // ── Chart
   drawChart(netPerMonth, setup);
 }
 
@@ -575,28 +575,28 @@ function updateCallout(payback, net, setup) {
 
   if (net <= 0) {
     box.classList.add('danger');
-    icon.textContent  = 'âš ';
+    icon.textContent  = '⚠';
     strong.textContent = 'Not yet viable with these numbers';
     sub.textContent    = 'Your monthly tool cost (' + fmtGbp(+document.getElementById('inp-monthly').value) + ') exceeds the labour saving. Try daily tasks, higher rate, or a cheaper tool.';
     return;
   }
   if (setup === 0) {
-    icon.textContent  = 'âœ…';
+    icon.textContent  = '✅';
     strong.textContent = 'Zero setup cost &mdash; immediate profit';
     sub.textContent    = 'You save ' + fmtGbp(net) + ' every month from day one. That\'s ' + fmtGbp(net * 12) + ' in year one.';
     return;
   }
   if (payback <= 2) {
-    icon.textContent  = 'ðŸš€';
+    icon.textContent  = '🚀';
     strong.textContent = 'Pays back in ' + (payback < 1 ? Math.round(payback*30) + ' days' : payback.toFixed(1) + ' months') + ' &mdash; compelling case';
     sub.textContent    = 'After that you pocket ' + fmtGbp(net) + ' every month, net of tool costs.';
   } else if (payback <= 6) {
-    icon.textContent  = 'ðŸ“ˆ';
+    icon.textContent  = '📈';
     strong.textContent = 'Payback in ' + payback.toFixed(1) + ' months &mdash; solid investment';
     sub.textContent    = 'Then ' + fmtGbp(net) + '/month in clear profit. Most businesses consider < 6 months excellent.';
   } else if (payback <= 12) {
     box.classList.add('warn');
-    icon.textContent  = 'ðŸ“Š';
+    icon.textContent  = '📊';
     strong.textContent = 'Payback in ' + payback.toFixed(0) + ' months &mdash; reasonable, but check assumptions';
     sub.textContent    = 'Consider whether task frequency or time estimates could be higher. Even modest increases drastically shorten payback.';
   } else {
@@ -607,7 +607,7 @@ function updateCallout(payback, net, setup) {
   }
 }
 
-// â”€â”€ Canvas Chart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Canvas Chart ─────────────────────────────────────────────────────────────
 
 function drawChart(netPerMonth, setup) {
   const canvas = document.getElementById('roi-chart');
@@ -703,7 +703,7 @@ function drawChart(netPerMonth, setup) {
   });
 }
 
-// â”€â”€ Self-download â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Self-download ─────────────────────────────────────────────────────────────
 function downloadSelf() {
   const html = document.documentElement.outerHTML;
   const blob = new Blob([html], { type: 'text/html' });
@@ -713,7 +713,7 @@ function downloadSelf() {
   a.click();
 }
 
-// â”€â”€ Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Init ─────────────────────────────────────────────────────────────────────
 recalc();
 window.addEventListener('resize', () => {
   const net   = (+document.getElementById('sl-rate').value || 0)

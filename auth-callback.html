@@ -116,7 +116,7 @@
     const next = sessionStorage.getItem('oauth_next') || '';
     sessionStorage.removeItem('oauth_next');
 
-    // New Google user with no provider â†’ onboard them
+    // New Google user with no provider → onboard them
     if (!provider) {
       window.location.replace('submit-listing.html?google=1');
       return;

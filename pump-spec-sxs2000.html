@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="assets/css/style.css" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9889;</text></svg>" />
 <style>
-/* â”€â”€ Spec sheet â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Spec sheet ─────────────────────────────────────────────────────────── */
 .spec-page { padding: 100px 0 60px; position: relative; z-index: 1; }
 .spec-page::before {
   content:''; position:absolute; inset:0; pointer-events:none;
@@ -41,7 +41,7 @@
 .badge.blue  { border-color:var(--blue);  color:var(--blue); }
 .badge.grey  { border-color:var(--white-30); color:var(--white-60); }
 
-/* â”€â”€ Hero image + spec split â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Hero image + spec split ──────────────────────────────────────────── */
 .hero-split {
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -109,7 +109,7 @@
   text-align:center; border-top:1px solid var(--border);
 }
 
-/* â”€â”€ Spec cards (right column) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Spec cards (right column) ────────────────────────────────────────── */
 .spec-col { display:flex; flex-direction:column; gap:18px; }
 
 .spec-card {
@@ -136,7 +136,7 @@
 .kv-v strong { color:var(--green); }
 .kv-v .u { color:var(--white-30); font-size:11px; margin-left:3px; }
 
-/* â”€â”€ Dimensions grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Dimensions grid ──────────────────────────────────────────────────── */
 .sec-title {
   font-family:var(--font-head); font-size:15px; font-weight:600;
   color:var(--white-90); margin-bottom:14px; padding-bottom:9px;
@@ -156,7 +156,7 @@
 .dim-cell .dv { font-size:14px; font-weight:600; color:var(--white-90); margin-bottom:2px; }
 .dim-cell .dd { font-size:11px; color:var(--white-30); line-height:1.4; }
 
-/* â”€â”€ Performance table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Performance table ────────────────────────────────────────────────── */
 .table-wrap { overflow-x:auto; border-radius:var(--radius-md); border:1px solid var(--border); margin-bottom:20px; }
 table.pt {
   width:100%; border-collapse:collapse; font-size:12.5px; white-space:nowrap;
@@ -178,7 +178,7 @@ table.pt {
 .pt tbody tr:hover td { background:var(--black-3); }
 .pt td.hi { color:var(--green); font-weight:600; }
 
-/* â”€â”€ Head-curve bar chart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Head-curve bar chart ─────────────────────────────────────────────── */
 .hchart {
   background:var(--black-2); border:1px solid var(--border);
   border-radius:var(--radius-md); padding:22px 22px 14px;
@@ -191,7 +191,7 @@ table.pt {
 .hbar { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--blue),var(--green)); }
 .hbar-val { font-size:11px; font-weight:600; color:var(--white-60); width:42px; flex-shrink:0; }
 
-/* â”€â”€ All-models comparison table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── All-models comparison table ─────────────────────────────────────── */
 .models-card {
   background:var(--black-2); border:1px solid var(--border);
   border-radius:var(--radius-md); overflow:hidden; margin-bottom:28px;
@@ -217,7 +217,7 @@ table.mt {
 .mt td.focus { color:var(--green); font-weight:700; background:rgba(0,230,118,.04); }
 .mt th.focus { color:var(--green); }
 
-/* â”€â”€ Download bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Download bar ─────────────────────────────────────────────────────── */
 .dl-bar {
   display:flex; gap:10px; flex-wrap:wrap; align-items:center;
   background:var(--black-3); border:1px solid var(--border);
@@ -234,7 +234,7 @@ table.mt {
 .dl-btn.out { border-color:var(--border); color:var(--white-60); background:transparent; }
 .dl-btn.out:hover { border-color:var(--white-30); color:var(--white-90); }
 
-/* â”€â”€ Footer strip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Footer strip ─────────────────────────────────────────────────────── */
 .spec-foot {
   border-top:1px solid var(--border); padding:22px 0;
   display:flex; align-items:center; justify-content:space-between;
@@ -246,7 +246,7 @@ table.mt {
 </head>
 <body>
 
-<!-- â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ── NAV ──────────────────────────────────────────────────────────────────── -->
 <nav class="nav" id="nav">
   <div class="container nav-inner">
     <a href="index.html" class="nav-logo">AutomationHire</a>
@@ -261,7 +261,7 @@ table.mt {
   </div>
 </nav>
 
-<!-- â”€â”€ PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ── PAGE ─────────────────────────────────────────────────────────────────── -->
 <div class="spec-page">
 <div class="container">
 
@@ -289,7 +289,7 @@ table.mt {
     </div>
   </div>
 
-  <!-- â”€â”€ Hero: image panel + spec cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Hero: image panel + spec cards ─────────────────────────────────────── -->
   <div class="hero-split">
 
     <!-- LEFT: photo / 3D tab panel -->
@@ -437,7 +437,7 @@ table.mt {
     </div>
   </div>
 
-  <!-- â”€â”€ Dimensions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Dimensions ─────────────────────────────────────────────────────────── -->
   <div class="sec-title">Envelope &amp; Mounting Dimensions &mdash; SXS 2000 T-V</div>
   <div class="dim-grid">
     <div class="dim-cell"><div class="dl">H</div><div class="dv">486 mm</div><div class="dd">Total body height</div></div>
@@ -450,7 +450,7 @@ table.mt {
     <div class="dim-cell"><div class="dl">Kg</div><div class="dv">14.6 kg</div><div class="dd">Net weight</div></div>
   </div>
 
-  <!-- â”€â”€ Full range comparison â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Full range comparison ──────────────────────────────────────────────── -->
   <div class="sec-title">Full SXS Range Comparison</div>
   <div class="models-card">
     <table class="mt">
@@ -499,13 +499,13 @@ table.mt {
     </table>
   </div>
 
-  <!-- â”€â”€ Performance data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Performance data ───────────────────────────────────────────────────── -->
   <div class="sec-title">Performance Curve &mdash; All models at 50 Hz</div>
   <div class="table-wrap">
     <table class="pt">
       <thead>
         <tr>
-          <th>Type / Q â†’</th>
+          <th>Type / Q →</th>
           <th>0 m³/h</th><th>3.6</th><th>5.4</th><th>7.2</th><th>9</th>
           <th>12</th><th>15</th><th>21</th><th>27</th><th>33</th>
         </tr>
@@ -549,7 +549,7 @@ table.mt {
     <div class="hbar-row"><span class="hbar-lbl">33 m³/h</span><div class="hbar-wrap"><div class="hbar" style="width:40%"></div></div><span class="hbar-val">5.0 m</span></div>
   </div>
 
-  <!-- â”€â”€ Download bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Download bar ───────────────────────────────────────────────────────── -->
   <div class="dl-bar">
     <span class="dl-label">Downloads</span>
     <a href="assets/models/speroni_sxs2000.html" download="speroni_sxs2000_3d.html" class="dl-btn out">
@@ -565,7 +565,7 @@ table.mt {
     </span>
   </div>
 
-  <!-- â”€â”€ Footer strip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <!-- ── Footer strip ───────────────────────────────────────────────────────── -->
   <div class="spec-foot">
     <span>Ref: SXS2000-TV-415V-v1 &nbsp;&middot;&nbsp; All data indicative &mdash; verify against current Speroni datasheet</span>
     <span><a href="forge.html">PartForge</a> &nbsp;&middot;&nbsp; <a href="index.html">AutomationHire.co.uk</a></span>

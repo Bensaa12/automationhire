@@ -74,7 +74,7 @@
   <p>Enter your Supabase service role key to continue</p>
   <input id="admin-key-input" type="password" placeholder="Service role key (eyJ...)" class="form-input" style="width:100%;margin-bottom:12px" />
   <button onclick="adminLogin()" class="btn btn-primary" style="width:100%">Access Admin Panel</button>
-  <p style="margin-top:16px;font-size:12px;color:var(--white-60)">Find this in Supabase â†’ Settings â†’ API</p>
+  <p style="margin-top:16px;font-size:12px;color:var(--white-60)">Find this in Supabase → Settings → API</p>
 </div>
 
 <!-- MAIN PANEL -->
@@ -85,7 +85,7 @@
       <div style="font-size:13px;color:var(--green);font-weight:600;margin-bottom:4px">&#9889; Admin Panel</div>
       <h1>Provider Listings</h1>
     </div>
-    <button onclick="loadAll()" class="btn btn-secondary btn-sm">â†» Refresh</button>
+    <button onclick="loadAll()" class="btn btn-secondary btn-sm">↻ Refresh</button>
   </div>
 
   <!-- Stats -->
@@ -119,7 +119,7 @@
 
   <!-- List -->
   <div id="providers-list">
-    <div class="loading"><span class="spinner">âŸ³</span></div>
+    <div class="loading"><span class="spinner">⟳</span></div>
   </div>
 
 </div>
@@ -136,11 +136,11 @@ let   supabaseKey  = '';
 let   currentTab   = 'pending';
 let   allProviders = [];
 
-/* â”€â”€ Auth â”€â”€ */
+/* ── Auth ── */
 function adminLogin() {
   const key = document.getElementById('admin-key-input').value.trim();
   if (!key.startsWith('eyJ')) {
-    alert('That does not look like a valid key. Find it in Supabase â†’ Settings â†’ API â†’ service_role key.');
+    alert('That does not look like a valid key. Find it in Supabase → Settings → API → service_role key.');
     return;
   }
   sessionStorage.setItem('ah_admin_key', key);
@@ -159,7 +159,7 @@ function showPanel() {
   loadAll();
 }
 
-/* â”€â”€ Supabase fetch â”€â”€ */
+/* ── Supabase fetch ── */
 async function sbFetch(path, opts = {}) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
     ...opts,
@@ -178,10 +178,10 @@ async function sbFetch(path, opts = {}) {
   return opts.method === 'PATCH' ? res : res.json();
 }
 
-/* â”€â”€ Load providers â”€â”€ */
+/* ── Load providers ── */
 async function loadAll() {
   document.getElementById('providers-list').innerHTML =
-    '<div class="loading"><span class="spinner">âŸ³</span><br><br>Loading listings…</div>';
+    '<div class="loading"><span class="spinner">⟳</span><br><br>Loading listings…</div>';
 
   try {
     allProviders = await sbFetch(
@@ -192,7 +192,7 @@ async function loadAll() {
     renderTab(currentTab);
   } catch (e) {
     document.getElementById('providers-list').innerHTML =
-      `<div class="empty-state"><div class="icon">âš </div><p>Error loading data:<br><code style="color:#ef4444;font-size:12px">${e.message}</code></p></div>`;
+      `<div class="empty-state"><div class="icon">⚠</div><p>Error loading data:<br><code style="color:#ef4444;font-size:12px">${e.message}</code></p></div>`;
   }
 }
 
@@ -228,7 +228,7 @@ function renderTab(tab) {
 
   if (list.length === 0) {
     el.innerHTML = `<div class="empty-state">
-      <div class="icon">${tab === 'pending' ? 'âœ…' : 'ðŸ“­'}</div>
+      <div class="icon">${tab === 'pending' ? '✅' : '📭'}</div>
       <p>${tab === 'pending' ? 'No pending listings &mdash; all caught up!' : 'No listings found.'}</p>
     </div>`;
     return;
@@ -243,8 +243,8 @@ function buildRow(p) {
   const approved =  p.is_approved && p.is_active;
 
   const statusLabel = pending  ? '<span class="status-badge status-pending">â³ Pending</span>'
-                    : approved ? '<span class="status-badge status-approved">âœ… Live</span>'
-                    :            '<span class="status-badge status-rejected">âœ— Rejected</span>';
+                    : approved ? '<span class="status-badge status-approved">✅ Live</span>'
+                    :            '<span class="status-badge status-rejected">✗ Rejected</span>';
 
   const date = new Date(p.created_at).toLocaleDateString('en-GB', {
     day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'
@@ -261,34 +261,34 @@ function buildRow(p) {
           ${statusLabel}
         </div>
         <div class="row-meta">
-          <span>ðŸ“§ ${escHtml(p.email || '&mdash;')}</span>
+          <span>📧 ${escHtml(p.email || '&mdash;')}</span>
           <span>ðŸ¢ ${capitalize(p.provider_type || '&mdash;')}</span>
           <span>ðŸ“ ${escHtml([p.location_city, p.location_country].filter(Boolean).join(', ') || 'Remote')}</span>
           <span>ðŸ• ${date}</span>
-          ${p.hourly_rate_min ? `<span>ðŸ’· From &pound;${p.hourly_rate_min}/hr</span>` : ''}
+          ${p.hourly_rate_min ? `<span>💷 From &pound;${p.hourly_rate_min}/hr</span>` : ''}
         </div>
         <div class="row-desc">${escHtml((p.description||'').substring(0,180))}${(p.description||'').length > 180 ? '…' : ''}</div>
         <div class="row-tags">${tags}</div>
       </div>
       <div class="row-actions">
         ${pending ? `
-          <button class="btn-approve" onclick="approve('${p.id}')">âœ“ Approve</button>
-          <button class="btn-reject"  onclick="reject('${p.id}')">âœ— Reject</button>
+          <button class="btn-approve" onclick="approve('${p.id}')">✓ Approve</button>
+          <button class="btn-reject"  onclick="reject('${p.id}')">✗ Reject</button>
         ` : approved ? `
           <button class="btn-reject" onclick="reject('${p.id}')">Unpublish</button>
         ` : `
           <button class="btn-approve" onclick="approve('${p.id}')">Re-approve</button>
         `}
-        ${p.slug ? `<a href="provider-profile.html?slug=${p.slug}" target="_blank" class="btn-view">View Profile â†—</a>` : ''}
+        ${p.slug ? `<a href="provider-profile.html?slug=${p.slug}" target="_blank" class="btn-view">View Profile ↗</a>` : ''}
       </div>
     </div>
   `;
 }
 
-/* â”€â”€ Actions â”€â”€ */
+/* ── Actions ── */
 async function approve(id) {
   const btn = document.querySelector(`#row-${id} .btn-approve`);
-  if (btn) { btn.textContent = 'âŸ³ Saving…'; btn.disabled = true; }
+  if (btn) { btn.textContent = '⟳ Saving…'; btn.disabled = true; }
 
   try {
     await sbFetch(`/providers?id=eq.${id}`, {
@@ -296,11 +296,11 @@ async function approve(id) {
       prefer: 'return=minimal',
       body: JSON.stringify({ is_approved: true, is_active: true }),
     });
-    showToastMsg('âœ… Approved and live!', false);
+    showToastMsg('✅ Approved and live!', false);
     await loadAll();
   } catch (e) {
     showToastMsg('Failed: ' + e.message, true);
-    if (btn) { btn.textContent = 'âœ“ Approve'; btn.disabled = false; }
+    if (btn) { btn.textContent = '✓ Approve'; btn.disabled = false; }
   }
 }
 
@@ -319,7 +319,7 @@ async function reject(id) {
   }
 }
 
-/* â”€â”€ Utils â”€â”€ */
+/* ── Utils ── */
 function escHtml(s) {
   if (!s) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -349,7 +349,7 @@ function showToastMsg(msg, isError) {
   el._t = setTimeout(() => { el.style.opacity = '0'; }, 3000);
 }
 
-/* â”€â”€ Boot â”€â”€ */
+/* ── Boot ── */
 window.addEventListener('DOMContentLoaded', () => {
   supabaseKey = sessionStorage.getItem('ah_admin_key') || '';
   if (supabaseKey) {

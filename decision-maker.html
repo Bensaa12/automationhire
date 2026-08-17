@@ -7,10 +7,10 @@
   <meta name="description" content="Free AI-powered decision making app. Choose your thinking style &mdash; side-by-side comparison, cost-benefit analysis, weighted scoring, devil's advocate or gut check. Get a clear recommendation instantly." />
   <link rel="canonical" href="https://automationhire.co.uk/decision-maker" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>âš–</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖</text></svg>" />
   <script src="https://cdn.jsdelivr.net/npm/marked@9.1.6/marked.min.js"></script>
   <style>
-    /* â”€â”€ App shell â”€â”€ */
+    /* ── App shell ── */
     .app-shell {
       display: grid;
       grid-template-columns: 420px 1fr;
@@ -19,7 +19,7 @@
     }
     @media(max-width:960px) { .app-shell { grid-template-columns: 1fr; } }
 
-    /* â”€â”€ Left: Input pane â”€â”€ */
+    /* ── Left: Input pane ── */
     .input-pane {
       border-right: 1px solid var(--border);
       padding: 28px 24px 60px;
@@ -32,7 +32,7 @@
     }
     @media(max-width:960px) { .input-pane { position:static; max-height:none; border-right:none; border-bottom:1px solid var(--border); } }
 
-    /* â”€â”€ Style chips â”€â”€ */
+    /* ── Style chips ── */
     .style-section-lbl { font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px; }
     .style-chips { display:flex;gap:7px;flex-wrap:wrap;margin-bottom:24px; }
     .style-chip {
@@ -51,7 +51,7 @@
     .chip-desc  { font-size:9px;color:var(--white-30);text-align:center;line-height:1.3; }
     .style-chip.active .chip-label { color:var(--chip-color); }
 
-    /* â”€â”€ Form sections â”€â”€ */
+    /* ── Form sections ── */
     .form-section { margin-bottom:20px; }
     .form-lbl { font-size:12px;font-weight:700;color:var(--white-60);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center; }
     .form-lbl span { font-size:10px;font-weight:500;color:var(--muted); }
@@ -149,7 +149,7 @@
     .analyse-btn:disabled { opacity:.5;cursor:not-allowed;transform:none;box-shadow:none; }
     .form-error { font-size:12px;color:#f87171;margin-top:10px;padding:10px 12px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:7px;display:none; }
 
-    /* â”€â”€ Right: Output pane â”€â”€ */
+    /* ── Right: Output pane ── */
     .output-pane { padding:28px;min-height:calc(100vh - 68px); }
     @media(max-width:960px) { .output-pane { padding:24px 20px; } }
 
@@ -280,7 +280,7 @@
 <!-- â•â• APP SHELL â•â• -->
 <div class="app-shell">
 
-  <!-- â”€â”€ LEFT: INPUT PANE â”€â”€ -->
+  <!-- ── LEFT: INPUT PANE ── -->
   <div class="input-pane">
 
     <!-- Back link -->
@@ -300,21 +300,21 @@
         <button class="style-chip" data-style="comparator"
           style="--chip-color:#3b82f6;--chip-bg:rgba(59,130,246,.1);--chip-glow:rgba(59,130,246,.15)"
           onclick="setStyle('comparator',this)" title="Side-by-side comparison">
-          <span class="chip-icon">âš–</span>
+          <span class="chip-icon">⚖</span>
           <span class="chip-label">Compare</span>
           <span class="chip-desc">Side by side</span>
         </button>
         <button class="style-chip active" data-style="analyst"
           style="--chip-color:#00e676;--chip-bg:rgba(0,230,118,.1);--chip-glow:rgba(0,230,118,.15)"
           onclick="setStyle('analyst',this)" title="Cost-benefit analysis">
-          <span class="chip-icon">ðŸ“Š</span>
+          <span class="chip-icon">📊</span>
           <span class="chip-label">Analyst</span>
           <span class="chip-desc">Cost-benefit</span>
         </button>
         <button class="style-chip" data-style="scorer"
           style="--chip-color:#a78bfa;--chip-bg:rgba(167,139,250,.1);--chip-glow:rgba(167,139,250,.15)"
           onclick="setStyle('scorer',this)" title="Weighted scoring">
-          <span class="chip-icon">ðŸŽ¯</span>
+          <span class="chip-icon">🎯</span>
           <span class="chip-label">Scorer</span>
           <span class="chip-desc">Weighted score</span>
         </button>
@@ -349,12 +349,12 @@
         <div class="option-row">
           <div class="option-letter">A</div>
           <input class="option-input" type="text" placeholder="First option…" />
-          <button class="remove-btn" onclick="removeOption(this)" title="Remove" style="visibility:hidden">âœ•</button>
+          <button class="remove-btn" onclick="removeOption(this)" title="Remove" style="visibility:hidden">✕</button>
         </div>
         <div class="option-row">
           <div class="option-letter">B</div>
           <input class="option-input" type="text" placeholder="Second option…" />
-          <button class="remove-btn" onclick="removeOption(this)" title="Remove" style="visibility:hidden">âœ•</button>
+          <button class="remove-btn" onclick="removeOption(this)" title="Remove" style="visibility:hidden">✕</button>
         </div>
       </div>
       <button class="add-btn" id="add-opt-btn" onclick="addOption()">
@@ -374,12 +374,12 @@
           <div class="criteria-row">
             <div class="criteria-num">1</div>
             <input class="criteria-input" type="text" placeholder="e.g. Cost…" />
-            <button class="remove-btn" onclick="removeCrit(this)" title="Remove">âœ•</button>
+            <button class="remove-btn" onclick="removeCrit(this)" title="Remove">✕</button>
           </div>
           <div class="criteria-row">
             <div class="criteria-num">2</div>
             <input class="criteria-input" type="text" placeholder="e.g. Speed…" />
-            <button class="remove-btn" onclick="removeCrit(this)" title="Remove">âœ•</button>
+            <button class="remove-btn" onclick="removeCrit(this)" title="Remove">✕</button>
           </div>
         </div>
         <button class="add-btn" style="margin-top:8px" onclick="addCrit()">
@@ -417,18 +417,18 @@
 
   </div>
 
-  <!-- â”€â”€ RIGHT: OUTPUT PANE â”€â”€ -->
+  <!-- ── RIGHT: OUTPUT PANE ── -->
   <div class="output-pane">
 
     <!-- Empty state -->
     <div id="state-empty" class="state-panel">
-      <div class="empty-icon">âš–</div>
+      <div class="empty-icon">⚖</div>
       <h3>Your analysis will appear here</h3>
       <p>Describe your decision on the left, choose your thinking style, and click Analyse.</p>
       <div class="style-preview-grid">
-        <div class="spg-card"><div class="spg-icon">âš–</div><div class="spg-name">Compare</div><div class="spg-desc">Structured side-by-side &mdash; instantly see what each option wins and loses on</div></div>
-        <div class="spg-card"><div class="spg-icon">ðŸ“Š</div><div class="spg-name">Analyst</div><div class="spg-desc">Deep cost-benefit with hidden costs, risks and opportunity cost exposed</div></div>
-        <div class="spg-card"><div class="spg-icon">ðŸŽ¯</div><div class="spg-name">Scorer</div><div class="spg-desc">Weighted scores against your criteria &mdash; best for complex multi-factor decisions</div></div>
+        <div class="spg-card"><div class="spg-icon">⚖</div><div class="spg-name">Compare</div><div class="spg-desc">Structured side-by-side &mdash; instantly see what each option wins and loses on</div></div>
+        <div class="spg-card"><div class="spg-icon">📊</div><div class="spg-name">Analyst</div><div class="spg-desc">Deep cost-benefit with hidden costs, risks and opportunity cost exposed</div></div>
+        <div class="spg-card"><div class="spg-icon">🎯</div><div class="spg-name">Scorer</div><div class="spg-desc">Weighted scores against your criteria &mdash; best for complex multi-factor decisions</div></div>
         <div class="spg-card"><div class="spg-icon">ðŸ”</div><div class="spg-name">Challenge</div><div class="spg-desc">Devil's advocate &mdash; steelmanned then dismantled, so you see what survives scrutiny</div></div>
         <div class="spg-card"><div class="spg-icon">&#9889;</div><div class="spg-name">Intuition</div><div class="spg-desc">Gut read first, then validated with evidence &mdash; for when instinct and data must agree</div></div>
       </div>
@@ -436,7 +436,7 @@
 
     <!-- Loading state -->
     <div id="state-loading" class="state-panel" style="display:none">
-      <div class="loading-icon">ðŸ§ </div>
+      <div class="loading-icon">🧠</div>
       <p class="loading-msg" id="loading-msg">Analysing your options…</p>
       <div class="dot-pulse"><span></span><span></span><span></span></div>
     </div>
@@ -466,8 +466,8 @@
         <div class="gut-q">Does this match your gut feeling?</div>
         <div class="gut-btns">
           <button class="gut-btn" onclick="gutReact('yes')">ðŸ‘ Yes, feels right</button>
-          <button class="gut-btn" onclick="gutReact('no')">ðŸ¤” Not quite sure</button>
-          <button class="gut-btn" onclick="gutReact('disagree')">ðŸ‘Ž I'd choose differently</button>
+          <button class="gut-btn" onclick="gutReact('no')">🤔 Not quite sure</button>
+          <button class="gut-btn" onclick="gutReact('disagree')">👎 I'd choose differently</button>
         </div>
         <div class="gut-response" id="gut-response"></div>
       </div>
@@ -503,11 +503,11 @@
 
 <script src="assets/js/main.js"></script>
 <script>
-// â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── State ─────────────────────────────────────────────────────────────────────
 const STYLE_META = {
-  comparator: { label:'Comparator', icon:'âš–', color:'#3b82f6' },
-  analyst:    { label:'Analyst',    icon:'ðŸ“Š', color:'#00e676' },
-  scorer:     { label:'Scorer',     icon:'ðŸŽ¯', color:'#a78bfa' },
+  comparator: { label:'Comparator', icon:'⚖', color:'#3b82f6' },
+  analyst:    { label:'Analyst',    icon:'📊', color:'#00e676' },
+  scorer:     { label:'Scorer',     icon:'🎯', color:'#a78bfa' },
   challenger: { label:'Challenge',  icon:'ðŸ”', color:'#fb923c' },
   gut:        { label:'Intuition',  icon:'&#9889;', color:'#f472b6' },
 };
@@ -542,7 +542,7 @@ let appState = {
   });
 })();
 
-// â”€â”€ Style picker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Style picker ──────────────────────────────────────────────────────────────
 function setStyle(key, el) {
   appState.style = key;
   localStorage.setItem('dm-style', key);
@@ -550,7 +550,7 @@ function setStyle(key, el) {
   el.classList.add('active');
 }
 
-// â”€â”€ Options â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Options ───────────────────────────────────────────────────────────────────
 const LETTERS = 'ABCDEF';
 
 function rebuildLetters() {
@@ -574,7 +574,7 @@ function addOption() {
   row.innerHTML = `
     <div class="option-letter">${LETTERS[count]}</div>
     <input class="option-input" type="text" placeholder="Option ${LETTERS[count]}…" />
-    <button class="remove-btn" onclick="removeOption(this)" title="Remove">âœ•</button>`;
+    <button class="remove-btn" onclick="removeOption(this)" title="Remove">✕</button>`;
   list.appendChild(row);
   row.querySelector('input').focus();
   rebuildLetters();
@@ -587,7 +587,7 @@ function removeOption(btn) {
   rebuildLetters();
 }
 
-// â”€â”€ Criteria â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Criteria ──────────────────────────────────────────────────────────────────
 function toggleCriteria() {
   const wrap = document.getElementById('crit-wrap');
   const toggle = document.getElementById('crit-toggle');
@@ -605,7 +605,7 @@ function addCrit() {
   row.innerHTML = `
     <div class="criteria-num">${num}</div>
     <input class="criteria-input" type="text" placeholder="e.g. Quality…" />
-    <button class="remove-btn" onclick="removeCrit(this)" title="Remove">âœ•</button>`;
+    <button class="remove-btn" onclick="removeCrit(this)" title="Remove">✕</button>`;
   list.appendChild(row);
   row.querySelector('input').focus();
   rebuildCritNums();
@@ -622,7 +622,7 @@ function rebuildCritNums() {
   });
 }
 
-// â”€â”€ Pills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Pills ─────────────────────────────────────────────────────────────────────
 function setPill(btn) {
   const group = btn.dataset.group;
   document.querySelectorAll(`.pill-btn[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
@@ -630,7 +630,7 @@ function setPill(btn) {
   appState[group] = btn.dataset.val;
 }
 
-// â”€â”€ Collect form values â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Collect form values ───────────────────────────────────────────────────────
 function getFormValues() {
   const question = document.getElementById('q-question').value.trim();
   const options  = [...document.querySelectorAll('.option-input')].map(i => i.value.trim()).filter(Boolean);
@@ -645,7 +645,7 @@ function showError(msg) {
   setTimeout(() => el.style.display = 'none', 4000);
 }
 
-// â”€â”€ Main analysis call â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Main analysis call ────────────────────────────────────────────────────────
 async function analyse() {
   const { question, options, criteria } = getFormValues();
 
@@ -688,7 +688,7 @@ async function analyse() {
   }
 }
 
-// â”€â”€ Render result â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Render result ─────────────────────────────────────────────────────────────
 function renderResult(data) {
   const meta = STYLE_META[data.style] || STYLE_META.analyst;
 
@@ -724,14 +724,14 @@ function renderResult(data) {
   document.getElementById('gut-response').style.display = 'none';
 }
 
-// â”€â”€ State switcher â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── State switcher ────────────────────────────────────────────────────────────
 function showState(which) {
   ['empty','loading','result'].forEach(s => {
     document.getElementById('state-' + s).style.display = s === which ? (s === 'result' ? 'block' : 'flex') : 'none';
   });
 }
 
-// â”€â”€ Gut check â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Gut check ─────────────────────────────────────────────────────────────────
 function gutReact(key) {
   const responses = GUT_RESPONSES[key];
   const text = responses[Math.floor(Math.random() * responses.length)];
@@ -740,11 +740,11 @@ function gutReact(key) {
   el.style.display = 'block';
 }
 
-// â”€â”€ Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Actions ───────────────────────────────────────────────────────────────────
 function copyAnalysis() {
   if (!appState.lastResult) return;
   const { recommendation, confidence, keyInsight, analysis } = appState.lastResult;
-  const txt = `DECISION ANALYSIS\n${'â”€'.repeat(40)}\n\nRecommendation: ${recommendation}\nConfidence: ${confidence}%\nKey Insight: ${keyInsight}\n\n${'â”€'.repeat(40)}\n\n${analysis}\n\n&mdash;\nGenerated by AutomationHire Decision Maker\nhttps://automationhire.co.uk/decision-maker`;
+  const txt = `DECISION ANALYSIS\n${'─'.repeat(40)}\n\nRecommendation: ${recommendation}\nConfidence: ${confidence}%\nKey Insight: ${keyInsight}\n\n${'─'.repeat(40)}\n\n${analysis}\n\n&mdash;\nGenerated by AutomationHire Decision Maker\nhttps://automationhire.co.uk/decision-maker`;
 
   navigator.clipboard.writeText(txt).then(() => {
     const lbl = document.getElementById('copy-btn-label');
