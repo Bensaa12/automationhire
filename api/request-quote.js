@@ -7,6 +7,7 @@
 const { getSupabase, getResend, handleCors, ok, err, emails, getSender } = require('./_lib');
 
 module.exports = async function handler(req, res) {
+  try {
   if (handleCors(req, res)) return;
   if (req.method !== 'POST') return err(res, 'Method not allowed', 405);
 
@@ -156,4 +157,8 @@ module.exports = async function handler(req, res) {
     message: `Quote request sent to ${providerName}. Expect a reply within 4 hours.`,
     lead_id: lead.id,
   }, 201);
+  } catch (e) {
+    console.error('DIAGNOSTIC top-level catch:', e);
+    return err(res, 'DIAGNOSTIC', 500, { message: e.message, stack: e.stack?.split('\n').slice(0,5) });
+  }
 };
