@@ -4,8 +4,8 @@
 // Body: { plan, billing, provider_id, success_url, cancel_url }
 // ============================================================
 
-const Stripe                              = require('stripe');
-const { getSupabase, handleCors, ok, err } = require('../_lib');
+const Stripe                                       = require('stripe');
+const { getSupabase, getBody, handleCors, ok, err } = require('../_lib');
 
 const PRICE_MAP = {
   growth: {
@@ -45,7 +45,7 @@ module.exports = async function handler(req, res) {
     provider_id,
     success_url,
     cancel_url,
-  } = req.body;
+  } = await getBody(req);
 
   if (!provider_id)           return err(res, 'provider_id is required');
   if (!PRICE_MAP[plan])       return err(res, `Invalid plan: ${plan}`);

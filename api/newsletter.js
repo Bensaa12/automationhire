@@ -3,7 +3,7 @@
 // Newsletter signup — saves to Supabase, sends welcome email
 // ============================================================
 
-const { getSupabase, getResend, handleCors, ok, err, emails, getSender } = require('./_lib');
+const { getSupabase, getResend, getBody, handleCors, ok, err, emails, getSender } = require('./_lib');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -12,7 +12,7 @@ module.exports = async function handler(req, res) {
   const supabase = getSupabase();
   const resend   = getResend();
 
-  const { email, source } = req.body;
+  const { email, source } = await getBody(req);
 
   if (!email?.trim()) return err(res, 'Email is required');
 

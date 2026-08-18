@@ -3,7 +3,7 @@
 // /api/auth?action=refresh  POST { refresh_token }
 // Reached via vercel.json rewrites so frontend URLs stay unchanged.
 
-const { getSupabase, handleCors, ok, err } = require('./_lib');
+const { getSupabase, getBody, handleCors, ok, err } = require('./_lib');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -12,7 +12,7 @@ module.exports = async function handler(req, res) {
 
   if (action === 'login') {
     if (req.method !== 'POST') return err(res, 'Method not allowed', 405);
-    const { email, password } = req.body || {};
+    const { email, password } = await getBody(req);
     if (!email || !password) return err(res, 'Email and password required', 400);
 
     const supabase = getSupabase();
@@ -58,7 +58,7 @@ module.exports = async function handler(req, res) {
 
   if (action === 'refresh') {
     if (req.method !== 'POST') return err(res, 'Method not allowed', 405);
-    const { refresh_token } = req.body || {};
+    const { refresh_token } = await getBody(req);
     if (!refresh_token) return err(res, 'Refresh token required', 400);
 
     const supabase = getSupabase();

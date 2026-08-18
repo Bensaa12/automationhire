@@ -8,7 +8,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const crypto    = require('crypto');
 const fs        = require('fs');
 const path      = require('path');
-const { getSupabase, handleCors, ok, err, toSlug } = require('./_lib');
+const { getSupabase, getBody, handleCors, ok, err, toSlug } = require('./_lib');
 
 const MODEL = 'claude-sonnet-4-6';
 const SITE  = process.env.NEXT_PUBLIC_SITE_URL || 'https://automationhire.co.uk';
@@ -199,7 +199,7 @@ module.exports = async function handler(req, res) {
 
   // ── Password login (public — no auth required) ───────────────────────
   if (action === 'auth' && req.method === 'POST') {
-    const { password } = req.body || {};
+    const { password } = await getBody(req);
     const adminPass = process.env.ADMIN_PASSWORD;
     if (!adminPass) return err(res, 'ADMIN_PASSWORD not set in Vercel env vars.', 503);
     if (!password || password !== adminPass) return err(res, 'Incorrect password', 401);
@@ -213,7 +213,7 @@ module.exports = async function handler(req, res) {
     const {
       question, options = [], criteria = [],
       style = 'analyst', stakes = 'medium', timeframe = 'considered',
-    } = req.body || {};
+    } = await getBody(req);
 
     if (!question?.trim()) return err(res, 'question required');
     const validOpts = options.filter(o => o?.trim());
@@ -285,7 +285,7 @@ KEY INSIGHT: [one sharp memorable sentence]
 
   // ── Admin: publish / unpublish ────────────────────────────────────────
   if (action === 'publish' && req.method === 'POST') {
-    const { post_id, status = 'published' } = req.body || {};
+    const { post_id, status = 'published' } = await getBody(req);
     if (!post_id) return err(res, 'post_id required');
     const { error } = await supabase
       .from('blog_posts')
@@ -297,7 +297,7 @@ KEY INSIGHT: [one sharp memorable sentence]
 
   // ── Admin: delete post ────────────────────────────────────────────────
   if (action === 'delete' && req.method === 'POST') {
-    const { post_id } = req.body || {};
+    const { post_id } = await getBody(req);
     if (!post_id) return err(res, 'post_id required');
     const { error } = await supabase.from('blog_posts').delete().eq('id', post_id);
     if (error) return err(res, 'Delete failed', 500, error.message);
@@ -336,7 +336,7 @@ KEY INSIGHT: [one sharp memorable sentence]
 
   // ── Write post ────────────────────────────────────────────────────────
   if (action === 'write' && req.method === 'POST') {
-    const { title, keyword, angle } = req.body || {};
+    const { title, keyword, angle } = await getBody(req);
     if (!title) return err(res, 'title required');
 
     const results = await tavilySearch(`${title} UK automation business`, 30, 6);
@@ -379,7 +379,7 @@ KEY INSIGHT: [one sharp memorable sentence]
 
   // ── Generate social media copy ────────────────────────────────────────
   if (action === 'social' && req.method === 'POST') {
-    const { post_id } = req.body || {};
+    const { post_id } = await getBody(req);
     if (!post_id) return err(res, 'post_id required');
 
     const { data: post, error: fetchErr } = await supabase

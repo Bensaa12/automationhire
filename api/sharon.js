@@ -5,7 +5,7 @@
 // Returns: { reply: "..." }
 // ============================================================
 
-const { handleCors, ok, err, getSupabase } = require('./_lib');
+const { handleCors, ok, err, getSupabase, getBody } = require('./_lib');
 
 const SHARON_SYSTEM = `You are Sharon, the AI receptionist and guide for AutomationHire — the UK's leading directory platform connecting businesses with verified AI automation specialists, agencies, and workflow engineers. You are professional, warm, confident, and knowledgeable. You speak with clarity and enthusiasm about automation, and your job is to make every visitor feel welcomed, informed, and excited about what AutomationHire can do for their business.
 
@@ -76,11 +76,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  let body = req.body;
-  if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
-  if (!body || typeof body !== 'object') body = {};
-
-  const { messages = [] } = body;
+  const { messages = [] } = await getBody(req);
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return err(res, 'messages required');

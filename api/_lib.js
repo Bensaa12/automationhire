@@ -35,6 +35,31 @@ function getResend() {
   return new Resend(key);
 }
 
+// --- Robust POST body parsing ---
+// This deployment doesn't reliably auto-parse JSON bodies for plain
+// api/*.js functions (framework: null in vercel.json) — req.body can
+// come through as an already-parsed object, a raw string, or
+// undefined depending on the request. Handles all three; falls back
+// to reading the raw stream directly if req.body is unusable.
+async function getBody(req) {
+  let body = req.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch { body = {}; }
+  }
+  if (!body || typeof body !== 'object') {
+    try {
+      const chunks = [];
+      await new Promise((resolve, reject) => {
+        req.on('data', c => chunks.push(c));
+        req.on('end', resolve);
+        req.on('error', reject);
+      });
+      body = JSON.parse(Buffer.concat(chunks).toString() || '{}');
+    } catch { body = {}; }
+  }
+  return body;
+}
+
 // --- CORS preflight handler ---
 function handleCors(req, res) {
   res.setHeader('Access-Control-Allow-Origin',  '*');
@@ -318,4 +343,4 @@ function getSender(type = 'system') {
   return SENDERS[type] || SENDERS.system;
 }
 
-module.exports = { getSupabase, getResend, handleCors, ok, err, toSlug, emails, getSender };
+module.exports = { getSupabase, getResend, getBody, handleCors, ok, err, toSlug, emails, getSender };

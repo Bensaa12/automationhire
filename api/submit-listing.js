@@ -4,7 +4,7 @@
 // Sends welcome email via Resend
 // ============================================================
 
-const { getSupabase, getResend, handleCors, ok, err, toSlug, emails, getSender } = require('./_lib');
+const { getSupabase, getResend, getBody, handleCors, ok, err, toSlug, emails, getSender } = require('./_lib');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -53,7 +53,7 @@ module.exports = async function handler(req, res) {
     categories,
     tools,
     industries,
-  } = req.body;
+  } = await getBody(req);
 
   const email = bodyEmail?.trim() || oauthUserEmail;
 
