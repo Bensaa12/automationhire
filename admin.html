@@ -49,6 +49,11 @@
     .loading { text-align:center; padding:40px; color:var(--white-60); }
     .spinner { display:inline-block; font-size:28px; animation:spin .8s linear infinite; }
     @keyframes spin { to { transform:rotate(360deg); } }
+    .garage-upload-card { background:#0d1117; border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:24px; }
+    .form-input { background:#161b27; border:1px solid rgba(255,255,255,.1); border-radius:8px; padding:10px 14px; color:#fff; font-size:14px; font-family:inherit; }
+    .garage-row { background:#0d1117; border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:16px 20px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .garage-row .gr-name { font-weight:700; margin-bottom:2px; }
+    .garage-row .gr-meta { font-size:12px; color:var(--white-60); }
   </style>
 </head>
 <body>
@@ -71,10 +76,10 @@
 <div id="login-gate" class="login-gate" style="display:none">
   <div style="font-size:40px;margin-bottom:16px">🔐</div>
   <h2>Admin Access</h2>
-  <p>Enter your Supabase service role key to continue</p>
-  <input id="admin-key-input" type="password" placeholder="Service role key (eyJ...)" class="form-input" style="width:100%;margin-bottom:12px" />
+  <p>Enter your admin password to continue</p>
+  <input id="admin-key-input" type="password" placeholder="Password" class="form-input" style="width:100%;margin-bottom:12px" />
   <button onclick="adminLogin()" class="btn btn-primary" style="width:100%">Access Admin Panel</button>
-  <p style="margin-top:16px;font-size:12px;color:var(--white-60)">Find this in Supabase → Settings → API</p>
+  <p id="login-error" style="margin-top:16px;font-size:12px;color:#ef4444;display:none"></p>
 </div>
 
 <!-- MAIN PANEL -->
@@ -115,41 +120,100 @@
     </button>
     <button class="admin-tab" onclick="switchTab('approved', this)">Approved</button>
     <button class="admin-tab" onclick="switchTab('all', this)">All</button>
+    <button class="admin-tab" onclick="switchTab('garage', this)">AutoCAD Garage</button>
   </div>
 
-  <!-- List -->
+  <!-- Providers list -->
   <div id="providers-list">
     <div class="loading"><span class="spinner">⟳</span></div>
+  </div>
+
+  <!-- Garage panel -->
+  <div id="garage-panel" style="display:none">
+    <div class="garage-upload-card">
+      <h3 style="font-family:var(--font-head);font-size:16px;margin-bottom:16px">Upload New Item</h3>
+      <input id="garage-title" class="form-input" placeholder="Title (e.g. Pipe Fitting Block Library)" style="width:100%;margin-bottom:10px" />
+      <textarea id="garage-desc" class="form-input" placeholder="Description" rows="2" style="width:100%;margin-bottom:10px;resize:vertical"></textarea>
+      <select id="garage-category" class="form-input" style="width:100%;margin-bottom:10px">
+        <option value="">Category&hellip;</option>
+        <option value="blocks">Blocks / Symbols</option>
+        <option value="lisp">AutoLISP Routines</option>
+        <option value="templates">Templates</option>
+        <option value="plant3d">Plant 3D Catalogs</option>
+        <option value="other">Other</option>
+      </select>
+      <input id="garage-file" type="file" accept=".dwg,.dxf,.zip,.lsp,.step,.stp" style="width:100%;margin-bottom:14px" />
+      <button onclick="garageUpload()" id="garage-upload-btn" class="btn btn-primary" style="width:100%">Upload</button>
+      <p id="garage-upload-status" style="margin-top:10px;font-size:12px;color:var(--white-60)"></p>
+    </div>
+    <div id="garage-list" style="margin-top:24px">
+      <div class="loading"><span class="spinner">⟳</span></div>
+    </div>
   </div>
 
 </div>
 
 <script src="assets/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
    AutomationHire Admin Panel
-   Uses Supabase service role key (stored in sessionStorage only)
+   Auth: password -> short-lived HMAC token from /api/agent?action=auth
+   (same pattern as content-studio). The real Supabase service-role
+   key never leaves the server.
    ============================================================ */
 
-const SUPABASE_URL = 'https://lywcjlhfpucohuaxthem.supabase.co';
-let   supabaseKey  = '';
-let   currentTab   = 'pending';
-let   allProviders = [];
+const SUPABASE_URL  = 'https://lywcjlhfpucohuaxthem.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5d2NqbGhmcHVjb2h1YXh0aGVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MDMxMDIsImV4cCI6MjA5MDk3OTEwMn0.SYzs_uWk2A-aSyVCAsKJZldFbeZHwOCi75i_S5LSlVg';
+const TOKEN_KEY     = 'ah_admin_token';
+let   currentTab    = 'pending';
+let   allProviders  = [];
+let   garageItems   = [];
+let   sbClient      = null; // lazily-initialised Supabase client (anon key, for signed-upload only)
+
+function adminToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
+
+/* ── Admin API fetch (server-side, token-gated) ── */
+async function adminFetch(action, opts = {}) {
+  const res = await fetch(`/api/agent?action=${action}`, {
+    method: opts.method || 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${adminToken()}`,
+      ...(opts.headers || {}),
+    },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await res.json();
+  if (!res.ok || data.ok === false) throw new Error(data.error || 'Request failed');
+  return data;
+}
 
 /* ── Auth ── */
-function adminLogin() {
-  const key = document.getElementById('admin-key-input').value.trim();
-  if (!key.startsWith('eyJ')) {
-    alert('That does not look like a valid key. Find it in Supabase → Settings → API → service_role key.');
-    return;
+async function adminLogin() {
+  const password = document.getElementById('admin-key-input').value.trim();
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  if (!password) return;
+
+  try {
+    const res = await fetch('/api/agent?action=auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.token) throw new Error(data.error || 'Incorrect password');
+    localStorage.setItem(TOKEN_KEY, data.token);
+    showPanel();
+  } catch (e) {
+    errEl.textContent = e.message;
+    errEl.style.display = 'block';
   }
-  sessionStorage.setItem('ah_admin_key', key);
-  supabaseKey = key;
-  showPanel();
 }
 
 function adminLogout() {
-  sessionStorage.removeItem('ah_admin_key');
+  localStorage.removeItem(TOKEN_KEY);
   location.reload();
 }
 
@@ -159,35 +223,14 @@ function showPanel() {
   loadAll();
 }
 
-/* ── Supabase fetch ── */
-async function sbFetch(path, opts = {}) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
-    ...opts,
-    headers: {
-      'apikey':        supabaseKey,
-      'Authorization': `Bearer ${supabaseKey}`,
-      'Content-Type':  'application/json',
-      'Prefer':        opts.prefer || 'return=representation',
-      ...(opts.headers || {}),
-    },
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(err);
-  }
-  return opts.method === 'PATCH' ? res : res.json();
-}
-
 /* ── Load providers ── */
 async function loadAll() {
   document.getElementById('providers-list').innerHTML =
     '<div class="loading"><span class="spinner">⟳</span><br><br>Loading listings…</div>';
 
   try {
-    allProviders = await sbFetch(
-      '/providers?select=*&order=created_at.desc',
-      { headers: { 'Prefer': 'return=representation' } }
-    );
+    const data = await adminFetch('admin-providers');
+    allProviders = data.providers;
     updateStats();
     renderTab(currentTab);
   } catch (e) {
@@ -216,6 +259,11 @@ function switchTab(tab, el) {
   currentTab = tab;
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
+
+  document.getElementById('providers-list').style.display = tab === 'garage' ? 'none' : 'block';
+  document.getElementById('garage-panel').style.display    = tab === 'garage' ? 'block' : 'none';
+
+  if (tab === 'garage') { loadGarage(); return; }
   renderTab(tab);
 }
 
@@ -291,11 +339,7 @@ async function approve(id) {
   if (btn) { btn.textContent = '⟳ Saving…'; btn.disabled = true; }
 
   try {
-    await sbFetch(`/providers?id=eq.${id}`, {
-      method: 'PATCH',
-      prefer: 'return=minimal',
-      body: JSON.stringify({ is_approved: true, is_active: true }),
-    });
+    await adminFetch('admin-provider-approve', { method: 'POST', body: { id } });
     showToastMsg('✅ Approved and live!', false);
     await loadAll();
   } catch (e) {
@@ -307,13 +351,105 @@ async function approve(id) {
 async function reject(id) {
   if (!confirm('Remove this listing from the directory?')) return;
   try {
-    await sbFetch(`/providers?id=eq.${id}`, {
-      method: 'PATCH',
-      prefer: 'return=minimal',
-      body: JSON.stringify({ is_approved: false, is_active: false }),
-    });
+    await adminFetch('admin-provider-reject', { method: 'POST', body: { id } });
     showToastMsg('Listing unpublished.', false);
     await loadAll();
+  } catch (e) {
+    showToastMsg('Failed: ' + e.message, true);
+  }
+}
+
+/* ── AutoCAD Garage ── */
+function getSbClient() {
+  if (!sbClient) sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  return sbClient;
+}
+
+async function loadGarage() {
+  const el = document.getElementById('garage-list');
+  el.innerHTML = '<div class="loading"><span class="spinner">⟳</span></div>';
+  try {
+    const res = await fetch('/api/agent?action=garage-list&public=1');
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    garageItems = data.items;
+    renderGarageList();
+  } catch (e) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">⚠</div><p>${escHtml(e.message)}</p></div>`;
+  }
+}
+
+function renderGarageList() {
+  const el = document.getElementById('garage-list');
+  if (garageItems.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>No items uploaded yet.</p></div>';
+    return;
+  }
+  el.innerHTML = garageItems.map(i => `
+    <div class="garage-row">
+      <div>
+        <div class="gr-name">${escHtml(i.title)}</div>
+        <div class="gr-meta">${escHtml(i.category || 'Uncategorised')} &middot; ${escHtml(i.file_name)} &middot; ${i.downloads_count || 0} downloads</div>
+      </div>
+      <button class="btn-reject" onclick="garageDelete('${i.id}')">Delete</button>
+    </div>
+  `).join('');
+}
+
+async function garageUpload() {
+  const title    = document.getElementById('garage-title').value.trim();
+  const desc     = document.getElementById('garage-desc').value.trim();
+  const category = document.getElementById('garage-category').value;
+  const fileEl   = document.getElementById('garage-file');
+  const file     = fileEl.files[0];
+  const statusEl = document.getElementById('garage-upload-status');
+  const btn      = document.getElementById('garage-upload-btn');
+
+  if (!title)  { statusEl.textContent = 'Title is required.'; return; }
+  if (!file)   { statusEl.textContent = 'Choose a file to upload.'; return; }
+
+  btn.disabled = true;
+  statusEl.textContent = 'Requesting upload URL…';
+
+  try {
+    const { path, token } = await adminFetch('garage-upload-url', {
+      method: 'POST', body: { file_name: file.name },
+    });
+
+    statusEl.textContent = 'Uploading…';
+    const { error: upErr } = await getSbClient().storage
+      .from('garage-files')
+      .uploadToSignedUrl(path, token, file);
+    if (upErr) throw new Error(upErr.message);
+
+    statusEl.textContent = 'Saving…';
+    await adminFetch('garage-save', {
+      method: 'POST',
+      body: {
+        title, description: desc, category,
+        file_name: file.name, file_path: path,
+        file_size: file.size, file_type: file.name.split('.').pop(),
+      },
+    });
+
+    statusEl.textContent = '✅ Uploaded.';
+    document.getElementById('garage-title').value = '';
+    document.getElementById('garage-desc').value = '';
+    document.getElementById('garage-category').value = '';
+    fileEl.value = '';
+    await loadGarage();
+  } catch (e) {
+    statusEl.textContent = 'Failed: ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function garageDelete(id) {
+  if (!confirm('Delete this item from the Garage?')) return;
+  try {
+    await adminFetch('garage-delete', { method: 'POST', body: { id } });
+    await loadGarage();
   } catch (e) {
     showToastMsg('Failed: ' + e.message, true);
   }
@@ -351,8 +487,7 @@ function showToastMsg(msg, isError) {
 
 /* ── Boot ── */
 window.addEventListener('DOMContentLoaded', () => {
-  supabaseKey = sessionStorage.getItem('ah_admin_key') || '';
-  if (supabaseKey) {
+  if (adminToken()) {
     showPanel();
   } else {
     document.getElementById('login-gate').style.display = 'block';

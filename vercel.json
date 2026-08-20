@@ -30,7 +30,6 @@
     }
   ],
   "redirects": [
-    { "source": "/ready-to-deploy", "destination": "/forge", "permanent": true },
     { "source": "/ads",             "destination": "/forge", "permanent": true },
     { "source": "/categories",      "destination": "/forge", "permanent": true }
   ],

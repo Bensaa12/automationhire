@@ -95,6 +95,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://automationhire.co.uk/garage</loc>
+    <lastmod>2026-08-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://automationhire.co.uk/pump-spec-gam100</loc>
     <lastmod>2026-08-17</lastmod>
     <changefreq>monthly</changefreq>

@@ -197,6 +197,19 @@ module.exports = async function handler(req, res) {
     return res.status(200).send(renderBlogPost(template, p));
   }
 
+  // ── Public: list published AutoCAD Garage items ───────────────────────
+  if (action === 'garage-list' && req.method === 'GET' && req.query.public === '1') {
+    const { data, error } = await supabase
+      .from('garage_items')
+      .select('id,title,description,category,file_name,file_path,file_size,file_type,downloads_count,created_at')
+      .eq('is_published', true)
+      .order('created_at', { ascending: false });
+    if (error) return err(res, 'Fetch failed', 500);
+    const base = `${process.env.SUPABASE_URL}/storage/v1/object/public/garage-files/`;
+    const items = (data || []).map(i => ({ ...i, download_url: base + i.file_path }));
+    return ok(res, { items });
+  }
+
   // ── Password login (public — no auth required) ───────────────────────
   if (action === 'auth' && req.method === 'POST') {
     const { password } = await getBody(req);
@@ -442,6 +455,98 @@ Return this exact JSON:
       return err(res, 'AI failed to generate social copy. Please try again.', 500);
     }
     return ok(res, { social: parsed, post: { title: post.title, slug: post.slug } });
+  }
+
+  // ── Admin: list all providers (replaces client-side service-role fetch) ─
+  if (action === 'admin-providers' && req.method === 'GET') {
+    const { data, error } = await supabase
+      .from('providers')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) return err(res, 'Fetch failed', 500);
+    return ok(res, { providers: data || [] });
+  }
+
+  // ── Admin: approve / reject a provider listing ────────────────────────
+  if (action === 'admin-provider-approve' && req.method === 'POST') {
+    const { id } = await getBody(req);
+    if (!id) return err(res, 'id required');
+    const { error } = await supabase
+      .from('providers')
+      .update({ is_approved: true, is_active: true })
+      .eq('id', id);
+    if (error) return err(res, 'Update failed', 500, error.message);
+    return ok(res, { approved: true });
+  }
+
+  if (action === 'admin-provider-reject' && req.method === 'POST') {
+    const { id } = await getBody(req);
+    if (!id) return err(res, 'id required');
+    const { error } = await supabase
+      .from('providers')
+      .update({ is_approved: false, is_active: false })
+      .eq('id', id);
+    if (error) return err(res, 'Update failed', 500, error.message);
+    return ok(res, { rejected: true });
+  }
+
+  // ── Admin: AutoCAD Garage — request a signed upload URL ───────────────
+  if (action === 'garage-upload-url' && req.method === 'POST') {
+    const { file_name } = await getBody(req);
+    if (!file_name) return err(res, 'file_name required');
+    const ext = (file_name.split('.').pop() || '').toLowerCase();
+    const allowed = ['dwg', 'dxf', 'zip', 'lsp', 'step', 'stp'];
+    if (!allowed.includes(ext)) return err(res, `File type .${ext} not allowed. Allowed: ${allowed.join(', ')}`);
+
+    const path = `${Date.now()}-${toSlug(file_name.replace(/\.[^.]+$/, ''))}.${ext}`;
+    const { data, error } = await supabase.storage
+      .from('garage-files')
+      .createSignedUploadUrl(path);
+    if (error) return err(res, 'Failed to create upload URL', 500, error.message);
+    return ok(res, { path, token: data.token, signedUrl: data.signedUrl });
+  }
+
+  // ── Admin: AutoCAD Garage — save item metadata after upload ───────────
+  if (action === 'garage-save' && req.method === 'POST') {
+    const { title, description, category, file_name, file_path, file_size, file_type } = await getBody(req);
+    if (!title?.trim())     return err(res, 'Title is required');
+    if (!file_path)         return err(res, 'file_path is required');
+
+    const { data, error } = await supabase
+      .from('garage_items')
+      .insert({
+        title:       title.trim(),
+        description: description?.trim() || null,
+        category:    category || null,
+        file_name,
+        file_path,
+        file_size:   file_size || null,
+        file_type:   file_type || null,
+        is_published: true,
+      })
+      .select('id')
+      .single();
+    if (error) return err(res, 'Save failed', 500, error.message);
+    return ok(res, { id: data.id });
+  }
+
+  // ── Admin: AutoCAD Garage — delete an item ────────────────────────────
+  if (action === 'garage-delete' && req.method === 'POST') {
+    const { id } = await getBody(req);
+    if (!id) return err(res, 'id required');
+
+    const { data: item } = await supabase
+      .from('garage_items')
+      .select('file_path')
+      .eq('id', id)
+      .single();
+
+    if (item?.file_path) {
+      await supabase.storage.from('garage-files').remove([item.file_path]).catch(() => {});
+    }
+    const { error } = await supabase.from('garage_items').delete().eq('id', id);
+    if (error) return err(res, 'Delete failed', 500, error.message);
+    return ok(res, { deleted: true });
   }
 
   return err(res, 'Unknown action', 404);
