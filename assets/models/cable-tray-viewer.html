@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cable Tray Parametric Preview — Articraft-generated</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#09090f;overflow:hidden;font-family:Inter,system-ui,sans-serif;color:#e6e6f0}
+  #stage{position:absolute;inset:0}
+  #ui{
+    position:absolute;top:12px;left:12px;right:12px;z-index:3;
+    display:flex;flex-wrap:wrap;gap:8px;pointer-events:none;
+  }
+  #ui .grp{
+    display:flex;gap:6px;align-items:center;pointer-events:auto;
+    background:rgba(15,15,22,0.85);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 10px;
+    font-size:12px;
+  }
+  #ui .grp label{color:rgba(230,230,240,0.55);font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+  #ui .grp select{
+    background:transparent;color:#e6e6f0;border:none;font-size:13px;font-weight:500;
+    outline:none;cursor:pointer;padding-right:4px;
+  }
+  #ui .grp select option{background:#0f0f16;color:#e6e6f0}
+  #brand{
+    position:absolute;top:12px;right:12px;z-index:3;pointer-events:auto;
+    background:linear-gradient(135deg,rgba(0,230,118,0.12),rgba(37,99,235,0.12));
+    border:1px solid rgba(0,230,118,0.3);border-radius:8px;padding:6px 12px;
+    font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#00e676;
+  }
+  #hud{
+    position:absolute;bottom:12px;left:14px;z-index:3;
+    color:rgba(0,230,118,.55);font-size:10px;line-height:1.7;pointer-events:none;
+    font-family:ui-monospace,monospace;
+  }
+  #hud .dim{color:rgba(0,230,118,.35)}
+  #loading{
+    position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;
+    background:rgba(9,9,15,0.85);color:rgba(230,230,240,0.7);font-size:14px;
+    transition:opacity .25s;pointer-events:none;
+  }
+  #loading.hidden{opacity:0}
+  #err{
+    position:absolute;bottom:12px;right:14px;z-index:3;
+    color:#ff5c8a;font-size:11px;font-family:ui-monospace,monospace;
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+
+<div id="ui">
+  <div class="grp"><label>Type</label>
+    <select id="sel-product"></select>
+  </div>
+  <div class="grp"><label>Fitting</label>
+    <select id="sel-fitting"></select>
+  </div>
+  <div class="grp"><label>Width</label>
+    <select id="sel-width"></select>
+  </div>
+</div>
+
+<div id="brand">⚡ Articraft · Live 3D</div>
+
+<div id="hud">
+  <div>drag · scroll · right-drag</div>
+  <div class="dim" id="dimtxt"></div>
+</div>
+
+<div id="loading">Loading…</div>
+<div id="err"></div>
+
+<script type="importmap">
+{"imports":{
+  "three":"https://esm.sh/three@0.163.0",
+  "three/addons/":"https://esm.sh/three@0.163.0/examples/jsm/"
+}}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const BASE = './cable-tray/';
+
+const PRODUCT_COLOR = {
+  tray:     0x8fa3c6,
+  ladder:   0xa9b7d1,
+  trunking: 0xc0c8d8,
+  wire:     0x6f8cae,
+};
+
+const stage = document.getElementById('stage');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x09090f);
+scene.fog        = new THREE.FogExp2(0x09090f, 0.00025);
+
+const cam = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 1, 40000);
+cam.position.set(1400, 900, 1400);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(devicePixelRatio);
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+stage.appendChild(renderer.domElement);
+
+const ctrl = new OrbitControls(cam, renderer.domElement);
+ctrl.enableDamping = true;
+ctrl.dampingFactor = 0.08;
+ctrl.autoRotate = true;
+ctrl.autoRotateSpeed = 1.4;
+renderer.domElement.addEventListener('pointerdown', ()=>{ ctrl.autoRotate = false; }, { once: true });
+
+scene.add(new THREE.HemisphereLight(0xdfeaff, 0x0b0b16, 0.85));
+const key = new THREE.DirectionalLight(0xffffff, 0.85);
+key.position.set(1500, 1800, 900);
+scene.add(key);
+const rim = new THREE.DirectionalLight(0x9fd4ff, 0.35);
+rim.position.set(-1400, 800, -900);
+scene.add(rim);
+
+const grid = new THREE.GridHelper(6000, 30, 0x2a2f3d, 0x1a1c26);
+grid.position.y = 0;
+scene.add(grid);
+
+addEventListener('resize', () => {
+  cam.aspect = innerWidth/innerHeight;
+  cam.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+let currentMesh = null;
+const loader = new GLTFLoader();
+const loadingEl = document.getElementById('loading');
+const errEl = document.getElementById('err');
+const dimEl = document.getElementById('dimtxt');
+
+function setBusy(on) {
+  loadingEl.classList.toggle('hidden', !on);
+}
+
+function loadModel(product, fitting, width) {
+  const url = `${BASE}${product}-${fitting}-w${width}.glb`;
+  setBusy(true);
+  errEl.textContent = '';
+  loader.load(url, (gltf) => {
+    if (currentMesh) { scene.remove(currentMesh); currentMesh.traverse(o=>{ if(o.geometry) o.geometry.dispose(); if(o.material) o.material.dispose(); }); }
+    const root = gltf.scene;
+    const color = PRODUCT_COLOR[product] ?? 0xa0a0b0;
+    const mat = new THREE.MeshStandardMaterial({ color, metalness: 0.35, roughness: 0.55, flatShading: false });
+    root.traverse(o => {
+      if (o.isMesh) {
+        o.material = mat;
+        o.castShadow = false;
+        o.receiveShadow = false;
+      }
+    });
+
+    const box = new THREE.Box3().setFromObject(root);
+    const size = new THREE.Vector3(); box.getSize(size);
+    const center = new THREE.Vector3(); box.getCenter(center);
+    root.position.sub(center);
+    root.position.y = -box.min.y + center.y;
+
+    scene.add(root);
+    currentMesh = root;
+
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const dist = maxDim * 1.6 + 400;
+    cam.position.set(dist * 0.7, dist * 0.55, dist * 0.9);
+    ctrl.target.set(0, size.y * 0.35, 0);
+    ctrl.update();
+
+    dimEl.textContent = `${product} · ${fitting} · W=${width} mm  ·  bbox ${size.x.toFixed(0)} × ${size.y.toFixed(0)} × ${size.z.toFixed(0)} mm`;
+    setBusy(false);
+  }, undefined, (err) => {
+    errEl.textContent = `Failed to load ${product}-${fitting}-w${width}.glb`;
+    setBusy(false);
+    console.error(err);
+  });
+}
+
+function fill(sel, options, currentValue) {
+  sel.innerHTML = '';
+  for (const opt of options) {
+    const o = document.createElement('option');
+    o.value = opt.key ?? opt;
+    o.textContent = opt.label ?? opt;
+    if ((currentValue !== undefined) && (o.value == currentValue)) o.selected = true;
+    sel.appendChild(o);
+  }
+}
+
+const selProduct = document.getElementById('sel-product');
+const selFitting = document.getElementById('sel-fitting');
+const selWidth   = document.getElementById('sel-width');
+
+(async function init() {
+  try {
+    const res = await fetch(BASE + 'manifest.json');
+    const manifest = await res.json();
+    fill(selProduct, manifest.products);
+    fill(selFitting, manifest.fittings);
+    fill(selWidth,   manifest.widths.map(w => ({ key: w, label: w + ' mm' })));
+    // sensible default: tray / straight / 300
+    selProduct.value = 'tray';
+    selFitting.value = 'straight';
+    selWidth.value   = String(manifest.widths[0]);
+    load();
+  } catch (e) {
+    errEl.textContent = 'Could not load manifest.json';
+  }
+})();
+
+function load() { loadModel(selProduct.value, selFitting.value, selWidth.value); }
+selProduct.addEventListener('change', load);
+selFitting.addEventListener('change', load);
+selWidth  .addEventListener('change', load);
+
+function tick() {
+  requestAnimationFrame(tick);
+  ctrl.update();
+  renderer.render(scene, cam);
+}
+tick();
+</script>
+</body>
+</html>

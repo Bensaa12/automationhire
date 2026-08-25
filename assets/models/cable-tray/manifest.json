@@ -1,0 +1,448 @@
+{
+  "products": [
+    {
+      "key": "tray",
+      "label": "Cable Tray"
+    },
+    {
+      "key": "ladder",
+      "label": "Cable Ladder"
+    },
+    {
+      "key": "trunking",
+      "label": "Cable Trunking"
+    },
+    {
+      "key": "wire",
+      "label": "Wire Basket"
+    }
+  ],
+  "fittings": [
+    {
+      "key": "straight",
+      "label": "Straight"
+    },
+    {
+      "key": "elbow_h",
+      "label": "Elbow 90\u00b0 horizontal"
+    },
+    {
+      "key": "elbow_up",
+      "label": "Elbow 90\u00b0 up"
+    },
+    {
+      "key": "tee",
+      "label": "Tee"
+    },
+    {
+      "key": "cross",
+      "label": "Cross"
+    },
+    {
+      "key": "reducer",
+      "label": "Reducer"
+    },
+    {
+      "key": "riser",
+      "label": "Riser / Z-offset"
+    }
+  ],
+  "widths": [
+    300,
+    600
+  ],
+  "files": [
+    {
+      "product": "tray",
+      "fitting": "straight",
+      "width": 300,
+      "file": "tray-straight-w300.glb",
+      "bytes": 2392
+    },
+    {
+      "product": "tray",
+      "fitting": "straight",
+      "width": 600,
+      "file": "tray-straight-w600.glb",
+      "bytes": 2392
+    },
+    {
+      "product": "tray",
+      "fitting": "elbow_h",
+      "width": 300,
+      "file": "tray-elbow_h-w300.glb",
+      "bytes": 7884
+    },
+    {
+      "product": "tray",
+      "fitting": "elbow_h",
+      "width": 600,
+      "file": "tray-elbow_h-w600.glb",
+      "bytes": 7884
+    },
+    {
+      "product": "tray",
+      "fitting": "elbow_up",
+      "width": 300,
+      "file": "tray-elbow_up-w300.glb",
+      "bytes": 7884
+    },
+    {
+      "product": "tray",
+      "fitting": "elbow_up",
+      "width": 600,
+      "file": "tray-elbow_up-w600.glb",
+      "bytes": 7884
+    },
+    {
+      "product": "tray",
+      "fitting": "tee",
+      "width": 300,
+      "file": "tray-tee-w300.glb",
+      "bytes": 2904
+    },
+    {
+      "product": "tray",
+      "fitting": "tee",
+      "width": 600,
+      "file": "tray-tee-w600.glb",
+      "bytes": 4924
+    },
+    {
+      "product": "tray",
+      "fitting": "cross",
+      "width": 300,
+      "file": "tray-cross-w300.glb",
+      "bytes": 3720
+    },
+    {
+      "product": "tray",
+      "fitting": "cross",
+      "width": 600,
+      "file": "tray-cross-w600.glb",
+      "bytes": 6316
+    },
+    {
+      "product": "tray",
+      "fitting": "reducer",
+      "width": 300,
+      "file": "tray-reducer-w300.glb",
+      "bytes": 1232
+    },
+    {
+      "product": "tray",
+      "fitting": "reducer",
+      "width": 600,
+      "file": "tray-reducer-w600.glb",
+      "bytes": 1236
+    },
+    {
+      "product": "tray",
+      "fitting": "riser",
+      "width": 300,
+      "file": "tray-riser-w300.glb",
+      "bytes": 11764
+    },
+    {
+      "product": "tray",
+      "fitting": "riser",
+      "width": 600,
+      "file": "tray-riser-w600.glb",
+      "bytes": 12340
+    },
+    {
+      "product": "ladder",
+      "fitting": "straight",
+      "width": 300,
+      "file": "ladder-straight-w300.glb",
+      "bytes": 5256
+    },
+    {
+      "product": "ladder",
+      "fitting": "straight",
+      "width": 600,
+      "file": "ladder-straight-w600.glb",
+      "bytes": 5256
+    },
+    {
+      "product": "ladder",
+      "fitting": "elbow_h",
+      "width": 300,
+      "file": "ladder-elbow_h-w300.glb",
+      "bytes": 15984
+    },
+    {
+      "product": "ladder",
+      "fitting": "elbow_h",
+      "width": 600,
+      "file": "ladder-elbow_h-w600.glb",
+      "bytes": 16464
+    },
+    {
+      "product": "ladder",
+      "fitting": "elbow_up",
+      "width": 300,
+      "file": "ladder-elbow_up-w300.glb",
+      "bytes": 15984
+    },
+    {
+      "product": "ladder",
+      "fitting": "elbow_up",
+      "width": 600,
+      "file": "ladder-elbow_up-w600.glb",
+      "bytes": 16464
+    },
+    {
+      "product": "ladder",
+      "fitting": "tee",
+      "width": 300,
+      "file": "ladder-tee-w300.glb",
+      "bytes": 6556
+    },
+    {
+      "product": "ladder",
+      "fitting": "tee",
+      "width": 600,
+      "file": "ladder-tee-w600.glb",
+      "bytes": 12032
+    },
+    {
+      "product": "ladder",
+      "fitting": "cross",
+      "width": 300,
+      "file": "ladder-cross-w300.glb",
+      "bytes": 8668
+    },
+    {
+      "product": "ladder",
+      "fitting": "cross",
+      "width": 600,
+      "file": "ladder-cross-w600.glb",
+      "bytes": 15776
+    },
+    {
+      "product": "ladder",
+      "fitting": "reducer",
+      "width": 300,
+      "file": "ladder-reducer-w300.glb",
+      "bytes": 1232
+    },
+    {
+      "product": "ladder",
+      "fitting": "reducer",
+      "width": 600,
+      "file": "ladder-reducer-w600.glb",
+      "bytes": 1236
+    },
+    {
+      "product": "ladder",
+      "fitting": "riser",
+      "width": 300,
+      "file": "ladder-riser-w300.glb",
+      "bytes": 24728
+    },
+    {
+      "product": "ladder",
+      "fitting": "riser",
+      "width": 600,
+      "file": "ladder-riser-w600.glb",
+      "bytes": 27796
+    },
+    {
+      "product": "trunking",
+      "fitting": "straight",
+      "width": 300,
+      "file": "trunking-straight-w300.glb",
+      "bytes": 2440
+    },
+    {
+      "product": "trunking",
+      "fitting": "straight",
+      "width": 600,
+      "file": "trunking-straight-w600.glb",
+      "bytes": 2440
+    },
+    {
+      "product": "trunking",
+      "fitting": "elbow_h",
+      "width": 300,
+      "file": "trunking-elbow_h-w300.glb",
+      "bytes": 7932
+    },
+    {
+      "product": "trunking",
+      "fitting": "elbow_h",
+      "width": 600,
+      "file": "trunking-elbow_h-w600.glb",
+      "bytes": 7932
+    },
+    {
+      "product": "trunking",
+      "fitting": "elbow_up",
+      "width": 300,
+      "file": "trunking-elbow_up-w300.glb",
+      "bytes": 7932
+    },
+    {
+      "product": "trunking",
+      "fitting": "elbow_up",
+      "width": 600,
+      "file": "trunking-elbow_up-w600.glb",
+      "bytes": 7932
+    },
+    {
+      "product": "trunking",
+      "fitting": "tee",
+      "width": 300,
+      "file": "trunking-tee-w300.glb",
+      "bytes": 3000
+    },
+    {
+      "product": "trunking",
+      "fitting": "tee",
+      "width": 600,
+      "file": "trunking-tee-w600.glb",
+      "bytes": 5020
+    },
+    {
+      "product": "trunking",
+      "fitting": "cross",
+      "width": 300,
+      "file": "trunking-cross-w300.glb",
+      "bytes": 3864
+    },
+    {
+      "product": "trunking",
+      "fitting": "cross",
+      "width": 600,
+      "file": "trunking-cross-w600.glb",
+      "bytes": 6460
+    },
+    {
+      "product": "trunking",
+      "fitting": "reducer",
+      "width": 300,
+      "file": "trunking-reducer-w300.glb",
+      "bytes": 1280
+    },
+    {
+      "product": "trunking",
+      "fitting": "reducer",
+      "width": 600,
+      "file": "trunking-reducer-w600.glb",
+      "bytes": 1284
+    },
+    {
+      "product": "trunking",
+      "fitting": "riser",
+      "width": 300,
+      "file": "trunking-riser-w300.glb",
+      "bytes": 11956
+    },
+    {
+      "product": "trunking",
+      "fitting": "riser",
+      "width": 600,
+      "file": "trunking-riser-w600.glb",
+      "bytes": 12532
+    },
+    {
+      "product": "wire",
+      "fitting": "straight",
+      "width": 300,
+      "file": "wire-straight-w300.glb",
+      "bytes": 73204
+    },
+    {
+      "product": "wire",
+      "fitting": "straight",
+      "width": 600,
+      "file": "wire-straight-w600.glb",
+      "bytes": 91208
+    },
+    {
+      "product": "wire",
+      "fitting": "elbow_h",
+      "width": 300,
+      "file": "wire-elbow_h-w300.glb",
+      "bytes": 193280
+    },
+    {
+      "product": "wire",
+      "fitting": "elbow_h",
+      "width": 600,
+      "file": "wire-elbow_h-w600.glb",
+      "bytes": 304880
+    },
+    {
+      "product": "wire",
+      "fitting": "elbow_up",
+      "width": 300,
+      "file": "wire-elbow_up-w300.glb",
+      "bytes": 193280
+    },
+    {
+      "product": "wire",
+      "fitting": "elbow_up",
+      "width": 600,
+      "file": "wire-elbow_up-w600.glb",
+      "bytes": 304884
+    },
+    {
+      "product": "wire",
+      "fitting": "tee",
+      "width": 300,
+      "file": "wire-tee-w300.glb",
+      "bytes": 94736
+    },
+    {
+      "product": "wire",
+      "fitting": "tee",
+      "width": 600,
+      "file": "wire-tee-w600.glb",
+      "bytes": 238356
+    },
+    {
+      "product": "wire",
+      "fitting": "cross",
+      "width": 300,
+      "file": "wire-cross-w300.glb",
+      "bytes": 126752
+    },
+    {
+      "product": "wire",
+      "fitting": "cross",
+      "width": 600,
+      "file": "wire-cross-w600.glb",
+      "bytes": 314748
+    },
+    {
+      "product": "wire",
+      "fitting": "reducer",
+      "width": 300,
+      "file": "wire-reducer-w300.glb",
+      "bytes": 1232
+    },
+    {
+      "product": "wire",
+      "fitting": "reducer",
+      "width": 600,
+      "file": "wire-reducer-w600.glb",
+      "bytes": 1236
+    },
+    {
+      "product": "wire",
+      "fitting": "riser",
+      "width": 300,
+      "file": "wire-riser-w300.glb",
+      "bytes": 307596
+    },
+    {
+      "product": "wire",
+      "fitting": "riser",
+      "width": 600,
+      "file": "wire-riser-w600.glb",
+      "bytes": 512172
+    }
+  ]
+}
