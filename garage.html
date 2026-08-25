@@ -133,6 +133,65 @@
   </div>
 </section>
 
+<section class="section-sm" id="featured">
+  <div class="container">
+    <style>
+      .featured-pack{
+        display:grid; grid-template-columns:1.1fr 1fr; gap:36px; align-items:stretch;
+        background:linear-gradient(135deg, rgba(0,230,118,0.06), rgba(37,99,235,0.06));
+        border:1px solid rgba(0,230,118,0.25); border-radius:var(--radius-lg);
+        padding:26px; margin-bottom:56px; text-decoration:none; color:inherit;
+        transition:transform .2s ease, border-color .2s ease;
+      }
+      .featured-pack:hover{ transform:translateY(-3px); border-color:rgba(0,230,118,0.50); }
+      .featured-pack .media{
+        border-radius:var(--radius-md); overflow:hidden; background:var(--black-3);
+        border:1px solid var(--border);
+      }
+      .featured-pack .media img{ width:100%; height:100%; object-fit:cover; display:block; }
+      .featured-pack .body{ display:flex; flex-direction:column; gap:12px; padding:6px 4px; }
+      .featured-pack .badge{
+        display:inline-block; align-self:flex-start;
+        padding:5px 12px; border-radius:6px;
+        background:rgba(0,230,118,0.12); border:1px solid rgba(0,230,118,0.35);
+        font-family:var(--font-head); font-size:11px; font-weight:700;
+        letter-spacing:.8px; text-transform:uppercase; color:var(--green);
+      }
+      .featured-pack h2{ font-family:var(--font-head); font-size:clamp(24px,3vw,32px); font-weight:800; margin:0; line-height:1.15; }
+      .featured-pack p.desc{ color:var(--white-60); font-size:15px; line-height:1.6; margin:0; }
+      .featured-pack .meta{ display:flex; flex-wrap:wrap; gap:14px; font-size:13px; color:var(--white-60); margin-top:2px; }
+      .featured-pack .foot{
+        display:flex; justify-content:space-between; align-items:center;
+        margin-top:auto; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06);
+      }
+      .featured-pack .price{ font-family:var(--font-head); font-size:26px; font-weight:800; color:var(--white); }
+      .featured-pack .price small{ font-size:12px; font-weight:500; color:var(--white-60); margin-left:4px; }
+      @media (max-width: 800px){ .featured-pack{ grid-template-columns: 1fr; } }
+    </style>
+
+    <a href="garage/plant-3d-cable-tray.html" class="featured-pack">
+      <div class="media">
+        <img src="assets/garage/plant-3d-cable-tray/hero.png" alt="Rectangular cable tray fittings routed in AutoCAD Plant 3D" loading="lazy" />
+      </div>
+      <div class="body">
+        <span class="badge">Featured &middot; Paid pack</span>
+        <h2>Cable Tray Catalog for AutoCAD Plant 3D</h2>
+        <p class="desc">Parametric cable-tray, ladder, trunking and wire-basket catalog. 2704 size records across the standard EN width/height matrix, all standard fittings, one-click installer that patches Plant 3D so parts render rectangular (not circular).</p>
+        <div class="meta">
+          <span>📦 2704 variants</span>
+          <span>📐 15 widths × 3–4 heights × 3 lengths</span>
+          <span>⚡ 1-click installer</span>
+          <span>🛠 Plant 3D 2024–2027</span>
+        </div>
+        <div class="foot">
+          <div class="price">£49.99<small>one-off · single seat</small></div>
+          <span class="btn btn-primary btn-sm">View pack →</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
 <section class="section-sm" id="library">
   <div class="container">
     <div class="filter-bar" id="filter-bar">
