@@ -14,6 +14,20 @@ const MODEL = 'claude-sonnet-4-6';
 const SITE  = process.env.NEXT_PUBLIC_SITE_URL || 'https://automationhire.co.uk';
 const BLOG_TEMPLATE_PATH = path.join(process.cwd(), 'blog-post.html');
 
+// ─── Paid Garage packs ────────────────────────────────────────────────
+// One-off downloadable products sold via Stripe Checkout Sessions.
+// Add new packs here. For each, set the Stripe Price ID env var
+// (Stripe dashboard → Products → your product → Price ID) and upload
+// the ZIP into the referenced Supabase Storage bucket + path.
+const GARAGE_PAID_PACKS = {
+  'plant-3d-cable-tray': {
+    priceEnv:      'STRIPE_PRICE_CABLE_TRAY_PACK',   // e.g. price_1XxxxxYyy
+    returnPath:    '/garage/plant-3d-cable-tray',
+    storageBucket: 'garage-paid',
+    storagePath:   'plant-3d-cable-tray/AutomationHire_CableTrayPack_v1.0.0.zip',
+  },
+};
+
 // --- Server-render blog-post.html for a given slug (SEO: real <title>/
 // description/canonical/JSON-LD instead of client-JS-only injection) ---
 function escBlog(s) {
@@ -528,6 +542,75 @@ Return this exact JSON:
       .single();
     if (error) return err(res, 'Save failed', 500, error.message);
     return ok(res, { id: data.id });
+  }
+
+  // ── Paid Garage pack: create a Stripe Checkout session ────────────────
+  // POST { pack: 'plant-3d-cable-tray' }
+  // returns { url }  — client redirects window.location to that URL
+  if (action === 'garage-checkout' && req.method === 'POST') {
+    const { pack } = await getBody(req);
+    const config = GARAGE_PAID_PACKS[pack];
+    if (!config)                   return err(res, `Unknown pack: ${pack}`);
+    if (!process.env.STRIPE_SECRET_KEY) return err(res, 'Stripe not configured', 500);
+    if (!config.priceEnv || !process.env[config.priceEnv]) {
+      return err(res, `Stripe price env var not set: ${config.priceEnv}`, 500);
+    }
+    const Stripe = require('stripe');
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const origin = req.headers.origin || SITE;
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      line_items: [{ price: process.env[config.priceEnv], quantity: 1 }],
+      success_url: `${origin}${config.returnPath}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url:  `${origin}${config.returnPath}?canceled=1`,
+      allow_promotion_codes: true,
+      metadata: { pack },
+      payment_intent_data: { metadata: { pack } },
+    });
+    return ok(res, { url: session.url });
+  }
+
+  // ── Paid Garage pack: verify a Stripe session and return a signed URL ─
+  // GET ?action=garage-download&pack=plant-3d-cable-tray&session_id=cs_...
+  if (action === 'garage-download' && req.method === 'GET') {
+    const pack = req.query.pack;
+    const session_id = req.query.session_id;
+    const config = GARAGE_PAID_PACKS[pack];
+    if (!config)     return err(res, `Unknown pack: ${pack}`);
+    if (!session_id) return err(res, 'session_id required');
+    if (!process.env.STRIPE_SECRET_KEY) return err(res, 'Stripe not configured', 500);
+
+    const Stripe = require('stripe');
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+    let session;
+    try {
+      session = await stripe.checkout.sessions.retrieve(session_id);
+    } catch (e) {
+      return err(res, 'Invalid session', 404, e.message);
+    }
+    if (session.payment_status !== 'paid') {
+      return err(res, `Payment not completed (status: ${session.payment_status})`, 402);
+    }
+    if (session.metadata?.pack !== pack) {
+      return err(res, 'Session does not match this pack', 403);
+    }
+
+    const bucket = config.storageBucket;
+    const objectPath = config.storagePath;
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .createSignedUrl(objectPath, 60 * 60);  // 1-hour signed URL
+    if (error || !data?.signedUrl) {
+      return err(res, 'Failed to create signed download URL', 500, error?.message);
+    }
+    return ok(res, {
+      paid: true,
+      download_url: data.signedUrl,
+      expires_in: 3600,
+      pack,
+      customer_email: session.customer_details?.email || null,
+    });
   }
 
   // ── Admin: AutoCAD Garage — delete an item ────────────────────────────

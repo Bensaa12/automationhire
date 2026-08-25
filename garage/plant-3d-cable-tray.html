@@ -154,7 +154,9 @@
 
         <div class="product-buy">
           <div class="product-price">£49.99<small>one-off · single seat · perpetual licence</small></div>
-          <a href="mailto:hello@automationhire.co.uk?subject=Order:%20Plant%203D%20Cable%20Tray%20Catalog&body=I'd%20like%20to%20purchase%20the%20AutomationHire%20Cable%20Tray%20Catalog%20for%20AutoCAD%20Plant%203D%20(%C2%A349.99).%0A%0AName:%0ACompany:%0APlant%203D%20version:" class="btn btn-primary">Buy — £49.99 →</a>
+          <a href="#" class="btn btn-primary buy-btn" data-pack="plant-3d-cable-tray">Buy — £49.99 →</a>
+          <a href="#" class="btn btn-primary download-btn" style="display:none;background:var(--green);color:var(--black)">↓ Download pack</a>
+          <div class="buy-status" style="width:100%;font-size:13px;color:var(--white-60);margin-top:6px"></div>
         </div>
 
         <div class="product-feats">
@@ -275,7 +277,9 @@
 
     <div class="product-buy" style="margin-top:56px">
       <div class="product-price">£49.99<small>one-off · single seat · perpetual licence</small></div>
-      <a href="mailto:hello@automationhire.co.uk?subject=Order:%20Plant%203D%20Cable%20Tray%20Catalog&body=I'd%20like%20to%20purchase%20the%20AutomationHire%20Cable%20Tray%20Catalog%20for%20AutoCAD%20Plant%203D%20(%C2%A349.99).%0A%0AName:%0ACompany:%0APlant%203D%20version:" class="btn btn-primary">Buy — £49.99 →</a>
+      <a href="#" class="btn btn-primary buy-btn" data-pack="plant-3d-cable-tray">Buy — £49.99 →</a>
+      <a href="#" class="btn btn-primary download-btn" style="display:none;background:var(--green);color:var(--black)">↓ Download pack</a>
+      <div class="buy-status" style="width:100%;font-size:13px;color:var(--white-60);margin-top:6px"></div>
     </div>
 
   </div>
@@ -295,5 +299,73 @@
 </footer>
 
 <script src="../assets/js/main.js"></script>
+<script>
+(function() {
+  const PACK = 'plant-3d-cable-tray';
+  const buyBtns    = document.querySelectorAll('.buy-btn');
+  const dlBtns     = document.querySelectorAll('.download-btn');
+  const statusEls  = document.querySelectorAll('.buy-status');
+
+  function setStatus(msg, isErr) {
+    statusEls.forEach(el => {
+      el.textContent = msg || '';
+      el.style.color = isErr ? '#ff6b6b' : '';
+    });
+  }
+  function showDownload(url, email) {
+    buyBtns.forEach(b => b.style.display = 'none');
+    dlBtns.forEach(b => { b.href = url; b.style.display = 'inline-flex'; b.setAttribute('download', ''); });
+    setStatus(email
+      ? `Payment confirmed — receipt sent to ${email}. Your download link is valid for 1 hour; refresh this page to regenerate it.`
+      : 'Payment confirmed. Your download link is valid for 1 hour; refresh this page to regenerate it.');
+  }
+
+  buyBtns.forEach(btn => btn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    btn.style.pointerEvents = 'none';
+    setStatus('Redirecting to secure checkout…');
+    try {
+      const r = await fetch('/api/agent?action=garage-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pack: PACK }),
+      });
+      const j = await r.json();
+      if (!r.ok || !j.url) throw new Error(j.error || j.message || 'Checkout failed');
+      window.location.href = j.url;
+    } catch (err) {
+      setStatus('Sorry — ' + err.message + '. Please try again or email hello@automationhire.co.uk', true);
+      btn.style.pointerEvents = '';
+    }
+  }));
+
+  async function verifyAndSwap(sessionId) {
+    setStatus('Verifying your payment…');
+    try {
+      const r = await fetch(`/api/agent?action=garage-download&pack=${encodeURIComponent(PACK)}&session_id=${encodeURIComponent(sessionId)}`);
+      const j = await r.json();
+      if (!r.ok || !j.download_url) throw new Error(j.error || j.message || 'Verification failed');
+      showDownload(j.download_url, j.customer_email);
+      localStorage.setItem(`purchase.${PACK}.session_id`, sessionId);
+      // Clean URL so a share/bookmark doesn't leak the session id
+      history.replaceState({}, '', location.pathname);
+    } catch (err) {
+      setStatus('We could not verify that payment: ' + err.message + '. Contact hello@automationhire.co.uk with your receipt.', true);
+    }
+  }
+
+  const params = new URLSearchParams(location.search);
+  const urlSession = params.get('session_id');
+  const savedSession = localStorage.getItem(`purchase.${PACK}.session_id`);
+  if (urlSession) {
+    verifyAndSwap(urlSession);
+  } else if (savedSession) {
+    verifyAndSwap(savedSession);
+  } else if (params.get('canceled')) {
+    setStatus('Payment cancelled — nothing was charged. Click Buy when you\'re ready.');
+    history.replaceState({}, '', location.pathname);
+  }
+})();
+</script>
 </body>
 </html>
