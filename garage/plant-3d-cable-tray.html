@@ -331,7 +331,7 @@
         body: JSON.stringify({ pack: PACK }),
       });
       const j = await r.json();
-      if (!r.ok || !j.url) throw new Error(j.error || j.message || 'Checkout failed');
+      if (!r.ok || !j.url) throw new Error([j.error, j.details, j.message].filter(Boolean).join(' — ') || 'Checkout failed');
       window.location.href = j.url;
     } catch (err) {
       setStatus('Sorry — ' + err.message + '. Please try again or email hello@automationhire.co.uk', true);
