@@ -748,6 +748,45 @@
     <a href="request-quote.html" class="btn btn-primary btn-lg">Describe Your Component &#8594;</a>
   </div>
 
+  <!-- EQUIPMENT GALLERY -->
+  <style>
+    .eq-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 32px 0 40px; }
+    @media(max-width:860px){ .eq-gallery { grid-template-columns: 1fr; } }
+    .eq-tile { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid rgba(0,230,118,0.20); background: #000; box-shadow: 0 14px 40px rgba(0,0,0,0.45); }
+    .eq-tile img { display: block; width: 100%; height: auto; }
+    .eq-tile-caption { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 14px 16px; background: rgba(0,0,0,0.55); border-top: 1px solid rgba(0,230,118,0.16); }
+    .eq-tile-caption .name { color: var(--white); font-weight: 700; font-size: 15px; }
+    .eq-tile-caption .tag { color: var(--green); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .eq-intro { margin-top: 40px; }
+    .eq-intro-kicker { display: inline-flex; align-items: center; gap: 8px; color: var(--green); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px; }
+    .eq-intro-kicker::before { content: ''; width: 24px; height: 1px; background: var(--green); }
+  </style>
+
+  <div class="eq-intro">
+    <div class="eq-intro-kicker">Beyond fittings</div>
+    <h2 style="margin-top:0">Full plant equipment, not just piping</h2>
+    <p>The same photo-to-STEP pipeline handles tanks, pumps, pressure vessels and heat exchangers. Snap a photo on site, brief the geometry, and pull the CAD file into Plant 3D or SolidWorks alongside your piping run.</p>
+  </div>
+
+  <div class="eq-gallery">
+    <figure class="eq-tile" style="margin:0">
+      <img src="assets/img/forge-hero-storage-tank.png" alt="Photograph of a stainless vertical storage tank on the left, and its CAD STEP-file render on the right." width="2304" height="1296" loading="lazy" decoding="async" />
+      <figcaption class="eq-tile-caption"><span class="name">Vertical storage tank</span><span class="tag">STEP · Plant 3D</span></figcaption>
+    </figure>
+    <figure class="eq-tile" style="margin:0">
+      <img src="assets/img/forge-hero-centrifugal-pump.png" alt="Photograph of a cast-iron centrifugal pump with electric motor, and its CAD STEP-file render." width="2304" height="1296" loading="lazy" decoding="async" />
+      <figcaption class="eq-tile-caption"><span class="name">Centrifugal pump &amp; motor</span><span class="tag">STEP · Plant 3D</span></figcaption>
+    </figure>
+    <figure class="eq-tile" style="margin:0">
+      <img src="assets/img/forge-hero-pressure-vessel.png" alt="Photograph of a horizontal ASME pressure vessel on saddles, and its CAD STEP-file render." width="2304" height="1296" loading="lazy" decoding="async" />
+      <figcaption class="eq-tile-caption"><span class="name">Horizontal pressure vessel</span><span class="tag">STEP · Plant 3D</span></figcaption>
+    </figure>
+    <figure class="eq-tile" style="margin:0">
+      <img src="assets/img/forge-hero-heat-exchanger.png" alt="Photograph of a shell-and-tube heat exchanger with bonnet head, and its CAD STEP-file render." width="2304" height="1296" loading="lazy" decoding="async" />
+      <figcaption class="eq-tile-caption"><span class="name">Shell &amp; tube heat exchanger</span><span class="tag">STEP · Plant 3D</span></figcaption>
+    </figure>
+  </div>
+
   <!-- EXPORT FORMATS -->
   <h2>Export formats</h2>
 
