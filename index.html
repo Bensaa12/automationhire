@@ -373,6 +373,59 @@
   </div>
 </section>
 
+<!-- ===== FEATURED PRODUCT (PartForge) ===== -->
+<style>
+.hff { padding: 72px 0; position: relative; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: linear-gradient(180deg, transparent 0%, rgba(0,230,118,0.03) 100%); }
+.hff-inner { display: grid; grid-template-columns: 1fr 1.15fr; gap: 56px; align-items: center; }
+.hff-kicker { display: inline-flex; align-items: center; gap: 8px; color: var(--green); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 14px; }
+.hff-kicker::before { content: ''; width: 24px; height: 1px; background: var(--green); }
+.hff-h2 { font-size: clamp(1.7rem, 3.2vw, 2.6rem); line-height: 1.1; font-weight: 700; margin: 0 0 18px; color: var(--white); }
+.hff-h2 .grad { background: linear-gradient(135deg, #00e676 0%, #29b6f6 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hff-sub { color: var(--white-60); font-size: 15px; line-height: 1.6; margin: 0 0 24px; max-width: 52ch; }
+.hff-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+.hff-trust { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--white-60); font-size: 13px; }
+.hff-trust span { display: inline-flex; align-items: center; gap: 6px; }
+.hff-trust span::before { content: '✓'; color: var(--green); font-weight: 700; }
+.hff-visual { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,230,118,0.22); box-shadow: 0 20px 60px rgba(0,0,0,0.55); background: #000; }
+.hff-visual a { display: block; }
+.hff-visual img { display: block; width: 100%; height: auto; transition: transform .4s ease; }
+.hff-visual:hover img { transform: scale(1.02); }
+@media(max-width:900px){ .hff-inner{ grid-template-columns: 1fr; gap: 32px; } .hff{ padding: 56px 0; } }
+</style>
+<section class="hff">
+  <div class="container">
+    <div class="hff-inner">
+      <div class="reveal">
+        <div class="hff-kicker">Flagship &mdash; built in-house</div>
+        <h2 class="hff-h2">Upload a photo.<br>Get a <span class="grad">STEP file.</span></h2>
+        <p class="hff-sub">
+          PartForge turns photos of any real component &mdash; a valve, a fitting, a pump &mdash;
+          into production-ready CAD files. Importable straight into AutoCAD Plant 3D, SolidWorks,
+          Inventor and FreeCAD. No modelling skills required.
+        </p>
+        <div class="hff-cta">
+          <a href="forge.html" class="btn btn-primary btn-lg">Try PartForge free →</a>
+          <a href="plant-3d-piping-automation-uk.html" class="btn btn-ghost btn-lg">See the piping range</a>
+        </div>
+        <div class="hff-trust">
+          <span>B-Rep solids, not meshes</span>
+          <span>STEP · URDF · OBJ · STL</span>
+          <span>Free tier, no card</span>
+        </div>
+      </div>
+      <div class="hff-visual reveal reveal-delay-1">
+        <a href="forge.html" aria-label="Try PartForge — photo to STEP file">
+          <img
+            src="assets/img/forge-hero-photo-to-step.png"
+            alt="A photograph of a bronze pipe flange on the left and its clean CAD STEP-file render on the right."
+            width="2304" height="1296" loading="lazy" decoding="async"
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== STATS ===== -->
 <section class="stats-section">
   <div class="container">

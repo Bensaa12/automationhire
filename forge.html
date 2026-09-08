@@ -18,6 +18,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://automationhire.co.uk/forge" />
   <meta property="og:site_name" content="AutomationHire" />
+  <meta property="og:image" content="https://automationhire.co.uk/assets/img/forge-hero-photo-to-step.png" />
+  <meta property="og:image:width" content="2304" />
+  <meta property="og:image:height" content="1296" />
+  <meta property="og:image:alt" content="A photograph of a bronze pipe flange on a workshop bench next to its clean CAD STEP-file render." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PartForge &mdash; Upload a Photo. Get a STEP File." />
+  <meta name="twitter:description" content="AI-powered photo-to-CAD. Upload a photo of any component and get a production-ready STEP file." />
+  <meta name="twitter:image" content="https://automationhire.co.uk/assets/img/forge-hero-photo-to-step.png" />
 
   <script type="application/ld+json">
   {
@@ -803,6 +811,103 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROOF BAND (photo → STEP) ===== -->
+<style>
+.forge-proof {
+  padding: 40px 0 72px;
+  position: relative; z-index: 1;
+}
+.forge-proof-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.forge-proof-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--green);
+  font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.forge-proof-kicker::before {
+  content: ''; width: 24px; height: 1px; background: var(--green);
+}
+.forge-proof-h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  line-height: 1.15; font-weight: 700;
+  margin: 0 0 32px;
+  color: var(--white);
+}
+.forge-proof-h2 .grad-green {
+  background: linear-gradient(135deg, #00e676 0%, #29b6f6 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.forge-proof-frame {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0,230,118,0.22);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset;
+  background: #000;
+}
+.forge-proof-frame img {
+  display: block; width: 100%; height: auto;
+}
+.forge-proof-labels {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.forge-proof-label {
+  align-self: end;
+  padding: 20px 24px;
+  font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+.forge-proof-label.right { text-align: right; color: var(--green); }
+.forge-proof-label .dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor; margin-right: 8px; vertical-align: middle;
+}
+.forge-proof-caption {
+  display: flex; flex-wrap: wrap; gap: 18px 32px;
+  margin-top: 22px;
+  color: var(--white-60);
+  font-size: 14px;
+}
+.forge-proof-caption strong { color: var(--white); font-weight: 600; }
+@media(max-width:640px){
+  .forge-proof-label { padding: 12px 14px; font-size: 10px; letter-spacing: .16em; }
+}
+</style>
+<section class="forge-proof" aria-labelledby="proof-heading">
+  <div class="forge-proof-inner">
+    <div class="reveal">
+      <div class="forge-proof-kicker">See it work</div>
+      <h2 class="forge-proof-h2" id="proof-heading">
+        A phone photo in. A <span class="grad-green">production STEP file</span> out.
+      </h2>
+    </div>
+    <div class="forge-proof-frame reveal reveal-delay-1">
+      <img
+        src="assets/img/forge-hero-photo-to-step.png"
+        alt="Left: photograph of a bronze pipe flange on a workshop bench next to a vernier caliper and hex bolts. Right: the same flange rendered as a clean grey CAD STEP file on a dark technical grid."
+        width="2304" height="1296" loading="lazy" decoding="async"
+      />
+      <div class="forge-proof-labels" aria-hidden="true">
+        <div class="forge-proof-label"><span class="dot"></span>Your photo</div>
+        <div class="forge-proof-label right">Production STEP file<span class="dot" style="margin-left:8px;margin-right:0"></span></div>
+      </div>
+    </div>
+    <div class="forge-proof-caption reveal reveal-delay-2">
+      <div><strong>Real geometry</strong> — B-Rep solids, not meshes</div>
+      <div><strong>Ready to open</strong> in Plant 3D, SolidWorks, Inventor, FreeCAD</div>
+      <div><strong>Dimensioned</strong> — no re-measuring</div>
     </div>
   </div>
 </section>
