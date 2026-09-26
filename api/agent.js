@@ -26,6 +26,13 @@ const GARAGE_PAID_PACKS = {
     storageBucket: 'garage-paid',
     storagePath:   'plant-3d-cable-tray/AutomationHire_CableTrayPack_v1.0.0.zip',
   },
+  // Pound Appstore — £1 desktop apps
+  'hirecast': {
+    priceEnv:      'STRIPE_PRICE_HIRECAST',          // the £1.00 one-off Price ID
+    returnPath:    '/pound-appstore/hirecast',
+    storageBucket: 'garage-paid',
+    storagePath:   'hirecast/HireCast-Setup-1.0.0.exe',
+  },
 };
 
 // --- Server-render blog-post.html for a given slug (SEO: real <title>/

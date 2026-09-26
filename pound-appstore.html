@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pound Appstore — Useful Desktop Apps for £1 | AutomationHire</title>
+  <meta name="description" content="Small, genuinely useful Windows apps built by AutomationHire with AI. £1 each, pay once, keep forever. Starting with HireCast: screen recorder and video editor." />
+  <link rel="canonical" href="https://automationhire.co.uk/pound-appstore" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>£</text></svg>" />
+
+  <meta property="og:title" content="Pound Appstore — Useful Desktop Apps for £1" />
+  <meta property="og:description" content="Small, genuinely useful Windows apps built with AI. £1 each, pay once, keep forever." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://automationhire.co.uk/pound-appstore" />
+  <meta property="og:site_name" content="AutomationHire" />
+  <meta property="og:image" content="https://automationhire.co.uk/assets/pound-appstore/hirecast/og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pound Appstore — Useful Desktop Apps for £1" />
+  <meta name="twitter:description" content="Small, genuinely useful Windows apps built with AI. £1 each." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Pound Appstore",
+    "url": "https://automationhire.co.uk/pound-appstore",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "url": "https://automationhire.co.uk/pound-appstore/hirecast",
+        "name": "HireCast — screen recorder and video editor"
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .pa-hero { padding: 120px 0 56px; position: relative; z-index: 1; }
+    .pa-hero::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background:
+        radial-gradient(ellipse 60% 55% at 18% 35%, rgba(0,230,118,.08) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 45% at 85% 60%, rgba(41,121,255,.07) 0%, transparent 60%);
+    }
+    .pa-kicker {
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+      color:var(--green); margin-bottom:18px;
+    }
+    .pa-kicker::before { content:''; width:24px; height:2px; background:var(--green); box-shadow:0 0 8px var(--green); }
+    .pa-hero h1 { font-family:var(--font-head); font-size:clamp(34px,5.5vw,60px); font-weight:800; line-height:1.05; margin-bottom:20px; }
+    .pa-hero h1 .pound { color:var(--green); text-shadow: var(--shadow-green); }
+    .pa-hero p.lead { font-size:clamp(15px,2vw,18px); color:var(--white-60); max-width:620px; line-height:1.7; margin-bottom:0; }
+
+    .pa-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:22px; }
+    .pa-card {
+      display:flex; flex-direction:column; background:var(--black-3);
+      border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden;
+      transition: border-color .2s, transform .2s;
+      text-decoration:none; color:inherit;
+    }
+    .pa-card:hover { border-color: rgba(0,230,118,0.4); transform: translateY(-3px); }
+    .pa-card-media { aspect-ratio: 16/9; background:#0a0c14; overflow:hidden; border-bottom:1px solid var(--border); }
+    .pa-card-media img { width:100%; height:100%; object-fit:cover; display:block; }
+    .pa-card-body { padding:20px 22px 22px; display:flex; flex-direction:column; gap:10px; flex:1; }
+    .pa-card-head { display:flex; align-items:center; gap:12px; }
+    .pa-card-head img { width:44px; height:44px; border-radius:10px; }
+    .pa-card-head h2 { font-family:var(--font-head); font-size:22px; font-weight:700; margin:0; }
+    .pa-card-head small { display:block; color:var(--white-60); font-size:12px; }
+    .pa-card p { color:var(--white-60); font-size:14px; line-height:1.6; margin:0; }
+    .pa-tags { display:flex; flex-wrap:wrap; gap:6px; }
+    .pa-tags span { font-size:11px; padding:4px 10px; border-radius:100px; border:1px solid var(--border); color:var(--white-60); }
+    .pa-card-foot { display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:8px; }
+    .pa-price { font-family:var(--font-head); font-size:30px; font-weight:800; color:var(--white); }
+    .pa-promo {
+      font-size:12px; font-weight:600; color:#ffd84a; background:rgba(255,216,74,0.1);
+      border:1px solid rgba(255,216,74,0.35); border-radius:8px; padding:6px 10px;
+    }
+    .pa-soon { align-items:center; justify-content:center; text-align:center; padding:40px 28px; border-style:dashed; min-height:320px; }
+    .pa-soon:hover { transform:none; }
+    .pa-soon .big { font-size:44px; margin-bottom:10px; }
+    .pa-soon h2 { font-family:var(--font-head); font-size:22px; margin:0 0 8px; }
+
+    .pa-steps { display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
+    @media (max-width: 800px) { .pa-steps { grid-template-columns: 1fr; } }
+    .pa-step { background:var(--black-3); border:1px solid var(--border); border-radius:var(--radius-md); padding:22px; }
+    .pa-step .n { font-family:var(--font-head); font-size:14px; font-weight:700; color:var(--green); margin-bottom:8px; }
+    .pa-step h3 { font-family:var(--font-head); font-size:18px; margin:0 0 6px; }
+    .pa-step p { color:var(--white-60); font-size:14px; line-height:1.6; margin:0; }
+    .pa-sec-title { font-family:var(--font-head); font-size:26px; font-weight:700; margin-bottom:18px; }
+  </style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">⚡</div>
+      <span class="nav-logo-text">Automation<span>Hire</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="providers.html">Browse Experts</a></li>
+      <li><a href="garage.html">Garage</a></li>
+      <li><a href="pound-appstore.html" style="color:var(--green)">Pound Appstore</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
+      <a href="request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+    </div>
+    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<section class="pa-hero">
+  <div class="container">
+    <div class="pa-kicker">Pound Appstore</div>
+    <h1>Useful desktop apps.<br /><span class="pound">£1</span> each.</h1>
+    <p class="lead">Small, focused Windows tools built by AutomationHire with AI. Pay £1 once, download instantly, keep it forever. No subscriptions, no accounts, no adverts.</p>
+  </div>
+</section>
+
+<section class="section-sm" style="padding-top:0">
+  <div class="container">
+    <div class="pa-grid">
+
+      <a class="pa-card" href="pound-appstore/hirecast.html">
+        <div class="pa-card-media">
+          <img src="assets/pound-appstore/hirecast/01-editor.webp" alt="HireCast video editor with timeline, auto-zoom and captions" loading="lazy" />
+        </div>
+        <div class="pa-card-body">
+          <div class="pa-card-head">
+            <img src="assets/pound-appstore/hirecast/icon.png" alt="" />
+            <div>
+              <h2>HireCast</h2>
+              <small>Screen recorder + video editor · Windows 10/11</small>
+            </div>
+          </div>
+          <p>Record your screen with computer sound and your voice, then edit: split, trim, speed, colour, transitions, auto-zoom on clicks and AI captions. Export for YouTube, TikTok or square.</p>
+          <div class="pa-tags"><span>Screen recording</span><span>Auto-zoom</span><span>AI captions</span><span>9:16 export</span></div>
+          <div class="pa-promo">🎁 Goes free for everyone when our YouTube channel hits 10,000 subscribers</div>
+          <div class="pa-card-foot">
+            <div class="pa-price">£1</div>
+            <span class="btn btn-primary btn-sm">View app →</span>
+          </div>
+        </div>
+      </a>
+
+      <div class="pa-card pa-soon">
+        <div class="big">🛠️</div>
+        <h2>More apps coming</h2>
+        <p>Every Pound Appstore app starts as a real problem. Tell us the tool you wish existed — the best ideas get built.</p>
+        <a href="request-quote.html" class="btn btn-secondary btn-sm" style="margin-top:18px">Suggest an app</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+    <h2 class="pa-sec-title">How it works</h2>
+    <div class="pa-steps">
+      <div class="pa-step"><div class="n">01</div><h3>Pay £1</h3><p>Secure checkout by Stripe. Card, Apple Pay or Google Pay — we never see your card details.</p></div>
+      <div class="pa-step"><div class="n">02</div><h3>Download instantly</h3><p>You come straight back to the app page with your download ready. Your receipt is emailed to you.</p></div>
+      <div class="pa-step"><div class="n">03</div><h3>Keep it forever</h3><p>A perpetual licence for your own PCs. Not happy? Email us within 30 days for a full refund.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <div>© 2026 AutomationHire.co.uk — All rights reserved.</div>
+      <div>
+        <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+        <a href="terms.html">Terms of Service</a> &nbsp;·&nbsp;
+        <a href="privacy.html#cookies">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
