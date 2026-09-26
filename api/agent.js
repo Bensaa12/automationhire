@@ -16,9 +16,11 @@ const BLOG_TEMPLATE_PATH = path.join(process.cwd(), 'blog-post.html');
 
 // ─── Paid Garage packs ────────────────────────────────────────────────
 // One-off downloadable products sold via Stripe Checkout Sessions.
-// Add new packs here. For each, set the Stripe Price ID env var
-// (Stripe dashboard → Products → your product → Price ID) and upload
-// the ZIP into the referenced Supabase Storage bucket + path.
+// Add new packs here, priced one of two ways:
+//   priceEnv  - env var holding a Stripe Price ID (Stripe → Products → product → Price ID), or
+//   productId + unitAmount - a Stripe Product ID plus the amount in pence; checkout builds
+//               the price inline, so no Price ID or env var is needed.
+// Then upload the file into the referenced Supabase Storage bucket + path.
 const GARAGE_PAID_PACKS = {
   'plant-3d-cable-tray': {
     priceEnv:      'STRIPE_PRICE_CABLE_TRAY_PACK',   // e.g. price_1XxxxxYyy
@@ -28,12 +30,29 @@ const GARAGE_PAID_PACKS = {
   },
   // Pound Appstore — £1 desktop apps
   'hirecast': {
-    priceEnv:      'STRIPE_PRICE_HIRECAST',          // the £1.00 one-off Price ID
+    productId:     'prod_VKhoYJZcIPvvR0',            // Stripe product "HireCast"
+    unitAmount:    100,                              // £1.00
+    currency:      'gbp',
     returnPath:    '/pound-appstore/hirecast',
     storageBucket: 'garage-paid',
     storagePath:   'hirecast/HireCast-Setup-1.0.0.exe',
   },
 };
+
+/** Stripe Checkout line item for a pack: its Price ID, or an inline price on its Product. */
+function packLineItem(config) {
+  if (config.priceEnv) {
+    const price = process.env[config.priceEnv];
+    return price ? { price, quantity: 1 } : null;
+  }
+  if (config.productId && config.unitAmount) {
+    return {
+      price_data: { currency: config.currency || 'gbp', product: config.productId, unit_amount: config.unitAmount },
+      quantity: 1,
+    };
+  }
+  return null;
+}
 
 // --- Server-render blog-post.html for a given slug (SEO: real <title>/
 // description/canonical/JSON-LD instead of client-JS-only injection) ---
@@ -306,8 +325,9 @@ KEY INSIGHT: [one sharp memorable sentence]
     const config = GARAGE_PAID_PACKS[pack];
     if (!config)                        return err(res, `Unknown pack: ${pack}`);
     if (!process.env.STRIPE_SECRET_KEY) return err(res, 'Stripe not configured', 500);
-    if (!config.priceEnv || !process.env[config.priceEnv]) {
-      return err(res, `Stripe price env var not set: ${config.priceEnv}`, 500);
+    const lineItem = packLineItem(config);
+    if (!lineItem) {
+      return err(res, `Stripe price not configured for ${pack}${config.priceEnv ? ` (env var ${config.priceEnv})` : ''}`, 500);
     }
     const Stripe = require('stripe');
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -315,7 +335,7 @@ KEY INSIGHT: [one sharp memorable sentence]
     try {
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
-        line_items: [{ price: process.env[config.priceEnv], quantity: 1 }],
+        line_items: [lineItem],
         success_url: `${origin}${config.returnPath}?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url:  `${origin}${config.returnPath}?canceled=1`,
         allow_promotion_codes: true,
