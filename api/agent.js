@@ -9,6 +9,7 @@ const crypto    = require('crypto');
 const fs        = require('fs');
 const path      = require('path');
 const { getSupabase, getBody, handleCors, ok, err, toSlug } = require('./_lib');
+const { r2PresignedUrl } = require('./_r2');
 
 const MODEL = 'claude-sonnet-4-6';
 const SITE  = process.env.NEXT_PUBLIC_SITE_URL || 'https://automationhire.co.uk';
@@ -20,7 +21,8 @@ const BLOG_TEMPLATE_PATH = path.join(process.cwd(), 'blog-post.html');
 //   priceEnv  - env var holding a Stripe Price ID (Stripe → Products → product → Price ID), or
 //   productId + unitAmount - a Stripe Product ID plus the amount in pence; checkout builds
 //               the price inline, so no Price ID or env var is needed.
-// Then upload the file into the referenced Supabase Storage bucket + path.
+// Then upload the file to storagePath in the Supabase Storage bucket (storageBucket), or in
+// Cloudflare R2 (r2Bucket - for files over Supabase's upload limit; see api/_r2.js).
 const GARAGE_PAID_PACKS = {
   'plant-3d-cable-tray': {
     priceEnv:      'STRIPE_PRICE_CABLE_TRAY_PACK',   // e.g. price_1XxxxxYyy
@@ -34,7 +36,7 @@ const GARAGE_PAID_PACKS = {
     unitAmount:    100,                              // £1.00
     currency:      'gbp',
     returnPath:    '/pound-appstore/hirecast',
-    storageBucket: 'garage-paid',
+    r2Bucket:      'hirecast-downloads',             // Cloudflare R2 (file is 120 MB; Supabase free caps at 50 MB)
     storagePath:   'hirecast/HireCast-Setup-1.0.0.exe',
   },
 };
@@ -373,15 +375,29 @@ KEY INSIGHT: [one sharp memorable sentence]
       return err(res, 'Session does not match this pack', 403);
     }
 
-    const { data, error } = await supabase.storage
-      .from(config.storageBucket)
-      .createSignedUrl(config.storagePath, 60 * 60);
-    if (error || !data?.signedUrl) {
-      return err(res, 'Failed to create signed download URL', 500, error?.message);
+    let downloadUrl;
+    if (config.r2Bucket) {
+      // Large files (Supabase free plan caps uploads at 50 MB) live in Cloudflare R2.
+      try {
+        downloadUrl = r2PresignedUrl(config.r2Bucket, config.storagePath, {
+          expiresIn: 60 * 60,
+          downloadName: config.storagePath.split('/').pop(),
+        });
+      } catch (e) {
+        return err(res, 'Failed to create signed download URL', 500, e.message);
+      }
+    } else {
+      const { data, error } = await supabase.storage
+        .from(config.storageBucket)
+        .createSignedUrl(config.storagePath, 60 * 60);
+      if (error || !data?.signedUrl) {
+        return err(res, 'Failed to create signed download URL', 500, error?.message);
+      }
+      downloadUrl = data.signedUrl;
     }
     return ok(res, {
       paid: true,
-      download_url: data.signedUrl,
+      download_url: downloadUrl,
       expires_in: 3600,
       pack,
       customer_email: session.customer_details?.email || null,
