@@ -113,21 +113,33 @@
 <nav class="nav">
   <div class="nav-inner">
     <a href="../index.html" class="nav-logo">
-      <div class="nav-logo-icon">⚡</div>
-      <span class="nav-logo-text">Automation<span>Hire</span></span>
+      <img src="../assets/logo.png" alt="AutomationHire" class="nav-logo-img" />
     </a>
     <ul class="nav-links">
+      <!-- Group 1: Directory -->
       <li><a href="../providers.html">Browse Experts</a></li>
-      <li><a href="../garage.html">Garage</a></li>
-      <li><a href="../pound-appstore.html" style="color:var(--green)">Pound Appstore</a></li>
+      <!-- divider -->
+      <li class="nav-sep" aria-hidden="true"></li>
+      <!-- Group 2: Services -->
+      <li><a href="../forge.html">Component Library<span class="nav-live-badge">LIVE</span></a></li>
+      <li><a href="../forge.html" style="color:var(--green);font-weight:700">PartForge<span class="nav-live-badge" style="background:var(--green);color:#000">NEW</span></a></li>
+      <li><a href="../garage.html">AutoCAD Garage<span class="nav-live-badge" style="background:var(--green);color:#000">NEW</span></a></li>
+      <!-- divider -->
+      <li class="nav-sep" aria-hidden="true"></li>
+      <!-- Group 3: Resources -->
+      <li><a href="../pound-appstore.html" style="color:var(--green);font-weight:700">Pound Appstore<span class="nav-live-badge" style="background:var(--green);color:#000">£1</span></a></li>
       <li><a href="../pricing.html">Pricing</a></li>
       <li><a href="../blog.html">Blog</a></li>
+      <li><a href="../free.html" style="color:var(--green);font-weight:700">Free Tools</a></li>
     </ul>
     <div class="nav-cta">
-      <a href="../submit-listing.html" class="btn btn-secondary btn-sm">List Your Business</a>
-      <a href="../request-quote.html" class="btn btn-primary btn-sm">Hire an Expert</a>
+      <a href="../login.html" class="nav-expert-link">Expert Login</a>
+      <a href="../request-quote.html" class="nav-pill nav-pill-primary">Get Matched</a>
+      <a href="../book.html" class="nav-pill nav-pill-outline"><span class="nav-live-dot"></span>Book a Call</a>
     </div>
-    <div class="nav-hamburger"><span></span><span></span><span></span></div>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 </nav>
 
