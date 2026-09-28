@@ -10,6 +10,7 @@ const fs        = require('fs');
 const path      = require('path');
 const { getSupabase, getBody, handleCors, ok, err, toSlug } = require('./_lib');
 const { r2PresignedUrl } = require('./_r2');
+const { licenseKeyForSession } = require('./_license');
 
 const MODEL = 'claude-sonnet-4-6';
 const SITE  = process.env.NEXT_PUBLIC_SITE_URL || 'https://automationhire.co.uk';
@@ -37,7 +38,9 @@ const GARAGE_PAID_PACKS = {
     currency:      'gbp',
     returnPath:    '/pound-appstore/hirecast',
     r2Bucket:      'hirecast-downloads',             // Cloudflare R2 (file is 120 MB; Supabase free caps at 50 MB)
-    storagePath:   'hirecast/HireCast-Setup-1.0.0.exe',
+    storagePath:   'hirecast/HireCast-Setup-1.1.0.exe',
+    licensePrefix: 'HC1',                            // buyers get an offline licence key (api/_license.js)
+    licenseKeyEnv: 'HIRECAST_LICENSE_PRIVATE_KEY',
   },
 };
 
@@ -395,9 +398,21 @@ KEY INSIGHT: [one sharp memorable sentence]
       }
       downloadUrl = data.signedUrl;
     }
+    // Apps with licence keys: sign one for this purchase (same key on every reload).
+    let licenseKey = null;
+    let licenseError = null;
+    if (config.licensePrefix) {
+      try {
+        licenseKey = licenseKeyForSession(config.licensePrefix, config.licenseKeyEnv, session);
+      } catch (e) {
+        licenseError = e.message;
+      }
+    }
     return ok(res, {
       paid: true,
       download_url: downloadUrl,
+      license_key: licenseKey,
+      license_error: licenseError,
       expires_in: 3600,
       pack,
       customer_email: session.customer_details?.email || null,

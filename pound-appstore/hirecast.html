@@ -27,7 +27,7 @@
     "name": "HireCast",
     "applicationCategory": "MultimediaApplication",
     "operatingSystem": "Windows 10, Windows 11",
-    "softwareVersion": "1.0.0",
+    "softwareVersion": "1.1.0",
     "description": "Screen recorder and video editor with computer-sound and microphone recording, auto-zoom on mouse clicks, cursor spotlight, AI captions, transitions and export for YouTube, TikTok or square.",
     "image": "https://automationhire.co.uk/assets/pound-appstore/hirecast/og.jpg",
     "publisher": { "@type": "Organization", "name": "AutomationHire", "url": "https://automationhire.co.uk" },
@@ -71,6 +71,17 @@
     .product-price { font-family:var(--font-head); font-size:48px; font-weight:800; color:var(--white); line-height:1; }
     .product-price small { font-size:14px; font-weight:500; color:var(--white-60); display:block; margin-top:4px; }
     .product-buy .btn { font-size:16px; padding:14px 26px; }
+    .license-box {
+      padding:18px 20px; border-radius:var(--radius-lg); margin-bottom:18px;
+      background:rgba(41,121,255,0.08); border:1px solid rgba(41,121,255,0.4);
+    }
+    .license-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; color:var(--white); }
+    .license-key {
+      display:block; word-break:break-all; font-size:12px; line-height:1.5; padding:10px 12px;
+      background:var(--black-2); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--white-90);
+      user-select:all;
+    }
+    .license-box p { color:var(--white-60); font-size:13px; line-height:1.6; margin:10px 0 0; }
     .promo {
       font-size:14px; line-height:1.55; color:#ffe27a; background:rgba(255,216,74,0.08);
       border:1px solid rgba(255,216,74,0.35); border-radius:var(--radius-md); padding:12px 16px; margin-bottom:26px;
@@ -154,7 +165,7 @@
     <div class="product-grid">
 
       <div>
-        <span class="product-eyebrow">Windows 10 / 11 · Version 1.0</span>
+        <span class="product-eyebrow">Windows 10 / 11 · Version 1.1</span>
         <h1 class="product-title"><img src="../assets/pound-appstore/hirecast/icon.png" alt="" />HireCast</h1>
         <p class="product-tagline">Record your screen with your computer's sound and your voice, then turn it into a video people actually want to watch — auto-zoom on every click, AI captions, transitions, and export for YouTube or TikTok.</p>
 
@@ -163,6 +174,12 @@
           <a href="#" class="btn btn-primary buy-btn">Buy — £1 →</a>
           <a href="#" class="btn btn-primary download-btn" style="display:none;background:var(--green);color:var(--black)">↓ Download HireCast</a>
           <div class="buy-status" style="width:100%;font-size:13px;color:var(--white-60);margin-top:6px"></div>
+        </div>
+
+        <div class="license-box" style="display:none">
+          <div class="license-head"><strong>🔑 Your licence key</strong><button type="button" class="btn btn-secondary btn-sm license-copy">Copy</button></div>
+          <code class="license-key"></code>
+          <p>Paste this into HireCast the first time you open it. It works offline and never expires. Keep a copy — it's also here whenever you reopen this page in this browser.</p>
         </div>
 
         <div class="promo">🎁 <strong>Goes free for everyone</strong> when our YouTube channel hits 10,000 subscribers. £1 now gets it today — and supports the next app.</div>
@@ -210,7 +227,7 @@
       <table class="spec-table">
         <tbody>
           <tr><th>System</th><td>Windows 10 or 11, 64-bit</td></tr>
-          <tr><th>Download</th><td>HireCast-Setup-1.0.0.exe — about 120 MB, installs for your user account (no admin needed)</td></tr>
+          <tr><th>Download</th><td>HireCast-Setup-1.1.0.exe — about 120 MB, installs for your user account (no admin needed)</td></tr>
           <tr><th>Recording</th><td>Any microphone Windows can see. Computer sound is captured directly — no virtual cables</td></tr>
           <tr><th>AI captions (optional)</th><td>Python 3.10+ from python.org, then once: <code>pip install faster-whisper pysubs2</code>. Everything else works without Python</td></tr>
           <tr><th>Licence</th><td>Perpetual, for your own PCs. Videos you make are 100% yours — personal or commercial use</td></tr>
@@ -221,10 +238,11 @@
     <div class="product-sec">
       <h2>Install in a minute</h2>
       <ol>
-        <li>Buy above — you'll come straight back here with a <strong>Download</strong> button.</li>
-        <li>Run <strong>HireCast-Setup-1.0.0.exe</strong>.</li>
+        <li>Buy above — you'll come straight back here with a <strong>Download</strong> button and your <strong>licence key</strong>.</li>
+        <li>Run <strong>HireCast-Setup-1.1.0.exe</strong>.</li>
         <li>If Windows shows <em>"Windows protected your PC"</em>, click <strong>More info → Run anyway</strong>. This appears for new apps from small publishers that haven't bought a code-signing certificate yet.</li>
         <li>Accept the licence and click Install. HireCast opens from your desktop or Start menu.</li>
+        <li>Paste your licence key when HireCast asks for it — just once per PC.</li>
       </ol>
     </div>
 
@@ -296,6 +314,21 @@
   function setStatus(msg, isErr) {
     statusEls.forEach(el => { el.textContent = msg || ''; el.style.color = isErr ? '#ff6b6b' : ''; });
   }
+  function showLicense(key, keyError) {
+    const box = document.querySelector('.license-box');
+    if (key) {
+      box.querySelector('.license-key').textContent = key;
+      box.querySelector('.license-copy').onclick = async (e) => {
+        await navigator.clipboard.writeText(key);
+        e.target.textContent = 'Copied ✓';
+        setTimeout(() => { e.target.textContent = 'Copy'; }, 2000);
+      };
+    } else {
+      box.querySelector('.license-key').textContent = 'We couldn't create your key just now (' + (keyError || 'unknown error') + '). Email hello@automationhire.co.uk with your receipt and we'll send it straight away.';
+      box.querySelector('.license-copy').style.display = 'none';
+    }
+    box.style.display = 'block';
+  }
   function showDownload(url, email) {
     buyBtns.forEach(b => b.style.display = 'none');
     dlBtns.forEach(b => { b.href = url; b.style.display = 'inline-flex'; b.setAttribute('download', ''); });
@@ -330,6 +363,7 @@
       const j = await r.json();
       if (!r.ok || !j.download_url) throw new Error(j.error || j.message || 'Verification failed');
       showDownload(j.download_url, j.customer_email);
+      showLicense(j.license_key, j.license_error);
       localStorage.setItem(`purchase.${PACK}.session_id`, sessionId);
       // Clean URL so a share/bookmark doesn't leak the session id
       history.replaceState({}, '', location.pathname);
