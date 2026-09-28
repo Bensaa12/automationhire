@@ -10,7 +10,7 @@ const fs        = require('fs');
 const path      = require('path');
 const { getSupabase, getBody, handleCors, ok, err, toSlug } = require('./_lib');
 const { r2PresignedUrl } = require('./_r2');
-const { licenseKeyForSession } = require('./_license');
+const { licenseKeyForSession, verifyLicenseKey } = require('./_license');
 
 const MODEL = 'claude-sonnet-4-6';
 const SITE  = process.env.NEXT_PUBLIC_SITE_URL || 'https://automationhire.co.uk';
@@ -38,25 +38,41 @@ const GARAGE_PAID_PACKS = {
     currency:      'gbp',
     returnPath:    '/pound-appstore/hirecast',
     r2Bucket:      'hirecast-downloads',             // Cloudflare R2 (file is 120 MB; Supabase free caps at 50 MB)
-    storagePath:   'hirecast/HireCast-Setup-1.1.0.exe',
+    storagePath:   'hirecast/HireCast-Setup-1.2.0.exe',
     licensePrefix: 'HC1',                            // buyers get an offline licence key (api/_license.js)
     licenseKeyEnv: 'HIRECAST_LICENSE_PRIVATE_KEY',
   },
+  // Same installer - the Pro licence key unlocks the webcam features.
+  'hirecast-pro': {
+    productName:   'HireCast Pro',                   // inline Stripe product (no product ID needed)
+    unitAmount:    999,                              // £9.99
+    upgradeAmount: 899,                              // £8.99 with a valid HireCast Standard key
+    currency:      'gbp',
+    returnPath:    '/pound-appstore/hirecast-pro',
+    r2Bucket:      'hirecast-downloads',
+    storagePath:   'hirecast/HireCast-Setup-1.2.0.exe',
+    licensePrefix: 'HC1',
+    licenseKeyEnv: 'HIRECAST_LICENSE_PRIVATE_KEY',
+    edition:       'pro',
+  },
 };
 
-/** Stripe Checkout line item for a pack: its Price ID, or an inline price on its Product. */
-function packLineItem(config) {
+/**
+ * Stripe Checkout line item for a pack: its Price ID, or an inline price on its Product (by ID,
+ * or by name). `amount` overrides the price (e.g. the upgrade price), `name` the product name.
+ */
+function packLineItem(config, { amount, name } = {}) {
   if (config.priceEnv) {
     const price = process.env[config.priceEnv];
     return price ? { price, quantity: 1 } : null;
   }
-  if (config.productId && config.unitAmount) {
-    return {
-      price_data: { currency: config.currency || 'gbp', product: config.productId, unit_amount: config.unitAmount },
-      quantity: 1,
-    };
-  }
-  return null;
+  const unitAmount = amount || config.unitAmount;
+  if (!unitAmount) return null;
+  const priceData = { currency: config.currency || 'gbp', unit_amount: unitAmount };
+  if (config.productId && !name) priceData.product = config.productId;
+  else if (config.productName || name) priceData.product_data = { name: name || config.productName };
+  else return null;
+  return { price_data: priceData, quantity: 1 };
 }
 
 // --- Server-render blog-post.html for a given slug (SEO: real <title>/
@@ -325,12 +341,31 @@ KEY INSIGHT: [one sharp memorable sentence]
 
   // ── PUBLIC: Paid Garage pack — create a Stripe Checkout session ───────
   // POST { pack: 'plant-3d-cable-tray' }  returns { url } for client redirect
+  // POST { pack: 'hirecast-pro', upgrade_key: 'HC1-…' }  upgrade price for a Standard owner
   if (action === 'garage-checkout' && req.method === 'POST') {
-    const { pack } = await getBody(req);
+    const { pack, upgrade_key: upgradeKey } = await getBody(req);
     const config = GARAGE_PAID_PACKS[pack];
     if (!config)                        return err(res, `Unknown pack: ${pack}`);
     if (!process.env.STRIPE_SECRET_KEY) return err(res, 'Stripe not configured', 500);
-    const lineItem = packLineItem(config);
+    // Upgrade pricing: owners of the lower edition pay the difference. Their key is checked here
+    // (signature and edition), so the discount can't be had without a genuine key.
+    const metadata = { pack };
+    let lineItem;
+    if (upgradeKey) {
+      if (!config.upgradeAmount) return err(res, `${pack} has no upgrade price`);
+      let owned = null;
+      try {
+        owned = verifyLicenseKey(config.licensePrefix, config.licenseKeyEnv, upgradeKey);
+      } catch (e) {
+        return err(res, 'Upgrade check unavailable', 500, e.message);
+      }
+      if (!owned) return err(res, "That licence key isn't valid. Copy the whole key from your HireCast purchase page.");
+      if (owned.ed === config.edition) return err(res, "That's already a Pro key, so there's nothing to upgrade.");
+      metadata.upgrade_from = String(owned.id || '').slice(0, 16);
+      lineItem = packLineItem(config, { amount: config.upgradeAmount, name: `${config.productName} (upgrade)` });
+    } else {
+      lineItem = packLineItem(config);
+    }
     if (!lineItem) {
       return err(res, `Stripe price not configured for ${pack}${config.priceEnv ? ` (env var ${config.priceEnv})` : ''}`, 500);
     }
@@ -344,8 +379,8 @@ KEY INSIGHT: [one sharp memorable sentence]
         success_url: `${origin}${config.returnPath}?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url:  `${origin}${config.returnPath}?canceled=1`,
         allow_promotion_codes: true,
-        metadata: { pack },
-        payment_intent_data: { metadata: { pack } },
+        metadata,
+        payment_intent_data: { metadata },
       });
       return ok(res, { url: session.url });
     } catch (e) {
@@ -403,7 +438,7 @@ KEY INSIGHT: [one sharp memorable sentence]
     let licenseError = null;
     if (config.licensePrefix) {
       try {
-        licenseKey = licenseKeyForSession(config.licensePrefix, config.licenseKeyEnv, session);
+        licenseKey = licenseKeyForSession(config.licensePrefix, config.licenseKeyEnv, session, config.edition);
       } catch (e) {
         licenseError = e.message;
       }
