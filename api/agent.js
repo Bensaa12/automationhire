@@ -44,7 +44,7 @@ const GARAGE_PAID_PACKS = {
   },
   // Same installer - the Pro licence key unlocks the webcam features.
   'hirecast-pro': {
-    productName:   'HireCast Pro',                   // inline Stripe product (no product ID needed)
+    productId:     'prod_VLpGrrNCw4rd2a',            // Stripe product "HireCast Pro"
     unitAmount:    999,                              // £9.99
     upgradeAmount: 899,                              // £8.99 with a valid HireCast Standard key
     currency:      'gbp',
@@ -362,7 +362,7 @@ KEY INSIGHT: [one sharp memorable sentence]
       if (!owned) return err(res, "That licence key isn't valid. Copy the whole key from your HireCast purchase page.");
       if (owned.ed === config.edition) return err(res, "That's already a Pro key, so there's nothing to upgrade.");
       metadata.upgrade_from = String(owned.id || '').slice(0, 16);
-      lineItem = packLineItem(config, { amount: config.upgradeAmount, name: `${config.productName} (upgrade)` });
+      lineItem = packLineItem(config, { amount: config.upgradeAmount });
     } else {
       lineItem = packLineItem(config);
     }
