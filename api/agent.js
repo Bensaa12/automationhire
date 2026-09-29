@@ -57,7 +57,7 @@ const GARAGE_PAID_PACKS = {
   },
   // HireSign — sign PDF, Word and image documents. One installer; the key decides Basic or Pro.
   'hiresign': {
-    productName:   'HireSign',                       // inline product (swap for productId once created in Stripe)
+    productId:     'prod_VLqgDIUtoNKjA8',            // Stripe product "HireSign"
     unitAmount:    100,                              // £1.00
     currency:      'gbp',
     returnPath:    '/pound-appstore/hiresign',
@@ -67,7 +67,7 @@ const GARAGE_PAID_PACKS = {
     licenseKeyEnv: 'HIRESIGN_LICENSE_PRIVATE_KEY',
   },
   'hiresign-pro': {
-    productName:   'HireSign Pro',
+    productId:     'prod_VLqgK47wZrZ4lW',            // Stripe product "HireSign Pro"
     unitAmount:    999,                              // £9.99
     upgradeAmount: 899,                              // £8.99 with a valid HireSign (£1) key
     upgradeFromName: 'HireSign',
