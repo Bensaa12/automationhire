@@ -326,7 +326,7 @@
         setTimeout(() => { e.target.textContent = 'Copy'; }, 2000);
       };
     } else {
-      box.querySelector('.license-key').textContent = 'We couldn't create your key just now (' + (keyError || 'unknown error') + '). Email hello@automationhire.co.uk with your receipt and we'll send it straight away.';
+      box.querySelector('.license-key').textContent = "We couldn't create your key just now (" + (keyError || 'unknown error') + "). Email hello@automationhire.co.uk with your receipt and we'll send it straight away.";
       box.querySelector('.license-copy').style.display = 'none';
     }
     box.style.display = 'block';
