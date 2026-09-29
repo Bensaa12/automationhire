@@ -55,6 +55,30 @@ const GARAGE_PAID_PACKS = {
     licenseKeyEnv: 'HIRECAST_LICENSE_PRIVATE_KEY',
     edition:       'pro',
   },
+  // HireSign — sign PDF, Word and image documents. One installer; the key decides Basic or Pro.
+  'hiresign': {
+    productName:   'HireSign',                       // inline product (swap for productId once created in Stripe)
+    unitAmount:    100,                              // £1.00
+    currency:      'gbp',
+    returnPath:    '/pound-appstore/hiresign',
+    r2Bucket:      'hirecast-downloads',
+    storagePath:   'hiresign/HireSign-Setup-1.0.0.exe',
+    licensePrefix: 'HS1',
+    licenseKeyEnv: 'HIRESIGN_LICENSE_PRIVATE_KEY',
+  },
+  'hiresign-pro': {
+    productName:   'HireSign Pro',
+    unitAmount:    999,                              // £9.99
+    upgradeAmount: 899,                              // £8.99 with a valid HireSign (£1) key
+    upgradeFromName: 'HireSign',
+    currency:      'gbp',
+    returnPath:    '/pound-appstore/hiresign-pro',
+    r2Bucket:      'hirecast-downloads',
+    storagePath:   'hiresign/HireSign-Setup-1.0.0.exe',
+    licensePrefix: 'HS1',
+    licenseKeyEnv: 'HIRESIGN_LICENSE_PRIVATE_KEY',
+    edition:       'pro',
+  },
 };
 
 /**
@@ -359,7 +383,7 @@ KEY INSIGHT: [one sharp memorable sentence]
       } catch (e) {
         return err(res, 'Upgrade check unavailable', 500, e.message);
       }
-      if (!owned) return err(res, "That licence key isn't valid. Copy the whole key from your HireCast purchase page.");
+      if (!owned) return err(res, `That licence key isn't valid. Copy the whole key from your ${config.upgradeFromName || 'HireCast'} purchase page.`);
       if (owned.ed === config.edition) return err(res, "That's already a Pro key, so there's nothing to upgrade.");
       metadata.upgrade_from = String(owned.id || '').slice(0, 16);
       lineItem = packLineItem(config, { amount: config.upgradeAmount });
