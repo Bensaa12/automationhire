@@ -26,7 +26,9 @@ const BLOG_TEMPLATE_PATH = path.join(process.cwd(), 'blog-post.html');
 // Cloudflare R2 (r2Bucket - for files over Supabase's upload limit; see api/_r2.js).
 const GARAGE_PAID_PACKS = {
   'plant-3d-cable-tray': {
-    priceEnv:      'STRIPE_PRICE_CABLE_TRAY_PACK',   // e.g. price_1XxxxxYyy
+    productId:     'prod_V8jSD23FMRl0aB',            // Stripe product "AutomationHire Cable Tray Catalog for AutoCAD Plant 3D"
+    unitAmount:    499,                              // £4.99
+    currency:      'gbp',
     returnPath:    '/garage/plant-3d-cable-tray',
     storageBucket: 'garage-paid',
     storagePath:   'plant-3d-cable-tray/AutomationHire_CableTrayPack_v1.0.0.zip',
