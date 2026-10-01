@@ -66,6 +66,8 @@ async function getLiveExperts() {
 }
 
 module.exports = async function handler(req, res) {
+  // Jarvis Academy tutor shares this function (Vercel Hobby function limit)
+  if (req.query && req.query.action === 'academy') return require('./_academy-tutor')(req, res);
   if (handleCors(req, res)) return;
   if (req.method !== 'POST') return err(res, 'Method not allowed', 405);
 

@@ -41,7 +41,7 @@ const routes = [
   { path: '/api/stripe/webhook',        handler: './api/stripe/webhook'        },
   { path: '/api/chat',                  handler: './api/chat'                  },
   { path: '/api/receptionist',          handler: './api/receptionist'          },
-  { path: '/api/academy-tutor',         handler: './api/academy-tutor'         },
+  { path: '/api/academy-tutor',         handler: './api/_academy-tutor'        },
 
 ];
 
