@@ -106,6 +106,30 @@ const GARAGE_PAID_PACKS = {
     licenseKeyEnv: 'HIRECONVERT_LICENSE_PRIVATE_KEY',
     edition:       'pro',
   },
+  // HirePDF — merge, split, rearrange and compress PDFs. One installer; the key decides Basic or Pro.
+  'hirepdf': {
+    productName:   'HirePDF',
+    unitAmount:    100,                              // £1.00
+    currency:      'gbp',
+    returnPath:    '/pound-appstore/hirepdf',
+    r2Bucket:      'hirecast-downloads',
+    storagePath:   'hirepdf/HirePDF-Setup-1.0.0.exe',
+    licensePrefix: 'HP1',
+    licenseKeyEnv: 'HIREPDF_LICENSE_PRIVATE_KEY',
+  },
+  'hirepdf-pro': {
+    productName:   'HirePDF Pro',
+    unitAmount:    999,                              // £9.99
+    upgradeAmount: 899,                              // £8.99 with a valid HirePDF (£1) key
+    upgradeFromName: 'HirePDF',
+    currency:      'gbp',
+    returnPath:    '/pound-appstore/hirepdf-pro',
+    r2Bucket:      'hirecast-downloads',
+    storagePath:   'hirepdf/HirePDF-Setup-1.0.0.exe',
+    licensePrefix: 'HP1',
+    licenseKeyEnv: 'HIREPDF_LICENSE_PRIVATE_KEY',
+    edition:       'pro',
+  },
 };
 
 /**
