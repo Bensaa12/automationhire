@@ -81,6 +81,31 @@ const GARAGE_PAID_PACKS = {
     licenseKeyEnv: 'HIRESIGN_LICENSE_PRIVATE_KEY',
     edition:       'pro',
   },
+  // HireConvert — video, audio and photo converter. One installer; the key decides Basic or Pro.
+  // No productId yet: Stripe Checkout creates the product inline from `productName`.
+  'hireconvert': {
+    productName:   'HireConvert',
+    unitAmount:    100,                              // £1.00
+    currency:      'gbp',
+    returnPath:    '/pound-appstore/hireconvert',
+    r2Bucket:      'hirecast-downloads',
+    storagePath:   'hireconvert/HireConvert-Setup-1.0.0.exe',
+    licensePrefix: 'HX1',
+    licenseKeyEnv: 'HIRECONVERT_LICENSE_PRIVATE_KEY',
+  },
+  'hireconvert-pro': {
+    productName:   'HireConvert Pro',
+    unitAmount:    999,                              // £9.99
+    upgradeAmount: 899,                              // £8.99 with a valid HireConvert (£1) key
+    upgradeFromName: 'HireConvert',
+    currency:      'gbp',
+    returnPath:    '/pound-appstore/hireconvert-pro',
+    r2Bucket:      'hirecast-downloads',
+    storagePath:   'hireconvert/HireConvert-Setup-1.0.0.exe',
+    licensePrefix: 'HX1',
+    licenseKeyEnv: 'HIRECONVERT_LICENSE_PRIVATE_KEY',
+    edition:       'pro',
+  },
 };
 
 /**
