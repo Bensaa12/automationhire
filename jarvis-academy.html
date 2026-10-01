@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jarvis Academy &mdash; Your AI Learning Companion | AutomationHire</title>
+  <meta name="description" content="Jarvis Academy: a personal AI tutor for Primary, GCSE/A-Level and University. Explains, quizzes, tracks progress and builds revision plans. Try Jarvis free." />
+  <link rel="canonical" href="https://automationhire.co.uk/jarvis-academy" />
+  <meta name="robots" content="index, follow" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/academy.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%2322d3ee'/></svg>" />
+  <meta property="og:title" content="Jarvis Academy &mdash; Your AI Learning Companion" />
+  <meta property="og:description" content="From first numbers to first-class. A personal AI tutor that teaches rather than just answers." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://automationhire.co.uk/jarvis-academy" />
+  <meta property="og:image" content="https://automationhire.co.uk/assets/og/og-default.png" />
+</head>
+<body class="ja-page">
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="assets/logo.png" alt="AutomationHire" class="nav-logo-img" />
+    </a>
+    <ul class="nav-links">
+      <!-- Group 1: Directory -->
+      <li><a href="providers.html">Browse Experts</a></li>
+      <!-- divider -->
+      <li class="nav-sep" aria-hidden="true"></li>
+      <!-- Group 2: Services -->
+      <li><a href="forge.html">Component Library<span class="nav-live-badge">LIVE</span></a></li>
+      <li><a href="forge.html" style="color:var(--green);font-weight:700">PartForge<span class="nav-live-badge" style="background:var(--green);color:#000">NEW</span></a></li>
+      <li><a href="garage.html">AutoCAD Garage<span class="nav-live-badge" style="background:var(--green);color:#000">NEW</span></a></li>
+      <li class="nav-dd">
+        <a href="jarvis-academy.html" class="nav-dd-toggle" aria-haspopup="true" style="color:#22d3ee;font-weight:700">Jarvis Academy<span class="nav-live-badge" style="background:#22d3ee;color:#000;border-color:#22d3ee">NEW</span><span class="nav-dd-caret" aria-hidden="true">&#9662;</span></a>
+        <ul class="nav-dd-menu">
+          <li><a href="jarvis-academy.html#primary">Primary <small>Ages 5&ndash;11</small></a></li>
+          <li><a href="jarvis-academy.html#secondary">Secondary <small>GCSE &amp; A-Level</small></a></li>
+          <li><a href="jarvis-academy.html#university">University <small>Jarvis Scholar</small></a></li>
+          <li><a href="jarvis-academy.html#parents">Parents</a></li>
+          <li><a href="jarvis-academy.html#teachers">Teachers</a></li>
+        </ul>
+      </li>
+      <!-- divider -->
+      <li class="nav-sep" aria-hidden="true"></li>
+      <!-- Group 3: Resources -->
+      <li><a href="pound-appstore.html">Pound Appstore<span class="nav-live-badge" style="background:var(--green);color:#000">£1</span></a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="free.html" style="color:var(--green);font-weight:700">Free Tools</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="login.html" class="nav-expert-link">Expert Login</a>
+      <a href="request-quote.html" class="nav-pill nav-pill-primary">Get Matched</a>
+      <a href="book.html" class="nav-pill nav-pill-outline"><span class="nav-live-dot"></span>Book a Call</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ===== HERO ===== -->
+<section class="ja-hero">
+  <div class="container">
+    <div class="ja-orb" aria-hidden="true"></div>
+    <h1>JARVIS <span class="ja-grad">ACADEMY</span></h1>
+    <p class="ja-sub1">Your AI Learning Companion</p>
+    <p class="ja-quote">&ldquo;From first numbers to first-class.&rdquo;</p>
+    <p class="ja-lead">Learn smarter with your personal AI tutor. Jarvis explains difficult subjects, creates personalised practice, tracks your progress and helps you prepare for exams.</p>
+    <div class="ja-actions">
+      <a href="#try" class="btn btn-lg ja-btn-cyan">START LEARNING</a>
+      <a href="#tutor" class="btn btn-lg ja-btn-outline">MEET JARVIS</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LEVEL SELECTOR ===== -->
+<section class="section-sm" id="levels">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label ja-cyan">Choose your level</div>
+      <h2 class="section-title">One Jarvis. Three ways to learn.</h2>
+      <p class="section-sub">Pick where you are. Jarvis adapts his language, difficulty and tools to match.</p>
+    </div>
+    <div class="ja-levels">
+      <a href="#primary" class="ja-glass ja-level reveal" data-pick-level="primary">
+        <span class="ja-age">AGES 5&ndash;11</span>
+        <h3>PRIMARY</h3>
+        <p class="ja-desc">Learn through stories, games and interactive explanations.</p>
+        <ul><li>Reading</li><li>Maths</li><li>Spelling</li><li>Science</li><li>General knowledge</li><li>Creative learning</li></ul>
+        <span class="btn ja-btn-outline">EXPLORE PRIMARY</span>
+      </a>
+      <a href="#secondary" class="ja-glass ja-level reveal reveal-delay-1" data-pick-level="secondary">
+        <span class="ja-age">AGES 11&ndash;16 &middot; GCSE / A-LEVEL</span>
+        <h3>SECONDARY</h3>
+        <p class="ja-desc">Build confidence, master subjects and prepare for exams.</p>
+        <ul><li>GCSE subjects</li><li>Maths</li><li>English</li><li>Science</li><li>History</li><li>Geography</li><li>Computer Science</li><li>Revision</li><li>Exam practice</li></ul>
+        <span class="btn ja-btn-cyan">EXPLORE SECONDARY</span>
+      </a>
+      <a href="#university" class="ja-glass ja-level reveal reveal-delay-2" data-pick-level="university">
+        <span class="ja-age">UNIVERSITY &amp; ADULT LEARNERS</span>
+        <h3>UNIVERSITY</h3>
+        <p class="ja-desc">Study smarter. Understand more. Research with confidence.</p>
+        <ul><li>Lecture notes</li><li>Research</li><li>Academic reading</li><li>Essay planning</li><li>Revision</li><li>Flashcards</li><li>Exam preparation</li><li>Study planning</li></ul>
+        <span class="btn ja-btn-outline">EXPLORE UNIVERSITY</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MODES (Primary / Secondary / University) ===== -->
+<section class="section-sm" id="modes">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label ja-cyan">Jarvis changes with you</div>
+      <h2 class="section-title">Junior. Tutor. Scholar.</h2>
+    </div>
+    <div class="ja-tabs" role="tablist" aria-label="Education level">
+      <button class="ja-tab" role="tab" data-level="primary" aria-selected="false" aria-controls="primary">Jarvis Junior</button>
+      <button class="ja-tab" role="tab" data-level="secondary" aria-selected="true" aria-controls="secondary">Jarvis Tutor</button>
+      <button class="ja-tab" role="tab" data-level="university" aria-selected="false" aria-controls="university">Jarvis Scholar</button>
+    </div>
+
+    <div class="ja-glass ja-panel" id="primary" role="tabpanel" hidden>
+      <h3>JARVIS JUNIOR <span class="ja-tag soon">Preview &middot; chat available in the demo</span></h3>
+      <p class="ja-intro">Friendlier, still premium. Simpler language, more visual explanations and short sessions. Under-13s will use Jarvis through a parent or guardian account.</p>
+      <div class="ja-chips"><span class="ja-chip">Reading</span><span class="ja-chip">Maths</span><span class="ja-chip">Spelling</span><span class="ja-chip">Science</span><span class="ja-chip">General Knowledge</span><span class="ja-chip">Creative Learning</span></div>
+      <p class="ja-intro" style="margin-top:18px">&ldquo;I don&rsquo;t understand fractions.&rdquo; &rarr; Jarvis reaches for pizza slices, not jargon.</p>
+    </div>
+
+    <div class="ja-glass ja-panel" id="secondary" role="tabpanel">
+      <h3>JARVIS TUTOR <span class="ja-tag live">Main focus &middot; chat available in the demo</span></h3>
+      <p class="ja-intro">GCSE and A-Level revision, topic by topic, with exam technique built in.</p>
+      <div class="ja-chips">
+        <span class="ja-chip">Mathematics</span><span class="ja-chip">English Language</span><span class="ja-chip">English Literature</span><span class="ja-chip">Biology</span><span class="ja-chip">Chemistry</span><span class="ja-chip">Physics</span><span class="ja-chip">History</span><span class="ja-chip">Geography</span><span class="ja-chip">Computer Science</span><span class="ja-chip">Business</span><span class="ja-chip">French</span><span class="ja-chip">Spanish</span><span class="ja-chip">Religious Studies</span>
+      </div>
+    </div>
+
+    <div class="ja-glass ja-panel" id="university" role="tabpanel" hidden>
+      <h3>JARVIS SCHOLAR <span class="ja-tag soon">Preview &middot; chat available in the demo</span></h3>
+      <p class="ja-intro">A research assistant and academic coach. Jarvis develops your thinking; he does not write your assessed work.</p>
+      <div class="ja-feat-grid">
+        <div class="ja-feat"><strong>LECTURE ASSISTANT <span class="ja-tag soon">Coming soon</span></strong><span>Upload lecture slides and turn them into structured notes.</span></div>
+        <div class="ja-feat"><strong>RESEARCH ASSISTANT <span class="ja-tag soon">Coming soon</span></strong><span>Understand and compare academic sources.</span></div>
+        <div class="ja-feat"><strong>STUDY MODE <span class="ja-tag soon">Coming soon</span></strong><span>Create flashcards, quizzes and revision plans.</span></div>
+        <div class="ja-feat"><strong>WRITING COACH <span class="ja-tag soon">Coming soon</span></strong><span>Help structure and improve academic writing while preserving the student&rsquo;s own work.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LEARNING BRAIN ===== -->
+<section class="section" id="brain">
+  <div class="container ja-split">
+    <div class="reveal">
+      <div class="section-label ja-cyan" style="text-align:left">The Jarvis Learning Brain</div>
+      <h2 class="section-title" style="text-align:left">Jarvis remembers how you learn.</h2>
+      <p class="section-sub" style="text-align:left;margin-left:0">Not just &ldquo;James is studying GCSE Biology&rdquo;. A private learning profile that tracks subject, topic, skill, confidence and common mistakes, and uses it to plan your next session.</p>
+      <ul class="ja-checks">
+        <li>Finds your weak spots automatically</li>
+        <li>Builds a mini lesson around your usual mistakes</li>
+        <li>Remembers what happened last session</li>
+        <li>Recommends what to study next</li>
+      </ul>
+      <p class="ja-note" style="text-align:left"><span class="ja-tag soon">Coming soon</span> The profile is in design. The dashboard shown is an illustration.</p>
+    </div>
+    <div class="ja-glass ja-brain reveal reveal-delay-1" data-animate>
+      <div class="ja-brain-head"><span>STUDENT LEARNING PROFILE</span><span class="ja-tag sample">Sample data</span></div>
+      <div class="ja-bar-row"><span>Mathematics</span><div class="ja-bar"><i data-w="78"></i></div><b data-count="78" data-suffix="%">78%</b></div>
+      <div class="ja-bar-row"><span>English</span><div class="ja-bar"><i data-w="71"></i></div><b data-count="71" data-suffix="%">71%</b></div>
+      <div class="ja-bar-row"><span>Biology</span><div class="ja-bar"><i data-w="84"></i></div><b data-count="84" data-suffix="%">84%</b></div>
+      <div class="ja-bar-row"><span>Chemistry</span><div class="ja-bar"><i class="warn" data-w="56"></i></div><b data-count="56" data-suffix="%">56%</b></div>
+      <div class="ja-bar-row"><span>Physics</span><div class="ja-bar"><i data-w="63"></i></div><b data-count="63" data-suffix="%">63%</b></div>
+      <div class="ja-brain-cols">
+        <div><h4>STRONG AREAS</h4><div class="ja-ok">&#10003; Algebra</div><div class="ja-ok">&#10003; Cell Biology</div></div>
+        <div><h4>NEEDS PRACTICE</h4><div class="ja-warn">&#9888; Chemical Equations</div><div class="ja-warn">&#9888; Forces</div><div class="ja-warn">&#9888; Essay Structure</div></div>
+      </div>
+      <div class="ja-next"><b class="ja-cyan">CURRENT GOAL</b> &nbsp;GCSE Chemistry<br /><b class="ja-cyan">NEXT SESSION</b> &nbsp;Balancing Equations &middot; 12 minutes</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AI TUTOR EXPERIENCE ===== -->
+<section class="section" id="tutor">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label ja-cyan">Your personal AI tutor</div>
+      <h2 class="section-title">Jarvis teaches. He doesn&rsquo;t just answer.</h2>
+      <p class="section-sub">Watch how he handles a student who is stuck.</p>
+    </div>
+    <div class="ja-glass ja-chat reveal" style="margin-bottom:26px">
+      <div class="ja-chat-head"><div class="ja-mini-orb"></div><div><b>JARVIS</b><small>Example session</small></div><span class="ja-tag sample" style="margin-left:auto">Illustration</span></div>
+      <div class="ja-msgs" style="min-height:0">
+        <div class="ja-msg user">I don&rsquo;t understand simultaneous equations.</div>
+        <div class="ja-msg bot"><span class="ja-who">JARVIS</span>Certainly, sir. Let us tame the simultaneous equations before they become unnecessarily dramatic.
+          <ol class="ja-steps">
+            <li><b>STEP 1</b>Understand the equations</li>
+            <li><b>STEP 2</b>Eliminate one variable</li>
+            <li><b>STEP 3</b>Solve for the remaining variable</li>
+            <li><b>STEP 4</b>Check your answer</li>
+          </ol>
+        </div>
+      </div>
+      <div class="ja-quick" style="padding-bottom:20px"><button type="button" disabled>EXPLAIN IT</button><button type="button" disabled>GIVE ME A HINT</button><button type="button" disabled>QUIZ ME</button><button type="button" disabled>SHOW AN EXAMPLE</button></div>
+    </div>
+    <div class="ja-loop reveal" aria-label="Tutoring method"><span>QUESTION</span><em>&rarr;</em><span>HINT</span><em>&rarr;</em><span>EXPLANATION</span><em>&rarr;</em><span>STUDENT ATTEMPT</span><em>&rarr;</em><span>FEEDBACK</span><em>&rarr;</em><span>SIMILAR QUESTION</span><em>&rarr;</em><span>MASTERY</span></div>
+  </div>
+</section>
+
+<!-- ===== TRY JARVIS (live) ===== -->
+<section class="section" id="try">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label ja-cyan">Try Jarvis free <span class="ja-tag live" style="margin-left:6px">Available now</span></div>
+      <h2 class="section-title">Ask Jarvis something.</h2>
+      <p class="section-sub">No sign-up. Three free questions. This is the real AI tutor, text only for now.</p>
+    </div>
+    <div class="ja-glass ja-chat reveal">
+      <div class="ja-chat-head" id="jaChatHead">
+        <div class="ja-mini-orb"></div><div><b>JARVIS</b><small>Your personal AI tutor</small></div>
+        <div class="ja-level-pick" role="group" aria-label="Level">
+          <button type="button" data-level="primary" aria-pressed="false">Primary</button>
+          <button type="button" data-level="secondary" aria-pressed="true">Secondary</button>
+          <button type="button" data-level="university" aria-pressed="false">University</button>
+        </div>
+      </div>
+      <div class="ja-msgs" id="jaMsgs" aria-live="polite"></div>
+      <div class="ja-quick">
+        <button type="button" data-q="EXPLAIN">EXPLAIN IT</button><button type="button" data-q="HINT">GIVE ME A HINT</button><button type="button" data-q="QUIZ">QUIZ ME</button><button type="button" data-q="EXAMPLE">SHOW AN EXAMPLE</button>
+      </div>
+      <div class="ja-quick" style="padding-top:0">
+        <button type="button" data-example="I don't understand simultaneous equations.">Simultaneous equations</button>
+        <button type="button" data-example="Explain photosynthesis.">Photosynthesis</button>
+        <button type="button" data-example="I hate maths.">&ldquo;I hate maths.&rdquo;</button>
+      </div>
+      <form class="ja-form" id="jaForm" autocomplete="off">
+        <input id="jaInput" type="text" maxlength="500" placeholder="Give Jarvis a subject and a question…" aria-label="Your question for Jarvis" />
+        <button class="btn ja-btn-cyan" type="submit">SEND</button>
+      </form>
+      <div class="ja-gate" id="jaGate" hidden>
+        <b>You&rsquo;ve seen what Jarvis can do.</b><br />
+        <span style="color:var(--white-60);font-size:14px">Accounts are opening soon. Book a call and we&rsquo;ll give you early access.</span><br />
+        <a href="book.html" class="btn ja-btn-cyan btn-sm" style="margin-top:12px">GET EARLY ACCESS</a>
+      </div>
+      <div class="ja-chat-foot"><span id="jaLeft"></span><span>AI can make mistakes. Check important facts with a teacher or textbook. Please don&rsquo;t share personal details.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LEARN YOUR WAY ===== -->
+<section class="section-sm" id="learn">
+  <div class="container">
+    <div class="section-header reveal"><div class="section-label ja-cyan">Learn your way</div><h2 class="section-title">Explain. Practice. Quiz. Revise.</h2></div>
+    <div class="ja-four">
+      <div class="ja-glass ja-card reveal"><h3>EXPLAIN</h3><p>Break difficult concepts into simple explanations.</p></div>
+      <div class="ja-glass ja-card reveal reveal-delay-1"><h3>PRACTICE</h3><p>Generate questions based on what you need to improve.</p></div>
+      <div class="ja-glass ja-card reveal reveal-delay-2"><h3>QUIZ</h3><p>Test your knowledge and identify weak areas.</p></div>
+      <div class="ja-glass ja-card reveal reveal-delay-3"><h3>REVISE</h3><p>Build personalised revision sessions before exams.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXAM MODE ===== -->
+<section class="section" id="exam">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label ja-cyan">Exam mode <span class="ja-tag soon" style="margin-left:6px">Coming soon</span></div>
+      <h2 class="section-title">Tell Jarvis when your exam is. He builds the plan.</h2>
+    </div>
+    <div class="ja-glass ja-exam reveal" data-animate>
+      <div class="ja-exam-top"><h3>GCSE MATHEMATICS</h3><span class="ja-tag sample">Sample data</span></div>
+      <div class="ja-days"><span data-count="43">43</span><small>DAYS TO EXAM</small></div>
+      <div class="ja-progress"><div class="ja-bar"><i data-w="78"></i></div></div>
+      <div style="font-size:13px;color:var(--white-60)">Progress 78%</div>
+      <div class="ja-today"><h4>TODAY&rsquo;S SESSION</h4><div style="color:#fff;font-weight:600;margin-top:6px">Algebra &middot; 15 minutes</div>
+        <ul><li>5-minute explanation</li><li>5 practice questions</li><li>5-minute mini test</li></ul>
+        <a href="#try" class="btn ja-btn-outline btn-sm" style="margin-top:16px">TRY A JARVIS SESSION NOW</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VOICE ===== -->
+<section class="section" id="voice">
+  <div class="container">
+    <div class="ja-glass ja-voice reveal">
+      <div class="section-label ja-cyan">Voice-first Jarvis <span class="ja-tag soon" style="margin-left:6px">Coming soon to Academy</span></div>
+      <h2 class="section-title">Just talk to Jarvis.</h2>
+      <div class="ja-mic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
+      <div class="ja-wave" id="jaWave" aria-hidden="true"></div>
+      <div class="ja-says">
+        <div>Jarvis, explain photosynthesis.</div><div>Jarvis, quiz me on World War Two.</div>
+        <div>Jarvis, give me a GCSE maths question.</div><div>Jarvis, explain this like I&rsquo;m completely new to the subject.</div>
+      </div>
+      <p class="ja-note">Our voice-controlled Jarvis already exists; connecting it to the Academy tutor is on the roadmap.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PARENTS ===== -->
+<section class="section" id="parents">
+  <div class="container ja-split">
+    <div class="reveal">
+      <div class="section-label ja-cyan" style="text-align:left">For parents <span class="ja-tag soon" style="margin-left:6px">Coming soon</span></div>
+      <h2 class="section-title" style="text-align:left">Keep parents in the loop.</h2>
+      <p class="section-sub" style="text-align:left;margin-left:0">Useful learning information without reading every private conversation. Progress, activity, subjects, revision goals and areas needing practice.</p>
+      <p class="ja-privacy">Privacy first: parents see summaries and progress, not transcripts. Children&rsquo;s data is kept to what is needed to teach, and is never sold.</p>
+    </div>
+    <div class="ja-glass ja-dash reveal reveal-delay-1" data-animate>
+      <h4>THIS WEEK <span class="ja-tag sample">Sample data</span></h4>
+      <div class="ja-stat-row"><div class="ja-stat"><b data-count="4">4</b><span>learning sessions</span></div><div class="ja-stat"><b>2h 15m</b><span>learning time</span></div></div>
+      <div class="ja-line"><span>Mathematics</span><span class="ja-up">+8%</span></div>
+      <div class="ja-line"><span>Biology</span><span class="ja-up">+5%</span></div>
+      <div class="ja-line"><span>Chemistry</span><span class="ja-warn">Needs attention</span></div>
+      <div class="ja-next">Jarvis recommends: <b>15-minute Chemistry practice</b> this weekend.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TEACHERS ===== -->
+<section class="section" id="teachers">
+  <div class="container ja-split">
+    <div class="ja-glass ja-dash reveal" data-animate>
+      <h4>YEAR 9 MATHEMATICS &middot; 28 STUDENTS <span class="ja-tag sample">Sample data</span></h4>
+      <div class="ja-line"><span>Fractions</span><span class="ja-up">GOOD</span></div>
+      <div class="ja-line"><span>Algebra</span><span class="ja-dev">DEVELOPING</span></div>
+      <div class="ja-line"><span>Geometry</span><span class="ja-up">GOOD</span></div>
+      <div class="ja-line"><span>Probability</span><span class="ja-bad">NEEDS PRACTICE</span></div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="section-label ja-cyan" style="text-align:left">For schools <span class="ja-tag soon" style="margin-left:6px">Planned</span></div>
+      <h2 class="section-title" style="text-align:left">Jarvis for teachers.</h2>
+      <p class="section-sub" style="text-align:left;margin-left:0">Planned tools for teachers:</p>
+      <ul class="ja-checks"><li>Quizzes and worksheets</li><li>Revision exercises and lesson starters</li><li>Differentiated activities</li><li>Student progress insights</li></ul>
+      <a href="book.html" class="btn ja-btn-outline" style="margin-top:22px">BOOK A DEMO</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AVAILABILITY ===== -->
+<section class="section-sm" id="status">
+  <div class="container">
+    <div class="section-header reveal"><div class="section-label ja-cyan">Honest status</div><h2 class="section-title">What works today, and what&rsquo;s next.</h2></div>
+    <div class="ja-avail reveal">
+      <div class="ja-glass"><h3 class="ja-ok">AVAILABLE NOW</h3><ul class="live"><li>Live AI tutor chat (3 free questions, no sign-up)</li><li>Three levels: Primary, Secondary, University</li><li>Hint-first teaching style</li></ul></div>
+      <div class="ja-glass"><h3 class="ja-warn">COMING SOON</h3><ul class="soon"><li>Student accounts and the Learning Brain</li><li>Voice conversations</li><li>Exam Mode and revision plans</li><li>Parent dashboard</li><li>Teacher tools and lecture upload</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SAFETY ===== -->
+<section class="section-sm" id="safety">
+  <div class="container">
+    <div class="section-header reveal"><div class="section-label ja-cyan">Built for students</div><h2 class="section-title">Safe, private, and honest about learning.</h2></div>
+    <div class="ja-safety">
+      <div class="ja-glass ja-card reveal"><h3>Learning, not cheating</h3><p>Jarvis guides students to the answer and won&rsquo;t complete assessed work for them.</p></div>
+      <div class="ja-glass ja-card reveal reveal-delay-1"><h3>Age-appropriate</h3><p>Language and content change by level, with parental involvement planned for younger children.</p></div>
+      <div class="ja-glass ja-card reveal reveal-delay-2"><h3>Privacy-conscious</h3><p>Jarvis never asks for personal details. The demo needs no account and stores no profile.</p></div>
+    </div>
+    <p class="ja-note">AI can make mistakes. Always check important facts. Concerns? Email <a href="mailto:hello@automationhire.co.uk" style="color:var(--ja-cyan)">hello@automationhire.co.uk</a>.</p>
+  </div>
+</section>
+
+<!-- ===== PRICING (planned) ===== -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-header reveal"><div class="section-label ja-cyan">Planned pricing <span class="ja-tag soon" style="margin-left:6px">Not yet live</span></div><h2 class="section-title">Start free. Upgrade when Jarvis earns it.</h2><p class="section-sub">Proposed plans. Prices and limits may change before launch.</p></div>
+    <div class="ja-price">
+      <div class="ja-glass ja-plan reveal"><h3>FREE</h3><div class="ja-amt">&pound;0</div><ul><li>Limited AI tutor sessions</li><li>Limited voice sessions</li><li>Basic quizzes and progress</li></ul><a href="#try" class="btn ja-btn-outline">TRY JARVIS</a></div>
+      <div class="ja-glass ja-plan hot reveal reveal-delay-1"><h3>JARVIS PLUS</h3><div class="ja-amt">&pound;5.99<small>/month</small></div><ul><li>Generous AI tutoring allowance</li><li>Voice conversations</li><li>Exam Mode and Learning Brain</li><li>Personalised study plans</li></ul><a href="book.html" class="btn ja-btn-cyan">JOIN EARLY ACCESS</a></div>
+      <div class="ja-glass ja-plan reveal reveal-delay-2"><h3>JARVIS FAMILY</h3><div class="ja-amt">&pound;9.99<small>/month</small></div><ul><li>Up to 4 children, each with their own profile</li><li>Parent dashboard</li><li>Shared higher allowance</li></ul><a href="book.html" class="btn ja-btn-outline">JOIN EARLY ACCESS</a></div>
+    </div>
+    <p class="ja-note">Schools and teachers: bespoke plans. <a href="book.html" style="color:var(--ja-cyan)">Book a demo</a>.</p>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="section-sm">
+  <div class="container">
+    <div class="ja-glass ja-cta reveal">
+      <h2>READY TO MEET YOUR AI TUTOR?</h2>
+      <p>Give Jarvis a subject. Give him a question. Let him help you learn.</p>
+      <div class="ja-actions"><a href="#try" class="btn btn-lg ja-btn-cyan">START LEARNING</a><a href="book.html" class="btn btn-lg ja-btn-outline">BOOK A CALL</a></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          <img src="assets/logo.png" alt="AutomationHire" class="nav-logo-img" />
+        </a>
+        <p class="footer-desc">The UK's leading directory for AI automation agencies and workflow automation specialists. Find, compare and hire verified experts.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-link">𝕏</a>
+          <a href="#" class="social-link">in</a>
+          <a href="#" class="social-link">▶</a>
+          <a href="#" class="social-link">f</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Directory</div>
+        <ul class="footer-links">
+          <li><a href="providers.html">Browse All Experts</a></li>
+          <li><a href="reviews">Reviews &middot; 4.8/5</a></li>
+          <li><a href="providers.html?filter=featured">Featured Providers</a></li>
+          <li><a href="request-quote.html">Get Matched</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">For Providers</div>
+        <ul class="footer-links">
+          <li><a href="submit-listing.html">Submit Your Listing</a></li>
+          <li><a href="pricing.html">Pricing Plans</a></li>
+          <li><a href="dashboard.html">Provider Dashboard</a></li>
+          <li><a href="#">Advertise</a></li>
+          <li><a href="#">Partnership</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>&copy; 2025 AutomationHire.co.uk &mdash; All rights reserved.</div>
+      <div>
+        <a href="privacy.html">Privacy</a> &nbsp;&middot;&nbsp;
+        <a href="terms.html">Terms</a> &nbsp;&middot;&nbsp;
+        <a href="privacy.html#cookies">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/academy.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/chat.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

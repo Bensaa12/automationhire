@@ -1537,3 +1537,25 @@ body, .nav, .hero, .hero-card, .cat-card, .provider-card, .feature-card,
 .form-control, .search-box, .toast, .tool-chip, .tag-white {
   transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
+
+/* ── Nav: dropdown (Jarvis Academy) ── */
+.nav-dd { position: relative; }
+.nav-dd-caret { font-size: 10px; margin-left: 4px; opacity: .7; }
+.nav-dd-menu {
+  display: none; position: absolute; top: 100%; left: -14px; min-width: 210px;
+  list-style: none; padding: 8px; margin-top: 10px;
+  background: var(--black-2); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: 0 16px 48px rgba(0,0,0,0.55);
+}
+.nav-dd-menu::before { content: ''; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
+.nav-dd:hover .nav-dd-menu, .nav-dd:focus-within .nav-dd-menu { display: block; }
+.nav-dd-menu a { display: block; padding: 9px 12px; border-radius: 8px; font-size: 14px; color: var(--white-90); }
+.nav-dd-menu a::after { display: none; }
+.nav-dd-menu a:hover { background: rgba(34,211,238,0.10); color: #22d3ee; }
+.nav-dd-menu small { color: var(--white-30); font-size: 11px; margin-left: 6px; }
+@media (max-width: 768px) {
+  .nav-dd-menu { display: block; position: static; margin: 2px 0 6px 14px; padding: 0; background: none; border: 0; box-shadow: none; min-width: 0; }
+  .nav-dd-menu::before { display: none; }
+  .nav-dd-menu a { font-size: 15px; padding: 7px 4px; }
+  .nav-dd-caret { display: none; }
+}
