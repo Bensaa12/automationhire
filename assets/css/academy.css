@@ -176,3 +176,22 @@
   .ja-orb, .ja-orb::after, .ja-wave i, .ja-chat-head.speaking .ja-mini-orb, .ja-typing i { animation:none !important; }
   .ja-wave i { height:36px; } .ja-bar i { transition:none; } .ja-level, .ja-card { transition:none; }
 }
+
+/* Accounts */
+.ja-authbar { max-width:880px; margin:0 auto 12px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; font-size:13px; color:var(--white-60); }
+.ja-link { background:none; border:0; color:var(--white-60); font:600 13px var(--font-main); cursor:pointer; padding:4px 8px; }
+.ja-link:hover { color:#fff; } .ja-link-strong { color:var(--ja-cyan); } .ja-link[hidden] { display:none; }
+.ja-dialog { margin:auto; width:min(440px,92vw); padding:0; background:var(--black-2); color:var(--white-90); border:1px solid var(--ja-cyan); border-radius:var(--radius-lg); box-shadow:0 0 70px var(--ja-cyan-glow); }
+.ja-dialog::backdrop { background:rgba(2,4,10,.75); backdrop-filter:blur(4px); }
+.ja-dialog form { padding:30px 26px 24px; position:relative; }
+.ja-dialog h3 { font-family:var(--font-head); color:#fff; margin-bottom:16px; }
+.ja-x { position:absolute; top:10px; right:14px; background:none; border:0; color:var(--white-60); font-size:26px; cursor:pointer; }
+.ja-fields { display:grid; gap:12px; margin-bottom:14px; }
+.ja-fields label { display:grid; gap:5px; font-size:13px; color:var(--white-60); }
+.ja-fields input:not([type=checkbox]), .ja-fields select { background:var(--black-3); border:1px solid var(--border); border-radius:10px; padding:11px 13px; color:#fff; font:15px var(--font-main); }
+.ja-fields input:focus, .ja-fields select:focus { outline:none; border-color:var(--ja-cyan); box-shadow:0 0 0 3px var(--ja-cyan-glow); }
+.ja-fields .ja-check { display:flex; gap:10px; align-items:flex-start; line-height:1.4; } .ja-check input { margin-top:3px; accent-color:#22d3ee; }
+.ja-err { color:#f87171; font-size:13px; margin-bottom:12px; } .ja-err[hidden] { display:none; }
+.ja-live .ja-bar-row { grid-template-columns:minmax(120px,190px) 1fr 44px; }
+.ja-live .ja-bar-row small { color:var(--white-30); display:block; font-size:11px; }
+@media (max-width:640px) { .ja-live .ja-bar-row { grid-template-columns:110px 1fr 40px; } }

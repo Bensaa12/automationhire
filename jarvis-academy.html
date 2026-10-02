@@ -169,7 +169,7 @@
         <li>Remembers what happened last session</li>
         <li>Recommends what to study next</li>
       </ul>
-      <p class="ja-note" style="text-align:left"><span class="ja-tag soon">Coming soon</span> The profile is in design. The dashboard shown is an illustration.</p>
+      <p class="ja-note" style="text-align:left"><span class="ja-tag live">Basic version live</span> Sign in and answer Jarvis&rsquo;s questions to build your own profile (see Try Jarvis). The dashboard shown here is an illustration.</p>
     </div>
     <div class="ja-glass ja-brain reveal reveal-delay-1" data-animate>
       <div class="ja-brain-head"><span>STUDENT LEARNING PROFILE</span><span class="ja-tag sample">Sample data</span></div>
@@ -220,8 +220,9 @@
     <div class="section-header reveal">
       <div class="section-label ja-cyan">Try Jarvis free <span class="ja-tag live" style="margin-left:6px">Available now</span></div>
       <h2 class="section-title">Ask Jarvis something.</h2>
-      <p class="section-sub">No sign-up. Three free questions. This is the real AI tutor, text only for now.</p>
+      <p class="section-sub">No sign-up needed for three free questions. Create a free account and Jarvis starts remembering how you learn. This is the real AI tutor, text only for now.</p>
     </div>
+    <div class="ja-authbar" id="jaAuthBar"><span id="jaAuthText">Free demo &middot; 3 questions</span><span><button type="button" class="ja-link" id="jaSignIn">Sign in</button><button type="button" class="ja-link ja-link-strong" id="jaSignUp">Create free account</button><button type="button" class="ja-link" id="jaSignOut" hidden>Sign out</button></span></div>
     <div class="ja-glass ja-chat reveal">
       <div class="ja-chat-head" id="jaChatHead">
         <div class="ja-mini-orb"></div><div><b>JARVIS</b><small>Your personal AI tutor</small></div>
@@ -246,10 +247,15 @@
       </form>
       <div class="ja-gate" id="jaGate" hidden>
         <b>You&rsquo;ve seen what Jarvis can do.</b><br />
-        <span style="color:var(--white-60);font-size:14px">Accounts are opening soon. Book a call and we&rsquo;ll give you early access.</span><br />
-        <a href="book.html" class="btn ja-btn-cyan btn-sm" style="margin-top:12px">GET EARLY ACCESS</a>
+        <span style="color:var(--white-60);font-size:14px" id="jaGateText">Create a free account to keep going. Jarvis will remember what you work on.</span><br />
+        <button type="button" class="btn ja-btn-cyan btn-sm" id="jaGateBtn" style="margin-top:12px">CREATE FREE ACCOUNT</button>
       </div>
       <div class="ja-chat-foot"><span id="jaLeft"></span><span>AI can make mistakes. Check important facts with a teacher or textbook. Please don&rsquo;t share personal details.</span></div>
+    </div>
+    <div class="ja-glass ja-brain ja-live" id="jaBrainLive" hidden style="max-width:880px;margin:26px auto 0">
+      <div class="ja-brain-head"><span>YOUR LEARNING BRAIN</span><span class="ja-tag live">Live</span></div>
+      <div id="jaBrainRows"></div>
+      <p class="ja-note" id="jaBrainNote" style="text-align:left;margin-top:12px"></p>
     </div>
   </div>
 </section>
@@ -349,8 +355,8 @@
   <div class="container">
     <div class="section-header reveal"><div class="section-label ja-cyan">Honest status</div><h2 class="section-title">What works today, and what&rsquo;s next.</h2></div>
     <div class="ja-avail reveal">
-      <div class="ja-glass"><h3 class="ja-ok">AVAILABLE NOW</h3><ul class="live"><li>Live AI tutor chat (3 free questions, no sign-up)</li><li>Three levels: Primary, Secondary, University</li><li>Hint-first teaching style</li></ul></div>
-      <div class="ja-glass"><h3 class="ja-warn">COMING SOON</h3><ul class="soon"><li>Student accounts and the Learning Brain</li><li>Voice conversations</li><li>Exam Mode and revision plans</li><li>Parent dashboard</li><li>Teacher tools and lecture upload</li></ul></div>
+      <div class="ja-glass"><h3 class="ja-ok">AVAILABLE NOW</h3><ul class="live"><li>Live AI tutor chat (3 free questions, no sign-up)</li><li>Free student accounts: 10 sessions a month</li><li>Basic Learning Brain: Jarvis tracks topics and confidence from your answers</li><li>Three levels: Primary, Secondary, University</li><li>Hint-first teaching style</li></ul></div>
+      <div class="ja-glass"><h3 class="ja-warn">COMING SOON</h3><ul class="soon"><li>Full Learning Brain: study goals and recommendations</li><li>Voice conversations</li><li>Exam Mode and revision plans</li><li>Parent dashboard</li><li>Teacher tools and lecture upload</li></ul></div>
     </div>
   </div>
 </section>
@@ -391,6 +397,24 @@
     </div>
   </div>
 </section>
+
+<dialog id="jaAuth" class="ja-dialog" aria-labelledby="jaAuthTitle">
+  <form id="jaAuthForm" method="dialog" autocomplete="on">
+    <button type="button" class="ja-x" id="jaAuthClose" aria-label="Close">&times;</button>
+    <h3 id="jaAuthTitle">Create your free account</h3>
+    <div class="ja-fields">
+      <label id="jaNameWrap">First name or nickname<input id="jaName" maxlength="40" autocomplete="given-name" /></label>
+      <label>Email<input id="jaEmail" type="email" required autocomplete="email" /></label>
+      <label>Password <small>(8+ characters)</small><input id="jaPass" type="password" required minlength="8" autocomplete="current-password" /></label>
+      <label id="jaLevelWrap">I am learning at<select id="jaLevelSel"><option value="primary">Primary (5&ndash;11)</option><option value="secondary" selected>Secondary (GCSE / A-Level)</option><option value="university">University / adult</option></select></label>
+      <label class="ja-check" id="jaGuardWrap"><input type="checkbox" id="jaGuard" /> I am 13 or over, or a parent or guardian is setting this up for a child.</label>
+    </div>
+    <p class="ja-err" id="jaAuthErr" role="alert" hidden></p>
+    <button class="btn ja-btn-cyan" type="submit" id="jaAuthSubmit" style="width:100%;justify-content:center">CREATE ACCOUNT</button>
+    <p class="ja-note"><button type="button" class="ja-link" id="jaAuthSwap">I already have an account</button></p>
+    <p class="ja-note" style="margin-top:6px">We store your email, first name, level and what you practise so Jarvis can help. We never sell it and parents can ask us to delete it: hello@automationhire.co.uk.</p>
+  </form>
+</dialog>
 
 </main>
 

@@ -34,7 +34,8 @@
     { "source": "/categories",      "destination": "/forge", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/api/academy-tutor", "destination": "/api/sharon?action=academy" },
+    { "source": "/api/academy-tutor", "destination": "/api/sharon?action=academy&op=tutor" },
+    { "source": "/api/academy/:op", "destination": "/api/sharon?action=academy&op=:op" },
     { "source": "/api/auth/login",   "destination": "/api/auth?action=login"   },
     { "source": "/api/auth/me",      "destination": "/api/auth?action=me"      },
     { "source": "/api/auth/refresh", "destination": "/api/auth?action=refresh" },

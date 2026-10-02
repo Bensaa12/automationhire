@@ -1,15 +1,18 @@
 // ============================================================
-// POST /api/academy-tutor
-// "Try Jarvis" demo for Jarvis Academy. Anonymous, text only,
-// capped at 3 learner turns per conversation + a per-IP limit.
-// Body: { level: 'primary'|'secondary'|'university', messages: [{role, content}] }
+// Jarvis Academy API. Not a function itself: dispatched from api/sharon.js
+// (Vercel Hobby plan allows 12 functions). Rewrites in vercel.json:
+//   /api/academy/:op        -> /api/sharon?action=academy&op=:op
+//   /api/academy-tutor      -> same, op=tutor   (legacy path)
+// ops: signup | login | refresh | me | tutor
 // ============================================================
 
-const { getBody, handleCors, ok, err } = require('./_lib');
+const { getSupabase, getBody, handleCors, ok, err } = require('./_lib');
 
 const MODEL = 'claude-haiku-4-5-20251001';
-const MAX_TURNS = 3;          // learner messages per conversation
-const IP_LIMIT = 12;          // learner messages per IP per hour (best-effort, per instance)
+const ANON_TURNS = 3;          // anonymous learner messages per conversation
+const IP_LIMIT = 12;           // anonymous learner messages per IP per hour (best-effort, per instance)
+const FREE_SESSIONS = 10;      // signed-in free plan: sessions per calendar month
+const SESSION_TURNS = 20;      // learner messages per session
 const hits = new Map();
 
 const BASE = `You are Jarvis, the AI tutor inside Jarvis Academy on automationhire.co.uk. You are a sophisticated, patient British butler: calm, encouraging, gently dry-witted, never condescending. Occasional phrases such as "Certainly, sir." or "Very good." are welcome, but vary them and do not overdo it.
@@ -24,6 +27,13 @@ const LEVELS = {
   university: `LEVEL: University / adult learner. Treat the student as an adult. Be more Socratic: ask what they think first, analyse their reasoning, and never write assessed work for them. You may use precise academic vocabulary.`,
 };
 
+const EXTRACT = `You analyse one exchange between a student and a tutor. Reply with ONLY a JSON object, no prose:
+{"subject":"<school subject, e.g. Mathematics>","topic":"<specific topic, e.g. Simultaneous equations>","assessed":"correct|incorrect|partial|none","mistake":"<short common-mistake note, or empty>"}
+Use assessed="none" unless the STUDENT attempted an answer or explanation that the tutor evaluated. Keep subject and topic short, Title Case.`;
+
+const clamp = (s, n) => String(s || '').trim().slice(0, n);
+const validEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
 function limited(ip) {
   const now = Date.now();
   const arr = (hits.get(ip) || []).filter(t => now - t < 3600_000);
@@ -33,54 +43,185 @@ function limited(ip) {
   return false;
 }
 
-module.exports = async function handler(req, res) {
-  if (handleCors(req, res)) return;
-  if (req.method !== 'POST') return err(res, 'Method not allowed', 405);
+async function claude(apiKey, system, messages, max_tokens) {
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+    body: JSON.stringify({ model: MODEL, max_tokens, system, messages }),
+  });
+  if (!r.ok) throw new Error('anthropic ' + r.status);
+  const d = await r.json();
+  return d?.content?.[0]?.text?.trim() || '';
+}
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey || apiKey.startsWith('sk-ant-placeholder')) {
-    return err(res, 'The Jarvis demo is offline at the moment. Please try again soon.', 503);
+async function userFromReq(req, supabase) {
+  const h = req.headers.authorization || '';
+  if (!h.startsWith('Bearer ')) return null;
+  const { data: { user } = {}, error } = await supabase.auth.getUser(h.slice(7));
+  return error || !user ? null : user;
+}
+
+async function getBrain(supabase, userId) {
+  const monthStart = new Date(); monthStart.setUTCDate(1); monthStart.setUTCHours(0, 0, 0, 0);
+  const [skills, sess] = await Promise.all([
+    supabase.from('academy_skills').select('subject, topic, confidence, attempts, correct, last_mistake, updated_at').eq('user_id', userId).order('updated_at', { ascending: false }).limit(60),
+    supabase.from('academy_sessions').select('id', { count: 'exact', head: true }).eq('user_id', userId).gte('started_at', monthStart.toISOString()),
+  ]);
+  return { skills: skills.data || [], sessionsThisMonth: sess.count || 0, sessionLimit: FREE_SESSIONS };
+}
+
+function brainContext(skills) {
+  const weak = skills.filter(s => s.attempts > 0 && s.confidence < 60).sort((a, b) => a.confidence - b.confidence).slice(0, 3);
+  const strong = skills.filter(s => s.confidence >= 75).slice(0, 2);
+  if (!weak.length && !strong.length) return '';
+  const w = weak.map(s => `${s.subject}: ${s.topic} (${s.confidence}%${s.last_mistake ? ', usual mistake: ' + s.last_mistake : ''})`).join('; ');
+  const st = strong.map(s => `${s.subject}: ${s.topic}`).join('; ');
+  return `\n\nWHAT YOU REMEMBER ABOUT THIS STUDENT (private; use naturally, do not recite it): ${w ? 'needs practice: ' + w + '. ' : ''}${st ? 'strong at: ' + st + '.' : ''}`;
+}
+
+async function recordSkill(supabase, apiKey, userId, studentMsg, reply) {
+  try {
+    const raw = await claude(apiKey, EXTRACT, [{ role: 'user', content: `STUDENT: ${studentMsg}\n\nTUTOR: ${reply}` }], 120);
+    const j = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1));
+    if (!['correct', 'incorrect', 'partial'].includes(j.assessed)) return null;
+    const subject = clamp(j.subject, 40), topic = clamp(j.topic, 60);
+    if (!subject || !topic) return null;
+    const { data: cur } = await supabase.from('academy_skills').select('*').eq('user_id', userId).eq('subject', subject).eq('topic', topic).maybeSingle();
+    const target = j.assessed === 'correct' ? 100 : j.assessed === 'partial' ? 55 : 10;
+    const row = {
+      user_id: userId, subject, topic,
+      confidence: Math.round((cur ? cur.confidence : 50) * 0.7 + target * 0.3),
+      attempts: (cur?.attempts || 0) + 1,
+      correct: (cur?.correct || 0) + (j.assessed === 'correct' ? 1 : 0),
+      last_mistake: j.assessed !== 'correct' && j.mistake ? clamp(j.mistake, 140) : (cur?.last_mistake || null),
+      updated_at: new Date().toISOString(),
+    };
+    await supabase.from('academy_skills').upsert(row, { onConflict: 'user_id,subject,topic' });
+    return { subject, topic, confidence: row.confidence };
+  } catch (e) {
+    console.error('[academy] skill extract failed:', e.message);
+    return null;
   }
+}
 
-  const { level = 'secondary', messages = [] } = await getBody(req);
+function sessionPayload(session, user, profile) {
+  return { access_token: session.access_token, refresh_token: session.refresh_token, expires_in: session.expires_in, user: { id: user.id, email: user.email }, profile };
+}
+
+async function signup(req, res) {
+  const b = await getBody(req);
+  const email = clamp(b.email, 200).toLowerCase(), password = String(b.password || '');
+  const name = clamp(b.display_name, 40), level = LEVELS[b.level] ? b.level : 'secondary';
+  if (!validEmail(email)) return err(res, 'Please enter a valid email address');
+  if (password.length < 8) return err(res, 'Password must be at least 8 characters');
+  if (!name) return err(res, 'Please enter a first name or nickname');
+  if (b.guardian_confirmed !== true) return err(res, 'Please confirm you are 13 or over, or that a parent or guardian is setting this up');
+
+  const supabase = getSupabase();
+  const { data, error } = await supabase.auth.signUp({ email, password });
+  if (error) return err(res, error.message.includes('registered') ? 'That email already has an account. Try signing in.' : 'Could not create the account. Please try again.', 400);
+  if (!data.user) return err(res, 'Could not create the account', 400);
+
+  await supabase.from('academy_profiles').upsert({ user_id: data.user.id, display_name: name, level, guardian_confirmed: true }, { onConflict: 'user_id' });
+
+  if (!data.session) return ok(res, { needs_confirmation: true });   // project requires email confirmation
+  return ok(res, sessionPayload(data.session, data.user, { display_name: name, level }));
+}
+
+async function login(req, res) {
+  const { email, password } = await getBody(req);
+  if (!email || !password) return err(res, 'Email and password required');
+  const supabase = getSupabase();
+  const { data, error } = await supabase.auth.signInWithPassword({ email: clamp(email, 200).toLowerCase(), password: String(password) });
+  if (error) return err(res, 'Invalid email or password', 401);
+  const { data: profile } = await supabase.from('academy_profiles').select('display_name, level, plan').eq('user_id', data.user.id).maybeSingle();
+  if (!profile) return err(res, 'No Jarvis Academy account for this email. Please create one.', 404);
+  return ok(res, sessionPayload(data.session, data.user, profile));
+}
+
+async function refresh(req, res) {
+  const { refresh_token } = await getBody(req);
+  if (!refresh_token) return err(res, 'refresh_token required');
+  const supabase = getSupabase();
+  const { data, error } = await supabase.auth.refreshSession({ refresh_token });
+  if (error || !data.session) return err(res, 'Session expired. Please sign in again.', 401);
+  return ok(res, { access_token: data.session.access_token, refresh_token: data.session.refresh_token, expires_in: data.session.expires_in });
+}
+
+async function me(req, res) {
+  const supabase = getSupabase();
+  const user = await userFromReq(req, supabase);
+  if (!user) return err(res, 'Unauthorized', 401);
+  const { data: profile } = await supabase.from('academy_profiles').select('display_name, level, plan').eq('user_id', user.id).maybeSingle();
+  if (!profile) return err(res, 'No Jarvis Academy account for this user', 404);
+  return ok(res, { user: { id: user.id, email: user.email }, profile, brain: await getBrain(supabase, user.id) });
+}
+
+async function tutor(req, res) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey || apiKey.startsWith('sk-ant-placeholder')) return err(res, 'The Jarvis demo is offline at the moment. Please try again soon.', 503);
+
+  const { level = 'secondary', messages = [], session_id } = await getBody(req);
   if (!Array.isArray(messages) || !messages.length) return err(res, 'messages required');
-
   const clean = messages
     .filter(m => (m.role === 'user' || m.role === 'assistant') && m.content)
     .slice(-12)
     .map(m => ({ role: m.role, content: String(m.content).slice(0, 800) }));
-  if (!clean.length || clean[0].role !== 'user' || clean[clean.length - 1].role !== 'user') {
-    return err(res, 'Conversation must start and end with a student message');
-  }
-
+  if (!clean.length || clean[0].role !== 'user' || clean[clean.length - 1].role !== 'user') return err(res, 'Conversation must start and end with a student message');
   const turns = clean.filter(m => m.role === 'user').length;
-  if (turns > MAX_TURNS) {
-    return ok(res, { limit: true, reply: 'You have seen what Jarvis can do. Create a free account to continue.' });
-  }
 
-  const ip = String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
-  if (limited(ip)) return err(res, 'Too many requests from your connection. Please try again later.', 429);
+  const hasAuth = (req.headers.authorization || '').startsWith('Bearer ');
+  let supabase = null, user = null, profile = null, brain = null, sessTurns = 0;
+
+  if (hasAuth) {
+    supabase = getSupabase();
+    user = await userFromReq(req, supabase);
+    if (!user) return err(res, 'Your session has expired. Please sign in again.', 401);
+    if (!/^[0-9a-f-]{36}$/i.test(String(session_id || ''))) return err(res, 'session_id required');
+    ({ data: profile } = await supabase.from('academy_profiles').select('display_name, level').eq('user_id', user.id).maybeSingle());
+    if (!profile) return err(res, 'No Jarvis Academy account for this user', 404);
+
+    const { data: sess } = await supabase.from('academy_sessions').select('id, turns').eq('id', session_id).eq('user_id', user.id).maybeSingle();
+    if (!sess) {
+      const b = await getBrain(supabase, user.id);
+      if (b.sessionsThisMonth >= FREE_SESSIONS) return ok(res, { limit: 'monthly', reply: `You have used your ${FREE_SESSIONS} free sessions this month. Plus plans are coming soon.` });
+      await supabase.from('academy_sessions').insert({ id: session_id, user_id: user.id, level: LEVELS[level] ? level : 'secondary', turns: 0 });
+    } else if (sess.turns >= SESSION_TURNS) {
+      return ok(res, { limit: 'session', reply: 'That was a long and productive session, sir. Start a new one to carry on.' });
+    } else { sessTurns = sess.turns; }
+    brain = await getBrain(supabase, user.id);
+  } else {
+    if (turns > ANON_TURNS) return ok(res, { limit: 'anon', reply: 'You have seen what Jarvis can do. Create a free account to continue.' });
+    const ip = String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
+    if (limited(ip)) return err(res, 'Too many requests from your connection. Please try again later.', 429);
+  }
 
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 400,
-        system: `${BASE}\n\n${LEVELS[level] || LEVELS.secondary}`,
-        messages: clean,
-      }),
-    });
-    if (!r.ok) {
-      console.error('[academy-tutor] Anthropic error:', r.status);
-      return err(res, 'Jarvis is unavailable right now. Please try again.', 502);
-    }
-    const data = await r.json();
-    const reply = data?.content?.[0]?.text?.trim() || 'Forgive me, sir, could you say that again?';
-    return ok(res, { reply, turnsLeft: Math.max(0, MAX_TURNS - turns) });
+    const lvl = LEVELS[level] ? level : 'secondary';
+    let system = `${BASE}\n\n${LEVELS[lvl]}`;
+    if (profile) system += `\n\nThe student's first name or nickname is ${profile.display_name}. Use it occasionally.` + brainContext(brain.skills);
+    const reply = (await claude(apiKey, system, clean, 400)) || 'Forgive me, sir, could you say that again?';
+
+    if (!user) return ok(res, { reply, turnsLeft: Math.max(0, ANON_TURNS - turns) });
+
+    await supabase.from('academy_sessions').update({ turns: sessTurns + 1, updated_at: new Date().toISOString() }).eq('id', session_id).eq('user_id', user.id);
+    const learned = await recordSkill(supabase, apiKey, user.id, clean[clean.length - 1].content, reply);
+    return ok(res, { reply, learned });
   } catch (e) {
     console.error('[academy-tutor] Error:', e.message);
-    return err(res, 'Internal error', 500);
+    return err(res, 'Jarvis is unavailable right now. Please try again.', 502);
   }
+}
+
+const OPS = { signup, login, refresh, me, tutor };
+
+module.exports = async function handler(req, res) {
+  if (handleCors(req, res)) return;
+  const op = (req.query && req.query.op) || 'tutor';
+  const fn = OPS[op];
+  if (!fn) return err(res, 'Unknown operation', 404);
+  const wantsGet = op === 'me';
+  if ((wantsGet && req.method !== 'GET') || (!wantsGet && req.method !== 'POST')) return err(res, 'Method not allowed', 405);
+  try { return await fn(req, res); }
+  catch (e) { console.error('[academy]', op, e.message); return err(res, 'Internal error', 500); }
 };
