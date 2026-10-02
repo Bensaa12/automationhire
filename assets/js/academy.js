@@ -71,12 +71,14 @@
   function saveAuth(a) { auth = a; try { if (a) localStorage.setItem('ja_auth', JSON.stringify(a)); else localStorage.removeItem('ja_auth'); } catch (e) {} renderAuth(); }
   function isParent() { return !!(auth && auth.profile && auth.profile.role === 'parent'); }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  var payments = false, billing = 'monthly';
+  function planName() { var p = auth && auth.profile && auth.profile.plan; return p && p !== 'free' ? p.charAt(0).toUpperCase() + p.slice(1) : ''; }
   function maxTurns() { return auth ? USER_TURNS : ANON_TURNS; }
 
   function api(op, body, method) {
     var h = { 'Content-Type': 'application/json' };
     if (auth && auth.access_token) h.Authorization = 'Bearer ' + auth.access_token;
-    return fetch('/api/academy/' + op, { method: method || 'POST', headers: h, body: method === 'GET' ? undefined : JSON.stringify(body || {}) })
+    return fetch((op.charAt(0) === '/' ? op : '/api/academy/' + op), { method: method || 'POST', headers: h, body: method === 'GET' ? undefined : JSON.stringify(body || {}) })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.ok !== false, status: j.status || r.status, j: j }; }); });
   }
   // Retry once with a refreshed token if the access token has expired.
@@ -149,6 +151,9 @@
     apiAuthed('me', null, 'GET').then(function (res) {
       if (!res.ok) return;
       var b = res.j.brain, rows = document.getElementById('jaBrainRows'); rows.innerHTML = '';
+      USER_TURNS = b.turnLimit || 20;
+      if (res.j.profile && auth && (!auth.profile || auth.profile.plan !== res.j.profile.plan)) { auth.profile = res.j.profile; saveAuth(auth); }
+      setLeft();
       var skills = b.skills.filter(function (s) { return s.attempts > 0; }).sort(function (a, c) { return a.confidence - c.confidence; });
       skills.slice(0, 8).forEach(function (s) {
         var r = document.createElement('div'); r.className = 'ja-bar-row';
@@ -157,7 +162,7 @@
         var p = document.createElement('b'); p.textContent = s.confidence + '%';
         r.appendChild(n); r.appendChild(bar); r.appendChild(p); rows.appendChild(r);
       });
-      var weak = skills[0], used_ = b.sessionsThisMonth + ' of ' + b.sessionLimit + ' free sessions used this month.';
+      var weak = skills[0], used_ = b.sessionsThisMonth + ' of ' + b.sessionLimit + (b.plan === 'free' ? ' free' : '') + ' sessions used this month.';
       document.getElementById('jaBrainNote').textContent = skills.length
         ? (weak.confidence < 60 ? 'Jarvis suggests next: ' + weak.topic + ' (' + weak.subject + '). ' : '') + used_
         : 'Nothing yet. Answer one of Jarvis’s questions and your first topic will appear here. ' + used_;
@@ -171,8 +176,9 @@
   function renderAuth() {
     var t = document.getElementById('jaAuthText'); if (!t) return;
     document.getElementById('jaSignIn').hidden = !!auth; document.getElementById('jaSignUp').hidden = !!auth; document.getElementById('jaSignOut').hidden = !auth;
-    t.textContent = auth ? 'Signed in as ' + ((auth.profile && auth.profile.display_name) || 'student') + (isParent() ? ' (parent)' : '') : 'Free demo · 3 questions';
+    t.textContent = auth ? 'Signed in as ' + ((auth.profile && auth.profile.display_name) || 'student') + (isParent() ? ' (parent)' : '') + (planName() ? ' \u00b7 ' + planName() : '') : 'Free demo · 3 questions';
     if (!auth || isParent()) document.getElementById('jaBrainLive').hidden = true;
+    document.getElementById('jaManage').hidden = !(auth && payments && planName());
     document.getElementById('family').hidden = !isParent();
     if (isParent()) loadFamily();
     setLeft();
@@ -254,6 +260,71 @@
     });
   }
 
+  /* Pricing / Stripe checkout (paid plans only appear once the server says payments are live) */
+  function priceMsg(text, good) { var m = document.getElementById('jaPriceMsg'); m.textContent = text; m.style.color = good ? 'var(--green)' : ''; m.hidden = !text; }
+  function drawPrices() {
+    document.querySelectorAll('.ja-amt[data-m]').forEach(function (a) {
+      var y = billing === 'yearly'; a.textContent = '\u00a3' + (y ? a.dataset.y : a.dataset.m);
+      var sm = document.createElement('small'); sm.textContent = y ? '/year' : '/month'; a.appendChild(sm);
+    });
+  }
+  function buy(plan) {
+    if (!auth) { openAuth('signup', plan === 'family' ? 'parent' : 'student'); priceMsg(plan === 'family' ? 'Create a parent account, then choose Family.' : 'Create a free account, then choose Plus.'); return; }
+    priceMsg('Opening secure checkout\u2026', true);
+    apiAuthed('/api/stripe/create-checkout', { product: 'academy', plan: plan, billing: billing }).then(function (res) {
+      if (res.ok && res.j.checkout_url) { location.href = res.j.checkout_url; return; }
+      priceMsg(res.j.error || 'Could not start checkout. Please try again.');
+    }).catch(function () { priceMsg('Could not reach the server. Please try again.'); });
+  }
+  function initPricing() {
+    fetch('/api/academy/config').then(function (r) { return r.json(); }).then(function (c) {
+      payments = !!(c && c.payments); if (!payments) return;
+      document.getElementById('jaPriceLabel').firstChild.textContent = 'Pricing ';
+      var tag = document.getElementById('jaPriceTag'); tag.textContent = 'Live'; tag.className = 'ja-tag live';
+      document.getElementById('jaPriceSub').textContent = 'Choose a plan. It renews until you cancel, and you can cancel any time.';
+      document.getElementById('jaBilling').hidden = false;
+      var plus = document.getElementById('jaBuyPlus'), fam = document.getElementById('jaBuyFamily');
+      plus.textContent = 'UPGRADE TO PLUS'; fam.textContent = 'CHOOSE FAMILY';
+      plus.addEventListener('click', function (e) { e.preventDefault(); buy('plus'); });
+      fam.addEventListener('click', function (e) { e.preventDefault(); buy('family'); });
+      document.querySelectorAll('#jaBilling .ja-tab').forEach(function (b) {
+        b.addEventListener('click', function () {
+          billing = b.dataset.bill;
+          document.querySelectorAll('#jaBilling .ja-tab').forEach(function (x) { x.setAttribute('aria-selected', String(x === b)); });
+          drawPrices();
+        });
+      });
+      document.getElementById('jaManage').addEventListener('click', function () {
+        apiAuthed('/api/stripe/create-checkout', { product: 'academy', action: 'portal' }).then(function (res) {
+          if (res.ok && res.j.url) location.href = res.j.url; else priceMsg(res.j.error || 'Could not open billing. Please try again.');
+        });
+      });
+      renderAuth();
+    }).catch(function () {});
+
+    // Returning from Stripe
+    var q = location.search;
+    if (q.indexOf('subscribed=1') > -1) {
+      history.replaceState(null, '', location.pathname);
+      priceMsg('Thank you! Activating your plan\u2026', true);
+      document.getElementById('pricing').scrollIntoView();
+      var tries = 0;
+      (function poll() {
+        if (!auth) { priceMsg(''); return; }
+        apiAuthed('me', null, 'GET').then(function (res) {
+          if (res.ok && res.j.profile && res.j.profile.plan && res.j.profile.plan !== 'free') {
+            auth.profile = res.j.profile; saveAuth(auth); priceMsg('Your ' + planName() + ' plan is active. Welcome aboard!', true);
+            if (!isParent()) loadBrain(); return;
+          }
+          if (++tries < 8) setTimeout(poll, 2500); else priceMsg('Payment received. Your plan can take a minute to appear; refresh shortly.', true);
+        });
+      })();
+    } else if (q.indexOf('cancelled=1') > -1) {
+      history.replaceState(null, '', location.pathname + '#pricing');
+      priceMsg('No problem. Nothing was charged.');
+    }
+  }
+
   /* Auth dialog */
   var dlg = document.getElementById('jaAuth'), mode = 'signup';
   function openAuth(m, role) {
@@ -325,6 +396,7 @@
     });
     renderAuth(); resetDemo(); if (auth && !isParent()) loadBrain();
     handleConfirm();
+    initPricing();
   }
 
   fromHash();

@@ -72,6 +72,11 @@ module.exports = async function handler(req, res) {
 
   // ---- Handle event types ----
   try {
+    // Jarvis Academy subscriptions are handled separately (metadata.product === 'academy')
+    if (await require('../_academy-billing').handleEvent(event, { stripe, supabase })) {
+      return res.status(200).json({ received: true });
+    }
+
     switch (event.type) {
 
       case 'checkout.session.completed': {

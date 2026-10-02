@@ -60,3 +60,8 @@ create table if not exists academy_links (
 );
 alter table academy_invites enable row level security;
 alter table academy_links   enable row level security;
+
+-- ===== Billing (added 2026-10-02). Safe to re-run. =====
+alter table academy_profiles add column if not exists stripe_customer_id     text;
+alter table academy_profiles add column if not exists stripe_subscription_id text;
+alter table academy_profiles add column if not exists plan_expires_at        timestamptz;

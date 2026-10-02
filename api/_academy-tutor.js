@@ -12,8 +12,9 @@ const { getSupabase, getBody, handleCors, ok, err } = require('./_lib');
 const MODEL = 'claude-haiku-4-5-20251001';
 const ANON_TURNS = 3;          // anonymous learner messages per conversation
 const IP_LIMIT = 12;           // anonymous learner messages per IP per hour (best-effort, per instance)
-const FREE_SESSIONS = 10;      // signed-in free plan: sessions per calendar month
-const SESSION_TURNS = 20;      // learner messages per session
+// Per-plan allowances (sessions per calendar month, learner messages per session).
+// Marketed as "unlimited sessions" but fair-use capped here because voice/vision/AI cost real money.
+const PLANS = { free: { sessions: 10, turns: 20 }, plus: { sessions: 100, turns: 40 }, family: { sessions: 100, turns: 40 } };
 const hits = new Map();
 
 const BASE = `You are Jarvis, the AI tutor inside Jarvis Academy on automationhire.co.uk. You are a sophisticated, patient British butler: calm, encouraging, gently dry-witted, never condescending. Occasional phrases such as "Certainly, sir." or "Very good." are welcome, but vary them and do not overdo it.
@@ -62,13 +63,30 @@ async function userFromReq(req, supabase) {
   return error || !user ? null : user;
 }
 
-async function getBrain(supabase, userId) {
+const planActive = p => !!p && ['plus', 'family'].includes(p.plan) && (!p.plan_expires_at || new Date(p.plan_expires_at).getTime() + 3 * 86400_000 > Date.now());
+
+// A student's own Plus plan, or a linked parent's active Family plan, lifts the free limits.
+async function entitlement(supabase, userId) {
+  const { data: p } = await supabase.from('academy_profiles').select('plan, plan_expires_at').eq('user_id', userId).maybeSingle();
+  let plan = planActive(p) ? p.plan : 'free';
+  if (plan === 'free') {
+    const { data: links } = await supabase.from('academy_links').select('parent_id').eq('student_id', userId);
+    const ids = (links || []).map(l => l.parent_id);
+    if (ids.length) {
+      const { data: parents } = await supabase.from('academy_profiles').select('plan, plan_expires_at').in('user_id', ids);
+      if ((parents || []).some(x => x.plan === 'family' && planActive(x))) plan = 'family';
+    }
+  }
+  return { plan, ...PLANS[plan] };
+}
+
+async function getBrain(supabase, userId, ent) {
   const monthStart = new Date(); monthStart.setUTCDate(1); monthStart.setUTCHours(0, 0, 0, 0);
   const [skills, sess] = await Promise.all([
     supabase.from('academy_skills').select('subject, topic, confidence, attempts, correct, last_mistake, updated_at').eq('user_id', userId).order('updated_at', { ascending: false }).limit(60),
     supabase.from('academy_sessions').select('id', { count: 'exact', head: true }).eq('user_id', userId).gte('started_at', monthStart.toISOString()),
   ]);
-  return { skills: skills.data || [], sessionsThisMonth: sess.count || 0, sessionLimit: FREE_SESSIONS };
+  return { skills: skills.data || [], sessionsThisMonth: sess.count || 0, sessionLimit: ent.sessions, turnLimit: ent.turns, plan: ent.plan };
 }
 
 function brainContext(skills) {
@@ -156,7 +174,7 @@ async function me(req, res) {
   const { data: profile } = await supabase.from('academy_profiles').select('display_name, level, plan, role').eq('user_id', user.id).maybeSingle();
   if (!profile) return err(res, 'No Jarvis Academy account for this user', 404);
   if (profile.role === 'parent') return ok(res, { user: { id: user.id, email: user.email }, profile });
-  const brain = await getBrain(supabase, user.id);
+  const brain = await getBrain(supabase, user.id, await entitlement(supabase, user.id));
   const { count } = await supabase.from('academy_links').select('parent_id', { count: 'exact', head: true }).eq('student_id', user.id);
   brain.linkedParents = count || 0;
   return ok(res, { user: { id: user.id, email: user.email }, profile, brain });
@@ -177,7 +195,7 @@ async function tutor(req, res) {
   const turns = clean.filter(m => m.role === 'user').length;
 
   const hasAuth = (req.headers.authorization || '').startsWith('Bearer ');
-  let supabase = null, user = null, profile = null, brain = null, sessTurns = 0;
+  let supabase = null, user = null, profile = null, brain = null, sessTurns = 0, ent = null;
 
   if (hasAuth) {
     supabase = getSupabase();
@@ -187,16 +205,17 @@ async function tutor(req, res) {
     ({ data: profile } = await supabase.from('academy_profiles').select('display_name, level, role').eq('user_id', user.id).maybeSingle());
     if (!profile) return err(res, 'No Jarvis Academy account for this user', 404);
     if (profile.role === 'parent') return err(res, 'Parent accounts view progress; the tutor is for students.', 403);
+    ent = await entitlement(supabase, user.id);
 
     const { data: sess } = await supabase.from('academy_sessions').select('id, turns').eq('id', session_id).eq('user_id', user.id).maybeSingle();
     if (!sess) {
-      const b = await getBrain(supabase, user.id);
-      if (b.sessionsThisMonth >= FREE_SESSIONS) return ok(res, { limit: 'monthly', reply: `You have used your ${FREE_SESSIONS} free sessions this month. Plus plans are coming soon.` });
+      const b = await getBrain(supabase, user.id, ent);
+      if (b.sessionsThisMonth >= ent.sessions) return ok(res, { limit: 'monthly', reply: ent.plan === 'free' ? `You have used your ${ent.sessions} free sessions this month. Upgrade for a much bigger allowance.` : 'You have reached this month\'s fair-use allowance. It resets at the start of next month.' });
       await supabase.from('academy_sessions').insert({ id: session_id, user_id: user.id, level: LEVELS[level] ? level : 'secondary', turns: 0 });
-    } else if (sess.turns >= SESSION_TURNS) {
+    } else if (sess.turns >= ent.turns) {
       return ok(res, { limit: 'session', reply: 'That was a long and productive session, sir. Start a new one to carry on.' });
     } else { sessTurns = sess.turns; }
-    brain = await getBrain(supabase, user.id);
+    brain = await getBrain(supabase, user.id, ent);
   } else {
     if (turns > ANON_TURNS) return ok(res, { limit: 'anon', reply: 'You have seen what Jarvis can do. Create a free account to continue.' });
     const ip = String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
@@ -306,14 +325,16 @@ async function unlink(req, res) {
   return ok(res, { unlinked: true });
 }
 
-const OPS = { signup, login, refresh, me, tutor, invite, link, family, unlink };
+async function config(req, res) { return ok(res, { payments: require('./_academy-billing').paymentsLive() }); }
+
+const OPS = { signup, login, refresh, me, tutor, invite, link, family, unlink, config };
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
   const op = (req.query && req.query.op) || 'tutor';
   const fn = OPS[op];
   if (!fn) return err(res, 'Unknown operation', 404);
-  const wantsGet = op === 'me';
+  const wantsGet = op === 'me' || op === 'config';
   if ((wantsGet && req.method !== 'GET') || (!wantsGet && req.method !== 'POST')) return err(res, 'Method not allowed', 405);
   try { return await fn(req, res); }
   catch (e) { console.error('[academy]', op, e.message); return err(res, 'Internal error', 500); }

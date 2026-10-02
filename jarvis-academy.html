@@ -222,7 +222,7 @@
       <h2 class="section-title">Ask Jarvis something.</h2>
       <p class="section-sub">No sign-up needed for three free questions. Create a free account and Jarvis starts remembering how you learn. This is the real AI tutor, text only for now.</p>
     </div>
-    <div class="ja-authbar" id="jaAuthBar"><span id="jaAuthText">Free demo &middot; 3 questions</span><span><button type="button" class="ja-link" id="jaSignIn">Sign in</button><button type="button" class="ja-link ja-link-strong" id="jaSignUp">Create free account</button><button type="button" class="ja-link" id="jaSignOut" hidden>Sign out</button></span></div>
+    <div class="ja-authbar" id="jaAuthBar"><span id="jaAuthText">Free demo &middot; 3 questions</span><span><button type="button" class="ja-link" id="jaSignIn">Sign in</button><button type="button" class="ja-link ja-link-strong" id="jaSignUp">Create free account</button><button type="button" class="ja-link" id="jaManage" hidden>Manage plan</button><button type="button" class="ja-link" id="jaSignOut" hidden>Sign out</button></span></div>
     <div class="ja-glass ja-chat reveal">
       <div class="ja-chat-head" id="jaChatHead">
         <div class="ja-mini-orb"></div><div><b>JARVIS</b><small>Your personal AI tutor</small></div>
@@ -396,11 +396,13 @@
 <!-- ===== PRICING (planned) ===== -->
 <section class="section" id="pricing">
   <div class="container">
-    <div class="section-header reveal"><div class="section-label ja-cyan">Planned pricing <span class="ja-tag soon" style="margin-left:6px">Not yet live</span></div><h2 class="section-title">Start free. Upgrade when Jarvis earns it.</h2><p class="section-sub">Proposed plans. Prices and limits may change before launch.</p></div>
+    <div class="section-header reveal"><div class="section-label ja-cyan" id="jaPriceLabel">Planned pricing <span class="ja-tag soon" style="margin-left:6px" id="jaPriceTag">Not yet live</span></div><h2 class="section-title">Start free. Upgrade when Jarvis earns it.</h2><p class="section-sub" id="jaPriceSub">Proposed plans. Prices and limits may change before launch.</p></div>
+    <div class="ja-tabs" id="jaBilling" role="group" aria-label="Billing period" hidden><button type="button" class="ja-tab" data-bill="monthly" aria-selected="true">Monthly</button><button type="button" class="ja-tab" data-bill="yearly" aria-selected="false">Yearly (save over 25%)</button></div>
+    <p class="ja-note" id="jaPriceMsg" role="status" hidden style="margin:0 0 16px"></p>
     <div class="ja-price">
-      <div class="ja-glass ja-plan reveal"><h3>FREE</h3><div class="ja-amt">&pound;0</div><ul><li>Limited AI tutor sessions</li><li>Limited voice sessions</li><li>Basic quizzes and progress</li></ul><a href="#try" class="btn ja-btn-outline">TRY JARVIS</a></div>
-      <div class="ja-glass ja-plan hot reveal reveal-delay-1"><h3>JARVIS PLUS</h3><div class="ja-amt">&pound;5.99<small>/month</small></div><ul><li>Generous AI tutoring allowance</li><li>Voice conversations</li><li>Exam Mode and Learning Brain</li><li>Personalised study plans</li></ul><a href="book.html" class="btn ja-btn-cyan">JOIN EARLY ACCESS</a></div>
-      <div class="ja-glass ja-plan reveal reveal-delay-2"><h3>JARVIS FAMILY</h3><div class="ja-amt">&pound;9.99<small>/month</small></div><ul><li>Up to 4 children, each with their own profile</li><li>Parent dashboard</li><li>Shared higher allowance</li></ul><a href="book.html" class="btn ja-btn-outline">JOIN EARLY ACCESS</a></div>
+      <div class="ja-glass ja-plan reveal"><h3>FREE</h3><div class="ja-amt">&pound;0</div><ul><li>10 tutor sessions a month (20 questions each)</li><li>3 questions with no account</li><li>Basic Learning Brain</li></ul><a href="#try" class="btn ja-btn-outline">TRY JARVIS</a></div>
+      <div class="ja-glass ja-plan hot reveal reveal-delay-1"><h3>JARVIS PLUS</h3><div class="ja-amt" data-m="5.99" data-y="49">&pound;5.99<small>/month</small></div><ul><li>100 tutor sessions a month (fair use)</li><li>Longer sessions: 40 questions each</li><li>Full Learning Brain tracking</li><li>New features as they launch (voice, Exam Mode)</li></ul><a href="book.html" class="btn ja-btn-cyan" id="jaBuyPlus">JOIN EARLY ACCESS</a></div>
+      <div class="ja-glass ja-plan reveal reveal-delay-2"><h3>JARVIS FAMILY</h3><div class="ja-amt" data-m="9.99" data-y="89">&pound;9.99<small>/month</small></div><ul><li>Up to 4 linked children, each with the Plus allowance</li><li>Parent progress dashboard</li><li>Bought from a parent account</li></ul><a href="book.html" class="btn ja-btn-outline" id="jaBuyFamily">JOIN EARLY ACCESS</a></div>
     </div>
     <p class="ja-note">Schools and teachers: bespoke plans. <a href="book.html" style="color:var(--ja-cyan)">Book a demo</a>.</p>
   </div>

@@ -39,13 +39,16 @@ module.exports = async function handler(req, res) {
     return err(res, 'Payment service unavailable. Please try again later.', 503);
   }
 
+  const body = await getBody(req);
+  if (body.product === 'academy') return require('../_academy-billing').handle(req, res, { stripe, supabase, body });
+
   const {
     plan        = 'growth',
     billing     = 'monthly',  // 'monthly' | 'yearly'
     provider_id,
     success_url,
     cancel_url,
-  } = await getBody(req);
+  } = body;
 
   if (!provider_id)           return err(res, 'provider_id is required');
   if (!PRICE_MAP[plan])       return err(res, `Invalid plan: ${plan}`);
