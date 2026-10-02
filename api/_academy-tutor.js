@@ -172,6 +172,7 @@ async function tutor(req, res) {
     .filter(m => (m.role === 'user' || m.role === 'assistant') && m.content)
     .slice(-12)
     .map(m => ({ role: m.role, content: String(m.content).slice(0, 800) }));
+  while (clean.length && clean[0].role !== 'user') clean.shift();   // the 12-message window can start on a tutor reply
   if (!clean.length || clean[0].role !== 'user' || clean[clean.length - 1].role !== 'user') return err(res, 'Conversation must start and end with a student message');
   const turns = clean.filter(m => m.role === 'user').length;
 
