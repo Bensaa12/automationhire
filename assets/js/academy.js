@@ -235,6 +235,25 @@
     });
   });
 
+  /* Email-confirmation link lands here with tokens in the URL hash: sign the student straight in. */
+  function handleConfirm() {
+    var h = location.hash;
+    if (h.indexOf('access_token=') < 0 && h.indexOf('error_description=') < 0) return;
+    var p = new URLSearchParams(h.slice(1));
+    history.replaceState(null, '', location.pathname);
+    if (p.get('error_description') || !p.get('access_token')) { openAuth('login'); authMsg('That confirmation link has expired. Please sign in, or create the account again.'); return; }
+    auth = { access_token: p.get('access_token'), refresh_token: p.get('refresh_token'), profile: null };
+    apiAuthed('me', null, 'GET').then(function (res) {
+      if (!res.ok) { auth = null; openAuth('login'); authMsg('Email confirmed. Please sign in.', true); return; }
+      saveAuth({ access_token: auth.access_token, refresh_token: auth.refresh_token, profile: res.j.profile });
+      if (isParent()) { resetDemo(); document.getElementById('family').scrollIntoView(); return; }
+      if (res.j.profile && res.j.profile.level) { level = ''; setDemoLevel(res.j.profile.level); }
+      resetDemo(); loadBrain();
+      add('bot', 'Welcome aboard, ' + res.j.profile.display_name + '. Your email is confirmed. What shall we work on first?');
+      document.getElementById('try').scrollIntoView();
+    });
+  }
+
   /* Auth dialog */
   var dlg = document.getElementById('jaAuth'), mode = 'signup';
   function openAuth(m, role) {
@@ -305,6 +324,7 @@
       b.addEventListener('click', function () { input.value = b.dataset.example; input.focus(); });
     });
     renderAuth(); resetDemo(); if (auth && !isParent()) loadBrain();
+    handleConfirm();
   }
 
   fromHash();

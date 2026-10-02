@@ -119,7 +119,7 @@ async function signup(req, res) {
   if (b.guardian_confirmed !== true) return err(res, 'Please confirm you are 13 or over, or that a parent or guardian is setting this up');
 
   const supabase = getSupabase();
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: 'https://automationhire.co.uk/jarvis-academy.html?welcome=1' } });
   if (error) return err(res, error.message.includes('registered') ? 'That email already has an account. Try signing in.' : 'Could not create the account. Please try again.', 400);
   if (!data.user) return err(res, 'Could not create the account', 400);
 
