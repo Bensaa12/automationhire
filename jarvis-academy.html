@@ -256,6 +256,7 @@
       <div class="ja-brain-head"><span>YOUR LEARNING BRAIN</span><span class="ja-tag live">Live</span></div>
       <div id="jaBrainRows"></div>
       <p class="ja-note" id="jaBrainNote" style="text-align:left;margin-top:12px"></p>
+      <div class="ja-share"><b>Share progress with a parent</b><p id="jaShareNote">A parent sees your topics, scores and how often you practise. They never see your chats.</p><div class="ja-share-row"><button type="button" class="btn ja-btn-outline btn-sm" id="jaShareBtn">GET A CODE FOR MY PARENT</button><code id="jaShareCode" hidden></code><button type="button" class="ja-link" id="jaStopShare" hidden>Stop sharing</button></div></div>
     </div>
   </div>
 </section>
@@ -314,10 +315,11 @@
 <section class="section" id="parents">
   <div class="container ja-split">
     <div class="reveal">
-      <div class="section-label ja-cyan" style="text-align:left">For parents <span class="ja-tag soon" style="margin-left:6px">Coming soon</span></div>
+      <div class="section-label ja-cyan" style="text-align:left">For parents <span class="ja-tag live" style="margin-left:6px">Early access</span></div>
       <h2 class="section-title" style="text-align:left">Keep parents in the loop.</h2>
       <p class="section-sub" style="text-align:left;margin-left:0">Useful learning information without reading every private conversation. Progress, activity, subjects, revision goals and areas needing practice.</p>
       <p class="ja-privacy">Privacy first: parents see summaries and progress, not transcripts. Children&rsquo;s data is kept to what is needed to teach, and is never sold.</p>
+      <div style="margin-top:18px"><button type="button" class="btn ja-btn-cyan btn-sm" id="jaParentSignUp">CREATE A PARENT ACCOUNT</button> <button type="button" class="ja-link" id="jaParentSignIn">Parent sign in</button></div>
     </div>
     <div class="ja-glass ja-dash reveal reveal-delay-1" data-animate>
       <h4>THIS WEEK <span class="ja-tag sample">Sample data</span></h4>
@@ -326,6 +328,23 @@
       <div class="ja-line"><span>Biology</span><span class="ja-up">+5%</span></div>
       <div class="ja-line"><span>Chemistry</span><span class="ja-warn">Needs attention</span></div>
       <div class="ja-next">Jarvis recommends: <b>15-minute Chemistry practice</b> this weekend.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== FAMILY (live, parent accounts only) ===== -->
+<section class="section-sm" id="family" hidden>
+  <div class="container">
+    <div class="ja-glass ja-dash" style="max-width:880px;margin:0 auto">
+      <h4>YOUR FAMILY <span class="ja-tag live">Live</span></h4>
+      <form class="ja-form" id="jaLinkForm" style="padding:0 0 12px" autocomplete="off">
+        <input id="jaLinkCode" maxlength="12" placeholder="Enter the code from your child" aria-label="Code from your child" />
+        <button class="btn ja-btn-cyan" type="submit">LINK CHILD</button>
+      </form>
+      <p class="ja-err" id="jaLinkMsg" role="status" hidden></p>
+      <div id="jaChildren"></div>
+      <p class="ja-privacy">Your child creates a student account, taps &ldquo;Get a code for my parent&rdquo;, and gives you the code. You see progress summaries only, never their conversations, and either of you can stop sharing at any time. Up to 4 children.</p>
     </div>
   </div>
 </section>
@@ -355,8 +374,8 @@
   <div class="container">
     <div class="section-header reveal"><div class="section-label ja-cyan">Honest status</div><h2 class="section-title">What works today, and what&rsquo;s next.</h2></div>
     <div class="ja-avail reveal">
-      <div class="ja-glass"><h3 class="ja-ok">AVAILABLE NOW</h3><ul class="live"><li>Live AI tutor chat (3 free questions, no sign-up)</li><li>Free student accounts: 10 sessions a month</li><li>Basic Learning Brain: Jarvis tracks topics and confidence from your answers</li><li>Three levels: Primary, Secondary, University</li><li>Hint-first teaching style</li></ul></div>
-      <div class="ja-glass"><h3 class="ja-warn">COMING SOON</h3><ul class="soon"><li>Full Learning Brain: study goals and recommendations</li><li>Voice conversations</li><li>Exam Mode and revision plans</li><li>Parent dashboard</li><li>Teacher tools and lecture upload</li></ul></div>
+      <div class="ja-glass"><h3 class="ja-ok">AVAILABLE NOW</h3><ul class="live"><li>Live AI tutor chat (3 free questions, no sign-up)</li><li>Free student accounts: 10 sessions a month</li><li>Basic Learning Brain: Jarvis tracks topics and confidence from your answers</li><li>Parent accounts: link your child with a one-time code and see progress summaries</li><li>Three levels: Primary, Secondary, University</li><li>Hint-first teaching style</li></ul></div>
+      <div class="ja-glass"><h3 class="ja-warn">COMING SOON</h3><ul class="soon"><li>Full Learning Brain: study goals and recommendations</li><li>Voice conversations</li><li>Exam Mode and revision plans</li><li>Time-on-task and weekly trends for parents</li><li>Teacher tools and lecture upload</li></ul></div>
     </div>
   </div>
 </section>
@@ -403,11 +422,12 @@
     <button type="button" class="ja-x" id="jaAuthClose" aria-label="Close">&times;</button>
     <h3 id="jaAuthTitle">Create your free account</h3>
     <div class="ja-fields">
-      <label id="jaNameWrap">First name or nickname<input id="jaName" maxlength="40" autocomplete="given-name" /></label>
+      <label id="jaRoleWrap">I am a<select id="jaRoleSel"><option value="student" selected>Student</option><option value="parent">Parent or guardian</option></select></label>
+      <label id="jaNameWrap"><span id="jaNameLabel">First name or nickname</span><input id="jaName" maxlength="40" autocomplete="given-name" /></label>
       <label>Email<input id="jaEmail" type="email" required autocomplete="email" /></label>
       <label>Password <small>(8+ characters)</small><input id="jaPass" type="password" required minlength="8" autocomplete="current-password" /></label>
       <label id="jaLevelWrap">I am learning at<select id="jaLevelSel"><option value="primary">Primary (5&ndash;11)</option><option value="secondary" selected>Secondary (GCSE / A-Level)</option><option value="university">University / adult</option></select></label>
-      <label class="ja-check" id="jaGuardWrap"><input type="checkbox" id="jaGuard" /> I am 13 or over, or a parent or guardian is setting this up for a child.</label>
+      <label class="ja-check" id="jaGuardWrap"><input type="checkbox" id="jaGuard" /> <span id="jaGuardText">I am 13 or over, or a parent or guardian is setting this up for a child.</span></label>
     </div>
     <p class="ja-err" id="jaAuthErr" role="alert" hidden></p>
     <button class="btn ja-btn-cyan" type="submit" id="jaAuthSubmit" style="width:100%;justify-content:center">CREATE ACCOUNT</button>

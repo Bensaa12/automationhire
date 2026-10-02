@@ -40,3 +40,23 @@ alter table academy_profiles enable row level security;
 alter table academy_sessions enable row level security;
 alter table academy_skills   enable row level security;
 -- (no policies on purpose: service role bypasses RLS, everyone else gets nothing)
+
+-- ===== Parent view (added 2026-10-02). Safe to re-run. =====
+alter table academy_profiles add column if not exists role text not null default 'student' check (role in ('student','parent'));
+
+-- One-time codes a student generates to share progress with a parent.
+create table if not exists academy_invites (
+  code        text primary key,
+  student_id  uuid not null references auth.users(id) on delete cascade,
+  expires_at  timestamptz not null
+);
+
+-- Parent <-> student links. Parents see summaries (progress, topics), never chat text.
+create table if not exists academy_links (
+  parent_id   uuid not null references auth.users(id) on delete cascade,
+  student_id  uuid not null references auth.users(id) on delete cascade,
+  created_at  timestamptz not null default now(),
+  primary key (parent_id, student_id)
+);
+alter table academy_invites enable row level security;
+alter table academy_links   enable row level security;

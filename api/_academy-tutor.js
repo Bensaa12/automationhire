@@ -3,9 +3,10 @@
 // (Vercel Hobby plan allows 12 functions). Rewrites in vercel.json:
 //   /api/academy/:op        -> /api/sharon?action=academy&op=:op
 //   /api/academy-tutor      -> same, op=tutor   (legacy path)
-// ops: signup | login | refresh | me | tutor
+// ops: signup | login | refresh | me | tutor | invite | link | family | unlink
 // ============================================================
 
+const crypto = require('crypto');
 const { getSupabase, getBody, handleCors, ok, err } = require('./_lib');
 
 const MODEL = 'claude-haiku-4-5-20251001';
@@ -111,7 +112,7 @@ function sessionPayload(session, user, profile) {
 async function signup(req, res) {
   const b = await getBody(req);
   const email = clamp(b.email, 200).toLowerCase(), password = String(b.password || '');
-  const name = clamp(b.display_name, 40), level = LEVELS[b.level] ? b.level : 'secondary';
+  const name = clamp(b.display_name, 40), level = LEVELS[b.level] ? b.level : 'secondary', role = b.role === 'parent' ? 'parent' : 'student';
   if (!validEmail(email)) return err(res, 'Please enter a valid email address');
   if (password.length < 8) return err(res, 'Password must be at least 8 characters');
   if (!name) return err(res, 'Please enter a first name or nickname');
@@ -122,10 +123,10 @@ async function signup(req, res) {
   if (error) return err(res, error.message.includes('registered') ? 'That email already has an account. Try signing in.' : 'Could not create the account. Please try again.', 400);
   if (!data.user) return err(res, 'Could not create the account', 400);
 
-  await supabase.from('academy_profiles').upsert({ user_id: data.user.id, display_name: name, level, guardian_confirmed: true }, { onConflict: 'user_id' });
+  await supabase.from('academy_profiles').upsert({ user_id: data.user.id, display_name: name, level, role, guardian_confirmed: true }, { onConflict: 'user_id' });
 
   if (!data.session) return ok(res, { needs_confirmation: true });   // project requires email confirmation
-  return ok(res, sessionPayload(data.session, data.user, { display_name: name, level }));
+  return ok(res, sessionPayload(data.session, data.user, { display_name: name, level, role }));
 }
 
 async function login(req, res) {
@@ -134,7 +135,7 @@ async function login(req, res) {
   const supabase = getSupabase();
   const { data, error } = await supabase.auth.signInWithPassword({ email: clamp(email, 200).toLowerCase(), password: String(password) });
   if (error) return err(res, 'Invalid email or password', 401);
-  const { data: profile } = await supabase.from('academy_profiles').select('display_name, level, plan').eq('user_id', data.user.id).maybeSingle();
+  const { data: profile } = await supabase.from('academy_profiles').select('display_name, level, plan, role').eq('user_id', data.user.id).maybeSingle();
   if (!profile) return err(res, 'No Jarvis Academy account for this email. Please create one.', 404);
   return ok(res, sessionPayload(data.session, data.user, profile));
 }
@@ -152,9 +153,13 @@ async function me(req, res) {
   const supabase = getSupabase();
   const user = await userFromReq(req, supabase);
   if (!user) return err(res, 'Unauthorized', 401);
-  const { data: profile } = await supabase.from('academy_profiles').select('display_name, level, plan').eq('user_id', user.id).maybeSingle();
+  const { data: profile } = await supabase.from('academy_profiles').select('display_name, level, plan, role').eq('user_id', user.id).maybeSingle();
   if (!profile) return err(res, 'No Jarvis Academy account for this user', 404);
-  return ok(res, { user: { id: user.id, email: user.email }, profile, brain: await getBrain(supabase, user.id) });
+  if (profile.role === 'parent') return ok(res, { user: { id: user.id, email: user.email }, profile });
+  const brain = await getBrain(supabase, user.id);
+  const { count } = await supabase.from('academy_links').select('parent_id', { count: 'exact', head: true }).eq('student_id', user.id);
+  brain.linkedParents = count || 0;
+  return ok(res, { user: { id: user.id, email: user.email }, profile, brain });
 }
 
 async function tutor(req, res) {
@@ -178,8 +183,9 @@ async function tutor(req, res) {
     user = await userFromReq(req, supabase);
     if (!user) return err(res, 'Your session has expired. Please sign in again.', 401);
     if (!/^[0-9a-f-]{36}$/i.test(String(session_id || ''))) return err(res, 'session_id required');
-    ({ data: profile } = await supabase.from('academy_profiles').select('display_name, level').eq('user_id', user.id).maybeSingle());
+    ({ data: profile } = await supabase.from('academy_profiles').select('display_name, level, role').eq('user_id', user.id).maybeSingle());
     if (!profile) return err(res, 'No Jarvis Academy account for this user', 404);
+    if (profile.role === 'parent') return err(res, 'Parent accounts view progress; the tutor is for students.', 403);
 
     const { data: sess } = await supabase.from('academy_sessions').select('id, turns').eq('id', session_id).eq('user_id', user.id).maybeSingle();
     if (!sess) {
@@ -213,7 +219,93 @@ async function tutor(req, res) {
   }
 }
 
-const OPS = { signup, login, refresh, me, tutor };
+const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const MAX_CHILDREN = 4;
+
+async function authedProfile(req, res, supabase, role) {
+  const user = await userFromReq(req, supabase);
+  if (!user) { err(res, 'Unauthorized', 401); return null; }
+  const { data: profile } = await supabase.from('academy_profiles').select('display_name, level, role').eq('user_id', user.id).maybeSingle();
+  if (!profile) { err(res, 'No Jarvis Academy account for this user', 404); return null; }
+  if (role && profile.role !== role) { err(res, role === 'parent' ? 'Only parent accounts can do this' : 'Only student accounts can do this', 403); return null; }
+  return { user, profile };
+}
+
+// Student: make a one-time code (valid 7 days) to share progress with a parent.
+async function invite(req, res) {
+  const supabase = getSupabase();
+  const a = await authedProfile(req, res, supabase, 'student'); if (!a) return;
+  const bytes = crypto.randomBytes(8);
+  const code = Array.from(bytes, b => CODE_CHARS[b % CODE_CHARS.length]).join('');
+  const expires_at = new Date(Date.now() + 7 * 86400_000).toISOString();
+  await supabase.from('academy_invites').delete().eq('student_id', a.user.id);   // one live code at a time
+  const { error } = await supabase.from('academy_invites').insert({ code, student_id: a.user.id, expires_at });
+  if (error) return err(res, 'Could not create a code. Please try again.', 500);
+  return ok(res, { code, expires_at });
+}
+
+// Parent: redeem a student's code.
+async function link(req, res) {
+  const supabase = getSupabase();
+  const a = await authedProfile(req, res, supabase, 'parent'); if (!a) return;
+  const { code } = await getBody(req);
+  const c = clamp(code, 20).toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (c.length < 6) return err(res, 'Please enter the code from your child');
+  const { count } = await supabase.from('academy_links').select('student_id', { count: 'exact', head: true }).eq('parent_id', a.user.id);
+  if ((count || 0) >= MAX_CHILDREN) return err(res, 'You can link up to ' + MAX_CHILDREN + ' children.');
+  const { data: inv } = await supabase.from('academy_invites').select('code, student_id, expires_at').eq('code', c).maybeSingle();
+  if (!inv || new Date(inv.expires_at) < new Date()) return err(res, 'That code is not valid or has expired. Ask your child for a new one.', 404);
+  await supabase.from('academy_links').upsert({ parent_id: a.user.id, student_id: inv.student_id }, { onConflict: 'parent_id,student_id' });
+  await supabase.from('academy_invites').delete().eq('code', c);
+  return ok(res, { linked: true });
+}
+
+// Parent: progress summary for each linked child. No conversation text, ever.
+async function family(req, res) {
+  const supabase = getSupabase();
+  const a = await authedProfile(req, res, supabase, 'parent'); if (!a) return;
+  const { data: links } = await supabase.from('academy_links').select('student_id').eq('parent_id', a.user.id);
+  const ids = (links || []).map(l => l.student_id);
+  if (!ids.length) return ok(res, { children: [] });
+  const weekAgo = new Date(Date.now() - 7 * 86400_000).toISOString();
+  const [profiles, skills, sessions] = await Promise.all([
+    supabase.from('academy_profiles').select('user_id, display_name, level').in('user_id', ids),
+    supabase.from('academy_skills').select('user_id, subject, topic, confidence, attempts').in('user_id', ids).gt('attempts', 0),
+    supabase.from('academy_sessions').select('user_id, turns, updated_at').in('user_id', ids).gte('updated_at', weekAgo),
+  ]);
+  const children = (profiles.data || []).map(p => {
+    const sk = (skills.data || []).filter(s => s.user_id === p.user_id);
+    const se = (sessions.data || []).filter(s => s.user_id === p.user_id);
+    const bySubject = {};
+    sk.forEach(s => { (bySubject[s.subject] = bySubject[s.subject] || []).push(s.confidence); });
+    return {
+      id: p.user_id, display_name: p.display_name, level: p.level,
+      sessionsThisWeek: se.length,
+      questionsThisWeek: se.reduce((n, s) => n + (s.turns || 0), 0),
+      lastActive: se.map(s => s.updated_at).sort().pop() || null,
+      subjects: Object.keys(bySubject).map(k => ({ subject: k, average: Math.round(bySubject[k].reduce((x, y) => x + y, 0) / bySubject[k].length), topics: bySubject[k].length })).sort((x, y) => y.average - x.average),
+      needsAttention: sk.filter(s => s.confidence < 60).sort((x, y) => x.confidence - y.confidence).slice(0, 3).map(s => ({ subject: s.subject, topic: s.topic, confidence: s.confidence })),
+      strong: sk.filter(s => s.confidence >= 75).sort((x, y) => y.confidence - x.confidence).slice(0, 3).map(s => ({ subject: s.subject, topic: s.topic, confidence: s.confidence })),
+    };
+  });
+  return ok(res, { children });
+}
+
+// Either side can end a link. Parent sends { student_id }; a student ends all their parent links.
+async function unlink(req, res) {
+  const supabase = getSupabase();
+  const a = await authedProfile(req, res, supabase); if (!a) return;
+  const b = await getBody(req);
+  if (a.profile.role === 'parent') {
+    if (!b.student_id) return err(res, 'student_id required');
+    await supabase.from('academy_links').delete().eq('parent_id', a.user.id).eq('student_id', String(b.student_id));
+  } else {
+    await supabase.from('academy_links').delete().eq('student_id', a.user.id);
+  }
+  return ok(res, { unlinked: true });
+}
+
+const OPS = { signup, login, refresh, me, tutor, invite, link, family, unlink };
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;

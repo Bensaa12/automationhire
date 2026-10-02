@@ -69,6 +69,8 @@
   function newId() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) { var r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }); }
   function loadAuth() { try { return JSON.parse(localStorage.getItem('ja_auth') || 'null'); } catch (e) { return null; } }
   function saveAuth(a) { auth = a; try { if (a) localStorage.setItem('ja_auth', JSON.stringify(a)); else localStorage.removeItem('ja_auth'); } catch (e) {} renderAuth(); }
+  function isParent() { return !!(auth && auth.profile && auth.profile.role === 'parent'); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function maxTurns() { return auth ? USER_TURNS : ANON_TURNS; }
 
   function api(op, body, method) {
@@ -101,6 +103,7 @@
     if (!box) return;
     box.innerHTML = ''; history_ = []; used = 0; sessionId = newId(); gate.hidden = true; setLocked(false); setLeft();
     add('bot', greet[level]);
+    if (isParent()) { add('bot', 'You are signed in as a parent. Your family dashboard is just below. Students use this tutor.'); setLocked(true); }
   }
   function setDemoLevel(id) {
     if (!box || id === level) return;
@@ -116,7 +119,7 @@
 
   function send(text) {
     text = (text || '').trim();
-    if (!text || busy || used >= maxTurns()) return;
+    if (!text || busy || isParent() || used >= maxTurns()) return;
     busy = true; used++; setLeft(); setLocked(true);
     add('user', text); history_.push({ role: 'user', content: text });
     var wait = add('bot', ''); wait.innerHTML += '<span class="ja-typing"><i></i><i></i><i></i></span>';
@@ -135,7 +138,7 @@
       .catch(function () { wait.remove(); undo(); add('bot', 'I could not reach the server. Please check your connection and try again.'); })
       .then(function () {
         busy = false; head.classList.remove('speaking'); input.value = '';
-        if (!auth && used >= ANON_TURNS) showGate('Create a free account to keep going. Jarvis will remember what you work on.', 'signup');
+        if (isParent()) { setLocked(true); } else if (!auth && used >= ANON_TURNS) showGate('Create a free account to keep going. Jarvis will remember what you work on.', 'signup');
         else if (gate.hidden) { setLocked(false); input.focus(); }
       });
   }
@@ -158,6 +161,9 @@
       document.getElementById('jaBrainNote').textContent = skills.length
         ? (weak.confidence < 60 ? 'Jarvis suggests next: ' + weak.topic + ' (' + weak.subject + '). ' : '') + used_
         : 'Nothing yet. Answer one of Jarvis’s questions and your first topic will appear here. ' + used_;
+      var n = b.linkedParents || 0;
+      document.getElementById('jaShareNote').textContent = n ? n + (n === 1 ? ' parent can' : ' parents can') + ' see your topics, scores and how often you practise. They never see your chats.' : 'A parent sees your topics, scores and how often you practise. They never see your chats.';
+      document.getElementById('jaStopShare').hidden = !n;
       document.getElementById('jaBrainLive').hidden = false;
     });
   }
@@ -165,23 +171,92 @@
   function renderAuth() {
     var t = document.getElementById('jaAuthText'); if (!t) return;
     document.getElementById('jaSignIn').hidden = !!auth; document.getElementById('jaSignUp').hidden = !!auth; document.getElementById('jaSignOut').hidden = !auth;
-    t.textContent = auth ? 'Signed in as ' + ((auth.profile && auth.profile.display_name) || 'student') : 'Free demo · 3 questions';
-    if (!auth) document.getElementById('jaBrainLive').hidden = true;
+    t.textContent = auth ? 'Signed in as ' + ((auth.profile && auth.profile.display_name) || 'student') + (isParent() ? ' (parent)' : '') : 'Free demo · 3 questions';
+    if (!auth || isParent()) document.getElementById('jaBrainLive').hidden = true;
+    document.getElementById('family').hidden = !isParent();
+    if (isParent()) loadFamily();
     setLeft();
   }
 
+  /* Student: share progress with a parent */
+  var shareBtn = document.getElementById('jaShareBtn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', function () {
+      apiAuthed('invite', {}).then(function (res) {
+        if (!res.ok) { document.getElementById('jaShareNote').textContent = res.j.error || 'Could not make a code. Please try again.'; return; }
+        var c = document.getElementById('jaShareCode'); c.textContent = res.j.code; c.hidden = false;
+        document.getElementById('jaShareNote').textContent = 'Give this code to your parent. They enter it on this page after creating a parent account. It works once and expires in 7 days.';
+      });
+    });
+    document.getElementById('jaStopShare').addEventListener('click', function () {
+      apiAuthed('unlink', {}).then(function () { document.getElementById('jaShareCode').hidden = true; loadBrain(); });
+    });
+  }
+
+  /* Parent: family dashboard */
+  function loadFamily() {
+    apiAuthed('family', {}).then(function (res) {
+      var box_ = document.getElementById('jaChildren'); if (!box_ || !res.ok) return;
+      box_.innerHTML = '';
+      if (!res.j.children.length) { box_.appendChild(el('p', 'ja-empty', 'No children linked yet. Ask your child for their code.')); return; }
+      res.j.children.forEach(function (c) {
+        var card = el('div', 'ja-child'), hd = el('div', 'ja-child-head'), nm = el('b', null, c.display_name);
+        nm.appendChild(el('small', null, c.level)); hd.appendChild(nm);
+        var stop = el('button', 'ja-link', 'Stop sharing'); stop.type = 'button';
+        stop.addEventListener('click', function () { apiAuthed('unlink', { student_id: c.id }).then(loadFamily); });
+        hd.appendChild(stop); card.appendChild(hd);
+        var sr = el('div', 'ja-stat-row');
+        [[c.sessionsThisWeek, 'sessions this week'], [c.questionsThisWeek, 'questions this week'], [c.lastActive ? new Date(c.lastActive).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : 'None', 'last active']].forEach(function (p) {
+          var s = el('div', 'ja-stat'); s.appendChild(el('b', null, String(p[0]))); s.appendChild(el('span', null, p[1])); sr.appendChild(s);
+        });
+        card.appendChild(sr);
+        if (c.subjects.length) {
+          c.subjects.forEach(function (s) {
+            var r = el('div', 'ja-bar-row'); r.appendChild(el('span', null, s.subject));
+            var bar = el('div', 'ja-bar'), i = el('i'); if (s.average < 60) i.className = 'warn'; i.style.width = s.average + '%'; bar.appendChild(i); r.appendChild(bar); r.appendChild(el('b', null, s.average + '%')); card.appendChild(r);
+          });
+        } else card.appendChild(el('p', 'ja-empty', 'No scored topics yet. They appear once your child answers Jarvis\u2019s questions.'));
+        [['NEEDS ATTENTION', c.needsAttention, 'ja-warn', '\u26a0 '], ['DOING WELL', c.strong, 'ja-ok', '\u2713 ']].forEach(function (g) {
+          if (!g[1].length) return; card.appendChild(el('h5', null, g[0])); var ul = el('ul');
+          g[1].forEach(function (s) { ul.appendChild(el('li', g[2], g[3] + s.topic + ' (' + s.subject + ', ' + s.confidence + '%)')); }); card.appendChild(ul);
+        });
+        box_.appendChild(card);
+      });
+    });
+  }
+  var linkForm = document.getElementById('jaLinkForm');
+  if (linkForm) linkForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var m = document.getElementById('jaLinkMsg');
+    apiAuthed('link', { code: document.getElementById('jaLinkCode').value }).then(function (res) {
+      m.hidden = false; m.style.color = res.ok ? 'var(--green)' : '';
+      m.textContent = res.ok ? 'Linked. Your child\u2019s progress is below.' : (res.j.error || 'Could not link. Please try again.');
+      if (res.ok) { document.getElementById('jaLinkCode').value = ''; loadFamily(); }
+    });
+  });
+
   /* Auth dialog */
   var dlg = document.getElementById('jaAuth'), mode = 'signup';
-  function openAuth(m) {
+  function openAuth(m, role) {
     mode = m; var s = m === 'signup';
+    if (role) document.getElementById('jaRoleSel').value = role;
+    applyRole();
     document.getElementById('jaAuthTitle').textContent = s ? 'Create your free account' : 'Welcome back';
     document.getElementById('jaAuthSubmit').textContent = s ? 'CREATE ACCOUNT' : 'SIGN IN';
     document.getElementById('jaAuthSwap').textContent = s ? 'I already have an account' : 'Create a new account';
     ['jaNameWrap', 'jaLevelWrap', 'jaGuardWrap'].forEach(function (id) { document.getElementById(id).hidden = !s; });
     document.getElementById('jaPass').autocomplete = s ? 'new-password' : 'current-password';
     document.getElementById('jaLevelSel').value = level;
+    document.getElementById('jaRoleWrap').hidden = !s;
+    applyRole();
     var e = document.getElementById('jaAuthErr'); e.hidden = true; e.style.color = '';
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  }
+  function applyRole() {
+    var p = document.getElementById('jaRoleSel').value === 'parent' && mode === 'signup';
+    document.getElementById('jaLevelWrap').hidden = p || mode !== 'signup';
+    document.getElementById('jaNameLabel').textContent = p ? 'Your first name' : 'First name or nickname';
+    document.getElementById('jaGuardText').textContent = p ? 'I am an adult (18 or over) and the parent or guardian of the child I will link.' : 'I am 13 or over, or a parent or guardian is setting this up for a child.';
   }
   function authMsg(msg, good) { var e = document.getElementById('jaAuthErr'); e.textContent = msg; e.style.color = good ? 'var(--green)' : ''; e.hidden = false; }
 
@@ -191,12 +266,15 @@
     document.getElementById('jaGateBtn').addEventListener('click', function (e) { openAuth(e.currentTarget.dataset.mode || 'signup'); });
     document.getElementById('jaAuthClose').addEventListener('click', function () { dlg.close(); });
     document.getElementById('jaAuthSwap').addEventListener('click', function () { openAuth(mode === 'signup' ? 'login' : 'signup'); });
+    document.getElementById('jaRoleSel').addEventListener('change', applyRole);
+    document.getElementById('jaParentSignUp').addEventListener('click', function () { openAuth('signup', 'parent'); });
+    document.getElementById('jaParentSignIn').addEventListener('click', function () { openAuth('login'); });
     document.getElementById('jaSignOut').addEventListener('click', function () { saveAuth(null); resetDemo(); });
     document.getElementById('jaAuthForm').addEventListener('submit', function (e) {
       e.preventDefault();
       var btn = document.getElementById('jaAuthSubmit'); btn.disabled = true;
       var body = { email: document.getElementById('jaEmail').value, password: document.getElementById('jaPass').value };
-      if (mode === 'signup') { body.display_name = document.getElementById('jaName').value; body.level = document.getElementById('jaLevelSel').value; body.guardian_confirmed = document.getElementById('jaGuard').checked; }
+      if (mode === 'signup') { body.role = document.getElementById('jaRoleSel').value; body.display_name = document.getElementById('jaName').value; body.level = document.getElementById('jaLevelSel').value; body.guardian_confirmed = document.getElementById('jaGuard').checked; }
       var prev = auth; auth = null;
       api(mode, body).then(function (res) {
         btn.disabled = false;
@@ -204,6 +282,7 @@
         if (res.j.needs_confirmation) { auth = prev; authMsg('Almost there! Check your email for a confirmation link, then sign in.', true); return; }
         saveAuth({ access_token: res.j.access_token, refresh_token: res.j.refresh_token, profile: res.j.profile });
         dlg.close();
+        if (isParent()) { resetDemo(); document.getElementById('family').scrollIntoView({ behavior: 'smooth' }); return; }
         if (res.j.profile && res.j.profile.level) { level = ''; setDemoLevel(res.j.profile.level); }
         resetDemo(); loadBrain();
       }).catch(function () { auth = prev; btn.disabled = false; authMsg('Could not reach the server. Please try again.'); });
@@ -225,7 +304,7 @@
     document.querySelectorAll('[data-example]').forEach(function (b) {
       b.addEventListener('click', function () { input.value = b.dataset.example; input.focus(); });
     });
-    renderAuth(); resetDemo(); if (auth) loadBrain();
+    renderAuth(); resetDemo(); if (auth && !isParent()) loadBrain();
   }
 
   fromHash();
