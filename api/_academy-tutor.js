@@ -327,13 +327,14 @@ async function unlink(req, res) {
 
 async function config(req, res) { return ok(res, { payments: require('./_academy-billing').paymentsLive() }); }
 
-// Maths Challenge game (assets/js/academy-game.js): a finished round updates the student's
-// Learning Brain like a tutor exchange does, so games show in their progress and the parent view.
-// Questions are generated in the browser, so this is the only server call a game makes.
+// Games (assets/js/academy-game.js = Maths Challenge, academy-spelling.js = Spelling Bee): a finished
+// round updates the student's Learning Brain like a tutor exchange does, so games show in their
+// progress and the parent view. Questions are made in the browser; this is the only server call.
 const GAME_TOPICS = {
-  'add-sub': 'Addition and subtraction', times: 'Times tables', divide: 'Division',
-  negatives: 'Negative numbers', fractions: 'Fractions of amounts', percent: 'Percentages',
-  algebra: 'Solving equations', powers: 'Powers and roots',
+  'add-sub': ['Mathematics', 'Addition and subtraction'], times: ['Mathematics', 'Times tables'], divide: ['Mathematics', 'Division'],
+  negatives: ['Mathematics', 'Negative numbers'], fractions: ['Mathematics', 'Fractions of amounts'], percent: ['Mathematics', 'Percentages'],
+  algebra: ['Mathematics', 'Solving equations'], powers: ['Mathematics', 'Powers and roots'],
+  'spell-5-7': ['English', 'Spelling (ages 5-7)'], 'spell-7-9': ['English', 'Spelling (ages 7-9)'], 'spell-9-11': ['English', 'Spelling (ages 9-11)'],
 };
 const gameHits = new Map();
 
@@ -351,16 +352,17 @@ async function game(req, res) {
   const results = Array.isArray(b.results) ? b.results.slice(0, 8) : [];
   const saved = [];
   for (const r of results) {
-    const topic = GAME_TOPICS[r && r.topic];
+    const known = GAME_TOPICS[r && r.topic];
     const total = Math.floor(Number(r && r.total));
     const correct = Math.floor(Number(r && r.correct));
-    if (!topic || !(total >= 1 && total <= 120) || !(correct >= 0 && correct <= total)) continue;
-    const { data: cur } = await supabase.from('academy_skills').select('*').eq('user_id', a.user.id).eq('subject', 'Mathematics').eq('topic', topic).maybeSingle();
+    if (!known || !(total >= 1 && total <= 120) || !(correct >= 0 && correct <= total)) continue;
+    const [subject, topic] = known;
+    const { data: cur } = await supabase.from('academy_skills').select('*').eq('user_id', a.user.id).eq('subject', subject).eq('topic', topic).maybeSingle();
     // More questions answered = more evidence, so the round moves confidence further (max half-way).
     const weight = Math.min(0.5, 0.04 * total);
     const accuracy = (correct / total) * 100;
     const row = {
-      user_id: a.user.id, subject: 'Mathematics', topic,
+      user_id: a.user.id, subject, topic,
       confidence: Math.round((cur ? cur.confidence : 50) * (1 - weight) + accuracy * weight),
       attempts: (cur?.attempts || 0) + total,
       correct: (cur?.correct || 0) + correct,
@@ -368,7 +370,7 @@ async function game(req, res) {
       updated_at: new Date().toISOString(),
     };
     await supabase.from('academy_skills').upsert(row, { onConflict: 'user_id,subject,topic' });
-    saved.push({ topic, confidence: row.confidence });
+    saved.push({ subject, topic, confidence: row.confidence });
   }
   return ok(res, { saved });
 }
