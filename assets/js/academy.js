@@ -399,5 +399,21 @@
     initPricing();
   }
 
+  // Bridge for the Maths Challenge game (academy-game.js): who is signed in, authed API calls
+  // (with token refresh), refreshing the Learning Brain panel, and handing a topic to the tutor.
+  window.JA = {
+    student: function () { return !!auth && !isParent(); },
+    apiAuthed: apiAuthed,
+    refreshBrain: function () { if (auth && !isParent()) loadBrain(); },
+    askTutor: function (text, lvl) {
+      if (!form) return;
+      if (lvl && lvl !== level) { setDemoLevel(lvl); resetDemo(); }
+      input.value = text;
+      document.getElementById('try').scrollIntoView({ behavior: 'smooth' });
+      setTimeout(function () { input.focus(); }, 500);
+    },
+    signUp: function () { openAuth('signup'); }
+  };
+
   fromHash();
 })();

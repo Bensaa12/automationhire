@@ -3,7 +3,7 @@
 // (Vercel Hobby plan allows 12 functions). Rewrites in vercel.json:
 //   /api/academy/:op        -> /api/sharon?action=academy&op=:op
 //   /api/academy-tutor      -> same, op=tutor   (legacy path)
-// ops: signup | login | refresh | me | tutor | invite | link | family | unlink
+// ops: signup | login | refresh | me | tutor | invite | link | family | unlink | config | game
 // ============================================================
 
 const crypto = require('crypto');
@@ -327,7 +327,53 @@ async function unlink(req, res) {
 
 async function config(req, res) { return ok(res, { payments: require('./_academy-billing').paymentsLive() }); }
 
-const OPS = { signup, login, refresh, me, tutor, invite, link, family, unlink, config };
+// Maths Challenge game (assets/js/academy-game.js): a finished round updates the student's
+// Learning Brain like a tutor exchange does, so games show in their progress and the parent view.
+// Questions are generated in the browser, so this is the only server call a game makes.
+const GAME_TOPICS = {
+  'add-sub': 'Addition and subtraction', times: 'Times tables', divide: 'Division',
+  negatives: 'Negative numbers', fractions: 'Fractions of amounts', percent: 'Percentages',
+  algebra: 'Solving equations', powers: 'Powers and roots',
+};
+const gameHits = new Map();
+
+async function game(req, res) {
+  const supabase = getSupabase();
+  const a = await authedProfile(req, res, supabase, 'student');
+  if (!a) return;
+  // A 60-second round can't legitimately be posted more than every 20 seconds.
+  const last = gameHits.get(a.user.id) || 0;
+  if (Date.now() - last < 20_000) return err(res, 'Slow down a moment', 429);
+  gameHits.set(a.user.id, Date.now());
+  if (gameHits.size > 5000) gameHits.clear();
+
+  const b = await getBody(req);
+  const results = Array.isArray(b.results) ? b.results.slice(0, 8) : [];
+  const saved = [];
+  for (const r of results) {
+    const topic = GAME_TOPICS[r && r.topic];
+    const total = Math.floor(Number(r && r.total));
+    const correct = Math.floor(Number(r && r.correct));
+    if (!topic || !(total >= 1 && total <= 120) || !(correct >= 0 && correct <= total)) continue;
+    const { data: cur } = await supabase.from('academy_skills').select('*').eq('user_id', a.user.id).eq('subject', 'Mathematics').eq('topic', topic).maybeSingle();
+    // More questions answered = more evidence, so the round moves confidence further (max half-way).
+    const weight = Math.min(0.5, 0.04 * total);
+    const accuracy = (correct / total) * 100;
+    const row = {
+      user_id: a.user.id, subject: 'Mathematics', topic,
+      confidence: Math.round((cur ? cur.confidence : 50) * (1 - weight) + accuracy * weight),
+      attempts: (cur?.attempts || 0) + total,
+      correct: (cur?.correct || 0) + correct,
+      last_mistake: r.mistake ? clamp(r.mistake, 140) : (cur?.last_mistake || null),
+      updated_at: new Date().toISOString(),
+    };
+    await supabase.from('academy_skills').upsert(row, { onConflict: 'user_id,subject,topic' });
+    saved.push({ topic, confidence: row.confidence });
+  }
+  return ok(res, { saved });
+}
+
+const OPS = { signup, login, refresh, me, tutor, invite, link, family, unlink, config, game };
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;

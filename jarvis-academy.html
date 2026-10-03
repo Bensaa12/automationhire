@@ -77,6 +77,7 @@
     <div class="ja-actions">
       <a href="#try" class="btn btn-lg ja-btn-cyan">START LEARNING</a>
       <a href="#tutor" class="btn btn-lg ja-btn-outline">MEET JARVIS</a>
+      <a href="#play" class="btn btn-lg ja-btn-outline">&#127918; PLAY MATHS CHALLENGE</a>
     </div>
   </div>
 </section>
@@ -274,6 +275,18 @@
   </div>
 </section>
 
+<!-- ===== MATHS CHALLENGE GAME (assets/js/academy-game.js) ===== -->
+<section class="section" id="play">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label ja-cyan">Play &amp; learn <span class="ja-tag live" style="margin-left:6px">New</span></div>
+      <h2 class="section-title">Jarvis Maths Challenge.</h2>
+      <p class="section-sub">60 seconds. How many can you get right? Build a streak for bonus points, and every mistake comes with Jarvis&rsquo;s trick for next time.</p>
+    </div>
+    <div class="ja-glass ja-game" id="jaGame"></div>
+  </div>
+</section>
+
 <!-- ===== EXAM MODE ===== -->
 <section class="section" id="exam">
   <div class="container">
@@ -374,7 +387,7 @@
   <div class="container">
     <div class="section-header reveal"><div class="section-label ja-cyan">Honest status</div><h2 class="section-title">What works today, and what&rsquo;s next.</h2></div>
     <div class="ja-avail reveal">
-      <div class="ja-glass"><h3 class="ja-ok">AVAILABLE NOW</h3><ul class="live"><li>Live AI tutor chat (3 free questions, no sign-up)</li><li>Free student accounts: 10 sessions a month</li><li>Basic Learning Brain: Jarvis tracks topics and confidence from your answers</li><li>Parent accounts: link your child with a one-time code and see progress summaries</li><li>Three levels: Primary, Secondary, University</li><li>Hint-first teaching style</li></ul></div>
+      <div class="ja-glass"><h3 class="ja-ok">AVAILABLE NOW</h3><ul class="live"><li>Live AI tutor chat (3 free questions, no sign-up)</li><li>Free student accounts: 10 sessions a month</li><li>Basic Learning Brain: Jarvis tracks topics and confidence from your answers</li><li>Parent accounts: link your child with a one-time code and see progress summaries</li><li>Maths Challenge game: 8 topics from times tables to algebra, saved to the Learning Brain</li><li>Three levels: Primary, Secondary, University</li><li>Hint-first teaching style</li></ul></div>
       <div class="ja-glass"><h3 class="ja-warn">COMING SOON</h3><ul class="soon"><li>Full Learning Brain: study goals and recommendations</li><li>Voice conversations</li><li>Exam Mode and revision plans</li><li>Time-on-task and weekly trends for parents</li><li>Teacher tools and lecture upload</li></ul></div>
     </div>
   </div>
@@ -498,6 +511,7 @@
 
 <script src="assets/js/main.js"></script>
 <script src="assets/js/academy.js"></script>
+<script src="assets/js/academy-game.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/chat.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
