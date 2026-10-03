@@ -327,7 +327,7 @@ async function unlink(req, res) {
 
 async function config(req, res) { return ok(res, { payments: require('./_academy-billing').paymentsLive() }); }
 
-// Games (assets/js/academy-game.js = Maths Challenge, academy-spelling.js = Spelling Bee): a finished
+// Games (academy-game.js = Maths Challenge, academy-spelling.js = Spelling Bee, academy-science.js = Science Quiz): a finished
 // round updates the student's Learning Brain like a tutor exchange does, so games show in their
 // progress and the parent view. Questions are made in the browser; this is the only server call.
 const GAME_TOPICS = {
@@ -335,6 +335,10 @@ const GAME_TOPICS = {
   negatives: ['Mathematics', 'Negative numbers'], fractions: ['Mathematics', 'Fractions of amounts'], percent: ['Mathematics', 'Percentages'],
   algebra: ['Mathematics', 'Solving equations'], powers: ['Mathematics', 'Powers and roots'],
   'spell-5-7': ['English', 'Spelling (ages 5-7)'], 'spell-7-9': ['English', 'Spelling (ages 7-9)'], 'spell-9-11': ['English', 'Spelling (ages 9-11)'],
+  // Science Quiz (assets/js/academy-science.js)
+  'sci-bio-7-11': ['Science', 'Biology (ages 7-11)'], 'sci-chem-7-11': ['Science', 'Chemistry (ages 7-11)'], 'sci-phys-7-11': ['Science', 'Physics (ages 7-11)'],
+  'sci-bio-11-14': ['Science', 'Biology (ages 11-14)'], 'sci-chem-11-14': ['Science', 'Chemistry (ages 11-14)'], 'sci-phys-11-14': ['Science', 'Physics (ages 11-14)'],
+  'sci-bio-14-16': ['Science', 'Biology (GCSE)'], 'sci-chem-14-16': ['Science', 'Chemistry (GCSE)'], 'sci-phys-14-16': ['Science', 'Physics (GCSE)'],
 };
 const gameHits = new Map();
 
