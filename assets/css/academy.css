@@ -272,3 +272,5 @@
   .jg-hud { font-size:13px; gap:8px 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .jg-q.good, .jg-q.bad, .jg-mult.hot { animation:none; } .jg-confetti { display:none; } }
+/* While a Maths Challenge round is running, the sales chat bubble would cover the keypad. */
+body.jg-playing #ah-chat-launcher { display:none !important; }

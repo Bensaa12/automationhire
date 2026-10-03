@@ -257,6 +257,7 @@
     var queue = practice ? g.missed.map(function (m) { return m.q; }) : [];
     g = { score: 0, streak: 0, bestStreak: 0, right: 0, total: 0, diff: LEVELS[lvl].start, missed: [], per: {}, practice: practice, queue: queue, left: ROUND_SECONDS, cur: null, typed: '' };
     setup.hidden = true; end.hidden = true; play.hidden = false;
+    document.body.classList.add('jg-playing');   // hides the site's "Talk to Sales" bubble over the keypad
     bar.hidden = practice; timeWrap.hidden = practice; scoreWrap.hidden = practice; mEl.hidden = practice;
     fbEl.textContent = practice ? 'Practice your mistakes. No clock, no pressure: get each one right to finish.' : 'Type the answer, then press Enter (or OK). Go!';
     fbEl.className = 'jg-feedback';
@@ -324,6 +325,7 @@
     clearInterval(timer);
     if (play.hidden) return;
     play.hidden = true;
+    document.body.classList.remove('jg-playing');
     if (g.practice) return showPracticeEnd();
     if (quit && g.total === 0) { setup.hidden = false; renderSetup(); return; }
     sfx.end();
