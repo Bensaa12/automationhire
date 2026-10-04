@@ -1,7 +1,7 @@
-/* Jarvis Academy — Science Quiz (ages 7–16).
+/* Jarvis Academy — Science Quiz (secondary, ages 11–16).
  * Multiple choice, 10 questions a round, optional 20-second clock with a speed bonus, one 50:50
  * lifeline, and a "Did you know?" explanation after every answer. Questions follow the UK National
- * Curriculum (KS2, KS3) and GCSE combined science. Signed-in students' rounds go to their Learning
+ * Curriculum (KS3) and GCSE combined science. Secondary only, by request: not offered to primary. Signed-in students' rounds go to their Learning
  * Brain as Science: Biology / Chemistry / Physics (POST /api/academy/game). */
 (function () {
   'use strict';
@@ -12,40 +12,6 @@
 
   /* Each question: [question, [CORRECT, wrong, wrong, wrong], explanation]. Options are shuffled when shown. */
   var BANK = {
-    '7-11': { name: 'Ages 7–11', tutorLevel: 'primary', bio: [
-      ['Which part of a plant takes in water from the soil?', ['Roots', 'Leaves', 'Flowers', 'Petals'], 'Roots take in water and minerals from the soil, and the stem carries them up to the leaves.'],
-      ['What does a plant need to make its own food?', ['Sunlight, water and carbon dioxide', 'Moonlight, salt water and oxygen', 'Warm soil, sugar and darkness', 'Milk, sand and cold air'], 'Plants make food in their leaves using sunlight, water and carbon dioxide from the air. This is called photosynthesis.'],
-      ['Which of these animals is a mammal?', ['Whale', 'Shark', 'Salmon', 'Turtle'], 'Whales breathe air and feed their babies milk, so they are mammals, even though they live in the sea.'],
-      ['What is the job of the heart?', ['To pump blood around the body', 'To digest food', 'To help us think', 'To clean the air we breathe'], 'Your heart is a muscle that pumps blood around your body, carrying oxygen and food to every part.'],
-      ['What do we call animals that have a backbone?', ['Vertebrates', 'Invertebrates', 'Insects', 'Molluscs'], 'Animals with a backbone are vertebrates: fish, amphibians, reptiles, birds and mammals.'],
-      ['A caterpillar changes into a…', ['Butterfly', 'Beetle', 'Spider', 'Worm'], 'Inside a chrysalis, a caterpillar changes into a butterfly. This big change is called metamorphosis.'],
-      ['Which teeth are best for tearing food?', ['Canines', 'Incisors', 'Molars', 'Baby teeth'], 'Incisors cut, canines tear, and molars grind food into small pieces.'],
-      ['What do herbivores eat?', ['Only plants', 'Only meat', 'Plants and meat', 'Only insects'], 'Herbivores eat only plants. Carnivores eat meat, and omnivores eat both.'],
-      ['Which organs help us breathe?', ['Lungs', 'Kidneys', 'Liver', 'Stomach'], 'Your lungs take in oxygen from the air and get rid of carbon dioxide when you breathe out.'],
-      ['What is the natural home of a living thing called?', ['Its habitat', 'Its hibernation', 'Its harvest', 'Its hatchery'], 'A habitat is where a living thing lives and finds food, water and shelter, like a pond or a woodland.']
-    ], chem: [
-      ['What are the three states of matter?', ['Solid, liquid and gas', 'Hot, warm and cold', 'Wood, metal and plastic', 'Rock, water and air'], 'Everything is a solid, a liquid or a gas. Water can be all three: ice, water and steam.'],
-      ['At what temperature does pure water freeze?', ['0°C', '10°C', '100°C', '−50°C'], 'Pure water freezes at 0°C and boils at 100°C.'],
-      ['What happens to water when it evaporates?', ['It turns into a gas (water vapour)', 'It turns into tiny ice crystals', 'It disappears and is gone forever', 'It turns into salt'], 'When water evaporates it becomes water vapour, a gas. It hasn’t gone: it’s in the air.'],
-      ['Which of these materials is magnetic?', ['Iron', 'Copper', 'Plastic', 'Wood'], 'Iron, nickel and cobalt are magnetic. Most other metals, like copper and aluminium, are not.'],
-      ['Which of these is a good thermal insulator (keeps heat in)?', ['Wool', 'Copper', 'Aluminium foil', 'Iron'], 'Wool traps air, which slows heat escaping. Metals let heat pass through easily.'],
-      ['What is it called when sugar mixes into tea and seems to disappear?', ['Dissolving', 'Melting', 'Freezing', 'Evaporating'], 'The sugar dissolves: it breaks into tiny pieces that spread through the tea. It’s still there, which is why the tea tastes sweet.'],
-      ['Which of these changes can NOT be reversed?', ['Burning wood', 'Melting chocolate', 'Freezing water', 'Dissolving salt in water'], 'Burning makes new materials like ash and smoke, so you can’t get the wood back. Melting and freezing can be undone.'],
-      ['What is it called when water vapour turns back into liquid water?', ['Condensation', 'Evaporation', 'Melting', 'Filtering'], 'Condensation is why a cold window gets wet on a winter morning.'],
-      ['Which material is transparent (you can see through it)?', ['Glass', 'Wood', 'Cardboard', 'Brick'], 'Transparent materials like glass let light pass straight through them.'],
-      ['How could you separate sand from water?', ['Pour it through a filter', 'Hold a magnet over the jug', 'Put it in the freezer', 'Shake it really hard'], 'A filter lets the water through but catches the sand.']
-    ], phys: [
-      ['Which force pulls things down towards the Earth?', ['Gravity', 'Friction', 'Magnetism', 'Air resistance'], 'Gravity pulls everything towards the Earth. That’s why a dropped ball falls down.'],
-      ['What do we need to be able to see things?', ['Light', 'Sound', 'Heat', 'Wind'], 'We see things when light bounces off them and travels into our eyes.'],
-      ['How long does it take the Earth to travel once around the Sun?', ['About 365 days (one year)', 'About 24 hours (one day)', 'About 30 days (one month)', 'About 7 days (one week)'], 'One trip around the Sun takes about 365¼ days. The extra quarter day is why we have leap years.'],
-      ['What causes day and night?', ['The Earth spinning', 'The Sun moving around the Earth', 'The Moon covering the Sun', 'Clouds blocking the light'], 'The Earth spins once every 24 hours. It’s daytime on the side facing the Sun.'],
-      ['Sounds are made by things that are…', ['Vibrating', 'Melting', 'Shining', 'Floating'], 'Sounds are vibrations. Touch your throat while you hum and you can feel them.'],
-      ['Which of these conducts electricity?', ['A metal paperclip', 'A plastic ruler', 'A rubber band', 'A wooden spoon'], 'Metals are electrical conductors. Plastic, rubber and wood are insulators.'],
-      ['What is a shadow?', ['A place where light is blocked', 'A reflection of you in a mirror', 'A special kind of dark light', 'A dark-coloured object'], 'Light travels in straight lines, so an object that blocks it leaves a dark shape behind: a shadow.'],
-      ['Which force slows a bicycle down when you use the brakes?', ['Friction', 'Gravity', 'Magnetism', 'Upthrust'], 'Brake pads rub on the wheel, and that friction slows the bike down.'],
-      ['Which planet is closest to the Sun?', ['Mercury', 'Venus', 'Earth', 'Mars'], 'Mercury is the closest planet to the Sun, and the smallest planet in our solar system.'],
-      ['What happens when two north poles of magnets are put together?', ['They push apart (repel)', 'They pull together (attract)', 'Nothing happens', 'They stick together'], 'Like poles repel and opposite poles attract: north and south pull together.']
-    ] },
     '11-14': { name: 'Ages 11–14', tutorLevel: 'secondary', bio: [
       ['What is the basic unit of all living things?', ['The cell', 'The atom', 'The organ', 'The tissue'], 'All living things are made of cells. Cells form tissues, tissues form organs, and organs form systems.'],
       ['Which part of a cell contains its genetic material (DNA)?', ['Nucleus', 'Cell membrane', 'Cytoplasm', 'Cell wall'], 'The nucleus holds the DNA and controls what the cell does.'],
@@ -125,7 +91,7 @@
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
 
-  var level = BANK[store('ja_sci_level')] ? store('ja_sci_level') : '7-11';
+  var level = BANK[store('ja_sci_level')] ? store('ja_sci_level') : '11-14';
   var subject = 'mixed';
   var timed = store('ja_sci_timed') !== '0';
   var muted = store('ja_game_muted') === '1';
