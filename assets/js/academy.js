@@ -59,12 +59,89 @@
   var head = document.getElementById('jaChatHead'), gate = document.getElementById('jaGate'), left = document.getElementById('jaLeft');
   var level = 'secondary', history_ = [], busy = false, used = 0, sessionId = newId();
   var auth = loadAuth();
-  var greet = {
-    primary: 'Hello there! I am Jarvis. Tell me what you would like to learn today, and we will work it out together.',
-    secondary: 'Good evening, sir. Give me a subject and a question. I shall attempt to make learning slightly less painful.',
-    university: 'Good evening. Tell me what you are studying and where you are stuck, and we shall begin with your own thinking.'
+  // Tutor languages (EN | FR switch). The API gets `lang` and answers in it (api/_academy-lang.js).
+  var T = {
+    en: {
+      greet: {
+        primary: 'Hello there! I am Jarvis. Tell me what you would like to learn today, and we will work it out together.',
+        secondary: 'Good evening, sir. Give me a subject and a question. I shall attempt to make learning slightly less painful.',
+        university: 'Good evening. Tell me what you are studying and where you are stuck, and we shall begin with your own thinking.'
+      },
+      quick: { EXPLAIN: 'Explain it to me step by step.', HINT: 'Give me a hint, but not the full answer.', QUIZ: 'Quiz me on this with one question.', EXAMPLE: 'Show me a worked example on a different problem.' },
+      quickLabel: { EXPLAIN: 'EXPLAIN IT', HINT: 'GIVE ME A HINT', QUIZ: 'QUIZ ME', EXAMPLE: 'SHOW AN EXAMPLE' },
+      levels: { primary: 'Primary', secondary: 'Secondary', university: 'University' },
+      examples: [["I don't understand simultaneous equations.", 'Simultaneous equations'], ['Explain photosynthesis.', 'Photosynthesis'], ['I hate maths.', '“I hate maths.”']],
+      tagline: 'Your personal AI tutor',
+      placeholder: 'Give Jarvis a subject and a question…', send: 'SEND',
+      topicFirst: 'Do tell me the topic first, then press that button.',
+      signedLeft: function (n) { return 'Signed in: ' + n + ' questions left in this session'; },
+      anonLeft: function (n, t) { return n + ' of ' + t + ' free questions left'; },
+      gateTitle: 'You’ve seen what Jarvis can do.',
+      gateSignup: 'Create a free account to keep going. Jarvis will remember what you work on.',
+      expired: 'Your session has expired. Please sign in again.',
+      unavailable: 'Jarvis is unavailable at the moment. Please try again shortly.',
+      offline: 'I could not reach the server. Please check your connection and try again.',
+      parent: 'You are signed in as a parent. Your family dashboard is just below. Students use this tutor.',
+      signIn: 'SIGN IN', create: 'CREATE FREE ACCOUNT',
+      foot: 'AI can make mistakes. Check important facts with a teacher or textbook. Please don’t share personal details.',
+      switched: 'Very good. I shall carry on in English.'
+    },
+    fr: {
+      greet: {
+        primary: 'Bonjour ! Je suis Jarvis. Dis-moi ce que tu veux apprendre aujourd’hui, et nous allons trouver ensemble.',
+        secondary: 'Bonjour. Donnez-moi une matière et une question : je m’efforcerai de rendre l’apprentissage un peu moins pénible.',
+        university: 'Bonjour. Dites-moi ce que vous étudiez et où vous bloquez ; nous partirons de votre propre réflexion.'
+      },
+      quick: { EXPLAIN: 'Explique-moi étape par étape.', HINT: 'Donne-moi un indice, mais pas la réponse complète.', QUIZ: 'Pose-moi une question sur ce sujet.', EXAMPLE: 'Montre-moi un exemple corrigé sur un autre exercice.' },
+      quickLabel: { EXPLAIN: 'EXPLIQUE-MOI', HINT: 'UN INDICE', QUIZ: 'INTERROGE-MOI', EXAMPLE: 'UN EXEMPLE' },
+      levels: { primary: 'Primaire', secondary: 'Secondaire', university: 'Université' },
+      examples: [['Je ne comprends pas les systèmes d’équations.', 'Systèmes d’équations'], ['Explique-moi la photosynthèse.', 'Photosynthèse'], ['Je déteste les maths.', '« Je déteste les maths. »']],
+      tagline: 'Votre tuteur IA personnel',
+      placeholder: 'Donnez à Jarvis une matière et une question…', send: 'ENVOYER',
+      topicFirst: 'Dites-moi d’abord le sujet, puis appuyez sur ce bouton.',
+      signedLeft: function (n) { return 'Connecté : ' + n + ' question' + (n > 1 ? 's' : '') + ' restante' + (n > 1 ? 's' : '') + ' dans cette séance'; },
+      anonLeft: function (n, t) { return 'Questions gratuites restantes : ' + n + ' sur ' + t; },
+      gateTitle: 'Vous avez vu ce que Jarvis sait faire.',
+      gateSignup: 'Créez un compte gratuit pour continuer. Jarvis se souviendra de ce que vous travaillez.',
+      expired: 'Votre session a expiré. Veuillez vous reconnecter.',
+      unavailable: 'Jarvis est indisponible pour le moment. Réessayez dans un instant.',
+      offline: 'Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.',
+      parent: 'Vous êtes connecté avec un compte parent. Votre tableau de bord familial se trouve juste en dessous. Le tuteur est réservé aux élèves.',
+      signIn: 'SE CONNECTER', create: 'CRÉER UN COMPTE GRATUIT',
+      foot: 'L’IA peut se tromper. Vérifiez les informations importantes auprès d’un enseignant ou d’un manuel. Ne partagez pas d’informations personnelles.',
+      switched: 'Très bien. Je continue en français.'
+    }
   };
-  var quick = { EXPLAIN: 'Explain it to me step by step.', HINT: 'Give me a hint, but not the full answer.', QUIZ: 'Quiz me on this with one question.', EXAMPLE: 'Show me a worked example on a different problem.' };
+  var lang = loadLang();
+  function loadLang() {
+    try { var s = localStorage.getItem('ja_lang'); if (T[s]) return s; } catch (e) {}
+    return /^fr\b/i.test(navigator.language || '') ? 'fr' : 'en';   // French browsers start in French
+  }
+  function L() { return T[lang]; }
+  // Re-label the chat widget in the current language
+  function applyLang() {
+    var t = L(), chat = document.querySelector('.ja-chat');
+    if (!chat) return;
+    chat.lang = lang;
+    document.querySelectorAll('.ja-lang-pick button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === lang)); });
+    document.querySelectorAll('.ja-level-pick button').forEach(function (b) { b.textContent = t.levels[b.dataset.level] || b.textContent; });
+    document.querySelectorAll('.ja-quick button[data-q]').forEach(function (b) { b.textContent = t.quickLabel[b.dataset.q]; });
+    document.querySelectorAll('.ja-quick button[data-example]').forEach(function (b, i) {
+      if (t.examples[i]) { b.dataset.example = t.examples[i][0]; b.textContent = t.examples[i][1]; }
+    });
+    var tag = document.querySelector('#jaChatHead small'); if (tag) tag.textContent = t.tagline;
+    input.placeholder = t.placeholder; form.querySelector('button').textContent = t.send;
+    document.getElementById('jaGateTitle').textContent = t.gateTitle;
+    document.getElementById('jaFoot').textContent = t.foot;
+    setLeft();
+  }
+  function setLang(code) {
+    if (!T[code] || code === lang) return;
+    lang = code;
+    try { localStorage.setItem('ja_lang', code); } catch (e) {}
+    applyLang();
+    if (used === 0) resetDemo(); else add('bot', L().switched);
+  }
 
   function newId() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) { var r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }); }
   function loadAuth() { try { return JSON.parse(localStorage.getItem('ja_auth') || 'null'); } catch (e) { return null; } }
@@ -99,13 +176,13 @@
     d.appendChild(document.createTextNode(text)); box.appendChild(d); box.scrollTop = box.scrollHeight; return d;
   }
   function setLocked(v) { input.disabled = v; form.querySelector('button').disabled = v; document.querySelectorAll('.ja-quick button').forEach(function (b) { b.disabled = v; }); }
-  function setLeft() { if (!left) return; left.textContent = auth ? 'Signed in: ' + Math.max(0, USER_TURNS - used) + ' questions left in this session' : Math.max(0, ANON_TURNS - used) + ' of ' + ANON_TURNS + ' free questions left'; }
+  function setLeft() { if (!left) return; left.textContent = auth ? L().signedLeft(Math.max(0, USER_TURNS - used)) : L().anonLeft(Math.max(0, ANON_TURNS - used), ANON_TURNS); }
 
   function resetDemo() {
     if (!box) return;
     box.innerHTML = ''; history_ = []; used = 0; sessionId = newId(); gate.hidden = true; setLocked(false); setLeft();
-    add('bot', greet[level]);
-    if (isParent()) { add('bot', 'You are signed in as a parent. Your family dashboard is just below. Students use this tutor.'); setLocked(true); }
+    add('bot', L().greet[level]);
+    if (isParent()) { add('bot', L().parent); setLocked(true); }
   }
   function setDemoLevel(id) {
     if (!box || id === level) return;
@@ -115,7 +192,7 @@
   }
   function showGate(text, mode, hideBtn) {
     document.getElementById('jaGateText').textContent = text;
-    var b = document.getElementById('jaGateBtn'); b.textContent = mode === 'login' ? 'SIGN IN' : 'CREATE FREE ACCOUNT'; b.dataset.mode = mode; b.hidden = !!hideBtn;
+    var b = document.getElementById('jaGateBtn'); b.textContent = mode === 'login' ? L().signIn : L().create; b.dataset.mode = mode; b.hidden = !!hideBtn;
     gate.hidden = false; setLocked(true);
   }
 
@@ -128,19 +205,19 @@
     head.classList.add('speaking');
     var undo = function () { used--; history_.pop(); setLeft(); };
     var wasAuth = !!auth;
-    apiAuthed('tutor', { level: level, session_id: sessionId, messages: history_ })
+    apiAuthed('tutor', { level: level, lang: lang, session_id: sessionId, messages: history_ })
       .then(function (res) {
         wait.remove();
-        if (res.status === 401 && wasAuth) { undo(); showGate('Your session has expired. Please sign in again.', 'login'); return; }
-        if (!res.ok) { undo(); add('bot', res.j.error || 'Jarvis is unavailable at the moment. Please try again shortly.'); return; }
-        if (res.j.limit) { undo(); add('bot', res.j.reply); showGate(res.j.limit === 'anon' ? 'Create a free account to keep going. Jarvis will remember what you work on.' : res.j.reply, 'signup', res.j.limit !== 'anon'); return; }
+        if (res.status === 401 && wasAuth) { undo(); showGate(L().expired, 'login'); return; }
+        if (!res.ok) { undo(); add('bot', res.j.error || L().unavailable); return; }
+        if (res.j.limit) { undo(); add('bot', res.j.reply); showGate(res.j.limit === 'anon' ? L().gateSignup : res.j.reply, 'signup', res.j.limit !== 'anon'); return; }
         add('bot', res.j.reply); history_.push({ role: 'assistant', content: res.j.reply });
         if (res.j.learned && auth) loadBrain();
       })
-      .catch(function () { wait.remove(); undo(); add('bot', 'I could not reach the server. Please check your connection and try again.'); })
+      .catch(function () { wait.remove(); undo(); add('bot', L().offline); })
       .then(function () {
         busy = false; head.classList.remove('speaking'); input.value = '';
-        if (isParent()) { setLocked(true); } else if (!auth && used >= ANON_TURNS) showGate('Create a free account to keep going. Jarvis will remember what you work on.', 'signup');
+        if (isParent()) { setLocked(true); } else if (!auth && used >= ANON_TURNS) showGate(L().gateSignup, 'signup');
         else if (gate.hidden) { setLocked(false); input.focus(); }
       });
   }
@@ -384,8 +461,8 @@
     document.querySelectorAll('.ja-quick button').forEach(function (b) {
       if (!b.dataset.q) return;
       b.addEventListener('click', function () {
-        if (!history_.length) { input.focus(); add('bot', 'Do tell me the topic first, then press that button.'); return; }
-        send(quick[b.dataset.q]);
+        if (!history_.length) { input.focus(); add('bot', L().topicFirst); return; }
+        send(L().quick[b.dataset.q]);
       });
     });
     document.querySelectorAll('.ja-level-pick button').forEach(function (b) {
@@ -394,6 +471,10 @@
     document.querySelectorAll('[data-example]').forEach(function (b) {
       b.addEventListener('click', function () { input.value = b.dataset.example; input.focus(); });
     });
+    document.querySelectorAll('.ja-lang-pick button').forEach(function (b) {
+      b.addEventListener('click', function () { setLang(b.dataset.lang); });
+    });
+    applyLang();
     renderAuth(); resetDemo(); if (auth && !isParent()) loadBrain();
     handleConfirm();
     initPricing();

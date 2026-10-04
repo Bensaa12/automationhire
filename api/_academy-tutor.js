@@ -8,6 +8,7 @@
 
 const crypto = require('crypto');
 const { getSupabase, getBody, handleCors, ok, err } = require('./_lib');
+const { LANGS, pickLang } = require('./_academy-lang');
 
 const MODEL = 'claude-haiku-4-5-20251001';
 const ANON_TURNS = 3;          // anonymous learner messages per conversation
@@ -31,7 +32,7 @@ const LEVELS = {
 
 const EXTRACT = `You analyse one exchange between a student and a tutor. Reply with ONLY a JSON object, no prose:
 {"subject":"<school subject, e.g. Mathematics>","topic":"<specific topic, e.g. Simultaneous equations>","assessed":"correct|incorrect|partial|none","mistake":"<short common-mistake note, or empty>"}
-Use assessed="none" unless the STUDENT attempted an answer or explanation that the tutor evaluated. Keep subject and topic short, Title Case.`;
+Use assessed="none" unless the STUDENT attempted an answer or explanation that the tutor evaluated. Keep subject and topic short, Title Case. Always write subject, topic and mistake in English, even when the exchange is in another language, so progress stays comparable.`;
 
 const clamp = (s, n) => String(s || '').trim().slice(0, n);
 const validEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
@@ -184,7 +185,8 @@ async function tutor(req, res) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey || apiKey.startsWith('sk-ant-placeholder')) return err(res, 'The Jarvis demo is offline at the moment. Please try again soon.', 503);
 
-  const { level = 'secondary', messages = [], session_id } = await getBody(req);
+  const { level = 'secondary', messages = [], session_id, lang: langCode } = await getBody(req);
+  const lang = LANGS[pickLang(langCode)];
   if (!Array.isArray(messages) || !messages.length) return err(res, 'messages required');
   const clean = messages
     .filter(m => (m.role === 'user' || m.role === 'assistant') && m.content)
@@ -210,14 +212,14 @@ async function tutor(req, res) {
     const { data: sess } = await supabase.from('academy_sessions').select('id, turns').eq('id', session_id).eq('user_id', user.id).maybeSingle();
     if (!sess) {
       const b = await getBrain(supabase, user.id, ent);
-      if (b.sessionsThisMonth >= ent.sessions) return ok(res, { limit: 'monthly', reply: ent.plan === 'free' ? `You have used your ${ent.sessions} free sessions this month. Upgrade for a much bigger allowance.` : 'You have reached this month\'s fair-use allowance. It resets at the start of next month.' });
+      if (b.sessionsThisMonth >= ent.sessions) return ok(res, { limit: 'monthly', reply: ent.plan === 'free' ? lang.replies.monthlyFree(ent.sessions) : lang.replies.monthlyPaid });
       await supabase.from('academy_sessions').insert({ id: session_id, user_id: user.id, level: LEVELS[level] ? level : 'secondary', turns: 0 });
     } else if (sess.turns >= ent.turns) {
-      return ok(res, { limit: 'session', reply: 'That was a long and productive session, sir. Start a new one to carry on.' });
+      return ok(res, { limit: 'session', reply: lang.replies.session });
     } else { sessTurns = sess.turns; }
     brain = await getBrain(supabase, user.id, ent);
   } else {
-    if (turns > ANON_TURNS) return ok(res, { limit: 'anon', reply: 'You have seen what Jarvis can do. Create a free account to continue.' });
+    if (turns > ANON_TURNS) return ok(res, { limit: 'anon', reply: lang.replies.anon });
     const ip = String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
     if (limited(ip)) return err(res, 'Too many requests from your connection. Please try again later.', 429);
   }
@@ -225,8 +227,9 @@ async function tutor(req, res) {
   try {
     const lvl = LEVELS[level] ? level : 'secondary';
     let system = `${BASE}\n\n${LEVELS[lvl]}`;
+    if (lang.prompt) system += `\n\n${lang.prompt}`;   // after the level, so it can override GCSE wording
     if (profile) system += `\n\nThe student's first name or nickname is ${profile.display_name}. Use it occasionally.` + brainContext(brain.skills);
-    const reply = (await claude(apiKey, system, clean, 400)) || 'Forgive me, sir, could you say that again?';
+    const reply = (await claude(apiKey, system, clean, lang.maxTokens)) || lang.replies.fallback;
 
     if (!user) return ok(res, { reply, turnsLeft: Math.max(0, ANON_TURNS - turns) });
 

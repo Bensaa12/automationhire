@@ -232,6 +232,10 @@
           <button type="button" data-level="secondary" aria-pressed="true">Secondary</button>
           <button type="button" data-level="university" aria-pressed="false">University</button>
         </div>
+        <div class="ja-lang-pick" role="group" aria-label="Language / Langue">
+          <button type="button" data-lang="en" aria-pressed="true" title="English">EN</button>
+          <button type="button" data-lang="fr" aria-pressed="false" title="Français">FR</button>
+        </div>
       </div>
       <div class="ja-msgs" id="jaMsgs" aria-live="polite"></div>
       <div class="ja-quick">
@@ -247,11 +251,11 @@
         <button class="btn ja-btn-cyan" type="submit">SEND</button>
       </form>
       <div class="ja-gate" id="jaGate" hidden>
-        <b>You&rsquo;ve seen what Jarvis can do.</b><br />
+        <b id="jaGateTitle">You&rsquo;ve seen what Jarvis can do.</b><br />
         <span style="color:var(--white-60);font-size:14px" id="jaGateText">Create a free account to keep going. Jarvis will remember what you work on.</span><br />
         <button type="button" class="btn ja-btn-cyan btn-sm" id="jaGateBtn" style="margin-top:12px">CREATE FREE ACCOUNT</button>
       </div>
-      <div class="ja-chat-foot"><span id="jaLeft"></span><span>AI can make mistakes. Check important facts with a teacher or textbook. Please don&rsquo;t share personal details.</span></div>
+      <div class="ja-chat-foot"><span id="jaLeft"></span><span id="jaFoot">AI can make mistakes. Check important facts with a teacher or textbook. Please don&rsquo;t share personal details.</span></div>
     </div>
     <div class="ja-glass ja-brain ja-live" id="jaBrainLive" hidden style="max-width:880px;margin:26px auto 0">
       <div class="ja-brain-head"><span>YOUR LEARNING BRAIN</span><span class="ja-tag live">Live</span></div>
