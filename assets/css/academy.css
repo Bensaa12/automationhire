@@ -328,3 +328,13 @@ body.jg-playing #ah-chat-launcher { display:none !important; }
 @media (max-width:600px) { .sq-opts { grid-template-columns:1fr; } .sq-opt { min-height:52px; } }
 /* Game parts hidden with the hidden attribute must stay hidden even when their class sets display. */
 .ja-game [hidden] { display:none !important; }
+
+/* Link to GCSE Literature Games (gcse-literature.html) under the Play & learn games */
+.ja-lit-promo { display:flex; align-items:center; gap:18px; max-width:760px; margin:18px auto 0; box-sizing:border-box; padding:18px 22px; text-decoration:none; color:inherit; transition:transform .2s, border-color .2s, box-shadow .2s; }
+.ja-lit-promo:hover { transform:translateY(-3px); border-color:var(--ja-cyan); box-shadow:0 12px 40px var(--ja-cyan-glow); }
+.ja-lit-ic { font-size:34px; flex:none; }
+.ja-lit-txt { display:flex; flex-direction:column; gap:4px; flex:1; }
+.ja-lit-txt b { color:#fff; font-family:var(--font-head); font-size:17px; }
+.ja-lit-txt span { color:var(--white-60); font-size:14px; }
+.ja-lit-go { flex:none; color:var(--ja-cyan); font-weight:700; white-space:nowrap; }
+@media (max-width:600px) { .ja-lit-promo { flex-wrap:wrap; } .ja-lit-go { width:100%; } }

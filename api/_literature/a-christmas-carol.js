@@ -1,0 +1,152 @@
+// GCSE English Literature content: A Christmas Carol. Server-only (never shipped to the browser in full).
+// Shape is shared by every text: see api/_literature/index.js. Quotations are short and checked
+// against the 1843 text; "Stave" is Dickens's own name for each chapter.
+
+module.exports = {
+  id: 'a-christmas-carol',
+  title: 'A Christmas Carol',
+  author: 'Charles Dickens',
+  form: 'Novella (1843)',
+  examBoards: ['AQA', 'Edexcel', 'OCR', 'Eduqas'],
+  tagline: 'Four ghosts, one miser and a last chance to change.',
+  accent: '#3fa9f5',
+
+  characters: [
+    { name: 'Ebenezer Scrooge', summary: 'A cold, greedy moneylender who is transformed by the visits of three spirits.' },
+    { name: 'Jacob Marley', summary: 'Scrooge\'s dead business partner; his chained ghost warns Scrooge to change.' },
+    { name: 'Bob Cratchit', summary: 'Scrooge\'s poorly paid, loyal clerk; a loving father.' },
+    { name: 'Tiny Tim', summary: 'Bob\'s disabled youngest son; a symbol of the vulnerable poor.' },
+    { name: 'Fred', summary: 'Scrooge\'s cheerful nephew, who embodies the Christmas spirit.' },
+    { name: 'The Ghosts', summary: 'Christmas Past, Present and Yet to Come guide Scrooge through memory, society and death.' },
+    { name: 'Belle', summary: 'Scrooge\'s former fiancée, who left him because he came to love money more.' },
+    { name: 'Fezziwig', summary: 'Scrooge\'s generous old employer, a model of a good master.' },
+  ],
+  themes: [
+    { name: 'Redemption', summary: 'Anyone, even Scrooge, can change.' },
+    { name: 'Poverty', summary: 'The poor are human beings, not a "surplus population".' },
+    { name: 'Social responsibility', summary: '"Mankind was my business": the rich must care for others.' },
+    { name: 'Christmas', summary: 'A symbol of generosity, family and goodwill.' },
+    { name: 'Greed', summary: 'Money isolates Scrooge and costs him love.' },
+    { name: 'Social inequality', summary: 'The gap between rich and poor in Victorian London.' },
+  ],
+  events: [
+    { where: 'Stave One', summary: 'Scrooge rejects Fred and the charity collectors; Marley\'s ghost warns him.' },
+    { where: 'Stave Two', summary: 'The Ghost of Christmas Past shows his lonely childhood, Fezziwig and Belle.' },
+    { where: 'Stave Three', summary: 'The Ghost of Christmas Present shows the Cratchits, Fred\'s party, Ignorance and Want.' },
+    { where: 'Stave Four', summary: 'The Ghost of Christmas Yet to Come shows Tiny Tim\'s death and Scrooge\'s grave.' },
+    { where: 'Stave Five', summary: 'A transformed Scrooge sends a turkey, gives to charity and joins Fred.' },
+  ],
+  quotations: [
+    { text: 'solitary as an oyster', speaker: 'Narrator', where: 'Stave One' },
+    { text: 'decrease the surplus population', speaker: 'Scrooge', where: 'Stave One' },
+    { text: 'I wear the chain I forged in life', speaker: 'Marley', where: 'Stave One' },
+    { text: 'Mankind was my business', speaker: 'Marley', where: 'Stave One' },
+    { text: 'Another idol has displaced me', speaker: 'Belle', where: 'Stave Two' },
+    { text: 'This boy is Ignorance. This girl is Want.', speaker: 'Ghost of Christmas Present', where: 'Stave Three' },
+    { text: 'I will honour Christmas in my heart, and try to keep it all the year.', speaker: 'Scrooge', where: 'Stave Four' },
+    { text: 'as good a friend, as good a master, and as good a man', speaker: 'Narrator', where: 'Stave Five' },
+  ],
+  context: [
+    'Published in December 1843.',
+    'The Poor Law Amendment Act (1834) sent the poor to harsh workhouses.',
+    'Thomas Malthus warned that population would outgrow food supply.',
+    'Dickens worked in a blacking factory as a child while his father was in a debtors\' prison.',
+    'A government report on child labour (1843) and Ragged Schools moved Dickens to write.',
+  ],
+  techniques: ['Five-stave structure', 'Third-person narrator with a chatty, direct voice', 'Pathetic fallacy and weather', 'Contrast and juxtaposition', 'Allegory and symbolism', 'Lists and asyndeton', 'Similes and metaphors'],
+
+  flashcards: [
+    // Characters
+    { id: 'acc-c1', category: 'characters', free: true, q: 'How does Dickens present Scrooge in Stave One?', a: 'As a cold, isolated miser: "a squeezing, wrenching, grasping, scraping, clutching, covetous, old sinner!" The pile-up of verbs shows his greed. He is "solitary as an oyster": closed off, though an oyster may hide a pearl, hinting at goodness inside.' },
+    { id: 'acc-c2', category: 'characters', q: 'What is the purpose of Jacob Marley\'s ghost?', a: 'To warn Scrooge. Marley wears "the chain I forged in life", made of cash-boxes, ledgers and padlocks, symbolising greed. He regrets that "Mankind was my business" and announces the three spirits who give Scrooge a chance to change.' },
+    { id: 'acc-c3', category: 'characters', q: 'How is Bob Cratchit presented?', a: 'A badly paid clerk ("fifteen \'Bob\' a-week") working in a freezing office, yet cheerful, gentle and a loving father. He even toasts Scrooge as "the Founder of the Feast". He represents the hard-working, deserving poor.' },
+    { id: 'acc-c4', category: 'characters', q: 'What is Tiny Tim\'s role in the novella?', a: 'The disabled youngest Cratchit, a symbol of vulnerable poor children. The Ghost of Christmas Present warns that unless things change "the child will die". His fate moves Scrooge to change, and Scrooge becomes "a second father" to him.' },
+    { id: 'acc-c5', category: 'characters', q: 'How does Fred contrast with Scrooge?', a: 'Scrooge\'s nephew is warm and generous and invites him to dinner every year despite being rejected. He calls Christmas "a kind, forgiving, charitable, pleasant time". He has less money than Scrooge but far more happiness.' },
+    { id: 'acc-c6', category: 'characters', q: 'What does each of the three ghosts show Scrooge?', a: 'Past: memories (his lonely schooldays, Fezziwig, Belle) that explain how he became greedy. Present: society now (the Cratchits, Fred\'s party, Ignorance and Want). Yet to Come: the consequences (his unmourned death and Tiny Tim\'s death).' },
+    // Themes
+    { id: 'acc-t1', category: 'themes', free: true, q: 'How does Dickens present Scrooge\'s redemption?', a: 'As a gradual change across the staves: from "Bah! Humbug!" to weeping at his past, asking whether Tiny Tim will live, and pleading "I am not the man I was". In Stave Five he is "as light as a feather" and generous. The message: anyone can change.' },
+    { id: 'acc-t2', category: 'themes', q: 'How does Dickens present poverty?', a: 'Through the loving but poor Cratchits, the wretched children Ignorance and Want, and the grim pawnbroker\'s den in Stave Four. He challenges the idea that the poor deserve their fate and shows poverty as a social problem with deadly consequences.' },
+    { id: 'acc-t3', category: 'themes', q: 'What does Dickens suggest about social responsibility?', a: 'That the wealthy must help others. Marley\'s ghost says "Mankind was my business. The common welfare was my business", and the Ghost of Christmas Present throws Scrooge\'s "surplus population" back at him. Scrooge\'s change models responsibility.' },
+    { id: 'acc-t4', category: 'themes', q: 'How is Christmas used as a symbol?', a: 'Christmas stands for generosity, family and goodwill: Fezziwig\'s party, the Cratchits\' dinner, Fred\'s party. It is the opposite of Scrooge\'s greed, and Dickens links it to Christian charity and social reform.' },
+    { id: 'acc-t5', category: 'themes', q: 'How does Dickens present greed?', a: 'Scrooge\'s love of money isolates him. Belle leaves because "Another idol has displaced me", meaning money. Marley\'s chain shows its spiritual cost, and in Stave Four strangers sell the dead Scrooge\'s possessions: greed leaves him unloved.' },
+    { id: 'acc-t6', category: 'themes', q: 'How does Dickens present the gap between rich and poor?', a: 'Through contrast: abundant feasts against cold offices and cramped homes. The charity collectors note that at Christmas "Want is keenly felt, and Abundance rejoices", and Ignorance and Want warn what happens if society ignores the poor.' },
+    // Key events
+    { id: 'acc-e1', category: 'events', free: true, q: 'What happens in Stave One before the spirits arrive?', a: 'Scrooge refuses Fred\'s invitation, turns away the charity collectors and grudgingly gives Bob Christmas Day off. At home he sees Marley\'s face in the door knocker, and Marley\'s chained ghost warns him that three spirits will visit.' },
+    { id: 'acc-e2', category: 'events', q: 'Which memories does the Ghost of Christmas Past show Scrooge?', a: 'Young Scrooge alone at school; his sister Fan bringing him home; Fezziwig\'s joyful Christmas party; Belle ending their engagement because he loves money; and Belle later happy with her family, when Scrooge begs the ghost to stop.' },
+    { id: 'acc-e3', category: 'events', q: 'What does Scrooge see with the Ghost of Christmas Present?', a: 'Plenty in the streets, the Cratchits\' Christmas dinner and Tiny Tim, people celebrating in mines, lighthouses and ships, Fred\'s party laughing about him, and finally the two children, Ignorance and Want.' },
+    { id: 'acc-e4', category: 'events', q: 'What does the Ghost of Christmas Yet to Come reveal?', a: 'Businessmen who don\'t care about a man\'s death; Old Joe\'s shop selling the dead man\'s belongings, even his bed curtains; the Cratchits mourning Tiny Tim; and finally a neglected grave with Scrooge\'s own name on it.' },
+    { id: 'acc-e5', category: 'events', q: 'How does Scrooge behave on Christmas morning?', a: 'He wakes joyful, sends a prize turkey to the Cratchits anonymously, promises a large donation to one of the charity collectors, goes to Fred\'s dinner, and the next day raises Bob\'s salary.' },
+    { id: 'acc-e6', category: 'events', q: 'Why does Belle end her engagement to Scrooge?', a: 'Because his love of money has replaced his love for her: "Another idol has displaced me". She releases him. The scene shows the personal cost of greed and is one of the memories that most pains Scrooge.' },
+    // Quotes
+    { id: 'acc-q1', category: 'quotes', free: true, q: '"solitary as an oyster": what does this simile suggest about Scrooge?', a: 'From Stave One. Like an oyster he is shut away in a hard shell, isolated from others. But oysters can contain pearls, hinting that there is something valuable inside Scrooge that the spirits will reveal.' },
+    { id: 'acc-q2', category: 'quotes', q: '"decrease the surplus population": who says it and why does it matter?', a: 'Scrooge, to the charity collectors in Stave One, echoing Malthus\'s ideas. In Stave Three, when Scrooge asks if Tiny Tim will live, the Ghost repeats his words back to him and Scrooge is ashamed.' },
+    { id: 'acc-q3', category: 'quotes', q: '"I wear the chain I forged in life": what does the metaphor mean?', a: 'Marley in Stave One. His sins, especially greed, have created a burden he must carry after death. He warns that Scrooge\'s own chain is already longer.' },
+    { id: 'acc-q4', category: 'quotes', q: '"This boy is Ignorance. This girl is Want.": what is Dickens doing here?', a: 'The Ghost of Christmas Present reveals two allegorical children (Stave Three) and warns Scrooge to "beware them both". Dickens warns society that neglecting the education and needs of poor children leads to disaster.' },
+    { id: 'acc-q5', category: 'quotes', q: '"I will honour Christmas in my heart, and try to keep it all the year.": when and why does Scrooge say this?', a: 'At his own grave in Stave Four. It is his vow to change, and it extends Christmas values (generosity, kindness) to the whole year, which is Dickens\'s message to his readers.' },
+    { id: 'acc-q6', category: 'quotes', q: '"as good a friend, as good a master, and as good a man": what does this show?', a: 'The narrator in Stave Five. The repeated pattern of three shows Scrooge\'s complete redemption and mirrors, in reverse, the list of negative words used to describe him in Stave One.' },
+    // Context
+    { id: 'acc-x1', category: 'context', free: true, q: 'What was the 1834 Poor Law, and why does Scrooge mention workhouses?', a: 'The Poor Law Amendment Act forced poor people who needed help into workhouses with harsh conditions. Scrooge\'s "Are there no prisons? ... And the Union workhouses?" shows the uncaring attitude of the wealthy, which Dickens criticises.' },
+    { id: 'acc-x2', category: 'context', q: 'How did Dickens\'s childhood shape the novella?', a: 'When he was about twelve his father was imprisoned for debt in the Marshalsea and Dickens worked in a blacking factory. He knew poverty first-hand, which shows in his sympathy for poor children like Tiny Tim.' },
+    { id: 'acc-x3', category: 'context', q: 'Who was Thomas Malthus, and how is he linked to Scrooge?', a: 'An economist who argued that population growth would outstrip food supply. Scrooge\'s "surplus population" echoes these ideas; Dickens rejects them by making the poor human and lovable, like Tiny Tim.' },
+    { id: 'acc-x4', category: 'context', q: 'Why did Dickens write A Christmas Carol in 1843?', a: 'He was shocked by a government report on child labour and by visits to Ragged Schools for poor children. He chose an entertaining story to persuade middle- and upper-class readers to help the poor.' },
+    { id: 'acc-x5', category: 'context', q: 'How was Christmas changing in Victorian England?', a: 'It was becoming a family celebration; Prince Albert helped popularise the Christmas tree. Dickens helped shape Christmas as a time of feasting, generosity and charity.' },
+    { id: 'acc-x6', category: 'context', q: 'How do Christian ideas shape the novella\'s message?', a: 'Christian values of charity, compassion and repentance run through it. Scrooge\'s redemption mirrors salvation, and Tiny Tim\'s "God bless Us, Every One!" closes the story with a blessing for all.' },
+    // Language & techniques
+    { id: 'acc-k1', category: 'techniques', q: 'Why is the novella divided into "staves"?', a: 'A stave is a verse of a song, fitting the title "Carol". The five staves give a clear structure (the problem, past, present, future and resolution) and shape Scrooge\'s journey to redemption.' },
+    { id: 'acc-k2', category: 'techniques', q: 'How does Dickens use weather and pathetic fallacy?', a: 'Stave One is "cold, bleak, biting weather: foggy withal", reflecting Scrooge\'s cold heart. Stave Five has "No fog, no mist" and "Golden sunlight", mirroring his transformation.' },
+    { id: 'acc-k3', category: 'techniques', q: 'What is the effect of Dickens\'s narrative voice?', a: 'A chatty, humorous third-person narrator who sometimes addresses the reader directly. It feels like a storyteller by the fire, which makes the moral message warm and persuasive rather than preachy.' },
+    { id: 'acc-k4', category: 'techniques', q: 'How does Dickens use contrast (juxtaposition)?', a: 'Scrooge against Fred, Fezziwig against Scrooge as an employer, the cold office against the warm Cratchit home, and Stave One against Stave Five. The contrasts make the moral message clear.' },
+    { id: 'acc-k5', category: 'techniques', q: 'How are the three ghosts used symbolically?', a: 'Past has light shining from its head, "like a child: yet not so like a child as like an old man" (memory). Present is a jolly giant with a torch shaped like a horn of plenty (abundance). Yet to Come is silent, hooded and pointing (death and fear of the future).' },
+    { id: 'acc-k6', category: 'techniques', q: 'How does Dickens use lists?', a: 'In Stave One, "squeezing, wrenching, grasping, scraping, clutching, covetous" piles up words for greed. Later lists of food and celebration show abundance and joy. Lists let the mood overflow.' },
+  ],
+
+  writingScenes: [
+    {
+      id: 'acc-s1', free: true, art: '👻⛓️', title: 'Marley\'s ghost visits Scrooge', where: 'Stave One',
+      drawPrompt: 'A dark, cold room. A transparent ghost dragging a long chain of cash-boxes and padlocks stands before Scrooge in his nightcap.',
+      sketchIdeas: ['Draw Marley and his chain, labelling what it is made of', 'Draw Scrooge\'s reaction', 'Add an arrow to the three spirits who will come'],
+      keyPoints: ['Scrooge first sees Marley\'s face in the door knocker', 'Marley wears a chain of cash-boxes, keys, padlocks and ledgers', '"I wear the chain I forged in life": his greed created it', 'Scrooge doubts him: "an undigested bit of beef"', '"Mankind was my business": Marley regrets ignoring others', 'He warns that three spirits will come: Scrooge\'s chance', 'Phantoms outside wail, unable to help the poor', 'Greed, social responsibility and Victorian Christianity'],
+      vocab: ['supernatural', 'symbolism', 'metaphor', 'redemption', 'warning', 'greed'],
+      examQuestion: 'How does Dickens use Marley\'s ghost to present the consequences of greed?',
+    },
+    {
+      id: 'acc-s2', art: '🎻💃', title: 'Fezziwig\'s Christmas party', where: 'Stave Two',
+      drawPrompt: 'A warehouse cleared for a party: a fiddler, dancing couples, food, and a beaming old man in a Welsh wig.',
+      sketchIdeas: ['Draw the party and its happy guests', 'Draw young Scrooge enjoying himself', 'Compare Fezziwig with old Scrooge using arrows'],
+      keyPoints: ['Fezziwig was Scrooge\'s generous old employer', 'The warehouse becomes a warm party with dancing and food', 'Young Scrooge is delighted', 'Scrooge: the happiness he gives "is quite as great as if it cost a fortune"', 'Contrast with how Scrooge treats Bob Cratchit', 'An early sign that Scrooge can change', 'Employers\' responsibility to workers'],
+      vocab: ['contrast', 'generosity', 'employer', 'nostalgia', 'responsibility'],
+      examQuestion: 'How does Dickens present Fezziwig as a good employer, and why?',
+    },
+    {
+      id: 'acc-s3', art: '🍗🎄', title: 'The Cratchits\' Christmas dinner', where: 'Stave Three',
+      drawPrompt: 'A small, crowded home. A family around a modest goose and a little pudding; a boy with a crutch beside his father.',
+      sketchIdeas: ['Draw the family round the table', 'Label Tiny Tim and Bob', 'Add the invisible Scrooge watching'],
+      keyPoints: ['The family is poor but full of love and joy', 'A small goose and pudding are treated as a feast', 'Tiny Tim and his crutch', 'Bob toasts Scrooge as "the Founder of the Feast"; Mrs Cratchit is angry', 'Scrooge asks if Tiny Tim will live', 'The Ghost repeats "decrease the surplus population"', 'Poverty, family and social responsibility'],
+      vocab: ['poverty', 'family', 'sympathy', 'irony', 'social responsibility'],
+      examQuestion: 'How does Dickens use the Cratchit family to present poverty?',
+    },
+    {
+      id: 'acc-s4', art: '🧒🧒', title: 'Ignorance and Want', where: 'Stave Three',
+      drawPrompt: 'Two thin, ragged children emerge from beneath the green robe of a giant spirit.',
+      sketchIdeas: ['Draw the two children and the spirit', 'Label each child with what they represent', 'Write Scrooge\'s earlier words in a speech bubble'],
+      keyPoints: ['Two wretched children appear from the Ghost\'s robe', '"This boy is Ignorance. This girl is Want."', 'The Ghost warns Scrooge to "beware them both", especially the boy', 'His own "Are there no prisons?" is thrown back at him', 'Allegory: the children stand for society\'s neglect', 'Context: Ragged Schools and child poverty', 'Dickens warns his readers directly'],
+      vocab: ['allegory', 'symbolism', 'warning', 'ignorance', 'poverty'],
+      examQuestion: 'How does Dickens present the dangers of ignoring poverty?',
+    },
+    {
+      id: 'acc-s5', art: '🪦⌛', title: 'Scrooge at his own grave', where: 'Stave Four',
+      drawPrompt: 'A neglected churchyard. A silent hooded figure points at a gravestone; an old man kneels, clutching its robe.',
+      sketchIdeas: ['Draw the gravestone and the pointing spirit', 'Show Scrooge\'s fear', 'Add speech bubbles for his promises'],
+      keyPoints: ['The silent Ghost of Christmas Yet to Come points', 'The churchyard is neglected and overgrown', 'Scrooge reads his own name on the stone', 'He pleads "I am not the man I was"', 'He vows to honour Christmas "all the year"', 'Fear of death drives his change', 'Christian repentance and redemption'],
+      vocab: ['repentance', 'redemption', 'foreboding', 'climax', 'symbolism'],
+      examQuestion: 'How does Dickens present Scrooge\'s fear and change in Stave Four?',
+    },
+  ],
+
+  examQuestions: [
+    'Starting with the extract from Stave One, explore how Dickens presents Scrooge as a cold and isolated character.',
+    'Starting with the Cratchits\' Christmas dinner, explore how Dickens presents the effects of poverty.',
+    'Starting with Marley\'s visit, explore how Dickens presents ideas about social responsibility.',
+    'Starting with Stave Five, explore how Dickens presents the theme of redemption.',
+  ],
+};

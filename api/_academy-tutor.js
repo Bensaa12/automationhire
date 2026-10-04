@@ -381,7 +381,10 @@ async function game(req, res) {
   return ok(res, { saved });
 }
 
-const OPS = { signup, login, refresh, me, tutor, invite, link, family, unlink, config, game };
+// GCSE Literature Games (lit-catalog, lit-round, lit-scene, lit-feedback, lit-progress): see api/_academy-lit.js
+const LIT_OPS = require('./_academy-lit')({ getSupabase, getBody, ok, err, userFromReq, entitlement, claude, limited });
+
+const OPS = { signup, login, refresh, me, tutor, invite, link, family, unlink, config, game, ...LIT_OPS };
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
