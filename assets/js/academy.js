@@ -58,6 +58,7 @@
   var box = document.getElementById('jaMsgs'), form = document.getElementById('jaForm'), input = document.getElementById('jaInput');
   var head = document.getElementById('jaChatHead'), gate = document.getElementById('jaGate'), left = document.getElementById('jaLeft');
   var level = 'secondary', history_ = [], busy = false, used = 0, sessionId = newId();
+  var hwItem = null;   // homework question the chat is about (keeps its answer locked server-side)
   var auth = loadAuth();
   // Tutor languages (EN | FR switch). The API gets `lang` and answers in it (api/_academy-lang.js).
   var T = {
@@ -195,7 +196,7 @@
 
   function resetDemo() {
     if (!box) return;
-    box.innerHTML = ''; history_ = []; used = 0; sessionId = newId(); gate.hidden = true; setLocked(false); setLeft();
+    box.innerHTML = ''; history_ = []; used = 0; sessionId = newId(); hwItem = null; gate.hidden = true; setLocked(false); setLeft();
     add('bot', L().greet[level]);
     if (isParent()) { add('bot', L().parent); setLocked(true); }
   }
@@ -220,7 +221,7 @@
     head.classList.add('speaking');
     var undo = function () { used--; history_.pop(); setLeft(); };
     var wasAuth = !!auth;
-    apiAuthed('tutor', { level: level, lang: lang, session_id: sessionId, messages: history_ })
+    apiAuthed('tutor', { level: level, lang: lang, session_id: sessionId, messages: history_, homework_item: hwItem })
       .then(function (res) {
         wait.remove();
         if (res.status === 401 && wasAuth) { undo(); showGate(L().expired, 'login'); return; }
@@ -273,6 +274,7 @@
     document.getElementById('jaManage').hidden = !(auth && payments && planName());
     document.getElementById('family').hidden = !isParent();
     if (isParent()) loadFamily();
+    if (window.JAHW) window.JAHW.render();
     setLeft();
   }
 
@@ -508,7 +510,19 @@
       document.getElementById('try').scrollIntoView({ behavior: 'smooth' });
       setTimeout(function () { input.focus(); }, 500);
     },
-    signUp: function () { openAuth('signup'); }
+    signUp: function () { openAuth('signup'); },
+    // Homework Help (academy-homework.js)
+    isParent: function () { return isParent(); },
+    signedIn: function () { return !!auth; },
+    level: function () { return level; },
+    lang: function () { return lang; },
+    askTutorAbout: function (itemId, text, label) {
+      if (!form) return;
+      if (hwItem !== itemId) { resetDemo(); hwItem = itemId; if (label) add('bot', label); }
+      input.value = text || '';
+      document.getElementById('try').scrollIntoView({ behavior: 'smooth' });
+      setTimeout(function () { input.focus(); }, 500);
+    }
   };
 
   fromHash();

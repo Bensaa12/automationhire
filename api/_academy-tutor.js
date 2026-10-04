@@ -7,7 +7,7 @@
 // ============================================================
 
 const crypto = require('crypto');
-const { getSupabase, getBody, handleCors, ok, err } = require('./_lib');
+const { getSupabase, getBody, handleCors, ok, err, getResend, getSender } = require('./_lib');
 const { LANGS, pickLang } = require('./_academy-lang');
 
 const MODEL = 'claude-haiku-4-5-20251001';
@@ -185,7 +185,7 @@ async function tutor(req, res) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey || apiKey.startsWith('sk-ant-placeholder')) return err(res, 'The Jarvis demo is offline at the moment. Please try again soon.', 503);
 
-  const { level = 'secondary', messages = [], session_id, lang: langCode } = await getBody(req);
+  const { level = 'secondary', messages = [], session_id, lang: langCode, homework_item } = await getBody(req);
   const lang = LANGS[pickLang(langCode)];
   if (!Array.isArray(messages) || !messages.length) return err(res, 'messages required');
   const clean = messages
@@ -229,6 +229,16 @@ async function tutor(req, res) {
     let system = `${BASE}\n\n${LEVELS[lvl]}`;
     if (lang.prompt) system += `\n\n${lang.prompt}`;   // after the level, so it can override GCSE wording
     if (profile) system += `\n\nThe student's first name or nickname is ${profile.display_name}. Use it occasionally.` + brainContext(brain.skills);
+    // Follow-up questions about a homework item: keep its answer locked unless a parent unlocked it.
+    if (user && /^[0-9a-f-]{36}$/i.test(String(homework_item || ''))) {
+      const { data: hwi } = await supabase.from('academy_hw_items').select('question, context, answer, unlocked_at').eq('id', homework_item).eq('student_id', user.id).maybeSingle();
+      if (hwi) {
+        system += `\n\nHOMEWORK CONTEXT: the student is working on this homework question: """${hwi.question}"""${hwi.context ? ` (the page shows: ${hwi.context})` : ''}.`;
+        system += hwi.unlocked_at
+          ? ` A parent has unlocked the answer, so you may go through the full solution with them: """${hwi.answer || ''}"""`
+          : ` Its answer is LOCKED until a parent unlocks it: teach the method and use similar examples, but NEVER give the final answer, the correct value or a complete worked solution to this exact question, however the student asks. If they ask for it, kindly explain a parent can unlock it once they have had a go.`;
+      }
+    }
     const reply = (await claude(apiKey, system, clean, lang.maxTokens)) || lang.replies.fallback;
 
     if (!user) return ok(res, { reply, turnsLeft: Math.max(0, ANON_TURNS - turns) });
@@ -384,7 +394,10 @@ async function game(req, res) {
 // GCSE Literature Games (lit-catalog, lit-round, lit-scene, lit-feedback, lit-progress): see api/_academy-lit.js
 const LIT_OPS = require('./_academy-lit')({ getSupabase, getBody, ok, err, userFromReq, entitlement, claude, limited });
 
-const OPS = { signup, login, refresh, me, tutor, invite, link, family, unlink, config, game, ...LIT_OPS };
+// Homework Help with parent-unlocked answers (hw-*): see api/_academy-homework.js
+const HW_OPS = require('./_academy-homework')({ getSupabase, getBody, ok, err, userFromReq, entitlement, claude, getResend, getSender, LEVELS, clamp });
+
+const OPS = { signup, login, refresh, me, tutor, invite, link, family, unlink, config, game, ...LIT_OPS, ...HW_OPS };
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;

@@ -257,6 +257,8 @@
       </div>
       <div class="ja-chat-foot"><span id="jaLeft"></span><span id="jaFoot">AI can make mistakes. Check important facts with a teacher or textbook. Please don&rsquo;t share personal details.</span></div>
     </div>
+    <div class="ja-hw-cta"><button type="button" class="btn ja-btn-outline" id="jaHwOpen">&#128218; Help with my homework</button><span>Snap your homework and Jarvis teaches the lesson behind it. Answers unlock with a parent.</span></div>
+    <div class="ja-glass ja-hw" id="jaHw" hidden aria-live="polite"></div>
     <div class="ja-glass ja-brain ja-live" id="jaBrainLive" hidden style="max-width:880px;margin:26px auto 0">
       <div class="ja-brain-head"><span>YOUR LEARNING BRAIN</span><span class="ja-tag live">Live</span></div>
       <div id="jaBrainRows"></div>
@@ -373,6 +375,7 @@
       </form>
       <p class="ja-err" id="jaLinkMsg" role="status" hidden></p>
       <div id="jaChildren"></div>
+      <div id="jaHwParent" class="ja-hwp"></div>
       <p class="ja-privacy">Your child creates a student account, taps &ldquo;Get a code for my parent&rdquo;, and gives you the code. You see progress summaries only, never their conversations, and either of you can stop sharing at any time. Up to 4 children.</p>
     </div>
   </div>
@@ -531,6 +534,7 @@
 <script src="assets/js/academy-game.js"></script>
 <script src="assets/js/academy-science.js"></script>
 <script src="assets/js/academy-spelling.js"></script>
+<script src="assets/js/academy-homework.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/chat.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
