@@ -2,3 +2,13 @@
 test/
 # Database setup scripts: run by hand in Supabase, not needed by the site
 supabase-homework.sql
+# Internal notes, setup scripts and admin tools: not part of the website
+/TODO.md
+/SETUP.md
+/HomePath-User-Guide.md
+/PARTFORGE_ARCHITECTURE.md
+/supabase-academy.sql
+/supabase/
+/local-server.js
+/scripts/
+/.env.example

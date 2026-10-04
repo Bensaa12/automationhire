@@ -26,7 +26,7 @@
   | Key | Value |
   |-----|-------|
   | `ANTHROPIC_API_KEY` | Get from console.anthropic.com |
-  | `TAVILY_API_KEY` | `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` |
+  | `TAVILY_API_KEY` | Set in Vercel env vars only (rotated 2026-10-04). Never paste key values in this file. |
   | `ADMIN_EMAIL` | `bensaa123@gmail.com` |
 
 - [ ] **Redeploy** on Vercel after adding env vars
