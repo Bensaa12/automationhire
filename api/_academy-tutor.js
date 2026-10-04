@@ -162,7 +162,13 @@ async function login(req, res) {
   const { email, password } = await getBody(req);
   if (!email || !password) return err(res, 'Email and password required');
   const supabase = getSupabase();
-  const { data, error } = await supabase.auth.signInWithPassword({ email: clamp(email, 200).toLowerCase(), password: String(password) });
+  const addr = clamp(email, 200).toLowerCase();
+  const { data, error } = await supabase.auth.signInWithPassword({ email: addr, password: String(password) });
+  if (error && /not confirmed/i.test(error.message || '')) {
+    // Unconfirmed account: say so and send a fresh confirmation link (old links expire).
+    await supabase.auth.resend({ type: 'signup', email: addr, options: { emailRedirectTo: 'https://automationhire.co.uk/jarvis-academy' } }).catch(() => {});
+    return err(res, 'Please confirm your email first. We have just sent you a new confirmation link: check your inbox and spam folder.', 403);
+  }
   if (error) return err(res, 'Invalid email or password', 401);
   const { data: profile } = await supabase.from('academy_profiles').select('display_name, level, plan, role').eq('user_id', data.user.id).maybeSingle();
   if (!profile) return err(res, 'This AutomationHire account has no Jarvis Academy profile yet. Choose "Create free account" and use the same email and password.', 404);
