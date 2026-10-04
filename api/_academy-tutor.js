@@ -139,7 +139,17 @@ async function signup(req, res) {
 
   const supabase = getSupabase();
   const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: 'https://automationhire.co.uk/jarvis-academy' } });
-  if (error) return err(res, error.message.includes('registered') ? 'That email already has an account. Try signing in.' : 'Could not create the account. Please try again.', 400);
+  if (error && error.message.includes('registered')) {
+    // The email already has an AutomationHire account (sign-in is shared across the site).
+    // If the password matches, add an Academy profile to that account instead of turning them away.
+    const { data: s, error: se } = await supabase.auth.signInWithPassword({ email, password });
+    if (se || !s.user) return err(res, 'That email already has an AutomationHire account. Use the same password, or sign in.', 400);
+    const { data: existing } = await supabase.from('academy_profiles').select('display_name, level, plan, role').eq('user_id', s.user.id).maybeSingle();
+    if (existing) return ok(res, sessionPayload(s.session, s.user, existing));
+    await supabase.from('academy_profiles').upsert({ user_id: s.user.id, display_name: name, level, role, guardian_confirmed: true }, { onConflict: 'user_id' });
+    return ok(res, sessionPayload(s.session, s.user, { display_name: name, level, role }));
+  }
+  if (error) return err(res, 'Could not create the account. Please try again.', 400);
   if (!data.user) return err(res, 'Could not create the account', 400);
 
   await supabase.from('academy_profiles').upsert({ user_id: data.user.id, display_name: name, level, role, guardian_confirmed: true }, { onConflict: 'user_id' });
@@ -155,7 +165,7 @@ async function login(req, res) {
   const { data, error } = await supabase.auth.signInWithPassword({ email: clamp(email, 200).toLowerCase(), password: String(password) });
   if (error) return err(res, 'Invalid email or password', 401);
   const { data: profile } = await supabase.from('academy_profiles').select('display_name, level, plan, role').eq('user_id', data.user.id).maybeSingle();
-  if (!profile) return err(res, 'No Jarvis Academy account for this email. Please create one.', 404);
+  if (!profile) return err(res, 'This AutomationHire account has no Jarvis Academy profile yet. Choose "Create free account" and use the same email and password.', 404);
   return ok(res, sessionPayload(data.session, data.user, profile));
 }
 
