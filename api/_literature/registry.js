@@ -1,4 +1,5 @@
-// GCSE Literature: the registry of texts. Server-only.
+// GCSE Literature: the registry of texts. Server-only. (Not named index.js: a folder index
+// would be served as the page for /api/_literature on this static-output site.)
 //
 // ADD A NEW GCSE TEXT: create api/_literature/<id>.js with the same shape as macbeth.js
 // (id, title, author, form, examBoards, tagline, accent, characters, themes, events,

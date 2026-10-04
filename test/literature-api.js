@@ -4,7 +4,7 @@
 const assert = require('assert');
 process.env.ANTHROPIC_API_KEY = 'test-key';
 const createLitOps = require('../api/_academy-lit');
-const { byId } = require('../api/_literature');
+const { byId } = require('../api/_literature/registry');
 const { LIMITS } = require('../api/_academy-lit-config');
 
 // ---- fakes ----

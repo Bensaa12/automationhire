@@ -1,5 +1,5 @@
 // GCSE English Literature content: An Inspector Calls. Server-only (never shipped to the browser in full).
-// Shape is shared by every text: see api/_literature/index.js. Quotations are short and checked
+// Shape is shared by every text: see api/_literature/registry.js. Quotations are short and checked
 // against the play; stage directions are marked as such.
 
 module.exports = {

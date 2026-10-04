@@ -1,0 +1,2 @@
+# Not deployed: local-only test scripts (the site publishes its whole folder as static files)
+test/

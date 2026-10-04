@@ -1,5 +1,5 @@
 // GCSE English Literature content: Macbeth. Server-only (never shipped to the browser in full).
-// Shape is shared by every text: see api/_literature/index.js. Quotations are short and checked
+// Shape is shared by every text: see api/_literature/registry.js. Quotations are short and checked
 // against the play; act/scene numbers follow the standard (e.g. Arden / Folger) numbering.
 
 module.exports = {

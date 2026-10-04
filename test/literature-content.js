@@ -2,7 +2,7 @@
 // Checks structure, unique ids, valid categories, the free sample size, and that quotations
 // stay short (exam-board guidance and copyright: keep quoted material brief).
 const assert = require('assert');
-const { TEXTS, CATEGORIES, byId } = require('../api/_literature');
+const { TEXTS, CATEGORIES, byId } = require('../api/_literature/registry');
 const { LIMITS } = require('../api/_academy-lit-config');
 
 const cats = new Set(CATEGORIES.map((c) => c.id));

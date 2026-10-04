@@ -11,7 +11,7 @@
 // Built as a factory so the Academy's helpers can be injected (and faked in tests).
 // ============================================================
 
-const { TEXTS, CATEGORIES, LEVELS, byId } = require('./_literature');
+const { TEXTS, CATEGORIES, LEVELS, byId } = require('./_literature/registry');
 const { LIMITS, isPremium } = require('./_academy-lit-config');
 
 const SUBJECT = 'English Literature';

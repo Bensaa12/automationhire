@@ -1,5 +1,5 @@
 // GCSE English Literature content: A Christmas Carol. Server-only (never shipped to the browser in full).
-// Shape is shared by every text: see api/_literature/index.js. Quotations are short and checked
+// Shape is shared by every text: see api/_literature/registry.js. Quotations are short and checked
 // against the 1843 text; "Stave" is Dickens's own name for each chapter.
 
 module.exports = {
