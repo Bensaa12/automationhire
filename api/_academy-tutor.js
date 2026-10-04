@@ -149,7 +149,16 @@ async function signup(req, res) {
     await supabase.from('academy_profiles').upsert({ user_id: s.user.id, display_name: name, level, role, guardian_confirmed: true }, { onConflict: 'user_id' });
     return ok(res, sessionPayload(s.session, s.user, { display_name: name, level, role }));
   }
-  if (error) return err(res, 'Could not create the account. Please try again.', 400);
+  if (error) {
+    // Say what actually went wrong (it used to be a generic message, which hid e.g. email rate limits)
+    const m = String(error.message || '');
+    console.error('[academy] signup failed:', m);
+    if (/rate limit|too many/i.test(m)) return err(res, 'Too many sign-up emails have been sent in the last hour. Please try again in an hour.', 429);
+    if (/password/i.test(m)) return err(res, m, 400);
+    if (/invalid|email address/i.test(m)) return err(res, 'That email address can\'t be used. Please check it and try again.', 400);
+    if (/signups? not allowed|disabled/i.test(m)) return err(res, 'New sign-ups are paused at the moment. Please try again later.', 403);
+    return err(res, 'Could not create the account: ' + m.slice(0, 160), 400);
+  }
   if (!data.user) return err(res, 'Could not create the account', 400);
 
   await supabase.from('academy_profiles').upsert({ user_id: data.user.id, display_name: name, level, role, guardian_confirmed: true }, { onConflict: 'user_id' });
