@@ -170,10 +170,25 @@
     });
   }
 
+  // Jarvis sometimes marks emphasis as **bold** or *italic*; show it as such instead of raw
+  // asterisks. Builds DOM nodes (never innerHTML) and only matches markers hugging text, so a
+  // multiplication like "3 * 4" stays as typed.
+  var EMPH = /\*\*(\S(?:[^*\n]*\S)?)\*\*|\*(\S(?:[^*\n]*\S)?)\*/g;
+  function appendRich(parent, text) {
+    var last = 0, m;
+    EMPH.lastIndex = 0;
+    while ((m = EMPH.exec(text))) {
+      if (m.index > last) parent.appendChild(document.createTextNode(text.slice(last, m.index)));
+      parent.appendChild(m[1] != null ? el('b', null, m[1]) : el('i', null, m[2]));
+      last = EMPH.lastIndex;
+    }
+    if (last < text.length) parent.appendChild(document.createTextNode(text.slice(last)));
+  }
   function add(role, text) {
     var d = document.createElement('div'); d.className = 'ja-msg ' + role;
-    if (role === 'bot') { var w = document.createElement('span'); w.className = 'ja-who'; w.textContent = 'JARVIS'; d.appendChild(w); }
-    d.appendChild(document.createTextNode(text)); box.appendChild(d); box.scrollTop = box.scrollHeight; return d;
+    if (role === 'bot') { var w = document.createElement('span'); w.className = 'ja-who'; w.textContent = 'JARVIS'; d.appendChild(w); appendRich(d, text); }
+    else d.appendChild(document.createTextNode(text));
+    box.appendChild(d); box.scrollTop = box.scrollHeight; return d;
   }
   function setLocked(v) { input.disabled = v; form.querySelector('button').disabled = v; document.querySelectorAll('.ja-quick button').forEach(function (b) { b.disabled = v; }); }
   function setLeft() { if (!left) return; left.textContent = auth ? L().signedLeft(Math.max(0, USER_TURNS - used)) : L().anonLeft(Math.max(0, ANON_TURNS - used), ANON_TURNS); }
