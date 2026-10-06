@@ -32,7 +32,19 @@ function getResend() {
       }
     };
   }
-  return new Resend(key);
+  const resend = new Resend(key.trim());
+  // Clean every email before it goes out: env values pasted into Vercel can carry a trailing
+  // newline (which broke the From header), and Resend v4 only reads `replyTo`, not `reply_to`.
+  const send = resend.emails.send.bind(resend.emails);
+  resend.emails.send = (payload, options) => {
+    const p = { ...payload };
+    const clean = (v) => (Array.isArray(v) ? v.map(clean) : typeof v === 'string' ? v.replace(/\s*\n\s*/g, '').trim() : v);
+    if (p.reply_to && !p.replyTo) p.replyTo = p.reply_to;
+    delete p.reply_to;
+    for (const k of ['from', 'to', 'cc', 'bcc', 'replyTo']) if (p[k] != null) p[k] = clean(p[k]);
+    return send(p, options);
+  };
+  return resend;
 }
 
 // --- Robust POST body parsing ---
@@ -340,7 +352,7 @@ const SENDERS = {
 };
 
 function getSender(type = 'system') {
-  return SENDERS[type] || SENDERS.system;
+  return (SENDERS[type] || SENDERS.system).trim();
 }
 
 module.exports = { getSupabase, getResend, getBody, handleCors, ok, err, toSlug, emails, getSender };
