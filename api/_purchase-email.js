@@ -37,6 +37,7 @@ function buildPurchaseEmail({ pack, config, session, licenseKey }) {
   const name = (session.customer_details?.name || '').split(' ')[0];
   const paid = money(session.amount_total, session.currency);
   const fileName = String(config.storagePath || '').split('/').pop();
+  const phoneLink = config.webApp ? SITE + config.webApp : '';
 
   const subject = isApp ? `Your ${title} licence key and download` : `Your ${title} download`;
   const steps = isApp
@@ -58,6 +59,8 @@ function buildPurchaseEmail({ pack, config, session, licenseKey }) {
     <p style="margin:0 0 22px"><a href="${esc(link)}" style="display:inline-block;background:#00c853;color:#04150b;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:8px">Download ${esc(title)}</a></p>
     <p style="margin:0 0 6px;font-weight:700">How to install</p>
     <ol style="margin:0 0 18px;padding-left:20px;line-height:1.6">${steps.map((s) => `<li>${s}</li>`).join('')}</ol>
+    ${phoneLink ? `<p style="margin:0 0 6px;font-weight:700">On iPhone, iPad or Android</p>
+    <p style="margin:0 0 18px;line-height:1.55">Open <a href="${esc(phoneLink)}" style="color:#0b8f4d">${esc(phoneLink.replace(/^https?:\/\//, ''))}</a> on your phone. iPhone: tap <b>Share &rarr; Add to Home Screen</b>. Android: tap <b>Install app</b>. Then tap the &#9432; button and paste the same licence key.</p>` : ''}
     <p style="margin:0;color:#5b6472;font-size:13px;line-height:1.55">The download button always takes you back to your purchase page, which makes a fresh download link each time${isApp ? ' and shows your key again' : ''}. Not working as described? Reply to this email within 30 days for a full refund.</p>
   </div>
   <p style="color:#8a93a3;font-size:12px;margin:14px 4px 0">AutomationHire.co.uk &middot; Order ${esc(session.id.slice(-10))}</p>
@@ -71,6 +74,8 @@ function buildPurchaseEmail({ pack, config, session, licenseKey }) {
     '',
     'How to install:',
     ...steps.map((s, i) => `${i + 1}. ${s.replace(/<[^>]+>/g, '').replace(/&rarr;/g, '->').replace(/&amp;/g, '&')}`),
+    phoneLink ? `
+On iPhone, iPad or Android: open ${phoneLink} on your phone. iPhone: Share -> Add to Home Screen. Android: Install app. Then paste the same licence key.` : '',
     '',
     'Not working as described? Reply to this email within 30 days for a full refund.',
   ].filter((l) => l !== '').join('\n');

@@ -52,6 +52,7 @@ const GARAGE_PAID_PACKS = {
     storagePath:   'hiresign/HireSign-Setup-1.0.0.exe',
     licensePrefix: 'HS1',
     licenseKeyEnv: 'HIRESIGN_LICENSE_PRIVATE_KEY',
+    webApp:        '/apps/hiresign',                 // phone app (iPhone/Android), same key
   },
   'hiresign-pro': {
     productId:     'prod_VLqgK47wZrZ4lW',            // Stripe product "HireSign Pro"
@@ -64,6 +65,7 @@ const GARAGE_PAID_PACKS = {
     storagePath:   'hiresign/HireSign-Setup-1.0.0.exe',
     licensePrefix: 'HS1',
     licenseKeyEnv: 'HIRESIGN_LICENSE_PRIVATE_KEY',
+    webApp:        '/apps/hiresign',                 // phone app (iPhone/Android), same key
     edition:       'pro',
   },
   // HireConvert — video, audio and photo converter. One installer; the key decides Basic or Pro.
