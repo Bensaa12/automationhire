@@ -1,0 +1,32 @@
+{
+  "name": "HireSign",
+  "short_name": "HireSign",
+  "description": "Sign PDF, Word and image documents with your finger, pen or mouse.",
+  "id": "/apps/hiresign",
+  "start_url": "/apps/hiresign",
+  "scope": "/apps/hiresign",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#eef0f3",
+  "theme_color": "#2455d6",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

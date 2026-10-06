@@ -21,6 +21,13 @@
       ]
     },
     {
+      "source": "/apps/hiresign/sw.js",
+      "headers": [
+        { "key": "Service-Worker-Allowed", "value": "/apps/hiresign" },
+        { "key": "Cache-Control", "value": "no-cache" }
+      ]
+    },
+    {
       "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin",  "value": "*" },

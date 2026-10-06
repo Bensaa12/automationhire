@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <base href="/apps/hiresign/">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta name="description" content="Sign PDF, Word and image documents on your phone, tablet or computer with your finger, pen or mouse. Private: documents never leave your device.">
+  <meta name="theme-color" content="#2455d6">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="HireSign">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>HireSign</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; font-src 'self' data: blob:; style-src 'self' 'unsafe-inline' blob:; script-src 'self'; worker-src 'self' blob:">
+  <link rel="stylesheet" href="styles.css">
+  <script src="vendor/jszip.min.js"></script>
+  <script src="vendor/docx-preview.min.js"></script>
+  <script src="vendor/pdf-lib.min.js"></script>
+  <script src="vendor/nacl-fast.min.js"></script>
+  <script src="vendor/html2canvas.min.js"></script>
+  <script src="web-api.js"></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 17c3-1 4-9 7-9s-1 9 2 9 3-5 5-5 1 4 4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".5"/></svg>
+      <span>HireSign</span><small class="by">by AutomationHire</small>
+    </div>
+    <button id="btnOpen" class="btn" title="Open document (Ctrl+O)">
+      <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Open
+    </button>
+    <div id="docName" class="doc-name"></div>
+    <div class="spacer"></div>
+    <button id="licBadge" class="lic-badge" hidden></button>
+    <div class="zoom" id="zoomBox" hidden>
+      <button id="btnZoomOut" class="icon-btn" title="Zoom out (Ctrl -)"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+      <button id="zoomLabel" class="zoom-label" title="Fit to width">100%</button>
+      <button id="btnZoomIn" class="icon-btn" title="Zoom in (Ctrl +)"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+    <div id="pageInfo" class="page-info"></div>
+    <button id="btnUndo" class="icon-btn" title="Undo (Ctrl+Z)" disabled><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+    <button id="btnAbout" class="icon-btn" title="About &amp; licence"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg></button>
+    <div class="save-wrap">
+      <button id="btnSave" class="btn primary" disabled title="Save signed copy (Ctrl+S)">
+        <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>Save signed
+      </button>
+      <div id="saveMenu" class="menu" hidden></div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <section>
+        <h3>Signatures</h3>
+        <div id="sigList" class="sig-list"></div>
+        <button class="btn add" data-new="signature"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>New signature</button>
+      </section>
+      <section>
+        <h3>Initials</h3>
+        <div id="iniList" class="sig-list small"></div>
+        <button class="btn add" data-new="initials"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>New initials</button>
+      </section>
+      <section>
+        <h3>Tools</h3>
+        <div class="tools">
+          <button class="tool active" data-tool="select" title="Select, move and resize (Esc)">
+            <svg viewBox="0 0 24 24"><path d="m5 3 14 8-6 2-3 6z"/></svg><span>Select</span></button>
+          <button class="tool" data-tool="ink" title="Write directly on the page with pen, finger or mouse">
+            <svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg><span>Draw</span></button>
+          <button class="tool" data-tool="date" title="Place today's date">
+            <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Date</span></button>
+          <button class="tool" data-tool="text" title="Place text (name, title…)">
+            <svg viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg><span>Text</span></button>
+          <button class="tool" data-tool="check" title="Place a check mark">
+            <svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg><span>Check</span></button>
+          <button class="tool" data-tool="cross" title="Place a cross">
+            <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Cross</span></button>
+        </div>
+      </section>
+      <section>
+        <h3>Ink</h3>
+        <div class="swatches" id="inkColors">
+          <button class="swatch active" data-color="#111111" style="--c:#111111" title="Black"></button>
+          <button class="swatch" data-color="#1a3da8" style="--c:#1a3da8" title="Blue"></button>
+          <button class="swatch" data-color="#0b1f5c" style="--c:#0b1f5c" title="Navy"></button>
+          <button class="swatch" data-color="#b3261e" style="--c:#b3261e" title="Red"></button>
+        </div>
+        <label class="range">Thickness <input id="inkSize" type="range" min="1" max="8" step="0.5" value="3"></label>
+        <label class="check"><input id="penOnly" type="checkbox"> Pen only (ignore palm/finger when drawing on page)</label>
+      </section>
+      <p class="hint-small">Tip: pen pressure is used automatically. Hold <kbd>Shift</kbd> while placing to place several copies.</p>
+    </aside>
+
+    <main id="viewer" class="viewer">
+      <div id="empty" class="empty">
+        <div class="drop">
+          <svg viewBox="0 0 24 24" width="56" height="56"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M8 16c1.5-.5 2-3 3-3s0 3 1.5 3 1.5-1.5 2.5-1.5"/></svg>
+          <h2>Open a document to sign</h2>
+          <p>PDF, Word (.docx) or an image — or drag &amp; drop it here.</p>
+          <button id="btnOpen2" class="btn primary big">Choose a file…</button>
+        </div>
+      </div>
+      <div id="sizer" class="sizer" hidden><div id="stage" class="stage"></div></div>
+    </main>
+  </div>
+
+  <div id="hint" class="hint" hidden></div>
+  <div id="inkBar" class="ink-bar" hidden>
+    <span>Drawing on the page</span>
+    <button id="inkUndo" class="btn">Undo stroke</button>
+    <button id="inkDone" class="btn primary">Done</button>
+  </div>
+  <div id="toast" class="toast" hidden></div>
+  <div id="busy" class="busy" hidden><div class="spinner"></div><span id="busyText">Working…</span></div>
+
+  <!-- Signature creator -->
+  <dialog id="sigDialog" class="dlg">
+    <div class="dlg-head">
+      <h2 id="sigTitle">Create signature</h2>
+      <div class="tabs" id="sigTabs">
+        <button class="tab active" data-tab="draw">Draw</button>
+        <button class="tab" data-tab="type">Type <span class="pro-tag" hidden>PRO</span></button>
+        <button class="tab" data-tab="upload">Upload <span class="pro-tag" hidden>PRO</span></button>
+      </div>
+    </div>
+    <div class="dlg-body">
+      <div class="pane" data-pane="draw">
+        <div class="pad-wrap" id="padWrap">
+          <canvas id="pad"></canvas>
+          <div class="pad-line"><span>✕</span></div>
+          <div class="pad-placeholder" id="padPlaceholder">Sign here with your mouse, pen or finger</div>
+        </div>
+        <div class="pad-tools">
+          <div class="swatches" id="padColors">
+            <button class="swatch active" data-color="#111111" style="--c:#111111"></button>
+            <button class="swatch" data-color="#1a3da8" style="--c:#1a3da8"></button>
+            <button class="swatch" data-color="#0b1f5c" style="--c:#0b1f5c"></button>
+          </div>
+          <label class="range">Thickness <input id="padSize" type="range" min="1" max="10" step="0.5" value="4"></label>
+          <div class="spacer"></div>
+          <button id="padUndo" class="btn">Undo</button>
+          <button id="padClear" class="btn">Clear</button>
+        </div>
+      </div>
+      <div class="pane" data-pane="locked" hidden>
+        <div class="locked">
+          <div class="pro-tag big">PRO</div>
+          <h3 id="lockedTitle">Typed signatures are a Pro feature</h3>
+          <p class="muted">Your Basic licence includes drawn signatures. Upgrade to Pro to type or upload your signature and to sign Word documents.</p>
+          <button class="btn primary" id="lockedUpgrade">See Pro</button>
+        </div>
+      </div>
+      <div class="pane" data-pane="type" hidden>
+        <input id="typeInput" class="text-input" placeholder="Type your name" autocomplete="off">
+        <div id="fontList" class="font-list"></div>
+      </div>
+      <div class="pane" data-pane="upload" hidden>
+        <div class="upload-box">
+          <button id="uploadBtn" class="btn">Choose image of your signature…</button>
+          <input id="uploadInput" type="file" accept="image/*" hidden>
+          <label class="range">Background removal <input id="uploadThresh" type="range" min="120" max="250" value="200"></label>
+        </div>
+        <div class="upload-preview"><img id="uploadPreview" alt=""></div>
+      </div>
+    </div>
+    <div class="dlg-foot">
+      <label class="check"><input id="sigRemember" type="checkbox" checked> Save for next time</label>
+      <div class="spacer"></div>
+      <button class="btn" id="sigCancel">Cancel</button>
+      <button class="btn primary" id="sigUse">Use &amp; place</button>
+    </div>
+  </dialog>
+
+  <!-- About & licence -->
+  <dialog id="aboutDialog" class="dlg small">
+    <div class="dlg-head">
+      <div class="about-brand">
+        <img src="icon.png" alt="" width="48" height="48">
+        <div><h2>HireSign</h2><div class="muted" id="aboutVersion"></div></div>
+      </div>
+    </div>
+    <div class="dlg-body">
+      <div id="licNotice" class="lic-notice" hidden></div>
+      <div id="licState" class="lic-state"></div>
+      <div id="plans" class="plans">
+        <div class="plan" data-plan="Basic">
+          <div class="plan-name">Basic <span class="price" data-price="Basic"></span></div>
+          <ul><li>Sign PDFs and images</li><li>Draw your signature with mouse, pen or touch</li><li>Date, text and check marks</li><li>Save signed PDFs</li></ul>
+          <button class="btn" data-buy="basic">Buy Basic</button>
+        </div>
+        <div class="plan pro" data-plan="Pro">
+          <div class="plan-name">Pro <span class="price" data-price="Pro"></span></div>
+          <ul><li>Everything in Basic</li><li>Sign Word (.docx) documents</li><li>Save back to Word or PDF</li><li>Typed &amp; uploaded signatures</li></ul>
+          <button class="btn primary" data-buy="pro">Buy Pro</button>
+        </div>
+        <p class="muted small plans-note">One-off payment · perpetual licence for your own PCs · 30-day refund</p>
+      </div>
+      <div id="licForm">
+        <label class="field-label" for="licKey">Licence key</label>
+        <textarea id="licKey" class="text-input key-input" placeholder="Paste your licence key (starts with HS1-)" spellcheck="false"></textarea>
+        <div id="licError" class="lic-error" hidden></div>
+      </div>
+      <p class="muted small">Sign PDF, Word and image documents with your mouse, pen or touchscreen.<br>
+        &copy; 2026 AutomationHire. All rights reserved. &middot;
+        <a href="#" data-ext="https://automationhire.co.uk">automationhire.co.uk</a><br>
+        Includes open-source components: PDF.js, pdf-lib, docx-preview, JSZip, TweetNaCl, html2canvas (<a href="THIRD-PARTY-NOTICES.txt" target="_blank" rel="noopener">licences</a>). Your documents stay on this device.</p>
+    </div>
+    <div class="dlg-foot">
+      <button class="btn" id="licRemove" hidden>Remove licence</button>
+      <div class="spacer"></div>
+      <button class="btn" id="aboutClose">Close</button>
+      <button class="btn primary" id="licActivate">Activate</button>
+    </div>
+  </dialog>
+
+  <!-- Text entry -->
+  <dialog id="textDialog" class="dlg small">
+    <div class="dlg-head"><h2>Add text</h2></div>
+    <div class="dlg-body">
+      <input id="textInput" class="text-input" placeholder="e.g. your full name or job title" autocomplete="off">
+    </div>
+    <div class="dlg-foot">
+      <div class="spacer"></div>
+      <button class="btn" id="textCancel">Cancel</button>
+      <button class="btn primary" id="textOk">Place</button>
+    </div>
+  </dialog>
+</body>
+</html>
