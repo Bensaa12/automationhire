@@ -1,0 +1,32 @@
+{
+  "id": "/apps/hirepdf",
+  "name": "HirePDF",
+  "short_name": "HirePDF",
+  "description": "Merge, split, rearrange and compress PDFs, and turn photos into PDFs.",
+  "start_url": "/apps/hirepdf",
+  "scope": "/apps/hirepdf",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#e9ecf1",
+  "theme_color": "#c8372d",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

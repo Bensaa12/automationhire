@@ -103,6 +103,7 @@ const GARAGE_PAID_PACKS = {
     storagePath:   'hirepdf/HirePDF-Setup-1.0.0.exe',
     licensePrefix: 'HP1',
     licenseKeyEnv: 'HIREPDF_LICENSE_PRIVATE_KEY',
+    webApp:        '/apps/hirepdf',                  // phone app (iPhone/Android), same key
   },
   'hirepdf-pro': {
     productName:   'HirePDF Pro',
@@ -115,6 +116,7 @@ const GARAGE_PAID_PACKS = {
     storagePath:   'hirepdf/HirePDF-Setup-1.0.0.exe',
     licensePrefix: 'HP1',
     licenseKeyEnv: 'HIREPDF_LICENSE_PRIVATE_KEY',
+    webApp:        '/apps/hirepdf',                  // phone app (iPhone/Android), same key
     edition:       'pro',
   },
 };

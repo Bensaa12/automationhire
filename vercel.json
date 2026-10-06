@@ -28,6 +28,13 @@
       ]
     },
     {
+      "source": "/apps/hirepdf/sw.js",
+      "headers": [
+        { "key": "Service-Worker-Allowed", "value": "/apps/hirepdf" },
+        { "key": "Cache-Control", "value": "no-cache" }
+      ]
+    },
+    {
       "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin",  "value": "*" },

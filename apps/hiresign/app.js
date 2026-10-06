@@ -1147,7 +1147,7 @@ function openAbout(notice) {
   $('#licKey').value = '';
   renderLicense();
   aboutDlg.showModal();
-  if (!(lic.licensed && lic.edition === 'Pro')) $('#licKey').focus();
+  if (!(lic.licensed && lic.edition === 'Pro') && !matchMedia('(pointer: coarse)').matches) $('#licKey').focus();
 }
 
 $('#btnAbout').onclick = () => openAbout();

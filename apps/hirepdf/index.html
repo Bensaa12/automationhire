@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <base href="/apps/hirepdf/">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta name="description" content="Merge, split, rearrange and compress PDFs, and turn photos into PDFs, on your phone or computer. Private: files never leave your device.">
+  <meta name="theme-color" content="#c8372d">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="HirePDF">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>HirePDF</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; font-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self' blob:">
+  <link rel="stylesheet" href="styles.css">
+  <script src="vendor/pdf-lib.min.js"></script>
+  <script src="vendor/nacl-fast.min.js"></script>
+  <script src="web-api.js"></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="icon.png" alt="" width="26" height="26">
+      <span>HirePDF</span><small class="by">by AutomationHire</small>
+    </div>
+    <button id="btnAdd" class="btn" title="Add PDFs or photos (Ctrl+O)">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add files
+    </button>
+    <div class="tools-group" id="pageTools" hidden>
+      <span class="sep"></span>
+      <button id="btnUndo" class="icon-btn" title="Undo (Ctrl+Z)" disabled><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+      <button id="btnSelAll" class="btn ghost" title="Select all pages (Ctrl+A)">Select all</button>
+      <button id="btnRotL" class="icon-btn" title="Rotate selected pages left"><svg viewBox="0 0 24 24"><path d="M3 4v5h5"/><path d="M3.5 9A9 9 0 1 1 6 18"/></svg></button>
+      <button id="btnRotR" class="icon-btn" title="Rotate selected pages right (R)"><svg viewBox="0 0 24 24"><path d="M21 4v5h-5"/><path d="M20.5 9A9 9 0 1 0 18 18"/></svg></button>
+      <button id="btnDel" class="icon-btn danger" title="Delete selected pages (Delete)"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
+      <span id="selInfo" class="sel-info"></span>
+    </div>
+    <div class="spacer"></div>
+    <button id="licBadge" class="lic-badge" hidden></button>
+    <button id="btnAbout" class="icon-btn" title="About &amp; licence"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg></button>
+  </header>
+
+  <main id="main">
+    <!-- Empty state -->
+    <section id="empty" class="empty">
+      <button id="dropZone" class="drop-zone">
+        <svg viewBox="0 0 48 48" class="drop-icon"><path d="M12 4h17l9 9v27a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4z"/><path d="M29 4v9h9"/><path d="M24 34V20m0 0-6 6m6-6 6 6"/></svg>
+        <strong>Drop PDFs or photos here</strong>
+        <span>or click to choose files · PDF, JPG, PNG, iPhone HEIC and more</span>
+      </button>
+      <h3 class="quick-title">Or pick a job</h3>
+      <div class="quick">
+        <button class="quick-card" data-quick="merge">
+          <span class="qi"><svg viewBox="0 0 24 24"><path d="M8 3v6a4 4 0 0 0 4 4h0a4 4 0 0 1 4 4v4M16 3v6a4 4 0 0 1-4 4"/><path d="m13 18 3 3 3-3"/></svg></span>
+          <strong>Merge PDFs</strong>
+          <span>Join several PDFs into one, in the order you want</span>
+        </button>
+        <button class="quick-card" data-quick="split">
+          <span class="qi"><svg viewBox="0 0 24 24"><path d="M12 3v18M5 7H3v10h2M19 7h2v10h-2"/><path d="m8 10-2 2 2 2M16 10l2 2-2 2"/></svg></span>
+          <strong>Split a PDF</strong>
+          <span>Every page on its own, or pick the pages you need</span>
+        </button>
+        <button class="quick-card" data-quick="compress">
+          <span class="qi"><svg viewBox="0 0 24 24"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+          <strong>Compress a PDF <span class="pro-tag" data-pro-tag>PRO</span></strong>
+          <span>Make it small enough to email or upload</span>
+        </button>
+        <button class="quick-card" data-quick="photos">
+          <span class="qi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></span>
+          <strong>Photos to PDF</strong>
+          <span>Turn phone photos or scans into one PDF</span>
+        </button>
+        <button class="quick-card" data-quick="organise">
+          <span class="qi"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="9" rx="1"/><rect x="3" y="15" width="7" height="6" rx="1"/><path d="M14 18h7M17.5 15v6"/></svg></span>
+          <strong>Rearrange pages</strong>
+          <span>Drag pages into order, rotate or delete them</span>
+        </button>
+        <button class="quick-card" data-quick="images">
+          <span class="qi"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="m8 17 3-3 2 2 3-3"/></svg></span>
+          <strong>PDF to JPG <span class="pro-tag" data-pro-tag>PRO</span></strong>
+          <span>Save every page as a picture</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Workspace -->
+    <section id="work" class="work" hidden>
+      <aside class="files">
+        <h3>Files</h3>
+        <div id="fileList" class="file-list"></div>
+        <button id="btnAdd2" class="btn add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add more</button>
+        <p class="hint-text">Drag pages to reorder them. Click to select, Ctrl-click or Shift-click for several.</p>
+      </aside>
+      <div id="grid" class="grid" tabindex="0"></div>
+    </section>
+
+    <div id="dropOverlay" class="drop-overlay" hidden><div>Drop to add</div></div>
+  </main>
+
+  <footer id="bottom" class="bottom" hidden>
+    <div class="opts">
+      <label class="opt"><span class="opt-h">Compress <span class="pro-tag" data-pro-tag>PRO</span></span>
+        <select id="optCompress" class="select">
+          <option value="off" selected>Off</option>
+          <option value="light">Light — good for email</option>
+          <option value="strong">Strong — smallest file</option>
+        </select>
+      </label>
+      <label class="opt check-opt"><span>Page numbers <span class="pro-tag" data-pro-tag>PRO</span></span>
+        <span class="switch"><input type="checkbox" id="optNumbers"><i></i></span>
+      </label>
+      <label class="opt"><span class="opt-h">Watermark <span class="pro-tag" data-pro-tag>PRO</span></span>
+        <input id="optWatermark" class="text-in" placeholder="e.g. DRAFT" maxlength="40" spellcheck="false">
+      </label>
+      <label class="opt" id="photoSizeOpt" hidden>Photo pages
+        <select id="optPhotoSize" class="select">
+          <option value="a4" selected>A4</option>
+          <option value="letter">US Letter</option>
+          <option value="fit">Same shape as photo</option>
+        </select>
+      </label>
+    </div>
+    <div class="spacer"></div>
+    <div id="summary" class="summary"></div>
+    <button id="btnImages" class="btn">Save as JPG <span class="pro-tag" data-pro-tag>PRO</span></button>
+    <button id="btnSplit" class="btn">
+      <svg viewBox="0 0 24 24"><path d="M12 3v18M5 7H3v10h2M19 7h2v10h-2"/></svg>Split…
+    </button>
+    <button id="btnSave" class="btn primary big">
+      <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>
+      <span id="saveLabel">Save PDF</span>
+    </button>
+  </footer>
+
+  <div id="toast" class="toast" hidden></div>
+  <div id="busy" class="busy" hidden><div class="spinner"></div><div id="busyText">Working…</div><div class="busy-bar"><i id="busyBar"></i></div></div>
+
+  <!-- Split -->
+  <dialog id="splitDialog" class="dlg">
+    <div class="dlg-head"><h2>Split into separate PDFs</h2></div>
+    <div class="dlg-body">
+      <label class="radio"><input type="radio" name="split" value="each" checked><span><strong>Every page on its own</strong><small id="splitEachInfo"></small></span></label>
+      <label class="radio"><input type="radio" name="split" value="chunks"><span><strong>Every <input id="splitN" class="num-in" type="number" min="1" value="2"> pages</strong><small id="splitChunksInfo"></small></span></label>
+      <label class="radio" id="splitSelRow"><input type="radio" name="split" value="selected"><span><strong>Just the selected pages, as one PDF</strong><small id="splitSelInfo"></small></span></label>
+      <label class="radio"><input type="radio" name="split" value="ranges"><span><strong>Page ranges</strong><small>One PDF per range, e.g. <code>1-3, 4-6, 7-</code></small><input id="splitRanges" class="text-in wide" placeholder="1-3, 4-6, 7-" spellcheck="false"></span></label>
+      <div id="splitError" class="lic-error" hidden></div>
+    </div>
+    <div class="dlg-foot">
+      <span class="muted small">Your original file is not changed.</span>
+      <div class="spacer"></div>
+      <button class="btn" id="splitCancel">Cancel</button>
+      <button class="btn primary" id="splitGo">Choose folder &amp; split</button>
+    </div>
+  </dialog>
+
+  <!-- PDF to images -->
+  <dialog id="imgDialog" class="dlg small">
+    <div class="dlg-head"><h2>Save pages as pictures</h2></div>
+    <div class="dlg-body">
+      <div class="row2">
+        <label class="opt">Format
+          <select id="imgFormat" class="select"><option value="jpg" selected>JPG</option><option value="png">PNG</option></select>
+        </label>
+        <label class="opt">Sharpness
+          <select id="imgDpi" class="select"><option value="96">Screen (96 dpi)</option><option value="150" selected>Good (150 dpi)</option><option value="300">Print (300 dpi)</option></select>
+        </label>
+      </div>
+      <p class="muted" id="imgInfo"></p>
+    </div>
+    <div class="dlg-foot">
+      <div class="spacer"></div>
+      <button class="btn" id="imgCancel">Cancel</button>
+      <button class="btn primary" id="imgGo">Choose folder &amp; save</button>
+    </div>
+  </dialog>
+
+  <!-- About & licence -->
+  <dialog id="aboutDialog" class="dlg small">
+    <div class="dlg-head">
+      <div class="about-brand">
+        <img src="icon.png" alt="" width="48" height="48">
+        <div><h2>HirePDF</h2><div class="muted" id="aboutVersion"></div></div>
+      </div>
+    </div>
+    <div class="dlg-body">
+      <div id="licNotice" class="lic-notice" hidden></div>
+      <div id="licState" class="lic-state"></div>
+      <div id="plans" class="plans">
+        <div class="plan" data-plan="Basic">
+          <div class="plan-name">Basic <span class="price" data-price="Basic"></span></div>
+          <ul><li>Merge PDFs and photos into one</li><li>Split, or pull out the pages you need</li><li>Drag to reorder, rotate and delete pages</li><li>Phone photos and scans to PDF</li></ul>
+          <button class="btn" data-buy="basic">Buy Basic</button>
+        </div>
+        <div class="plan pro" data-plan="Pro">
+          <div class="plan-name">Pro <span class="price" data-price="Pro"></span></div>
+          <ul><li>Everything in Basic</li><li>Compress PDFs for email</li><li>Add page numbers</li><li>Add a watermark like DRAFT</li><li>Save pages as JPG or PNG</li></ul>
+          <button class="btn primary" data-buy="pro">Buy Pro</button>
+        </div>
+        <p class="muted small plans-note">One-off payment · perpetual licence for your own PCs · 30-day refund</p>
+      </div>
+      <div id="licForm">
+        <label class="field-label" for="licKey">Licence key</label>
+        <textarea id="licKey" class="text-input key-input" placeholder="Paste your licence key (starts with HP1-)" spellcheck="false"></textarea>
+        <div id="licError" class="lic-error" hidden></div>
+      </div>
+      <p class="muted small">Merge, split, rearrange and compress PDFs on your own phone or PC — nothing is uploaded.<br>
+        &copy; 2026 AutomationHire. All rights reserved. &middot;
+        <a href="#" data-ext="https://automationhire.co.uk">automationhire.co.uk</a><br>
+        Includes open-source components: PDF.js, pdf-lib, TweetNaCl (<a href="THIRD-PARTY-NOTICES.txt" target="_blank" rel="noopener">licences</a>). Your files stay on this device.</p>
+    </div>
+    <div class="dlg-foot">
+      <button class="btn" id="licRemove" hidden>Remove licence</button>
+      <div class="spacer"></div>
+      <button class="btn" id="aboutClose">Close</button>
+      <button class="btn primary" id="licActivate">Activate</button>
+    </div>
+  </dialog>
+</body>
+</html>
