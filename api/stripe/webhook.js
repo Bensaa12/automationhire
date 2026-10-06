@@ -1,7 +1,7 @@
 // ============================================================
 // POST /api/stripe/webhook
 // Handles Stripe webhook events:
-//   checkout.session.completed   → activate subscription
+//   checkout.session.completed   → activate subscription, or email a paid download's key + link
 //   customer.subscription.updated → sync plan changes
 //   customer.subscription.deleted → downgrade to free
 //   invoice.payment_failed        → notify provider
@@ -9,6 +9,8 @@
 
 const Stripe                              = require('stripe');
 const { getSupabase, getResend, handleCors, err, emails } = require('../_lib');
+const PACKS                               = require('../_packs');
+const { sendPurchaseEmail }               = require('../_purchase-email');
 
 async function getRawBody(req) {
   return new Promise((resolve, reject) => {
@@ -81,6 +83,14 @@ module.exports = async function handler(req, res) {
 
       case 'checkout.session.completed': {
         const session     = event.data.object;
+
+        // Paid downloads (Pound Appstore apps, Garage packs): email the licence key and download link.
+        if (session.metadata?.pack) {
+          const result = await sendPurchaseEmail(stripe, PACKS, session);
+          console.log(`Purchase email for ${session.metadata.pack}: ${result}`);
+          break;
+        }
+
         const providerId  = session.metadata?.provider_id;
         const plan        = session.metadata?.plan;
         const subId       = session.subscription;
