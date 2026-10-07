@@ -25,7 +25,7 @@ const GARAGE_PAID_PACKS = {
     currency:      'gbp',
     returnPath:    '/pound-appstore/hirecast',
     r2Bucket:      'hirecast-downloads',             // Cloudflare R2 (file is 120 MB; Supabase free caps at 50 MB)
-    storagePath:   'hirecast/HireCast-Setup-1.2.5.exe',
+    storagePath:   'hirecast/HireCast-Setup-1.5.0.exe',
     licensePrefix: 'HC1',                            // buyers get an offline licence key (api/_license.js)
     licenseKeyEnv: 'HIRECAST_LICENSE_PRIVATE_KEY',
   },
@@ -37,7 +37,7 @@ const GARAGE_PAID_PACKS = {
     currency:      'gbp',
     returnPath:    '/pound-appstore/hirecast-pro',
     r2Bucket:      'hirecast-downloads',
-    storagePath:   'hirecast/HireCast-Setup-1.2.5.exe',
+    storagePath:   'hirecast/HireCast-Setup-1.5.0.exe',
     licensePrefix: 'HC1',
     licenseKeyEnv: 'HIRECAST_LICENSE_PRIVATE_KEY',
     edition:       'pro',
