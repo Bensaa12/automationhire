@@ -155,6 +155,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://automationhire.co.uk/pound-appstore/hiremotion</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://automationhire.co.uk/pound-appstore/hiremotion-pro</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://automationhire.co.uk/pump-spec-gam100</loc>
     <lastmod>2026-08-17</lastmod>
     <changefreq>monthly</changefreq>

@@ -119,6 +119,30 @@ const GARAGE_PAID_PACKS = {
     webApp:        '/apps/hirepdf',                  // phone app (iPhone/Android), same key
     edition:       'pro',
   },
+  // HireMotion — animated Instagram carousels, Reels and TikToks. One installer; the key decides Basic or Pro.
+  'hiremotion': {
+    productName:   'HireMotion',
+    unitAmount:    100,                              // £1.00
+    currency:      'gbp',
+    returnPath:    '/pound-appstore/hiremotion',
+    r2Bucket:      'hirecast-downloads',
+    storagePath:   'hiremotion/HireMotion-Setup-1.0.0.exe',
+    licensePrefix: 'HM1',
+    licenseKeyEnv: 'HIREMOTION_LICENSE_PRIVATE_KEY',
+  },
+  'hiremotion-pro': {
+    productName:   'HireMotion Pro',
+    unitAmount:    999,                              // £9.99
+    upgradeAmount: 899,                              // £8.99 with a valid HireMotion (£1) key
+    upgradeFromName: 'HireMotion',
+    currency:      'gbp',
+    returnPath:    '/pound-appstore/hiremotion-pro',
+    r2Bucket:      'hirecast-downloads',
+    storagePath:   'hiremotion/HireMotion-Setup-1.0.0.exe',
+    licensePrefix: 'HM1',
+    licenseKeyEnv: 'HIREMOTION_LICENSE_PRIVATE_KEY',
+    edition:       'pro',
+  },
 };
 
 module.exports = GARAGE_PAID_PACKS;

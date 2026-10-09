@@ -19,6 +19,7 @@ const TITLES = {
   hiresign: 'HireSign', 'hiresign-pro': 'HireSign Pro',
   hireconvert: 'HireConvert', 'hireconvert-pro': 'HireConvert Pro',
   hirepdf: 'HirePDF', 'hirepdf-pro': 'HirePDF Pro',
+  hiremotion: 'HireMotion', 'hiremotion-pro': 'HireMotion Pro',
 };
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
