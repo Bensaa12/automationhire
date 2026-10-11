@@ -4,6 +4,7 @@
 const assert = require('assert');
 const crypto = require('crypto');
 process.env.ANTHROPIC_API_KEY = 'test-key';
+process.env.HW_FREE_UPLOADS = '2';   // these tests cover the tiered logic, so pin it (the live default is 10 a month)
 const createHomeworkOps = require('../api/_academy-homework');
 
 // ---------- fake Supabase (just enough of the query builder) ----------

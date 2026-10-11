@@ -11,7 +11,7 @@ const LANGS = {
     maxTokens: 400,
     replies: {
       anon: 'You have seen what Jarvis can do. Create a free account to continue.',
-      monthlyFree: (n) => `You have used your ${n} free sessions this month. Upgrade for a much bigger allowance.`,
+      monthlyFree: (n) => `You have used your ${n} free sessions this month. They come back on the 1st. If Jarvis has helped, a coffee keeps it free for everyone: buymeacoffee.com/automationhire`,
       monthlyPaid: 'You have reached this month\'s fair-use allowance. It resets at the start of next month.',
       session: 'That was a long and productive session, sir. Start a new one to carry on.',
       fallback: 'Forgive me, sir, could you say that again?',
@@ -27,7 +27,7 @@ STYLE: Keep Jarvis's courteous butler character in French ("Certainement.", "Tr�
     maxTokens: 520,   // French needs more tokens than English for the same ~150 words
     replies: {
       anon: 'Vous avez vu ce que Jarvis sait faire. Créez un compte gratuit pour continuer.',
-      monthlyFree: (n) => `Vous avez utilisé vos ${n} séances gratuites ce mois-ci. Passez à une offre supérieure pour beaucoup plus de séances.`,
+      monthlyFree: (n) => `Vous avez utilisé vos ${n} séances gratuites ce mois-ci. Elles reviennent le 1er du mois. Si Jarvis vous a aidé, un café permet de garder le service gratuit pour tous : buymeacoffee.com/automationhire`,
       monthlyPaid: 'Vous avez atteint la limite d\'utilisation raisonnable de ce mois. Elle se réinitialise au début du mois prochain.',
       session: 'Quelle longue et belle séance ! Commencez-en une nouvelle pour continuer.',
       fallback: 'Pardonnez-moi, pourriez-vous répéter ?',

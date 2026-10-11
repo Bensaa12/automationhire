@@ -3,6 +3,7 @@
 // Focus: free/premium restrictions cannot be bypassed by changing the request.
 const assert = require('assert');
 process.env.ANTHROPIC_API_KEY = 'test-key';
+process.env.LIT_PREMIUM_PLANS = 'plus,family';   // these tests cover the tiered logic, so pin the tiers (the live default is free for everyone)
 const createLitOps = require('../api/_academy-lit');
 const { byId } = require('../api/_literature/registry');
 const { LIMITS } = require('../api/_academy-lit-config');

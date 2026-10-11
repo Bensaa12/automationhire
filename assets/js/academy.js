@@ -355,7 +355,7 @@
   }
 
   /* Pricing / Stripe checkout (paid plans only appear once the server says payments are live) */
-  function priceMsg(text, good) { var m = document.getElementById('jaPriceMsg'); m.textContent = text; m.style.color = good ? 'var(--green)' : ''; m.hidden = !text; }
+  function priceMsg(text, good) { var m = document.getElementById('jaPriceMsg'); if (!m) return; m.textContent = text; m.style.color = good ? 'var(--green)' : ''; m.hidden = !text; }
   function drawPrices() {
     document.querySelectorAll('.ja-amt[data-m]').forEach(function (a) {
       var y = billing === 'yearly'; a.textContent = '\u00a3' + (y ? a.dataset.y : a.dataset.m);

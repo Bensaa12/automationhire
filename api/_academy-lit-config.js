@@ -14,8 +14,9 @@ const LIMITS = {
   writingMaxChars: 4000,
 };
 
-// Academy plans that unlock the full GCSE Literature experience.
-const PREMIUM_PLANS = String(process.env.LIT_PREMIUM_PLANS || 'plus,family').split(',').map((s) => s.trim()).filter(Boolean);
+// Academy plans that unlock the full GCSE Literature experience. Jarvis Academy is free, so every signed-in
+// account counts as "premium"; only guests (no account) see the free sample.
+const PREMIUM_PLANS = String(process.env.LIT_PREMIUM_PLANS || 'free,plus,family').split(',').map((s) => s.trim()).filter(Boolean);
 const isPremium = (ent) => !!ent && PREMIUM_PLANS.includes(ent.plan);
 
 module.exports = { LIMITS, PREMIUM_PLANS, isPremium };

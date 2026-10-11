@@ -15,7 +15,8 @@ const ANON_TURNS = 3;          // anonymous learner messages per conversation
 const IP_LIMIT = 12;           // anonymous learner messages per IP per hour (best-effort, per instance)
 // Per-plan allowances (sessions per calendar month, learner messages per session).
 // Marketed as "unlimited sessions" but fair-use capped here because voice/vision/AI cost real money.
-const PLANS = { free: { sessions: 10, turns: 20 }, plus: { sessions: 100, turns: 40 }, family: { sessions: 100, turns: 40 } };
+const envNum = (v, d) => (v !== undefined && v !== '' && Number.isFinite(Number(v)) ? Number(v) : d);
+const PLANS = { free: { sessions: envNum(process.env.ACADEMY_FREE_SESSIONS, 30), turns: envNum(process.env.ACADEMY_FREE_TURNS, 30) }, plus: { sessions: 100, turns: 40 }, family: { sessions: 100, turns: 40 } };
 const hits = new Map();
 
 const BASE = `You are Jarvis, the AI tutor inside Jarvis Academy on automationhire.co.uk. You are a sophisticated, patient British butler: calm, encouraging, gently dry-witted, never condescending. Occasional phrases such as "Certainly, sir." or "Very good." are welcome, but vary them and do not overdo it.

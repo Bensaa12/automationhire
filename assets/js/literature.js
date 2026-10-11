@@ -120,11 +120,10 @@
          'All ' + scenes + ' Draw the Story scenes, at every level', 'GCSE Exam Mode with structured paragraph feedback',
          'Detailed writing feedback from Jarvis', 'Progress tracking and mastery scores', 'New GCSE texts as they are added'].map(function (x) { return h('li', null, x); })),
       h('div', { class: 'lit-cta-btns' },
-        h('a', { class: 'lit-btn lit-btn-big', href: '/jarvis-academy?from=gcse-literature#pricing' }, 'Unlock GCSE Revision'),
-        h('a', { class: 'lit-btn lit-btn-ghost', href: '/jarvis-academy#pricing' }, 'View Plans')),
-      h('p', { class: 'lit-fine' }, 'Part of Jarvis Plus and Jarvis Family.' +
-        (payments ? '' : ' Paid plans are opening soon: join early access on the plans page.') +
-        (auth ? '' : ' Already subscribed? Sign in on the Jarvis Academy page.')));
+        h('a', { class: 'lit-btn lit-btn-big', href: '/jarvis-academy?from=gcse-literature#try' }, 'Create a free account'),
+        h('a', { class: 'lit-btn lit-btn-ghost', href: '/jarvis-academy#try' }, 'Sign in')),
+      h('p', { class: 'lit-fine' }, 'Everything here is free with a Jarvis Academy account.' +
+        (auth ? '' : ' Already have one? Sign in on the Jarvis Academy page.')));
   }
 
   /* ---------- views ---------- */
@@ -136,7 +135,7 @@
       var planNote = c.premium
         ? h('div', { class: 'lit-plan premium' }, '★ Full access: every card, scene and exam question is unlocked.')
         : h('div', { class: 'lit-plan' }, 'Free: ' + c.limits.freeFlashcards + ' flashcards and ' + c.limits.freeWriting + ' writing challenge per text. ',
-            h('a', { href: '/jarvis-academy#pricing' }, 'See the full experience'));
+            h('a', { href: '/jarvis-academy#try' }, 'Create a free account for everything'));
       if (!c.texts.length) { mount(h('div', { class: 'lit-state' }, h('p', null, 'No GCSE texts are available yet. Check back soon.'))); return; }
       mount(
         h('header', { class: 'lit-hero' },
@@ -192,7 +191,7 @@
   }
   function gameTile(icon, title, desc, href, locked) {
     return h('a', { class: 'lit-game' + (locked ? ' locked' : ''), href: href },
-      h('span', { class: 'lit-game-ic' }, icon), h('h3', null, title, locked ? h('span', { class: 'lit-lock', title: 'Premium' }, ' 🔒') : null), h('p', null, desc));
+      h('span', { class: 'lit-game-ic' }, icon), h('h3', null, title, locked ? h('span', { class: 'lit-lock', title: 'Free with an account' }, ' 🔒') : null), h('p', null, desc));
   }
   function categoryPicker(t) {
     return h('section', { class: 'lit-pick' }, h('h3', null, 'Challenge a category'),
@@ -205,7 +204,7 @@
       return h('section', { class: 'lit-mastery locked' },
         h('h3', null, '📚 ' + t.title + ' Mastery'),
         h('div', { class: 'lit-blur', 'aria-hidden': 'true' }, ['Characters', 'Themes', 'Quotes', 'Context', 'Writing'].map(function (l, i) { return bar(l, [82, 70, 48, 61, 55][i]); })),
-        h('p', null, 'Track your mastery of every category and get told exactly what to revise next. ', h('a', { href: '/jarvis-academy#pricing' }, 'Included with Jarvis Plus.')));
+        h('p', null, 'Track your mastery of every category and get told exactly what to revise next. ', h('a', { href: '/jarvis-academy#try' }, 'Free with an account.')));
     }
     var m = t.mastery || { overall: 0, parts: [] };
     var catHref = function (p) { return p.key === 'writing' ? '#/' + t.id + '/draw' : '#/' + t.id + '/flashcards/' + p.key; };
@@ -315,7 +314,7 @@
           h('div', null, h('h3', null, '💪 You did well on'), good.length ? h('ul', null, good.map(function (x) { return h('li', null, x.label + ' (' + x.correct + '/' + x.total + ')'); })) : h('p', { class: 'lit-muted' }, 'Keep practising: this list will fill up.')),
           h('div', null, h('h3', null, '📖 Revise next'), weak.length ? h('ul', null, weak.map(function (x) { return h('li', null, x.label + ' (' + x.correct + '/' + x.total + ')'); })) : h('p', { class: 'lit-muted' }, 'Nothing flagged. Brilliant.'))),
         h('div', { class: 'lit-next' }, h('p', null, h('b', null, 'Suggested next game: '), next.why), h('a', { class: 'lit-btn lit-btn-big', href: next.href }, next.label)),
-        sample ? h('p', { class: 'lit-fine' }, 'That was the free ' + t.title + ' sample. The full library has ' + t.totalCards + ' cards. ', h('a', { href: '/jarvis-academy#pricing' }, 'See what\'s included'))
+        sample ? h('p', { class: 'lit-fine' }, 'That was the free ' + t.title + ' sample. The full library has ' + t.totalCards + ' cards. ', h('a', { href: '/jarvis-academy#try' }, 'Create a free account for the full library'))
           : h('button', { class: 'lit-btn lit-btn-ghost', type: 'button', onclick: function () { flashcards(t.id, category); } }, 'Play another round')));
     toastAchievements();
   }
@@ -331,7 +330,7 @@
         // Locked scenes still link through: the server answers with a friendly "premium" screen.
         return h('a', { class: 'lit-scene-card' + (locked ? ' locked' : ''), href: '#/' + t.id + '/' + mode + '/' + s.id },
           h('span', { class: 'lit-art' }, s.art || '🎭'), h('b', null, s.title), h('small', null, s.where),
-          locked ? h('span', { class: 'lit-lock-tag' }, '🔒 Premium') : s.free && !cat.premium ? h('span', { class: 'lit-free-tag' }, 'Free') : null);
+          locked ? h('span', { class: 'lit-lock-tag' }, '🔒 Free account') : s.free && !cat.premium ? h('span', { class: 'lit-free-tag' }, 'Free') : null);
       })));
   }
   function drawGame(id, sceneId, mode) {
@@ -457,7 +456,7 @@
         return h('span', { class: f.structure[p[0]] ? 'ok' : 'miss' }, (f.structure[p[0]] ? '✓ ' : '○ ') + p[1]);
       })) : null,
       f.next_step ? h('p', { class: 'lit-nextq' }, h('b', null, 'Think about: '), f.next_step) : null,
-      r.basic ? h('p', { class: 'lit-fine' }, 'This is basic feedback. Jarvis Plus gives detailed scores on knowledge, detail, vocabulary, analysis and context.') : null);
+      r.basic ? h('p', { class: 'lit-fine' }, 'This is basic feedback. A free Jarvis Academy account gives detailed scores on knowledge, detail, vocabulary, analysis and context.') : null);
   }
 
   /* ---------- router ---------- */

@@ -16,7 +16,7 @@ const { LANGS, pickLang } = require('./_academy-lang');
 
 const num = (v, d) => (v !== undefined && v !== '' && Number.isFinite(Number(v)) ? Number(v) : d);
 const HW = {
-  freeUploads: num(process.env.HW_FREE_UPLOADS, 2),        // per calendar month
+  freeUploads: num(process.env.HW_FREE_UPLOADS, 10),       // per calendar month (fair use; Jarvis Academy is free)
   paidUploads: num(process.env.HW_PAID_UPLOADS, 60),       // Plus / Family, fair use
   paidPlans: String(process.env.HW_PAID_PLANS || 'plus,family').split(',').map((s) => s.trim()),
   maxPages: 4,

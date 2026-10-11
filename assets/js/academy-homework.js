@@ -108,7 +108,7 @@
     var q = state.quota;
     show(h('div', { class: 'ja-hw-in' },
       h('div', { class: 'ja-hw-head' }, h('h3', null, '📚 Help with my homework'), quotaLine()),
-      q && !q.left ? h('p', { class: 'ja-hw-limit' }, 'You have used this month\'s free homework uploads. They reset on the 1st, or upgrade to Jarvis Plus for many more. You can still open your recent homework below.') : null,
+      q && !q.left ? h('p', { class: 'ja-hw-limit' }, 'You have used this month\'s free homework uploads. They reset on the 1st. You can still open your recent homework below.') : null,
       q && !q.left ? null : h('div', null,
         h('div', { class: 'ja-hw-src' },
           h('button', { type: 'button', class: 'btn ja-btn-outline btn-sm', onclick: function () { cam.click(); } }, '📷 Take a photo'),
@@ -127,8 +127,8 @@
 
   function limitView() {
     show(h('div', { class: 'ja-hw-in' }, h('h3', null, '📚 Homework help'),
-      h('p', { class: 'ja-hw-limit' }, 'You have used this month\'s ' + (state.quota ? state.quota.limit : 2) + ' free homework uploads. They reset on the 1st of next month.'),
-      h('p', null, 'Jarvis Plus gives you many more uploads every month. ', h('a', { href: '#pricing' }, 'See plans')),
+      h('p', { class: 'ja-hw-limit' }, 'You have used this month\'s ' + (state.quota ? state.quota.limit : 10) + ' free homework uploads. They reset on the 1st of next month.'),
+      h('p', null, 'If Jarvis has helped, ', h('a', { href: 'https://buymeacoffee.com/automationhire', target: '_blank', rel: 'noopener' }, 'a coffee \u2615'), ' keeps it free for everyone.'),
       h('button', { type: 'button', class: 'ja-link', onclick: home }, '← Back')));
   }
 
