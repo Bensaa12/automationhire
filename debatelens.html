@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DebateLens &mdash; Fact-check any debate, line by line | AutomationHire</title>
+  <meta name="description" content="DebateLens turns a debate video into a searchable, fact-checked record: synced transcript, speakers, every claim with linked evidence, and broadcast-ready story mode. Request early access." />
+  <link rel="canonical" href="https://automationhire.co.uk/debatelens" />
+  <meta name="robots" content="index, follow" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='42' cy='42' r='28' fill='none' stroke='%23f6b737' stroke-width='12'/><path d='M62 62l24 24' stroke='%23f6b737' stroke-width='14' stroke-linecap='round'/></svg>" />
+  <meta property="og:title" content="DebateLens &mdash; Fact-check any debate, line by line" />
+  <meta property="og:description" content="Synced transcript, speakers, every claim with linked evidence, and broadcast-ready story mode. Request early access." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://automationhire.co.uk/debatelens" />
+  <meta property="og:site_name" content="AutomationHire" />
+  <meta property="og:image" content="https://automationhire.co.uk/assets/og/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "DebateLens",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description": "Interactive debate analysis: synced transcript, speaker identification, claim extraction and evidence-linked fact-checks, with a broadcast-style story mode.",
+    "url": "https://automationhire.co.uk/debatelens",
+    "publisher": { "@type": "Organization", "name": "AutomationHire", "url": "https://automationhire.co.uk" }
+  }
+  </script>
+  <style>
+    :root {
+      --bg: #120d09; --bg2: #1b140e; --card: #221a12; --line: #3a2e22; --line2: #4d3d2c;
+      --paper: #f5efe4; --fog: #b4a893; --fog2: #7d7262;
+      --amber: #f6b737; --ember: #ff6a2b;
+      --ok: #3ecf8e; --bad: #ff5a4e; --mixed: #f6b737; --unv: #9aa4b2;
+      --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+      --body: "Inter", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--paper); font: 16px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
+      background: radial-gradient(1200px 600px at 75% -10%, rgba(246,183,55,.13), transparent 60%), radial-gradient(900px 500px at 0% 30%, rgba(255,106,43,.08), transparent 60%); }
+    a { color: var(--amber); }
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+    .display { font-family: var(--display); text-transform: uppercase; letter-spacing: .01em; line-height: .95; }
+    .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--amber); }
+
+    /* top bar */
+    .top { position: sticky; top: 0; z-index: 10; background: rgba(18,13,9,.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+    .brand { display: flex; align-items: stretch; text-decoration: none; transform: skewX(-12deg); }
+    .brand span { transform: skewX(12deg); display: block; font-family: var(--display); font-weight: 800; font-size: 22px; padding: 4px 12px; text-transform: uppercase; }
+    .brand .b1 { background: var(--paper); color: #111; } .brand .b2 { background: var(--amber); color: #111; }
+    .brand-wrap { display: flex; align-items: center; gap: 14px; }
+    .brand-by { font-size: 13px; color: var(--fog); text-decoration: none; }
+    .brand-by:hover { color: var(--paper); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; padding: 12px 20px; font: 600 15px var(--body); text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: transform .15s, background .15s; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--amber); color: #111; }
+    .btn-primary:hover { background: #ffc857; }
+    .btn-ghost { border-color: var(--line2); color: var(--paper); background: transparent; }
+    .btn-ghost:hover { border-color: var(--fog); }
+    .top .btn { padding: 9px 16px; font-size: 14px; }
+
+    /* hero */
+    .hero { padding: 72px 0 40px; }
+    .hero h1 { font-size: clamp(48px, 8vw, 96px); margin: 14px 0 18px; font-weight: 800; }
+    .hero h1 em { font-style: normal; color: var(--amber); }
+    .hero p.lead { font-size: clamp(17px, 2vw, 20px); color: var(--fog); max-width: 640px; margin: 0 0 28px; }
+    .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 26px; color: var(--fog2); font-size: 13px; }
+    .badge-row span::before { content: "\25CF"; color: var(--amber); margin-right: 8px; font-size: 9px; vertical-align: 2px; }
+
+    /* product mock */
+    .mock { margin: 48px 0 0; border: 1px solid var(--line2); border-radius: 14px; background: var(--bg2); overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+    .mock-bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); font: 12px var(--mono); color: var(--fog2); }
+    .mock-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--line2); display: inline-block; }
+    .mock-bar b { margin-left: 10px; color: var(--fog); font-weight: 500; }
+    .mock-grid { display: grid; grid-template-columns: 1.35fr 1fr; }
+    .mock-left { padding: 16px; border-right: 1px solid var(--line); }
+    .stage { position: relative; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden; background: linear-gradient(135deg, #2b2016, #15100b); }
+    .stage .podium { position: absolute; bottom: 0; width: 22%; height: 46%; border-radius: 8px 8px 0 0; background: linear-gradient(#3b2c1e, #22180f); }
+    .stage .p1 { left: 16%; } .stage .p2 { right: 16%; }
+    .stage .head { position: absolute; bottom: 46%; width: 9%; aspect-ratio: 1; border-radius: 50%; background: #5a4532; }
+    .stage .h1 { left: 22.5%; } .stage .h2 { right: 22.5%; background: #4a3a2c; }
+    .stage .live { position: absolute; top: 12px; left: 12px; font: 13px var(--mono); background: rgba(0,0,0,.6); padding: 6px 10px; border-radius: 6px; color: var(--amber); }
+    .stage .cap { position: absolute; left: 8%; right: 8%; bottom: 10px; text-align: center; font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(14px, 2.2vw, 24px); color: #fff; text-shadow: 0 2px 8px #000; }
+    .stage .cap mark { background: var(--amber); color: #111; padding: 0 4px; }
+    .track { margin-top: 14px; position: relative; height: 34px; }
+    .track .rail { position: absolute; left: 0; right: 0; top: 14px; height: 6px; border-radius: 3px; background: var(--line); }
+    .track .mk { position: absolute; top: 9px; width: 6px; height: 16px; border-radius: 2px; }
+    .track .head { position: absolute; top: 4px; width: 2px; height: 26px; background: #fff; left: 38%; box-shadow: 0 0 8px #fff; }
+    .seg { display: flex; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--fog); }
+    .seg:last-child { border-bottom: 0; }
+    .seg .t { font: 12px var(--mono); color: var(--fog2); padding-top: 2px; min-width: 44px; }
+    .seg .who { font-weight: 600; color: var(--paper); margin-right: 6px; }
+    .seg.on { color: var(--paper); background: rgba(246,183,55,.07); border-radius: 6px; }
+    .seg u { text-decoration: none; border-bottom: 2px solid var(--amber); }
+    .mock-right { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .claim { border: 1px solid var(--line); border-radius: 10px; padding: 14px; background: var(--card); }
+    .claim .meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font: 12px var(--mono); color: var(--fog2); }
+    .claim q { display: block; font-size: 15px; line-height: 1.5; quotes: "\201C" "\201D"; }
+    .claim .src { margin-top: 10px; font-size: 12.5px; color: var(--fog); }
+    .claim .src a { color: var(--fog); text-decoration-color: var(--line2); }
+    .verdict { font: 700 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; }
+    .v-ok { background: rgba(62,207,142,.15); color: var(--ok); }
+    .v-mixed { background: rgba(246,183,55,.15); color: var(--mixed); }
+    .v-bad { background: rgba(255,90,78,.15); color: var(--bad); }
+    .v-unv { background: rgba(154,164,178,.15); color: var(--unv); }
+    .mock-note { font-size: 12px; color: var(--fog2); text-align: center; padding: 10px; border-top: 1px solid var(--line); }
+
+    section { padding: 80px 0; }
+    .sec-head { max-width: 720px; margin-bottom: 40px; }
+    .sec-head h2 { font-size: clamp(36px, 5vw, 58px); margin: 10px 0 12px; font-weight: 800; }
+    .sec-head p { color: var(--fog); font-size: 18px; margin: 0; }
+
+    /* steps */
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; counter-reset: s; }
+    .step { border: 1px solid var(--line); border-radius: 12px; padding: 24px; background: var(--bg2); }
+    .step::before { counter-increment: s; content: "0" counter(s); display: block; font: 800 44px var(--display); color: var(--amber); margin-bottom: 8px; }
+    .step h3 { font: 700 24px var(--display); text-transform: uppercase; margin: 0 0 8px; }
+    .step p { margin: 0; color: var(--fog); font-size: 15px; }
+
+    /* features */
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .feat { background: var(--bg); padding: 26px; }
+    .feat .ic { width: 38px; height: 38px; border-radius: 8px; display: grid; place-items: center; background: rgba(246,183,55,.12); color: var(--amber); margin-bottom: 14px; }
+    .feat h3 { margin: 0 0 6px; font-size: 17px; }
+    .feat p { margin: 0; color: var(--fog); font-size: 14.5px; }
+
+    /* story */
+    .story { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; }
+    .story ul { padding: 0; margin: 20px 0 0; list-style: none; }
+    .story li { padding: 10px 0 10px 30px; position: relative; color: var(--fog); border-bottom: 1px solid var(--line); }
+    .story li::before { content: "\2192"; position: absolute; left: 0; color: var(--amber); font-weight: 700; }
+    .story li b { color: var(--paper); font-weight: 600; }
+    .bcast { aspect-ratio: 16/9; border-radius: 12px; border: 1px solid var(--line2); position: relative; overflow: hidden; background: linear-gradient(135deg, #3a1d0c, #170d07 70%); }
+    .bcast .tag { position: absolute; top: 5%; left: 4%; display: flex; transform: skewX(-12deg); }
+    .bcast .tag span { transform: skewX(12deg); display: block; font: 800 clamp(11px, 1.6vw, 18px) var(--display); text-transform: uppercase; padding: 3px 9px; color: #111; }
+    .bcast .tag span:first-child { background: var(--paper); } .bcast .tag span:last-child { background: var(--amber); }
+    .bcast .vid { position: absolute; left: 4%; top: 18%; width: 56%; aspect-ratio: 16/9; border-radius: 8px; background: linear-gradient(135deg, #4a3526, #241910); border: 1px solid rgba(255,255,255,.08); }
+    .bcast .vid::after { content: "\25B6"; position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,.7); font-size: clamp(16px, 3vw, 30px); }
+    .bcast .panel { position: absolute; right: 4%; top: 18%; width: 33%; }
+    .bcast .panel .k { font: 700 clamp(9px, 1.2vw, 14px) var(--mono); letter-spacing: .2em; color: var(--amber); }
+    .bcast .panel .line { height: clamp(6px, 1vw, 10px); background: rgba(245,239,228,.85); border-radius: 3px; margin-top: 8%; }
+    .bcast .panel .line.s { width: 70%; background: rgba(245,239,228,.5); }
+    .bcast .panel .box { margin-top: 12%; padding: 8%; border-radius: 6px; background: rgba(0,0,0,.35); }
+    .bcast .bars { position: absolute; top: 7%; right: 4%; display: flex; gap: 4px; }
+    .bcast .bars i { width: clamp(12px, 2.2vw, 26px); height: 3px; background: rgba(245,239,228,.35); border-radius: 2px; }
+    .bcast .bars i.on { background: var(--amber); }
+    .bcast .tl { position: absolute; left: 4%; right: 4%; bottom: 13%; height: 5px; border-radius: 3px; background: rgba(245,239,228,.2); }
+    .bcast .tl b { position: absolute; top: -3px; height: 11px; width: 2.5%; border-radius: 2px; background: var(--ember); }
+    .bcast .cap2 { position: absolute; left: 0; right: 0; bottom: 3%; text-align: center; font: 800 clamp(11px, 1.8vw, 20px) var(--display); text-transform: uppercase; color: var(--amber); }
+
+    /* audiences */
+    .aud { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .aud div { border-top: 3px solid var(--amber); padding: 18px 4px 0; }
+    .aud h3 { font: 700 22px var(--display); text-transform: uppercase; margin: 0 0 6px; }
+    .aud p { margin: 0; color: var(--fog); font-size: 14.5px; }
+
+    /* trust */
+    .trust { border: 1px solid var(--line2); border-radius: 14px; padding: 32px; background: var(--bg2); display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .trust h3 { margin: 0 0 6px; font-size: 16px; }
+    .trust p { margin: 0; color: var(--fog); font-size: 14.5px; }
+
+    /* contact */
+    .contact { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: start; }
+    .contact .perks { list-style: none; padding: 0; margin: 24px 0 0; }
+    .contact .perks li { padding: 8px 0 8px 30px; position: relative; color: var(--fog); }
+    .contact .perks li::before { content: "\2713"; position: absolute; left: 0; color: var(--ok); font-weight: 700; }
+    form { border: 1px solid var(--line2); border-radius: 14px; padding: 28px; background: var(--bg2); }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    label { display: block; font-size: 13px; color: var(--fog); margin-bottom: 14px; }
+    input, select, textarea { display: block; width: 100%; margin-top: 6px; padding: 11px 12px; border-radius: 8px; border: 1px solid var(--line2); background: var(--bg); color: var(--paper); font: 15px var(--body); }
+    input:focus, select:focus, textarea:focus { outline: 2px solid var(--amber); outline-offset: 1px; border-color: transparent; }
+    textarea { min-height: 110px; resize: vertical; }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    form .btn { width: 100%; margin-top: 6px; }
+    form .small { font-size: 12px; color: var(--fog2); margin: 12px 0 0; }
+    .msg { margin-top: 14px; padding: 12px 14px; border-radius: 8px; font-size: 14px; display: none; }
+    .msg.ok { display: block; background: rgba(62,207,142,.12); color: var(--ok); }
+    .msg.err { display: block; background: rgba(255,90,78,.12); color: var(--bad); }
+
+    footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--fog2); font-size: 13px; }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+    footer a { color: var(--fog); text-decoration: none; margin-left: 16px; }
+    footer a:hover { color: var(--paper); }
+
+    @media (max-width: 900px) {
+      .mock-grid, .story, .contact { grid-template-columns: 1fr; }
+      .mock-left { border-right: 0; border-bottom: 1px solid var(--line); }
+      .steps, .features, .trust { grid-template-columns: 1fr; }
+      .aud { grid-template-columns: 1fr 1fr; }
+      section { padding: 56px 0; }
+    }
+    @media (max-width: 560px) {
+      .wrap { padding: 0 16px; }
+      .brand span { font-size: 17px; padding: 3px 8px; }
+      .brand-by { display: none; }
+      .aud, .row2 { grid-template-columns: 1fr; }
+      .hero { padding-top: 48px; }
+      .hero .ctas .btn { width: 100%; }
+      footer a { margin: 0 16px 0 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand-wrap">
+      <a href="#" class="brand" aria-label="DebateLens home"><span class="b1">Debate</span><span class="b2">Lens</span></a>
+      <a href="/" class="brand-by">by AutomationHire</a>
+    </div>
+    <a href="#early-access" class="btn btn-primary">Request early access</a>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <div class="kicker">Debate analysis &middot; Early access</div>
+      <h1 class="display">Fact-check any debate,<br><em>line by line.</em></h1>
+      <p class="lead">DebateLens turns a debate video into a searchable, evidence-linked record: who said what and when, every checkable claim, and what the sources actually say. Then it turns that into a broadcast-ready story you can publish.</p>
+      <div class="ctas">
+        <a href="#early-access" class="btn btn-primary">Request early access &rarr;</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+      <div class="badge-row">
+        <span>Upload a file or paste a YouTube link</span>
+        <span>English &amp; French</span>
+        <span>Every verdict shows its sources</span>
+      </div>
+
+      <div class="mock" aria-label="Illustration of the DebateLens workspace">
+        <div class="mock-bar"><i></i><i></i><i></i><b>Town hall debate on local transport &middot; 48 min &middot; 3 speakers &middot; 14 claims</b></div>
+        <div class="mock-grid">
+          <div class="mock-left">
+            <div class="stage">
+              <div class="podium p1"></div><div class="podium p2"></div>
+              <div class="head h1"></div><div class="head h2"></div>
+              <div class="live">0:18:42 &#9654; PROGRAMME</div>
+              <div class="cap">Bus journeys have <mark>doubled</mark> since 2019</div>
+            </div>
+            <div class="track" aria-hidden="true">
+              <div class="rail"></div>
+              <div class="mk" style="left:9%;background:var(--ok)"></div>
+              <div class="mk" style="left:22%;background:var(--unv)"></div>
+              <div class="mk" style="left:38.5%;background:var(--bad)"></div>
+              <div class="mk" style="left:57%;background:var(--mixed)"></div>
+              <div class="mk" style="left:71%;background:var(--ok)"></div>
+              <div class="mk" style="left:88%;background:var(--mixed)"></div>
+              <div class="head"></div>
+            </div>
+            <div class="seg"><span class="t">18:31</span><span><span class="who">Moderator</span>Councillor, your response on the bus network?</span></div>
+            <div class="seg on"><span class="t">18:36</span><span><span class="who">Cllr Hart</span>Look, <u>bus journeys in this county have doubled since 2019</u>, and that's because we invested.</span></div>
+            <div class="seg"><span class="t">18:49</span><span><span class="who">Ms Okafor</span>That's simply not what the council's own figures show.</span></div>
+          </div>
+          <div class="mock-right">
+            <div class="claim">
+              <div class="meta"><span>18:36 &middot; Cllr Hart</span><span class="verdict v-bad">Contradicted</span></div>
+              <q>Bus journeys in this county have doubled since 2019.</q>
+              <div class="src">Published passenger statistics show a rise of about 12% over the period, not 100%.<br><a href="#" onclick="return false">Source: annual bus statistics &middot; county transport report</a></div>
+            </div>
+            <div class="claim">
+              <div class="meta"><span>27:10 &middot; Ms Okafor</span><span class="verdict v-mixed">Mixed</span></div>
+              <q>Fares here are the highest in the region.</q>
+              <div class="src">True for single tickets; weekly passes are cheaper than two neighbouring areas.</div>
+            </div>
+            <div class="claim">
+              <div class="meta"><span>33:58 &middot; Mr Lewis</span><span class="verdict v-ok">Supported</span></div>
+              <q>The night route was cut in 2022.</q>
+            </div>
+          </div>
+        </div>
+        <div class="mock-note">Illustration with a fictional debate. AI verdicts are preliminary assessments with sources attached, not final determinations of truth.</div>
+      </div>
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="kicker">How it works</div>
+        <h2 class="display">From raw video to a checked record</h2>
+        <p>No manual logging. Add a debate, and DebateLens does the slow part so your team can focus on judgement.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><h3>Add the debate</h3><p>Upload a recording or paste a YouTube link. Long programmes are fine: hustings, TV debates, panels, podcasts.</p></div>
+        <div class="step"><h3>We transcribe &amp; extract</h3><p>A timestamped transcript separated by speaker, with every checkable factual claim pulled out and prioritised.</p></div>
+        <div class="step"><h3>Review the evidence</h3><p>Each claim gets a preliminary verdict with linked sources. You confirm, correct, and decide what gets published.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="features">
+        <div class="feat"><div class="ic">&#9654;</div><h3>Transcript synced to video</h3><p>Click any line to jump to that moment. Search the whole debate in seconds.</p></div>
+        <div class="feat"><div class="ic">&#9673;</div><h3>Speaker identification</h3><p>Voices are separated automatically and named from the debate itself or by you, never guessed from appearance.</p></div>
+        <div class="feat"><div class="ic">&#10003;</div><h3>Claims &amp; evidence</h3><p>Supported, contradicted, mixed or unverifiable, always with the sources behind it.</p></div>
+        <div class="feat"><div class="ic">&#9644;</div><h3>Claim timeline</h3><p>See where the contested moments cluster across the whole programme at a glance.</p></div>
+        <div class="feat"><div class="ic">&#10077;</div><h3>Quote checking</h3><p>Pin a quotation a speaker attributes to someone else and mark it verified, altered or misattributed.</p></div>
+        <div class="feat"><div class="ic">&#9733;</div><h3>Viral moments</h3><p>Mark the clips people will share and present them with the context that came next.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap story">
+      <div>
+        <div class="kicker">Story mode</div>
+        <h2 class="display" style="font-size:clamp(36px,5vw,58px);margin:10px 0 12px;font-weight:800">Ready to broadcast, ready to record</h2>
+        <p style="color:var(--fog);font-size:18px;margin:0">Turn the analysis into a chaptered, on-screen explainer in a newsroom style. Present it live or screen-record it for YouTube, social and class.</p>
+        <ul>
+          <li><b>Introduction &amp; speaker cards</b> with each person's name and background</li>
+          <li><b>Viral clips</b> on their own slides, followed by what was said next</li>
+          <li><b>Karaoke captions</b> and a programme timeline with excerpts marked</li>
+          <li><b>Five colour themes</b>, your own series name, labels in English or French</li>
+        </ul>
+      </div>
+      <div class="bcast" aria-label="Illustration of story mode">
+        <div class="tag"><span>Under the lens</span><span>DebateLens</span></div>
+        <div class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="vid"></div>
+        <div class="panel"><div class="k">&mdash; CONTRADICTED</div><div class="line"></div><div class="line s"></div><div class="box"><div class="line" style="margin-top:0"></div><div class="line s"></div><div class="line"></div></div></div>
+        <div class="tl"><b style="left:12%"></b><b style="left:31%"></b><b style="left:47%"></b><b style="left:76%"></b></div>
+        <div class="cap2">Have doubled since 2019</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="kicker">Who it's for</div>
+        <h2 class="display">Built for people who check before they share</h2>
+      </div>
+      <div class="aud">
+        <div><h3>Newsrooms</h3><p>Turn around a fact-check of last night's debate before the morning bulletin.</p></div>
+        <div><h3>Education</h3><p>Teach critical thinking and media literacy with real arguments and real sources.</p></div>
+        <div><h3>Creators</h3><p>Make evidence-backed breakdown videos without weeks of logging footage.</p></div>
+        <div><h3>Research &amp; NGOs</h3><p>Track what was promised and claimed across hustings and public meetings.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="trust">
+        <div><h3>Sources, not just verdicts</h3><p>Every assessment links to the evidence behind it, so readers and editors can check the check.</p></div>
+        <div><h3>You stay in control</h3><p>Verdicts are preliminary until you review them. Nothing is published without you.</p></div>
+        <div><h3>Private by default</h3><p>Your analyses belong to your account. Uploads are only processed to produce your analysis.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="early-access">
+    <div class="wrap contact">
+      <div>
+        <div class="kicker">Early access</div>
+        <h2 class="display" style="font-size:clamp(40px,6vw,64px);margin:10px 0 12px;font-weight:800">See it on a debate you choose</h2>
+        <p style="color:var(--fog);font-size:18px;margin:0">We're onboarding a small number of early users personally. Tell us what you'd use DebateLens for and we'll get back to you within two working days.</p>
+        <ul class="perks">
+          <li>A live demo on a debate of your choice</li>
+          <li>Founding-customer pricing, locked in</li>
+          <li>Direct input into what we build next</li>
+          <li>Team and institutional plans available</li>
+        </ul>
+        <p style="color:var(--fog2);font-size:14px;margin-top:24px">Prefer email? <a href="mailto:hello@automationhire.co.uk?subject=DebateLens">hello@automationhire.co.uk</a></p>
+      </div>
+
+      <form id="lead" novalidate>
+        <div class="row2">
+          <label>Your name<input name="name" autocomplete="name" required maxlength="120" /></label>
+          <label>Work email<input name="email" type="email" autocomplete="email" required /></label>
+        </div>
+        <label>Organisation <span style="color:var(--fog2)">(optional)</span><input name="organisation" autocomplete="organization" maxlength="160" /></label>
+        <label>What would you use it for?
+          <select name="use">
+            <option value="newsroom">Newsroom / broadcaster</option>
+            <option value="education">School, university or debate club</option>
+            <option value="creator">YouTube / podcast creator</option>
+            <option value="campaign">Campaign, NGO or research</option>
+            <option value="other">Something else</option>
+          </select>
+        </label>
+        <label>Anything we should know? <span style="color:var(--fog2)">(optional)</span><textarea name="message" maxlength="2000" placeholder="e.g. we cover weekly council debates and want checks out the same evening"></textarea></label>
+        <div class="hp" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
+        <button class="btn btn-primary" type="submit">Request early access</button>
+        <p class="small">We'll only use your details to reply about DebateLens. See our <a href="/privacy">privacy policy</a>.</p>
+        <div class="msg" id="msg" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; <span id="yr">2026</span> AutomationHire &middot; DebateLens</span>
+    <span><a href="/">AutomationHire</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const form = document.getElementById('lead');
+  const msg = document.getElementById('msg');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form));
+    msg.className = 'msg';
+    if (!data.name.trim()) { msg.textContent = 'Please tell us your name.'; msg.className = 'msg err'; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) { msg.textContent = 'Please enter a valid email address.'; msg.className = 'msg err'; return; }
+    const btn = form.querySelector('button');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      const r = await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, product: 'debatelens' }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || j.ok === false) throw new Error(j.error || 'Something went wrong. Please try again or email us.');
+      form.reset();
+      msg.textContent = j.message || "Thanks, we'll be in touch within two working days.";
+      msg.className = 'msg ok';
+      btn.textContent = 'Request sent';
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.className = 'msg err';
+      btn.disabled = false; btn.textContent = 'Request early access';
+    }
+  });
+</script>
+</body>
+</html>
